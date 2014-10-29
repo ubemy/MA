@@ -18,7 +18,7 @@ public class Startseite extends ActionBarActivity {
 		setContentView(R.layout.activity_startseite);
 		
 		/*
-		 * Start Spiel Button erstellen
+		 * Start Spiel Button erstellenn
 		 */
 		Button startSpielButton = (Button) findViewById(R.id.Start_Spiel_Button);
 		startSpielButton.setText("Spiel starten");

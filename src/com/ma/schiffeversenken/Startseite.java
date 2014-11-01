@@ -4,6 +4,8 @@ package com.ma.schiffeversenken;
 import com.ma.schiffeversenken.R;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,17 +19,31 @@ public class Startseite extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_startseite);
 		
+		Button startSpielButton=null, einstellungenButton=null, hilfeButton=null;
+		
+		createButtons(startSpielButton, R.id.Start_Spiel_Button, "Spiel starten", Schwierigkeitsstufe.class);
+		createButtons(einstellungenButton, R.id.Einstellungen_Button, "Einstellungen", Einstellungen.class);
+		createButtons(hilfeButton, R.id.Hilfe_Button, "Hilfe", Hilfe.class);
+		
+		SharedPreferences sp = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);
+		Editor editor = sp.edit();
+		editor.putString("lautlos", "false");
+		editor.putString("vibrationaus", "false");
+		editor.apply();
+	}
+	
+	private void createButtons(Button button, int id, String text, final Class c){
 		/*
-		 * Start Spiel Button erstellen
+		 * Buttons erstellen
 		 */
-		Button startSpielButton = (Button) findViewById(R.id.Start_Spiel_Button);
-		startSpielButton.setText("Spiel starten");
+		Button startSpielButton = (Button) findViewById(id);
+		startSpielButton.setText(text);
 		startSpielButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Intent spielStart = new Intent(Startseite.this, SpielStarten.class);
-				startActivity(spielStart);
+				Intent intent = new Intent(Startseite.this, c);
+				startActivity(intent);
 			}
 		});
 	}

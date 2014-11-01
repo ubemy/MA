@@ -26,6 +26,14 @@
             android:name=".SpielStarten"
             android:label="@string/title_activity_spiel_starten" >
         </activity>
+        <activity
+            android:name=".Einstellungen"
+            android:label="@string/title_activity_einstellungen" >
+        </activity>
+        <activity
+            android:name=".Schwierigkeitsstufe"
+            android:label="@string/title_activity_schwierigkeitsstufe" >
+        </activity>
     </application>
 
 </manifest>

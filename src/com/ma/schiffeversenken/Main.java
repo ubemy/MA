@@ -1,7 +1,7 @@
 package com.ma.schiffeversenken;
 
-import android.support.v7.app.ActionBarActivity;
 import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Main extends ActionBarActivity {
+public class Main extends Activity {
 
 	//Basic GL surface View
 	GLSurfaceView surfaceView;

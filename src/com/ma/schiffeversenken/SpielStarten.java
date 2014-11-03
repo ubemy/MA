@@ -1,11 +1,11 @@
 package com.ma.schiffeversenken;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class SpielStarten extends ActionBarActivity {
+public class SpielStarten extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

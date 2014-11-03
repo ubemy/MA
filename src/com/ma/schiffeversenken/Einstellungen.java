@@ -1,6 +1,6 @@
 package com.ma.schiffeversenken;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -10,9 +10,8 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Toast;
 
-public class Einstellungen extends ActionBarActivity {
+public class Einstellungen extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

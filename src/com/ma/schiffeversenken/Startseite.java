@@ -2,7 +2,7 @@ package com.ma.schiffeversenken;
 
 
 import com.ma.schiffeversenken.R;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class Startseite extends ActionBarActivity {
+public class Startseite extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ma.schiffeversenken.Einstellungen" >
+    tools:context="com.ma.schiffeversenken.view.Einstellungen" >
 
     <CheckBox
         android:id="@+id/Vibration_aus_Checkbox"

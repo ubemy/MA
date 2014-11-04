@@ -1,4 +1,4 @@
-package com.ma.schiffeversenken;
+package com.ma.schiffeversenken.view;
 
 import java.util.Random;
 

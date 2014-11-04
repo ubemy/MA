@@ -1,22 +1,27 @@
-package com.ma.schiffeversenken;
+package com.ma.schiffeversenken.view;
+
+import com.ma.schiffeversenken.R;
+import com.ma.schiffeversenken.R.id;
+import com.ma.schiffeversenken.R.layout;
+import com.ma.schiffeversenken.R.menu;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class Hilfe extends Activity {
+public class SpielStarten extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hilfe);
+		setContentView(R.layout.activity_spiel_starten);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.hilfe, menu);
+		getMenuInflater().inflate(R.menu.spiel_starten, menu);
 		return true;
 	}
 

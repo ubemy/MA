@@ -1,7 +1,11 @@
-package com.ma.schiffeversenken;
+package com.ma.schiffeversenken.view;
 
 
 import com.ma.schiffeversenken.R;
+import com.ma.schiffeversenken.R.id;
+import com.ma.schiffeversenken.R.layout;
+import com.ma.schiffeversenken.R.menu;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;

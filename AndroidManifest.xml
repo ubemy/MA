@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Startseite"
+            android:name="com.ma.schiffeversenken.view.Startseite"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,15 +23,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SpielStarten"
+            android:name="com.ma.schiffeversenken.view.SpielStarten"
             android:label="@string/title_activity_spiel_starten" >
         </activity>
-        <activity
-            android:name=".Einstellungen"
+        <activity 
+            android:name="com.ma.schiffeversenken.view.Einstellungen"
             android:label="@string/title_activity_einstellungen" >
         </activity>
         <activity
-            android:name=".Schwierigkeitsstufe"
+            android:name="com.ma.schiffeversenken.view.Schwierigkeitsstufe"
             android:label="@string/title_activity_schwierigkeitsstufe" >
         </activity>
     </application>

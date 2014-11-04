@@ -1,4 +1,4 @@
-package com.ma.schiffeversenken;
+package com.ma.schiffeversenken.view;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;

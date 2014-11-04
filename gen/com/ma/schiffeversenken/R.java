@@ -20,36 +20,37 @@ public final class R {
         /**  Default height of an action bar. 
  Default height of an action bar. 
          */
-        public static final int abc_action_bar_default_height=0x7f050002;
+        public static final int abc_action_bar_default_height=0x7f050004;
         /**  Vertical padding around action bar icons. 
  Vertical padding around action bar icons. 
          */
-        public static final int abc_action_bar_icon_vertical_padding=0x7f050003;
+        public static final int abc_action_bar_icon_vertical_padding=0x7f050005;
         /**  Bottom margin for action bar subtitles 
  Bottom margin for action bar subtitles 
          */
-        public static final int abc_action_bar_subtitle_bottom_margin=0x7f050007;
+        public static final int abc_action_bar_subtitle_bottom_margin=0x7f050009;
         /**  Text size for action bar subtitles 
  Text size for action bar subtitles 
          */
-        public static final int abc_action_bar_subtitle_text_size=0x7f050005;
+        public static final int abc_action_bar_subtitle_text_size=0x7f050007;
         /**  Top margin for action bar subtitles 
  Top margin for action bar subtitles 
          */
-        public static final int abc_action_bar_subtitle_top_margin=0x7f050006;
+        public static final int abc_action_bar_subtitle_top_margin=0x7f050008;
         /**  Text size for action bar titles 
  Text size for action bar titles 
          */
-        public static final int abc_action_bar_title_text_size=0x7f050004;
+        public static final int abc_action_bar_title_text_size=0x7f050006;
         /**  Minimum width for an action button in the menu area of an action bar 
  Minimum width for an action button in the menu area of an action bar 
          */
-        public static final int abc_action_button_min_width=0x7f050008;
+        public static final int abc_action_button_min_width=0x7f05000a;
         /**  Minimum width of the search view text entry area. 
  Minimum width of the search view text entry area. 
          */
-        public static final int abc_search_view_text_min_width=0x7f050009;
+        public static final int abc_search_view_text_min_width=0x7f05000b;
         /**  Default screen margins, per the Android Design guidelines. 
+ Default screen margins, per the Android Design guidelines. 
 
          Example customization of dimensions originally defined in res/values/dimens.xml
          (such as screen margins) for screens with more than 820dp of available width. This
@@ -63,19 +64,21 @@ public final class R {
         /**  The platform's desired fixed height for a dialog along the major axis
          (the screen is in portrait). This may be either a fraction or a dimension.
          */
-        public static final int dialog_fixed_height_major=0x7f05000c;
+        public static final int dialog_fixed_height_major=0x7f05000e;
         /**  The platform's desired fixed height for a dialog along the minor axis
          (the screen is in landscape). This may be either a fraction or a dimension.
          */
-        public static final int dialog_fixed_height_minor=0x7f05000d;
+        public static final int dialog_fixed_height_minor=0x7f05000f;
         /**  The platform's desired fixed width for a dialog along the major axis
          (the screen is in landscape). This may be either a fraction or a dimension.
          */
-        public static final int dialog_fixed_width_major=0x7f05000a;
+        public static final int dialog_fixed_width_major=0x7f05000c;
         /**  The platform's desired fixed width for a dialog along the minor axis
          (the screen is in portrait). This may be either a fraction or a dimension.
          */
-        public static final int dialog_fixed_width_minor=0x7f05000b;
+        public static final int dialog_fixed_width_minor=0x7f05000d;
+        public static final int seekBarEmotionsWidth=0x7f050002;
+        public static final int seekBarProtectorsWidth=0x7f050003;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
@@ -122,19 +125,6 @@ public final class R {
         public static final int startseite=0x7f090004;
     }
     public static final class string {
-        public static final int abc_action_bar_home_description=0x7f070007;
-        public static final int abc_action_bar_up_description=0x7f070008;
-        public static final int abc_action_menu_overflow_description=0x7f070009;
-        public static final int abc_action_mode_done=0x7f070006;
-        public static final int abc_activity_chooser_view_see_all=0x7f070010;
-        public static final int abc_activitychooserview_choose_application=0x7f07000f;
-        public static final int abc_searchview_description_clear=0x7f07000c;
-        public static final int abc_searchview_description_query=0x7f07000b;
-        public static final int abc_searchview_description_search=0x7f07000a;
-        public static final int abc_searchview_description_submit=0x7f07000d;
-        public static final int abc_searchview_description_voice=0x7f07000e;
-        public static final int abc_shareactionprovider_share_with=0x7f070012;
-        public static final int abc_shareactionprovider_share_with_application=0x7f070011;
         public static final int action_settings=0x7f070001;
         public static final int app_name=0x7f070000;
         public static final int hello_world=0x7f070003;

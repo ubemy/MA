@@ -4,5 +4,5 @@ public interface Schiff {
 	/*
 	 * Interface für alle Schiffe
 	 */
-	String name = "Test";
+	
 }

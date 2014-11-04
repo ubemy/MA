@@ -4,5 +4,10 @@ public interface Schiff {
 	/*
 	 * Interface für alle Schiffe
 	 */
-	String name = "Test";
+	int size = 0;
+	String name = null;
+	Standort 
+	
+	public abstract int getSize();
+	public abstract String getName();
 }

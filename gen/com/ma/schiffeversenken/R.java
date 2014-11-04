@@ -85,14 +85,15 @@ public final class R {
     }
     public static final class id {
         public static final int Einfach_Button=0x7f0a0003;
-        public static final int Einstellungen_Button=0x7f0a0006;
-        public static final int Hilfe_Button=0x7f0a0007;
+        public static final int Einstellungen_Button=0x7f0a0007;
+        public static final int Einzelspieler_Button=0x7f0a0005;
+        public static final int Hilfe_Button=0x7f0a0008;
         public static final int Lautlos_Checkbox=0x7f0a0001;
         public static final int Normal_Button=0x7f0a0002;
         public static final int Schwierig_Button=0x7f0a0004;
-        public static final int Start_Spiel_Button=0x7f0a0005;
+        public static final int Start_Spiel_Button=0x7f0a0006;
         public static final int Vibration_aus_Checkbox=0x7f0a0000;
-        public static final int action_settings=0x7f0a0008;
+        public static final int action_settings=0x7f0a0009;
     }
     public static final class integer {
         /**  The maximum number of action buttons that should be permitted within
@@ -116,7 +117,8 @@ public final class R {
         public static final int activity_main=0x7f030002;
         public static final int activity_schwierigkeitsstufe=0x7f030003;
         public static final int activity_spiel_starten=0x7f030004;
-        public static final int activity_startseite=0x7f030005;
+        public static final int activity_spielermodus=0x7f030005;
+        public static final int activity_startseite=0x7f030006;
     }
     public static final class menu {
         public static final int einstellungen=0x7f090000;
@@ -124,7 +126,8 @@ public final class R {
         public static final int main=0x7f090002;
         public static final int schwierigkeitsstufe=0x7f090003;
         public static final int spiel_starten=0x7f090004;
-        public static final int startseite=0x7f090005;
+        public static final int spielermodus=0x7f090005;
+        public static final int startseite=0x7f090006;
     }
     public static final class string {
         public static final int action_settings=0x7f070001;
@@ -134,6 +137,7 @@ public final class R {
         public static final int title_activity_hilfe=0x7f070006;
         public static final int title_activity_schwierigkeitsstufe=0x7f070005;
         public static final int title_activity_spiel_starten=0x7f070002;
+        public static final int title_activity_spielermodus=0x7f070007;
     }
     public static final class style {
         /** 

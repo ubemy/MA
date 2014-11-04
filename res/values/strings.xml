@@ -8,5 +8,6 @@
     <string name="title_activity_einstellungen">Einstellungen</string>
     <string name="title_activity_schwierigkeitsstufe">Schwierigkeitsstufe</string>
     <string name="title_activity_hilfe">Hilfe</string>
+    <string name="title_activity_spielermodus">Spielermodus</string>
 
 </resources>

@@ -7,5 +7,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_einstellungen">Einstellungen</string>
     <string name="title_activity_schwierigkeitsstufe">Schwierigkeitsstufe</string>
+    <string name="title_activity_hilfe">Hilfe</string>
 
 </resources>

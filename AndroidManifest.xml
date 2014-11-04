@@ -34,6 +34,10 @@
             android:name=".Schwierigkeitsstufe"
             android:label="@string/title_activity_schwierigkeitsstufe" >
         </activity>
+        <activity
+            android:name=".Hilfe"
+            android:label="@string/title_activity_hilfe" >
+        </activity>
     </application>
 
 </manifest>

@@ -93,8 +93,9 @@ public final class R {
         public static final int Normal_Button=0x7f0a0002;
         public static final int Schwierig_Button=0x7f0a0004;
         public static final int Start_Spiel_Button=0x7f0a0007;
+        public static final int Test_Button=0x7f0a000a;
         public static final int Vibration_aus_Checkbox=0x7f0a0000;
-        public static final int action_settings=0x7f0a000a;
+        public static final int action_settings=0x7f0a000b;
     }
     public static final class integer {
         /**  The maximum number of action buttons that should be permitted within

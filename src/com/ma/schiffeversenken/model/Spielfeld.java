@@ -20,11 +20,27 @@ public class Spielfeld {
 		createNeighbors();
 	}
 	
-	private void create(){
-		//Erstellt das Spielfeld, das aus 10x10 Feldelementen besteht
+	public FeldElement[][] getEinheiten(){
+		return einheiten;
+	}
+	
+	public FeldElement getElementByID(int id){
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
-				einheiten[i][j] = new FeldElement();
+				if(einheiten[i][j].getID() == id) return einheiten[i][j];
+			}
+		}
+		return null;
+	}
+	
+	private void create(){
+		//Erstellt das Spielfeld, das aus 10x10 Feldelementen besteht
+		int id=0;
+		
+		for (int i=0;i<10;i++){
+			for(int j=0;j<10;j++){
+				id++;
+				einheiten[i][j] = new FeldElement(id);
 			}
 		}
 	}

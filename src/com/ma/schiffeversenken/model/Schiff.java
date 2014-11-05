@@ -9,8 +9,9 @@ public abstract class Schiff {
 	String name; //Name des Schiffs
 	FeldElement[] standort; //Felder auf denen das Schiff platziert ist
 	
-	public Schiff(String name){
+	public Schiff(String name, int size){
 		this.name=name;
+		this.size=size;
 		standort = new FeldElement[size];
 	}
 	

@@ -15,9 +15,15 @@ public class Spielfeld {
 	int typ;
 	
 	public Spielfeld(int typ){
-		this.typ = typ;
-		create();
-		createNeighbors();
+		try{
+			this.typ = typ;
+			create();
+			createNeighbors();
+			createKante();
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	public FeldElement[][] getEinheiten(){
@@ -45,27 +51,53 @@ public class Spielfeld {
 		}
 	}
 	
+	private void createKante(){
+		for (int i=0;i<10;i++){
+			for(int j=0;j<10;j++){
+				FeldElement e = einheiten[i][j];
+				int id = e.getID();
+				if(id < 11){
+					if(e.getKante(1) == 0) e.setKante(1, 1);
+					else e.setKante(2, 1);
+				}
+				if(id > 89){
+					if(e.getKante(1) == 0) e.setKante(1, 2);
+					else e.setKante(2, 2);
+				}
+				if((id-(10*(i+1))) == 0){
+					if(e.getKante(1) == 0) e.setKante(1, 3);
+					else e.setKante(2, 3);
+				}
+				if((id-(10*i)) == 1){
+					if(e.getKante(1) == 0) e.setKante(1, 4);
+					else e.setKante(2, 4);
+				}
+			}
+		}
+	}
+	
 	private void createNeighbors(){
 		//Weist jedem FeldElement seine direkten Nachbarn zu
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
 				FeldElement lNachbar = null, rNachbar = null, oNachbar = null, uNachbar = null;
 				
-				if(i>0){
+				if(i>1 && i<10){
 					oNachbar = einheiten[i-1][j];
-					
-					if(i<10){
-						uNachbar = einheiten[i+1][j];
-					}
+				}	
+				if(i>0 && i<9){
+					uNachbar = einheiten[i+1][j];
 				}
 				
-				if(j>0){
+				
+				if(j>1 && j<10){
 					lNachbar = einheiten[i][j-1];
-					
-					if(j<10){
-						rNachbar = einheiten[i][j+1];
-					}
 				}
+				
+				if(j>0 && j<9){
+					rNachbar = einheiten[i][j+1];
+				}
+				
 				
 				einheiten[i][j].setNeighbors(lNachbar, rNachbar, oNachbar, uNachbar);
 			}

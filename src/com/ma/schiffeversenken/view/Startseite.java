@@ -5,7 +5,7 @@ import com.ma.schiffeversenken.R;
 import com.ma.schiffeversenken.R.id;
 import com.ma.schiffeversenken.R.layout;
 import com.ma.schiffeversenken.R.menu;
-
+import com.ma.schiffeversenken.controller.*;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class Startseite extends Activity {
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class Startseite extends Activity {
 		setContentView(R.layout.activity_startseite);
 		
 		Button startSpielButton=null, einstellungenButton=null, hilfeButton=null;
+		try{
 		
 		createButtons(startSpielButton, R.id.Start_Spiel_Button, "Spiel starten", Spielermodus.class);
 		createButtons(einstellungenButton, R.id.Einstellungen_Button, "Einstellungen", Einstellungen.class);
@@ -34,6 +36,10 @@ public class Startseite extends Activity {
 		editor.putString("lautlos", "false");
 		editor.putString("vibrationaus", "false");
 		editor.apply();
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	private void createButtons(Button button, int id, String text, final Class c){
@@ -46,8 +52,13 @@ public class Startseite extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(Startseite.this, c);
-				startActivity(intent);
+				try{
+					Intent intent = new Intent(Startseite.this, c);
+					startActivity(intent);
+				}
+				catch(Exception ex){
+					ex.printStackTrace();
+				}
 			}
 		});
 	}

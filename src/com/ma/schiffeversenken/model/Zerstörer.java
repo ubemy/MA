@@ -1,25 +1,7 @@
 package com.ma.schiffeversenken.model;
 
-public class Zerstörer implements Schiff {
-	private String name ="Zerstörer";
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
+public class Zerstörer extends Schiff {
+	public Zerstörer(String name){
+		super(name, 3);
 	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public int getSize() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

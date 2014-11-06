@@ -12,7 +12,7 @@ public abstract class Schiff {
 	public Schiff(String name, int size){
 		this.name=name;
 		this.size=size;
-		standort = new FeldElement[size];
+		this.standort = new FeldElement[size];
 	}
 	
 	public int getSize() {
@@ -23,5 +23,7 @@ public abstract class Schiff {
 		return name;
 	}
 
-	
+	public void setStandort(FeldElement element, int i){
+		this.standort[i] = element;
+	}
 }

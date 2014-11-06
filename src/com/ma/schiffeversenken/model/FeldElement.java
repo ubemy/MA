@@ -7,6 +7,21 @@ public class FeldElement {
 	Schiff platziertesSchiff;
 	int id;
 	boolean belegt;
+	int kante1=0;
+	int kante2=0;
+	
+	public void setKante(int kante, int wert){
+		if(kante == 1) this.kante1 = wert;
+		else if(kante == 2) this.kante2 = wert;
+	}
+	
+	public int getKante(int kante){
+		int ret = 0;
+		if(kante == 1) ret = this.kante1;
+		else if(kante == 2) ret = this.kante2;
+		
+		return ret;
+	}
 	
 	public FeldElement(int id){
 		this.id=id;
@@ -29,7 +44,15 @@ public class FeldElement {
 		this.platziertesSchiff = schiff;
 	}
 	
+	public Schiff getPlatziertesSchiff(){
+		return this.platziertesSchiff;
+	}
+	
 	public boolean getBelegt(){
 		return belegt;
+	}
+	
+	public void setBelegt(boolean belegt){
+		this.belegt = belegt;
 	}
 }

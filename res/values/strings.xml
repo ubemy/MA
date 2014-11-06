@@ -9,5 +9,6 @@
     <string name="title_activity_schwierigkeitsstufe">Schwierigkeitsstufe</string>
     <string name="title_activity_hilfe">Hilfe</string>
     <string name="title_activity_spielermodus">Spielermodus</string>
+    <string name="title_activity_test_ausgabe">TestAusgabe</string>
 
 </resources>

@@ -61,8 +61,8 @@ public class Startseite extends Activity {
 							new Kreuzer("Kreuzer"),
 							new Kreuzer("Kreuzer"),
 							new Kreuzer("Kreuzer"),
-							new Zerstoerer("Zerstörer"),
-							new Zerstoerer("Zerstörer"),
+							new Zerstoerer("Zerstoerer"),
+							new Zerstoerer("Zerstoerer"),
 							new Schlachtschiff("Schlachtschiff")
 							};
 					Spielfeld feld = new Spielfeld(0);

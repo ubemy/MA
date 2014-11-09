@@ -8,7 +8,7 @@ public class MaikTestKlasse {
 	public MaikTestKlasse(){
 		//Eine Klasse zum testen
 		
-		Zerstoerer z = new Zerstoerer("Zerstörer");
+		Zerstoerer z = new Zerstoerer("Zerstoerer");
 		Uboot u = new Uboot("Uboot");
 		
 		Schiff[] schiffe = new Schiff[]{z, u};

@@ -29,7 +29,7 @@ public class FeldElement {
 	}
 
 	public void setNeighbors(FeldElement lNachbar, FeldElement rNachbar, FeldElement oNachbar, FeldElement uNachbar){
-		//Weiﬂt diesem FeldElement seine direkten Nachbarn zu
+		//Wei√üt diesem FeldElement seine direkten Nachbarn zu
 		this.lNachbar = lNachbar;
 		this.rNachbar = rNachbar;
 		this.oNachbar = oNachbar;

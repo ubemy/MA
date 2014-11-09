@@ -2,10 +2,10 @@ package com.ma.schiffeversenken.model;
 
 public abstract class Schiff {
 	/*
-	 * Interface für alle Schiffe
+	 * Interface fÃ¼r alle Schiffe
 	 */
 	
-	int size; //Länger des Schiffs
+	int size; //LÃ¤nger des Schiffs
 	String name; //Name des Schiffs
 	FeldElement[] standort; //Felder auf denen das Schiff platziert ist
 	

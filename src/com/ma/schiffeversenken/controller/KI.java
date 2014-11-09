@@ -16,17 +16,17 @@ import com.ma.schiffeversenken.model.*;
 import com.ma.schiffeversenken.view.Startseite;
 
 public class KI extends Activity {
-	Block blöcke[];
+	Block blÃ¶cke[];
 	Spielfeld t;
 	
 	public KI(){
-		blöcke = new Block[25];
+		blÃ¶cke = new Block[25];
 	}
 	
 	public void platziereSchiffe(Spielfeld feld, Schiff[] schiffe){
 		this.t = feld;
 		//Platziert die Schiffe automatisch auf dem Spielfeld
-		blöckeErstellen(feld);
+		blÃ¶ckeErstellen(feld);
 		Random random = new Random();
 		
 		for(Schiff schiff:schiffe){
@@ -37,22 +37,22 @@ public class KI extends Activity {
 			
 			do{
 				do{
-					//Prüfen ob der Block schon belegt ist.
+					//Prï¿½fen ob der Block schon belegt ist.
 					do{
-						//Zufällige Zahl erstellen
+						//Zufï¿½llige Zahl erstellen
 						randomID = random.nextInt(100);
 					}while(randomID == 0);
 				}while(!checkBlock(randomID, schiff));
 				
 				do{
-					//Prüfen ob das FeldElement schon belegt ist
+					//Prï¿½fen ob das FeldElement schon belegt ist
 					horver = random.nextInt(3);
 					run++;
 					ok = checkEinheit(horver, schiff, randomID, feld);
 				}while(!ok && run<4);
 			}while(!ok);
 			
-			//Wenn die gewünschten Felder frei sind, kann hier jetzt das 
+			//Wenn die gewï¿½nschten Felder frei sind, kann hier jetzt das 
 			//Schiff platziert werden..
 			feld.getElementByID(randomID).setBelegt(true);
 			FeldElement tempElement = feld.getElementByID(randomID);
@@ -107,7 +107,7 @@ public class KI extends Activity {
 						if(temp.getPlatziertesSchiff().getName()=="Uboot")ret += "U";
 						if(temp.getPlatziertesSchiff().getName()=="Schlachtschiff")ret += "S";
 						if(temp.getPlatziertesSchiff().getName()=="Kreuzer")ret += "K";
-						if(temp.getPlatziertesSchiff().getName()=="Zerstörer")ret += "Z";
+						if(temp.getPlatziertesSchiff().getName()=="Zerstï¿½rer")ret += "Z";
 					}
 					catch(Exception ex){
 						ex.printStackTrace();
@@ -190,7 +190,7 @@ public class KI extends Activity {
 	}
 	
 	private Block getBlockById(int id){
-		for(Block b : blöcke){
+		for(Block b : blÃ¶cke){
 			for(int i:b.getFelder()){
 				if(i==id){
 					return b;
@@ -213,13 +213,13 @@ public class KI extends Activity {
 		return ret;
 	}
 	
-	private void blöckeErstellen(Spielfeld feld){
-		//Teil das Spielfeld in 25 identische Blöcke auf
+	private void blÃ¶ckeErstellen(Spielfeld feld){
+		//Teil das Spielfeld in 25 identische Blï¿½cke auf
 		int k=0;
 		FeldElement[][] einheiten = feld.getEinheiten();
 		for(int i=0; i<10; i=i+2){
 			for(int j=0; j<10; j=j+2){
-				blöcke[k] = new Block(einheiten[i][j].getID(),
+				blÃ¶cke[k] = new Block(einheiten[i][j].getID(),
 						einheiten[i][j+1].getID(),
 						einheiten[i+1][j].getID(),
 						einheiten[i+1][j+1].getID());

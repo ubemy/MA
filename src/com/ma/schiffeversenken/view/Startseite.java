@@ -51,7 +51,7 @@ public class Startseite extends Activity {
 			@Override
 			public void onClick(View v) {
 				try{
-					Zerstoerer z = newZerstoererr("Zerstörer");
+					Zerstoerer z = new Zerstoerer("Zerstörer");
 					Uboot u = new Uboot("Uboot");
 					
 					Schiff[] schiffe = new Schiff[]{new Uboot("Uboot"),
@@ -61,8 +61,8 @@ public class Startseite extends Activity {
 							new Kreuzer("Kreuzer"),
 							new Kreuzer("Kreuzer"),
 							new Kreuzer("Kreuzer"),
-							neZerstoererer("Zerstörer"),
-							nZerstoererrer("Zerstörer"),
+							new Zerstoerer("Zerstörer"),
+							new Zerstoerer("Zerstörer"),
 							new Schlachtschiff("Schlachtschiff")
 							};
 					Spielfeld feld = new Spielfeld(0);

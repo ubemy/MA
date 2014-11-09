@@ -16,17 +16,17 @@ import com.ma.schiffeversenken.model.*;
 import com.ma.schiffeversenken.view.Startseite;
 
 public class KI extends Activity {
-	Block blöcke[];
+	Block bloecke[];
 	Spielfeld t;
 	
 	public KI(){
-		blöcke = new Block[25];
+		bloecke = new Block[25];
 	}
 	
 	public void platziereSchiffe(Spielfeld feld, Schiff[] schiffe){
 		this.t = feld;
 		//Platziert die Schiffe automatisch auf dem Spielfeld
-		blöckeErstellen(feld);
+		bloeckeErstellen(feld);
 		Random random = new Random();
 		
 		for(Schiff schiff:schiffe){
@@ -107,7 +107,7 @@ public class KI extends Activity {
 						if(temp.getPlatziertesSchiff().getName()=="Uboot")ret += "U";
 						if(temp.getPlatziertesSchiff().getName()=="Schlachtschiff")ret += "S";
 						if(temp.getPlatziertesSchiff().getName()=="Kreuzer")ret += "K";
-						if(temp.getPlatziertesSchiff().getName()=="Zerst�rer")ret += "Z";
+						if(temp.getPlatziertesSchiff().getName()=="Zerstoerer")ret += "Z";
 					}
 					catch(Exception ex){
 						ex.printStackTrace();
@@ -190,7 +190,7 @@ public class KI extends Activity {
 	}
 	
 	private Block getBlockById(int id){
-		for(Block b : blöcke){
+		for(Block b : bloecke){
 			for(int i:b.getFelder()){
 				if(i==id){
 					return b;
@@ -213,13 +213,13 @@ public class KI extends Activity {
 		return ret;
 	}
 	
-	private void blöckeErstellen(Spielfeld feld){
+	private void bloeckeErstellen(Spielfeld feld){
 		//Teil das Spielfeld in 25 identische Bl�cke auf
 		int k=0;
 		FeldElement[][] einheiten = feld.getEinheiten();
 		for(int i=0; i<10; i=i+2){
 			for(int j=0; j<10; j=j+2){
-				blöcke[k] = new Block(einheiten[i][j].getID(),
+				bloecke[k] = new Block(einheiten[i][j].getID(),
 						einheiten[i][j+1].getID(),
 						einheiten[i+1][j].getID(),
 						einheiten[i+1][j+1].getID());

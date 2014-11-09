@@ -18,8 +18,6 @@ import android.view.View;
 import android.widget.Button;
 
 public class Startseite extends Activity {
-	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,7 +25,6 @@ public class Startseite extends Activity {
 		
 		Button startSpielButton=null, einstellungenButton=null, hilfeButton=null;
 		try{
-		
 			createButtons(startSpielButton, R.id.Start_Spiel_Button, "Spiel starten", Spielermodus.class);
 			createButtons(einstellungenButton, R.id.Einstellungen_Button, "Einstellungen", Einstellungen.class);
 			createButtons(hilfeButton, R.id.Hilfe_Button, "Hilfe", Hilfe.class);

@@ -79,6 +79,10 @@ public class KI extends Activity {
 			}while((nextAttackID == 0) && feld.getElementByID(nextAttackID).getAttackedBySecondPlayer());
 		}
 		
+		//Werte reinigen
+		shipDestroyedByLastAttack = false;
+		shipHitByLastAttack = false;
+		
 		//Ausgewaehltes FeldElement attackieren
 		return nextAttackID;
 	}

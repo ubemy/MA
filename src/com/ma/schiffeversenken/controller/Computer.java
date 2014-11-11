@@ -33,14 +33,14 @@ public class Computer {
 			nextAttackID = idForContinueLastAttack;
 		}
 		else{
-			//Angriff auf eine neue zufällige FeldID starten
+			//Angriff auf eine neue zufaellige FeldID starten
 			do{
 				//Zufaellige Zahl erstellen
 				nextAttackID = random.nextInt(100);
 			}while((nextAttackID == 0) && fieldAlreadyAttacked(nextAttackID));
 		}
 		
-		//Ausgewähltes FeldElement attackieren
+		//Ausgewaehltes FeldElement attackieren
 		FeldElement fe = feld.getElementByID(nextAttackID);
 		fe.attack();
 	}
@@ -49,9 +49,7 @@ public class Computer {
 		int ret = 0;
 		
 		if(shipHitByLastAttack){
-			if(!shipDestroyedByLastAttack){
-				//ret = lastAttackedID;
-				
+			if(!shipDestroyedByLastAttack){				
 				if(feld.getElementByID(lastAttackedID + 1).getShipDestroyedBySecondPlayer()){
 					ret = lastAttackedID - 1;
 				}
@@ -72,7 +70,7 @@ public class Computer {
 	
 	private boolean fieldAlreadyAttacked(int id){
 		/*
-		 * Überprueft ob das Feld mit der angegebenen ID bereits vom Computer attackiert wurde
+		 * Ueberprueft ob das Feld mit der angegebenen ID bereits vom Computer attackiert wurde
 		 */
 		boolean ret = false;
 		FeldElement f = feld.getElementByID(id);

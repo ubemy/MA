@@ -1,4 +1,4 @@
-package com.ma.schiffeversenken.controller;
+package com.ma.schiffeversenken.model;
 
 public class Block {
 	int felder[];

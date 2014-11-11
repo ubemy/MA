@@ -52,7 +52,7 @@ public class KI extends Activity {
 				}while(!ok && run<4);
 			}while(!ok);
 			
-			//Wenn die gew�nschten Felder frei sind, kann hier jetzt das 
+			//Wenn die gewuenschten Felder frei sind, kann hier jetzt das 
 			//Schiff platziert werden..
 			feld.getElementByID(randomID).setBelegt(true);
 			FeldElement tempElement = feld.getElementByID(randomID);

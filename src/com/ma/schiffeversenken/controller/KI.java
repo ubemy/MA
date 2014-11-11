@@ -16,221 +16,141 @@ import com.ma.schiffeversenken.model.*;
 import com.ma.schiffeversenken.view.Startseite;
 
 public class KI extends Activity {
-	Block bloecke[];
-	Spielfeld t;
+	//Spiellogik des Computer Gegners
+	private Spielfeld feld;
+	private boolean shipDestroyedByLastAttack;
+	private boolean shipHitByLastAttack;
+	private int lastAttackedID;
 	
-	public KI(){
-		bloecke = new Block[25];
+	public KI(Spielfeld feld){
+		this.feld = feld;
+		this.shipDestroyedByLastAttack = false;
+		this.shipHitByLastAttack = false;
+		this.lastAttackedID = 0;
+		setShips(createShips());
 	}
 	
-	public void platziereSchiffe(Spielfeld feld, Schiff[] schiffe){
-		this.t = feld;
-		//Platziert die Schiffe automatisch auf dem Spielfeld
-		bloeckeErstellen(feld);
-		Random random = new Random();
+	private Schiff[] createShips(){
+		//Benoetigte Schiffe erstellen
+		Schiff[] schiffe = new Schiff[]{new Uboot("Uboot"),
+				new Uboot("Uboot"),
+				new Uboot("Uboot"),
+				new Kreuzer("Kreuzer"),
+				new Kreuzer("Kreuzer"),
+				new Kreuzer("Kreuzer"),
+				new Kreuzer("Kreuzer"),
+				new Zerstoerer("Zerstoerer"),
+				new Zerstoerer("Zerstoerer"),
+				new Schlachtschiff("Schlachtschiff")
+				};
 		
-		for(Schiff schiff:schiffe){
-			int randomID = 0;
-			int horver = 0;
-			int run=0;
-			boolean ok = false;
-			
+		return schiffe;
+	}
+	
+	public void setShipDestroyedByLastAttack(boolean destroyed){
+		this.shipDestroyedByLastAttack = destroyed;
+	}
+	
+	public void setShipHitByLastAttack(boolean hit){
+		this.shipHitByLastAttack = hit;
+	}
+	
+	private void setShips(Schiff[] schiffe){
+		//Schiffe platzieren
+		ShipPlacement sp = new ShipPlacement();
+		sp.platziereSchiffe(feld, schiffe);
+	}
+	
+	public int attack(){
+		//Den Gegner attackieren
+		Random random = new Random();
+		int nextAttackID = 0;
+		int idForContinueLastAttack = getIDForContinueLastAttack();
+		
+		if(idForContinueLastAttack != 0){
+			//Den letzten Angriff fortfuehren
+			nextAttackID = idForContinueLastAttack;
+		}
+		else{
+			//Angriff auf eine neue zufaellige FeldID starten
 			do{
-				do{
-					//Pruefen ob der Block schon belegt ist.
-					do{
-						//Zufaellige Zahl erstellen
-						randomID = random.nextInt(100);
-					}while(randomID == 0);
-				}while(!checkBlock(randomID, schiff));
-				
-				do{
-					//Pruefen ob das FeldElement schon belegt ist
-					horver = random.nextInt(3);
-					run++;
-					ok = checkEinheit(horver, schiff, randomID, feld);
-				}while(!ok && run<4);
-			}while(!ok);
-			
-			//Wenn die gewuenschten Felder frei sind, kann hier jetzt das 
-			//Schiff platziert werden..
-			feld.getElementByID(randomID).setBelegt(true);
-			FeldElement tempElement = feld.getElementByID(randomID);
-			tempElement.setBelegt(true);
-			tempElement.platziereSchiff(schiff);
-			schiff.setStandort(tempElement, 0);
-			int schiffSize=schiff.getSize();
-			
-			if(schiffSize>1){
-				if(horver == 0){
-					markElements(1, schiffSize, randomID, feld, schiff);
-				}
-				else if(horver == 1){
-					markElements(-10, schiffSize, randomID, feld, schiff);
-				}
-				else if(horver == 2){
-					markElements(-1, schiffSize, randomID, feld, schiff);
-				}
-				else if(horver == 3){
-					markElements(10, schiffSize, randomID, feld, schiff);
-				}
-			}
+				//Zufaellige Zahl erstellen
+				nextAttackID = random.nextInt(100);
+			}while((nextAttackID == 0) && feld.getElementByID(nextAttackID).getAttackedBySecondPlayer());
 		}
-		String hallo="test";
+		
+		//Ausgewaehltes FeldElement attackieren
+		return nextAttackID;
 	}
 	
-	private void markElements(int counter, int size, int id, Spielfeld feld, Schiff schiff){
-		int temp=0;
-		int finalCounter = 0;
-		for(int i=1;i<size;i++){
-			finalCounter = counter*i;
-			temp=id+finalCounter;
-			if(temp>0 && temp<101){
-				FeldElement tempElement = feld.getElementByID(temp);
-				tempElement.setBelegt(true);
-				tempElement.platziereSchiff(schiff);
-				schiff.setStandort(tempElement, i);
-			}
-		}
-	}
-	
-	public String print(){
-		//Spielfeld mit platziertes Schiffen wird ausgegeben
-		//Dient nur zum testen
-		String ret="#############\r\n";
-		for(int i=0;i<10;i++){
-			ret += "#";
-			for(int j=0;j<10;j++){
-				FeldElement temp = t.getEinheiten()[i][j];
-				if(temp.getBelegt()){
-					try{
-						if(temp.getPlatziertesSchiff().getName()=="Uboot")ret += "U";
-						if(temp.getPlatziertesSchiff().getName()=="Schlachtschiff")ret += "S";
-						if(temp.getPlatziertesSchiff().getName()=="Kreuzer")ret += "K";
-						if(temp.getPlatziertesSchiff().getName()=="Zerstoerer")ret += "Z";
+	private int getIDForContinueLastAttack(){
+		int ret = 0;
+		
+		if(shipHitByLastAttack){
+			if(!shipDestroyedByLastAttack){				
+				if(feld.getElementByID(lastAttackedID + 1).getShipDestroyedBySecondPlayer()){
+					if(feld.getElementByID(lastAttackedID).getKante(1) != 4 && feld.getElementByID(lastAttackedID).getKante(2) != 4 && feld.getElementByID(lastAttackedID - 1).getAttackedBySecondPlayer()){
+						ret = lastAttackedID - 1;
 					}
-					catch(Exception ex){
-						ex.printStackTrace();
+					if(feld.getElementByID(lastAttackedID).getKante(1) != 3 && feld.getElementByID(lastAttackedID).getKante(2) != 3 && feld.getElementByID(lastAttackedID + 1).getAttackedBySecondPlayer()){
+						ret = lastAttackedID + 1;
+					}
+				}
+				else if(feld.getElementByID(lastAttackedID - 1).getShipDestroyedBySecondPlayer()){
+					if(feld.getElementByID(lastAttackedID).getKante(1) != 3 && feld.getElementByID(lastAttackedID).getKante(2) != 3 && feld.getElementByID(lastAttackedID + 1).getAttackedBySecondPlayer()){
+						ret = lastAttackedID + 1;
+					}
+					if(feld.getElementByID(lastAttackedID).getKante(1) != 4 && feld.getElementByID(lastAttackedID).getKante(2) != 4 && feld.getElementByID(lastAttackedID - 1).getAttackedBySecondPlayer()){
+						ret = lastAttackedID - 1;
+					}
+				}
+				else if(feld.getElementByID(lastAttackedID + 10).getShipDestroyedBySecondPlayer()){
+					if(feld.getElementByID(lastAttackedID).getKante(1) != 1 && feld.getElementByID(lastAttackedID).getKante(2) != 1 && feld.getElementByID(lastAttackedID - 10).getAttackedBySecondPlayer()){
+						ret = lastAttackedID - 10;
+					}
+					if(feld.getElementByID(lastAttackedID).getKante(1) != 2 && feld.getElementByID(lastAttackedID).getKante(2) != 2 && feld.getElementByID(lastAttackedID + 10).getAttackedBySecondPlayer()){
+						ret = lastAttackedID + 10;
+					}
+				}
+				else if(feld.getElementByID(lastAttackedID - 10).getShipDestroyedBySecondPlayer()){
+					if(feld.getElementByID(lastAttackedID).getKante(1) != 2 && feld.getElementByID(lastAttackedID).getKante(2) != 2 && feld.getElementByID(lastAttackedID + 10).getAttackedBySecondPlayer()){
+						ret = lastAttackedID + 10;
+					}
+					if(feld.getElementByID(lastAttackedID).getKante(1) != 1 && feld.getElementByID(lastAttackedID).getKante(2) != 1 && feld.getElementByID(lastAttackedID - 10).getAttackedBySecondPlayer()){
+						ret = lastAttackedID - 10;
 					}
 				}
 				else{
-					ret += "O";
-				}
-			}
-			ret += "#\r\n";
-		}
-		ret += "#############\r\n";
-		
-		return ret;
-	}
-	
-	private boolean checkEinheit(int horver, Schiff schiff, int id, Spielfeld feld){
-		int size = schiff.getSize();
-		boolean ret = true;
-		
-		if(feld.getElementByID(id).getBelegt()){
-			ret = false;
-		}
-		else {
-			if(horver == 0){
-				//Nach rechts gerichtetes Schiff
-				ret = checkID(1, size, id, feld);
-			}
-			else if(horver == 1){
-				//Nach oben gerichtetes Schiff
-				ret = checkID(-10, size, id, feld);
-			}
-			else if(horver == 2){
-				//Nach links gerichtetes Schiff
-				ret = checkID(-1, size, id, feld);
-			}
-			else if(horver == 3){
-				//Nach unten gerichtetes Schiff
-				ret = checkID(10, size, id, feld);
-			}
-		}
-		
-		return ret;
-	}
-	
-	private boolean checkID(int counter, int size, int id, Spielfeld feld){
-		boolean ret = true;
-		int temp=0;
-		int finalCounter = 0;
-		for(int i=1;i<=size;i++){
-			finalCounter = counter*i;
-			temp=id+finalCounter;
-			if(temp>0 && temp<101){
-				FeldElement tempElement = feld.getElementByID(temp); 
-				if(tempElement.getBelegt()) ret = false;
-				if((size-i)>0){
-					if(checkKante(counter, tempElement)) ret = false;
-				}
-			}
-			else ret=false;
-		}
-		return ret;
-	}
-	
-	private boolean checkKante(int counter, FeldElement element){
-		int kRichtung = 0;
-		boolean ret = false;
-		int id = element.getID();
-		if((id>0 && id<11) ||
-				(id>89 && id<101) ||
-				id==11 || id==21 || id==31 || id==41 || id==51 || id==61 ||
-				id==71 || id==81 || id==20 || id==30 || id==40 || id==50 ||
-				id==60 || id==70 || id==80){
-			String test="Hallo";
-		}
-		
-		if(counter == 1) kRichtung = 3;
-		else if(counter == -1) kRichtung = 4;
-		else if(counter == 10) kRichtung = 2;
-		else if(counter == -10) kRichtung = 1;
-		
-		if(element.getKante(1) == kRichtung || element.getKante(2) == kRichtung) ret = true;
-		
-		return ret;
-	}
-	
-	private Block getBlockById(int id){
-		for(Block b : bloecke){
-			for(int i:b.getFelder()){
-				if(i==id){
-					return b;
+					Random random = new Random();
+					int randomInt = random.nextInt(3) + 1;
+					
+					if(feld.getElementByID(lastAttackedID).getKante(1) != randomInt && feld.getElementByID(lastAttackedID).getKante(2) != randomInt){
+						if(randomInt == 1){
+							if(!feld.getElementByID(lastAttackedID - 10).getAttackedBySecondPlayer()){
+								ret = lastAttackedID - 10;
+							}
+						}
+						if(randomInt == 2){
+							if(!feld.getElementByID(lastAttackedID + 10).getAttackedBySecondPlayer()){
+								ret = lastAttackedID + 10;
+							}
+						}
+						if(randomInt == 3){
+							if(!feld.getElementByID(lastAttackedID + 1).getAttackedBySecondPlayer()){
+								ret = lastAttackedID + 1;
+							}
+						}
+						if(randomInt == 4){
+							if(!feld.getElementByID(lastAttackedID - 1).getAttackedBySecondPlayer()){
+								ret = lastAttackedID - 1;
+							}
+						}
+					}
 				}
 			}
 		}
-		return null;
-	}
-	
-	private boolean checkBlock(int random, Schiff schiff){
-		boolean ret = true;
-		
-		try{
-			if(getBlockById(random).getBelegt()) ret = false;
-		}
-		catch(Exception ex){
-			ex.printStackTrace();
-		}
 		
 		return ret;
-	}
-	
-	private void bloeckeErstellen(Spielfeld feld){
-		//Teil das Spielfeld in 25 identische Bl�cke auf
-		int k=0;
-		FeldElement[][] einheiten = feld.getEinheiten();
-		for(int i=0; i<10; i=i+2){
-			for(int j=0; j<10; j=j+2){
-				bloecke[k] = new Block(einheiten[i][j].getID(),
-						einheiten[i][j+1].getID(),
-						einheiten[i+1][j].getID(),
-						einheiten[i+1][j+1].getID());
-				k++;
-			}
-		}
 	}
 }
 

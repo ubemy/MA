@@ -57,18 +57,22 @@ public class Spielfeld {
 				FeldElement e = einheiten[i][j];
 				int id = e.getID();
 				if(id < 11){
+					//Obere Kante
 					if(e.getKante(1) == 0) e.setKante(1, 1);
 					else e.setKante(2, 1);
 				}
 				if(id > 89){
+					//Untere Kante
 					if(e.getKante(1) == 0) e.setKante(1, 2);
 					else e.setKante(2, 2);
 				}
 				if((id-(10*(i+1))) == 0){
+					//Rechte Kante
 					if(e.getKante(1) == 0) e.setKante(1, 3);
 					else e.setKante(2, 3);
 				}
 				if((id-(10*i)) == 1){
+					//Linke Kante
 					if(e.getKante(1) == 0) e.setKante(1, 4);
 					else e.setKante(2, 4);
 				}

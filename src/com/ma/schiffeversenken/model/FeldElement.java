@@ -10,6 +10,7 @@ public class FeldElement {
 	boolean belegt;
 	int kante1=0;
 	int kante2=0;
+	private boolean attacked;
 	private boolean attackedByFirstPlayer;
 	private boolean attackedBySecondPlayer;
 	private boolean shipDestroyedByFirstPlayer;
@@ -18,14 +19,19 @@ public class FeldElement {
 	public FeldElement(int id){
 		this.id=id;
 		this.belegt = false;
+		this.attacked = false;
 		this.attackedByFirstPlayer = false;
 		this.attackedBySecondPlayer = false;
 		this.shipDestroyedByFirstPlayer = false;
 		this.shipDestroyedBySecondPlayer = false;
 	}
 	
-	public void attack(){
-		//Dieses FeldElement attackieren
+	public void setAttacked(boolean attacked){
+		this.attacked = attacked;
+	}
+	
+	public boolean getAttacked(){
+		return this.attacked;
 	}
 	
 	public boolean getAttackedByFirstPlayer(){
@@ -90,7 +96,12 @@ public class FeldElement {
 	}
 	
 	public Schiff getPlatziertesSchiff(){
-		return this.platziertesSchiff;
+		if(belegt){
+			return this.platziertesSchiff;
+		}
+		else{
+			return null;
+		}
 	}
 	
 	public boolean getBelegt(){

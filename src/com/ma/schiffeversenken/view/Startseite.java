@@ -64,11 +64,11 @@ public class Startseite extends Activity {
 							};
 					Spielfeld feld = new Spielfeld(0);
 					
-					KI ki = new KI();
-					ki.platziereSchiffe(feld, schiffe);
+					ShipPlacement sp = new ShipPlacement();
+					sp.platziereSchiffe(feld, schiffe);
 					
 					Intent inte = new Intent(Startseite.this, TestAusgabe.class);
-					inte.putExtra("Test", ki.print());
+					inte.putExtra("Test", sp.print());
 					startActivity(inte);
 				}
 				catch(Exception ex){

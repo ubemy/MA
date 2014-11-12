@@ -6,7 +6,7 @@ public class Spielfeld {
 	 * einheiten[y-Achse (Zeile)][x-Achse (Spalte)]
 	 */
 	FeldElement[][] einheiten = new FeldElement[10][10];
-	
+	Schiff[] placedShips;
 	/*
 	 * typ = Gibt den Typ des Spielfelds an.
 	 * Eigenes Spielfeld = 0;
@@ -24,6 +24,14 @@ public class Spielfeld {
 		catch(Exception ex){
 			ex.printStackTrace();
 		}
+	}
+	
+	public void setShips(Schiff[] ships){
+		this.placedShips = ships;
+	}
+	
+	public Schiff[] getShips(){
+		return this.placedShips;
 	}
 	
 	public FeldElement[][] getEinheiten(){
@@ -52,6 +60,7 @@ public class Spielfeld {
 	}
 	
 	private void createKante(){
+		//Markiert, dass dieses FeldElement an einer Kante platziert ist
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
 				FeldElement e = einheiten[i][j];

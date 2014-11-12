@@ -16,9 +16,11 @@ public class Spielermodus extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spielermodus);
 		
-		Button einzelSpielerButton=null;
+		Button einzelSpielerButton = null;
+		Button multiplayerGameButton = null;
 				
 		createButtons(einzelSpielerButton, R.id.Einzelspieler_Button, "Einzelspieler", Schwierigkeitsstufe.class);
+		createButtons(multiplayerGameButton, R.id.Mehrspieler_Button, "Mehrspieler", Multiplayer.class);
 	}
 
 	private void createButtons(Button button, int id, String text, final Class c){

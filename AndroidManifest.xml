@@ -47,6 +47,18 @@
             android:name=".controller.TestAusgabe"
             android:label="@string/title_activity_test_ausgabe" >
         </activity>
+        <activity
+            android:name=".view.Multiplayer"
+            android:label="@string/title_activity_multiplayer" >
+        </activity>
+        <activity
+            android:name=".view.CreateMultiplayerGame"
+            android:label="@string/title_activity_create_multiplayer_game" >
+        </activity>
+        <activity
+            android:name=".view.VisitMultiplayerGame"
+            android:label="@string/title_activity_visit_multiplayer_game" >
+        </activity>
     </application>
 
 </manifest>

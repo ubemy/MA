@@ -17,13 +17,14 @@ import com.ma.schiffeversenken.view.Startseite;
 
 public class KI extends Activity {
 	//Spiellogik des Computer Gegners
-	private Spielfeld feld;
+	private Spielfeld myField;
+	private Spielfeld enemiesField;
 	private boolean shipDestroyedByLastAttack;
 	private boolean shipHitByLastAttack;
 	private int lastAttackedID;
 	
 	public KI(Spielfeld feld){
-		this.feld = feld;
+		this.myField = feld;
 		this.shipDestroyedByLastAttack = false;
 		this.shipHitByLastAttack = false;
 		this.lastAttackedID = 0;
@@ -58,7 +59,7 @@ public class KI extends Activity {
 	private void setShips(Schiff[] schiffe){
 		//Schiffe platzieren
 		ShipPlacement sp = new ShipPlacement();
-		sp.platziereSchiffe(feld, schiffe);
+		sp.platziereSchiffe(myField, schiffe);
 	}
 	
 	public int attack(){
@@ -76,7 +77,7 @@ public class KI extends Activity {
 			do{
 				//Zufaellige Zahl erstellen
 				nextAttackID = random.nextInt(100);
-			}while((nextAttackID == 0) && feld.getElementByID(nextAttackID).getAttackedBySecondPlayer());
+			}while((nextAttackID == 0) && enemiesField.getElementByID(nextAttackID).getAttacked());
 		}
 		
 		//Werte reinigen
@@ -92,35 +93,35 @@ public class KI extends Activity {
 		
 		if(shipHitByLastAttack){
 			if(!shipDestroyedByLastAttack){				
-				if(feld.getElementByID(lastAttackedID + 1).getShipDestroyedBySecondPlayer()){
-					if(feld.getElementByID(lastAttackedID).getKante(1) != 4 && feld.getElementByID(lastAttackedID).getKante(2) != 4 && feld.getElementByID(lastAttackedID - 1).getAttackedBySecondPlayer()){
+				if(enemiesField.getElementByID(lastAttackedID + 1).getPlatziertesSchiff().getDestroyed()){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != 4 && myField.getElementByID(lastAttackedID).getKante(2) != 4 && myField.getElementByID(lastAttackedID - 1).getAttacked()){
 						ret = lastAttackedID - 1;
 					}
-					if(feld.getElementByID(lastAttackedID).getKante(1) != 3 && feld.getElementByID(lastAttackedID).getKante(2) != 3 && feld.getElementByID(lastAttackedID + 1).getAttackedBySecondPlayer()){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != 3 && myField.getElementByID(lastAttackedID).getKante(2) != 3 && myField.getElementByID(lastAttackedID + 1).getAttacked()){
 						ret = lastAttackedID + 1;
 					}
 				}
-				else if(feld.getElementByID(lastAttackedID - 1).getShipDestroyedBySecondPlayer()){
-					if(feld.getElementByID(lastAttackedID).getKante(1) != 3 && feld.getElementByID(lastAttackedID).getKante(2) != 3 && feld.getElementByID(lastAttackedID + 1).getAttackedBySecondPlayer()){
+				else if(enemiesField.getElementByID(lastAttackedID - 1).getPlatziertesSchiff().getDestroyed()){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != 3 && myField.getElementByID(lastAttackedID).getKante(2) != 3 && myField.getElementByID(lastAttackedID + 1).getAttacked()){
 						ret = lastAttackedID + 1;
 					}
-					if(feld.getElementByID(lastAttackedID).getKante(1) != 4 && feld.getElementByID(lastAttackedID).getKante(2) != 4 && feld.getElementByID(lastAttackedID - 1).getAttackedBySecondPlayer()){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != 4 && myField.getElementByID(lastAttackedID).getKante(2) != 4 && myField.getElementByID(lastAttackedID - 1).getAttacked()){
 						ret = lastAttackedID - 1;
 					}
 				}
-				else if(feld.getElementByID(lastAttackedID + 10).getShipDestroyedBySecondPlayer()){
-					if(feld.getElementByID(lastAttackedID).getKante(1) != 1 && feld.getElementByID(lastAttackedID).getKante(2) != 1 && feld.getElementByID(lastAttackedID - 10).getAttackedBySecondPlayer()){
+				else if(enemiesField.getElementByID(lastAttackedID + 10).getPlatziertesSchiff().getDestroyed()){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != 1 && myField.getElementByID(lastAttackedID).getKante(2) != 1 && myField.getElementByID(lastAttackedID - 10).getAttacked()){
 						ret = lastAttackedID - 10;
 					}
-					if(feld.getElementByID(lastAttackedID).getKante(1) != 2 && feld.getElementByID(lastAttackedID).getKante(2) != 2 && feld.getElementByID(lastAttackedID + 10).getAttackedBySecondPlayer()){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != 2 && myField.getElementByID(lastAttackedID).getKante(2) != 2 && myField.getElementByID(lastAttackedID + 10).getAttacked()){
 						ret = lastAttackedID + 10;
 					}
 				}
-				else if(feld.getElementByID(lastAttackedID - 10).getShipDestroyedBySecondPlayer()){
-					if(feld.getElementByID(lastAttackedID).getKante(1) != 2 && feld.getElementByID(lastAttackedID).getKante(2) != 2 && feld.getElementByID(lastAttackedID + 10).getAttackedBySecondPlayer()){
+				else if(enemiesField.getElementByID(lastAttackedID - 10).getPlatziertesSchiff().getDestroyed()){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != 2 && myField.getElementByID(lastAttackedID).getKante(2) != 2 && myField.getElementByID(lastAttackedID + 10).getAttacked()){
 						ret = lastAttackedID + 10;
 					}
-					if(feld.getElementByID(lastAttackedID).getKante(1) != 1 && feld.getElementByID(lastAttackedID).getKante(2) != 1 && feld.getElementByID(lastAttackedID - 10).getAttackedBySecondPlayer()){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != 1 && myField.getElementByID(lastAttackedID).getKante(2) != 1 && myField.getElementByID(lastAttackedID - 10).getAttacked()){
 						ret = lastAttackedID - 10;
 					}
 				}
@@ -128,24 +129,24 @@ public class KI extends Activity {
 					Random random = new Random();
 					int randomInt = random.nextInt(3) + 1;
 					
-					if(feld.getElementByID(lastAttackedID).getKante(1) != randomInt && feld.getElementByID(lastAttackedID).getKante(2) != randomInt){
+					if(enemiesField.getElementByID(lastAttackedID).getKante(1) != randomInt && myField.getElementByID(lastAttackedID).getKante(2) != randomInt){
 						if(randomInt == 1){
-							if(!feld.getElementByID(lastAttackedID - 10).getAttackedBySecondPlayer()){
+							if(!enemiesField.getElementByID(lastAttackedID - 10).getAttacked()){
 								ret = lastAttackedID - 10;
 							}
 						}
 						if(randomInt == 2){
-							if(!feld.getElementByID(lastAttackedID + 10).getAttackedBySecondPlayer()){
+							if(!enemiesField.getElementByID(lastAttackedID + 10).getAttacked()){
 								ret = lastAttackedID + 10;
 							}
 						}
 						if(randomInt == 3){
-							if(!feld.getElementByID(lastAttackedID + 1).getAttackedBySecondPlayer()){
+							if(!enemiesField.getElementByID(lastAttackedID + 1).getAttacked()){
 								ret = lastAttackedID + 1;
 							}
 						}
 						if(randomInt == 4){
-							if(!feld.getElementByID(lastAttackedID - 1).getAttackedBySecondPlayer()){
+							if(!enemiesField.getElementByID(lastAttackedID - 1).getAttacked()){
 								ret = lastAttackedID - 1;
 							}
 						}

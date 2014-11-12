@@ -24,7 +24,7 @@ public class ShipPlacement {
 		//Platziert die Schiffe automatisch auf dem Spielfeld
 		bloeckeErstellen(feld);
 		Random random = new Random();
-		
+		feld.setShips(schiffe);
 		for(Schiff schiff:schiffe){
 			int randomID = 0;
 			int horver = 0;
@@ -53,6 +53,7 @@ public class ShipPlacement {
 			feld.getElementByID(randomID).setBelegt(true);
 			FeldElement tempElement = feld.getElementByID(randomID);
 			tempElement.setBelegt(true);
+			//TODO: X\Y Koordinate an Schiff uebergeben, wenn belegt
 			tempElement.platziereSchiff(schiff);
 			schiff.setStandort(tempElement, 0);
 			int schiffSize=schiff.getSize();

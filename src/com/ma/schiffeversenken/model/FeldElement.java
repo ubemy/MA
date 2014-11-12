@@ -11,19 +11,11 @@ public class FeldElement {
 	int kante1=0;
 	int kante2=0;
 	private boolean attacked;
-	private boolean attackedByFirstPlayer;
-	private boolean attackedBySecondPlayer;
-	private boolean shipDestroyedByFirstPlayer;
-	private boolean shipDestroyedBySecondPlayer;
 	
 	public FeldElement(int id){
 		this.id=id;
 		this.belegt = false;
 		this.attacked = false;
-		this.attackedByFirstPlayer = false;
-		this.attackedBySecondPlayer = false;
-		this.shipDestroyedByFirstPlayer = false;
-		this.shipDestroyedBySecondPlayer = false;
 	}
 	
 	public void setAttacked(boolean attacked){
@@ -34,38 +26,6 @@ public class FeldElement {
 		return this.attacked;
 	}
 	
-	public boolean getAttackedByFirstPlayer(){
-		return this.attackedByFirstPlayer;
-	}
-	
-	public void setAttackedByFirstPlayer(boolean attacked){
-		this.attackedByFirstPlayer = attacked;
-	}
-	
-	public boolean getAttackedBySecondPlayer(){
-		return this.attackedBySecondPlayer;
-	}
-	
-	public void setAttackedBySecondPlayer(boolean attacked){
-		this.attackedBySecondPlayer = attacked;
-	}
-	//
-	public boolean getShipDestroyedByFirstPlayer(){
-		return this.shipDestroyedByFirstPlayer;
-	}
-	
-	public void setShipDestroyedByFirstPlayer(boolean attacked){
-		this.shipDestroyedByFirstPlayer = attacked;
-	}
-	
-	public boolean getShipDestroyedBySecondPlayer(){
-		return this.shipDestroyedBySecondPlayer;
-	}
-	
-	public void setShipDestroyedBySecondPlayer(boolean attacked){
-		this.shipDestroyedBySecondPlayer = attacked;
-	}
-	//
 	public void setKante(int kante, int wert){
 		if(kante == 1) this.kante1 = wert;
 		else if(kante == 2) this.kante2 = wert;

@@ -16,5 +16,8 @@
     <string name="title_activity_hilfe">Hilfe</string>
     <string name="title_activity_spielermodus">Spielermodus</string>
     <string name="title_activity_test_ausgabe">TestAusgabe</string>
+    <string name="title_activity_multiplayer">Multiplayer</string>
+    <string name="title_activity_create_multiplayer_game">CreateMultiplayerGame</string>
+    <string name="title_activity_visit_multiplayer_game">VisitMultiplayerGame</string>
 
 </resources>

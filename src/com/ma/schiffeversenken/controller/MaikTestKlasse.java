@@ -14,7 +14,7 @@ public class MaikTestKlasse {
 		Schiff[] schiffe = new Schiff[]{z, u};
 		Spielfeld feld = new Spielfeld(0);
 		
-		KI ki = new KI();
-		ki.platziereSchiffe(feld, schiffe);
+		ShipPlacement sp = new ShipPlacement();
+		sp.platziereSchiffe(feld, schiffe);
 	}
 }

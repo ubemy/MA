@@ -17,3 +17,17 @@ gen/
 local.properties
 
 /nbandroid/
+
+#Android Studio
+.gradle/
+.idea/
+.settings/
+build/
+gradle/
+
+grandlew
+grandlew.bat
+MA.iml
+/build.gradle
+/gradlew
+/gradlew.bat

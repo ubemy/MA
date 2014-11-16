@@ -21,7 +21,7 @@ public class Schwierigkeitsstufe extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schwierigkeitsstufe);
         Button einfach_Button = null;
-        createButtons(einfach_Button, R.id.Einfach_Button, "Einfach", Main.class);
+        createButtons(einfach_Button, R.id.Einfach_Button, "Einfach", OpenGLES20Activity.class);
     }
 
     private void createButtons(Button button, int id, String text, final Class c) {

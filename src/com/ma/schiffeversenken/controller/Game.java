@@ -11,8 +11,8 @@ public class Game {
 	private int gameMode; //Einzelspieler (=0) oder Mehrspielermodus (=1)
 	private Field firstField; //Spielfeld des Spielerstellers
 	private Field secondField; //Spielfeld des Gastspielers
-	private boolean firstGamerAction; //Wird auf true gesetzt, wenn Spieler 1 eine Eingabe getätigt hat
-	private boolean secondGamerAction; //Wird auf true gesetzt, wenn Spieler 2 eine Eingabe getätigt hat
+	private boolean firstGamerAction; //Wird auf true gesetzt, wenn Spieler 1 eine Eingabe getaetigt hat
+	private boolean secondGamerAction; //Wird auf true gesetzt, wenn Spieler 2 eine Eingabe getaetigt hat
 	private int firstGamerAttackID; //Die Feld-ID, die Spieler 1 attackiert
 	private int secondGamerAttackID; //Die Feld-ID, die Spieler 2 attackiert
 	KI ki; //Kuenstlicher Computer Gegner
@@ -35,7 +35,7 @@ public class Game {
 		/*
 		 * Die Methode wird von der GUI aufgerufen,
 		 * sobald Spieler 1 auf ein Feld getippt
-		 * hat, das er attackieren möchte
+		 * hat, das er attackieren moechte
 		 */
 		this.firstGamerAttackID = id;
 		this.firstGamerAction = true;
@@ -45,7 +45,7 @@ public class Game {
 		/*
 		 * Die Methode wird von der GUI aufgerufen,
 		 * sobald Spieler 2 auf ein Feld getippt
-		 * hat, das er attackieren möchte
+		 * hat, das er attackieren moechte
 		 */
 		this.firstGamerAttackID = id;
 		this.firstGamerAction = true;
@@ -137,7 +137,7 @@ public class Game {
 			if(gamer == 1 && gameMode == 0){
 				/*
 				 * Wenn die KI attackiert hat werden zwei Variablen gesetzt,
-				 * damit die KI weiß ob ein Schiff getroffen und/oder zerstoert wurden
+				 * damit die KI weiss ob ein Schiff getroffen und/oder zerstoert wurden
 				 */
 				ki.setShipHitByLastAttack(true);
 				if(fe.getPlacedShip().getDestroyed()){

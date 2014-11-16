@@ -9,7 +9,7 @@ import com.ma.schiffeversenken.model.Field;
 public class ShipPlacement {
 	/*
 	 * Steuer das automatische Platzieren der Schiffe
-	 * für beide Spieler
+	 * fuer beide Spieler
 	 */
 	Block blocks[];
 	Field t;

@@ -18,7 +18,7 @@ public class Main extends Activity {
 
 	//Basic GL surface View
 	GLSurfaceView surfaceView;
-	GLRenderer renderer = new GLRenderer();
+    MyGLRenderer renderer = new MyGLRenderer();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,31 +30,7 @@ public class Main extends Activity {
 		
 		//set contentview from R.layout.activity_main to this surfaceView
 		setContentView(surfaceView);
-		
-		Button resetButton = new Button(this);
-		TextView tv = new TextView(this);
-		LinearLayout ll = new LinearLayout(this);
-		
-		resetButton.setText("Reset Scene");
-		tv.setText("Reset: ");
-		
-		
-		
-		ll.addView(tv);
-		ll.addView(resetButton);
-		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
-		
-		//linearlayout and l
-		addContentView(ll, lp);
-		
-		resetButton.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				//what happened when i klick the Reset Button
-				
-			}
-		});
-		
+
 	}
         
         
@@ -82,7 +58,7 @@ public class Main extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.spielermodus, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 

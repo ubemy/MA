@@ -20,7 +20,7 @@ public class Bluetooth extends Activity {
 		/*
 		 * Prueft ob Bluetooth verfuegbar und enabled ist
 		 * 
-		 * Bluetooth kann ueber folgenden Dialog in einer Avtivity eingeschaltet werden:
+		 * Bluetooth kann über folgenden Dialog in einer Avtivity eingeschaltet werden:
 		 * 
 		 * Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
     	 * startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);

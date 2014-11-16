@@ -1,10 +1,11 @@
 package com.ma.schiffeversenken.view;
 import com.ma.schiffeversenken.view.opengl.*;
+import android.opengl.GLSurfaceView.Renderer;
 
 /**
  * Created by xps on 16.11.2014.
  */
-public class MyGLRenderer implements GLSurfaceView.Renderer {
+public class MyGLRenderer implements Renderer {
 
     Triangle mTriangle;
     Square mSquare;

@@ -1,6 +1,6 @@
 package com.ma.schiffeversenken.model;
 
-public abstract class Schiff {
+public abstract class Ship {
 	/*
 	 * Interface für alle Schiffe
 	 */
@@ -8,13 +8,13 @@ public abstract class Schiff {
 	int size; //Laenge des Schiffs
 	boolean destroyed;
 	String name; //Name des Schiffs
-	FeldElement[] standort; //Felder auf denen das Schiff platziert ist
+	FieldUnit[] location; //Felder auf denen das Schiff platziert ist
 	
-	public Schiff(String name, int size){
+	public Ship(String name, int size){
 		this.name=name;
 		this.size=size;
 		this.destroyed = false;
-		this.standort = new FeldElement[size];
+		this.location = new FieldUnit[size];
 	}
 	
 	public void setDestroyed(boolean destroyed){
@@ -33,11 +33,11 @@ public abstract class Schiff {
 		return name;
 	}
 
-	public void setStandort(FeldElement element, int i){
-		this.standort[i] = element;
+	public void setStandort(FieldUnit element, int i){
+		this.location[i] = element;
 	}
 	
-	public FeldElement[] getStandort(){
-		return this.standort;
+	public FieldUnit[] getLocation(){
+		return this.location;
 	}
 }

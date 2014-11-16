@@ -3,29 +3,28 @@ package com.ma.schiffeversenken.controller;
 import java.util.Random;
 
 import com.ma.schiffeversenken.model.Block;
-import com.ma.schiffeversenken.model.FeldElement;
-import com.ma.schiffeversenken.model.Schiff;
-import com.ma.schiffeversenken.model.Spielfeld;
+import com.ma.schiffeversenken.model.*;
+import com.ma.schiffeversenken.model.Field;
 
 public class ShipPlacement {
 	/*
 	 * Steuer das automatische Platzieren der Schiffe
 	 * für beide Spieler
 	 */
-	Block bloecke[];
-	Spielfeld t;
+	Block blocks[];
+	Field t;
 	
 	public ShipPlacement() {
-		bloecke = new Block[25];
+		blocks = new Block[25];
 	}
 	
-	public void platziereSchiffe(Spielfeld feld, Schiff[] schiffe){
-		this.t = feld;
+	public void placeShips(Field field, Ship[] ships){
+		this.t = field;
 		//Platziert die Schiffe automatisch auf dem Spielfeld
-		bloeckeErstellen(feld);
+		createBlocks(field);
 		Random random = new Random();
-		feld.setShips(schiffe);
-		for(Schiff schiff:schiffe){
+		field.setShips(ships);
+		for(Ship ship:ships){
 			int randomID = 0;
 			int horver = 0;
 			int run=0;
@@ -38,55 +37,54 @@ public class ShipPlacement {
 						//Zufaellige Zahl erstellen
 						randomID = random.nextInt(100);
 					}while(randomID == 0);
-				}while(!checkBlock(randomID, schiff));
+				}while(!checkBlock(randomID, ship));
 				
 				do{
 					//Pruefen ob das FeldElement schon belegt ist
 					horver = random.nextInt(3);
 					run++;
-					ok = checkEinheit(horver, schiff, randomID, feld);
+					ok = checkEinheit(horver, ship, randomID, field);
 				}while(!ok && run<4);
 			}while(!ok);
 			
 			//Wenn die gewuenschten Felder frei sind, kann hier jetzt das 
 			//Schiff platziert werden..
-			feld.getElementByID(randomID).setBelegt(true);
-			FeldElement tempElement = feld.getElementByID(randomID);
-			tempElement.setBelegt(true);
+			field.getElementByID(randomID).setOccupied(true);
+			FieldUnit tempElement = field.getElementByID(randomID);
+			tempElement.setOccupied(true);
 			//TODO: X\Y Koordinate an Schiff uebergeben, wenn belegt
-			tempElement.platziereSchiff(schiff);
-			schiff.setStandort(tempElement, 0);
-			int schiffSize=schiff.getSize();
+			tempElement.placeShip(ship);
+			ship.setStandort(tempElement, 0);
+			int schiffSize=ship.getSize();
 			
 			if(schiffSize>1){
 				if(horver == 0){
-					markElements(1, schiffSize, randomID, feld, schiff);
+					markElements(1, schiffSize, randomID, field, ship);
 				}
 				else if(horver == 1){
-					markElements(-10, schiffSize, randomID, feld, schiff);
+					markElements(-10, schiffSize, randomID, field, ship);
 				}
 				else if(horver == 2){
-					markElements(-1, schiffSize, randomID, feld, schiff);
+					markElements(-1, schiffSize, randomID, field, ship);
 				}
 				else if(horver == 3){
-					markElements(10, schiffSize, randomID, feld, schiff);
+					markElements(10, schiffSize, randomID, field, ship);
 				}
 			}
 		}
-		String hallo="test";
 	}
 	
-	private void markElements(int counter, int size, int id, Spielfeld feld, Schiff schiff){
+	private void markElements(int counter, int size, int id, Field field, Ship ship){
 		int temp=0;
 		int finalCounter = 0;
 		for(int i=1;i<size;i++){
 			finalCounter = counter*i;
 			temp=id+finalCounter;
 			if(temp>0 && temp<101){
-				FeldElement tempElement = feld.getElementByID(temp);
-				tempElement.setBelegt(true);
-				tempElement.platziereSchiff(schiff);
-				schiff.setStandort(tempElement, i);
+				FieldUnit tempElement = field.getElementByID(temp);
+				tempElement.setOccupied(true);
+				tempElement.placeShip(ship);
+				ship.setStandort(tempElement, i);
 			}
 		}
 	}
@@ -98,13 +96,13 @@ public class ShipPlacement {
 		for(int i=0;i<10;i++){
 			ret += "#";
 			for(int j=0;j<10;j++){
-				FeldElement temp = t.getEinheiten()[i][j];
-				if(temp.getBelegt()){
+				FieldUnit temp = t.getFieldUnits()[i][j];
+				if(temp.getOccupied()){
 					try{
-						if(temp.getPlatziertesSchiff().getName()=="Uboot")ret += "U";
-						if(temp.getPlatziertesSchiff().getName()=="Schlachtschiff")ret += "S";
-						if(temp.getPlatziertesSchiff().getName()=="Kreuzer")ret += "K";
-						if(temp.getPlatziertesSchiff().getName()=="Zerstoerer")ret += "Z";
+						if(temp.getPlacedShip().getName()=="Uboot")ret += "U";
+						if(temp.getPlacedShip().getName()=="Schlachtschiff")ret += "S";
+						if(temp.getPlacedShip().getName()=="Kreuzer")ret += "K";
+						if(temp.getPlacedShip().getName()=="Zerstoerer")ret += "Z";
 					}
 					catch(Exception ex){
 						ex.printStackTrace();
@@ -121,11 +119,11 @@ public class ShipPlacement {
 		return ret;
 	}
 	
-	private boolean checkEinheit(int horver, Schiff schiff, int id, Spielfeld feld){
-		int size = schiff.getSize();
+	private boolean checkEinheit(int horver, Ship ship, int id, Field feld){
+		int size = ship.getSize();
 		boolean ret = true;
 		
-		if(feld.getElementByID(id).getBelegt()){
+		if(feld.getElementByID(id).getOccupied()){
 			ret = false;
 		}
 		else {
@@ -150,7 +148,7 @@ public class ShipPlacement {
 		return ret;
 	}
 	
-	private boolean checkID(int counter, int size, int id, Spielfeld feld){
+	private boolean checkID(int counter, int size, int id, Field feld){
 		boolean ret = true;
 		int temp=0;
 		int finalCounter = 0;
@@ -158,10 +156,10 @@ public class ShipPlacement {
 			finalCounter = counter*i;
 			temp=id+finalCounter;
 			if(temp>0 && temp<101){
-				FeldElement tempElement = feld.getElementByID(temp); 
-				if(tempElement.getBelegt()) ret = false;
+				FieldUnit tempElement = feld.getElementByID(temp); 
+				if(tempElement.getOccupied()) ret = false;
 				if((size-i)>0){
-					if(checkKante(counter, tempElement)) ret = false;
+					if(checkEdge(counter, tempElement)) ret = false;
 				}
 			}
 			else ret=false;
@@ -169,7 +167,7 @@ public class ShipPlacement {
 		return ret;
 	}
 	
-	private boolean checkKante(int counter, FeldElement element){
+	private boolean checkEdge(int counter, FieldUnit element){
 		int kRichtung = 0;
 		boolean ret = false;
 		int id = element.getID();
@@ -186,14 +184,14 @@ public class ShipPlacement {
 		else if(counter == 10) kRichtung = 2;
 		else if(counter == -10) kRichtung = 1;
 		
-		if(element.getKante(1) == kRichtung || element.getKante(2) == kRichtung) ret = true;
+		if(element.getEdge(1) == kRichtung || element.getEdge(2) == kRichtung) ret = true;
 		
 		return ret;
 	}
 	
 	private Block getBlockById(int id){
-		for(Block b : bloecke){
-			for(int i:b.getFelder()){
+		for(Block b : blocks){
+			for(int i:b.getFieldUnits()){
 				if(i==id){
 					return b;
 				}
@@ -202,11 +200,11 @@ public class ShipPlacement {
 		return null;
 	}
 	
-	private boolean checkBlock(int random, Schiff schiff){
+	private boolean checkBlock(int random, Ship ship){
 		boolean ret = true;
 		
 		try{
-			if(getBlockById(random).getBelegt()) ret = false;
+			if(getBlockById(random).getOccupied()) ret = false;
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
@@ -215,13 +213,13 @@ public class ShipPlacement {
 		return ret;
 	}
 	
-	private void bloeckeErstellen(Spielfeld feld){
+	private void createBlocks(Field feld){
 		//Teil das Spielfeld in 25 identische Blï¿½cke auf
 		int k=0;
-		FeldElement[][] einheiten = feld.getEinheiten();
+		FieldUnit[][] einheiten = feld.getFieldUnits();
 		for(int i=0; i<10; i=i+2){
 			for(int j=0; j<10; j=j+2){
-				bloecke[k] = new Block(einheiten[i][j].getID(),
+				blocks[k] = new Block(einheiten[i][j].getID(),
 						einheiten[i][j+1].getID(),
 						einheiten[i+1][j].getID(),
 						einheiten[i+1][j+1].getID());

@@ -9,15 +9,15 @@ public class Game {
 	 * - Kommuniziert mit beiden Spielern
 	 */
 	private int gameMode; //Einzelspieler (=0) oder Mehrspielermodus (=1)
-	private Spielfeld firstField; //Spielfeld des Spielerstellers
-	private Spielfeld secondField; //Spielfeld des Gastspielers
+	private Field firstField; //Spielfeld des Spielerstellers
+	private Field secondField; //Spielfeld des Gastspielers
 	private boolean firstGamerAction; //Wird auf true gesetzt, wenn Spieler 1 eine Eingabe get‰tigt hat
 	private boolean secondGamerAction; //Wird auf true gesetzt, wenn Spieler 2 eine Eingabe get‰tigt hat
 	private int firstGamerAttackID; //Die Feld-ID, die Spieler 1 attackiert
 	private int secondGamerAttackID; //Die Feld-ID, die Spieler 2 attackiert
 	KI ki; //Kuenstlicher Computer Gegner
 	
-	public Game(int gameMode, Spielfeld firstField, Spielfeld secondField){
+	public Game(int gameMode, Field firstField, Field secondField){
 		this.gameMode = gameMode;
 		this.firstField = firstField;
 		this.secondField = secondField;
@@ -26,7 +26,7 @@ public class Game {
 		
 		if(gameMode == 0){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
-			Spielfeld kiField = new Spielfeld(1);
+			Field kiField = new Field(1);
 			ki = new KI(kiField);
 		}
 	}
@@ -51,20 +51,20 @@ public class Game {
 		this.firstGamerAction = true;
 	}
 	
-	private void destroyShip(FeldElement fe){
+	private void destroyShip(FieldUnit fe){
 		/*
 		 * Wenn alle FeldElemente eines Schiffes zerstoert wurden,
 		 * wird dieses Schiff als zerstoert markiert
 		 */
 		boolean destroyed = true;
 		
-		for(FeldElement f : fe.getPlatziertesSchiff().getStandort()){
+		for(FieldUnit f : fe.getPlacedShip().getLocation()){
 			if(!f.getAttacked()){
 				destroyed = false;
 			}
 		}
 		
-		fe.getPlatziertesSchiff().setDestroyed(destroyed);
+		fe.getPlacedShip().setDestroyed(destroyed);
 	}
 	
 	public void start() throws InterruptedException{
@@ -120,7 +120,7 @@ public class Game {
 	private boolean gamerAction(int id, int gamer){
 		//Gibt zurueck ob ein gegnerisches Schiff getroffen wurde
 		boolean ret = false;
-		FeldElement fe;
+		FieldUnit fe;
 		
 		if(gamer == 0){
 			fe = secondField.getElementByID(id);
@@ -131,7 +131,7 @@ public class Game {
 		
 		fe.setAttacked(true); //FeldElement als attackiert markieren
 		
-		if(fe.getBelegt()){
+		if(fe.getOccupied()){
 			ret = true;
 			destroyShip(fe);
 			if(gamer == 1 && gameMode == 0){
@@ -140,7 +140,7 @@ public class Game {
 				 * damit die KI weiﬂ ob ein Schiff getroffen und/oder zerstoert wurden
 				 */
 				ki.setShipHitByLastAttack(true);
-				if(fe.getPlatziertesSchiff().getDestroyed()){
+				if(fe.getPlacedShip().getDestroyed()){
 					ki.setShipDestroyedByLastAttack(true);
 				}
 			}
@@ -158,13 +158,13 @@ public class Game {
 		 */
 		int ret = 1;
 		
-		for(Schiff ship : firstField.getShips()){
+		for(Ship ship : firstField.getShips()){
 			if(ship.getDestroyed()){
 				ret = 2;
 			}
 		}
 		
-		for(Schiff ship : secondField.getShips()){
+		for(Ship ship : secondField.getShips()){
 			if(ship.getDestroyed()){
 				ret = 0;
 			}

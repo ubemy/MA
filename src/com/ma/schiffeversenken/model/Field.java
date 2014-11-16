@@ -1,12 +1,12 @@
 package com.ma.schiffeversenken.model;
 
-public class Spielfeld {
+public class Field {
 	/*
 	 * einheiten = Das Spielfeld besteht aus 10x10 Einheiten
 	 * einheiten[y-Achse (Zeile)][x-Achse (Spalte)]
 	 */
-	FeldElement[][] einheiten = new FeldElement[10][10];
-	Schiff[] placedShips;
+	FieldUnit[][] units = new FieldUnit[10][10];
+	Ship[] placedShips;
 	/*
 	 * typ = Gibt den Typ des Spielfelds an.
 	 * Eigenes Spielfeld = 0;
@@ -14,7 +14,7 @@ public class Spielfeld {
 	 */
 	int typ;
 	
-	public Spielfeld(int typ){
+	public Field(int typ){
 		try{
 			this.typ = typ;
 			create();
@@ -26,22 +26,22 @@ public class Spielfeld {
 		}
 	}
 	
-	public void setShips(Schiff[] ships){
+	public void setShips(Ship[] ships){
 		this.placedShips = ships;
 	}
 	
-	public Schiff[] getShips(){
+	public Ship[] getShips(){
 		return this.placedShips;
 	}
 	
-	public FeldElement[][] getEinheiten(){
-		return einheiten;
+	public FieldUnit[][] getFieldUnits(){
+		return units;
 	}
 	
-	public FeldElement getElementByID(int id){
+	public FieldUnit getElementByID(int id){
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
-				if(einheiten[i][j].getID() == id) return einheiten[i][j];
+				if(units[i][j].getID() == id) return units[i][j];
 			}
 		}
 		return null;
@@ -54,7 +54,7 @@ public class Spielfeld {
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
 				id++;
-				einheiten[i][j] = new FeldElement(id);
+				units[i][j] = new FieldUnit(id);
 			}
 		}
 	}
@@ -63,27 +63,27 @@ public class Spielfeld {
 		//Markiert, dass dieses FeldElement an einer Kante platziert ist
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
-				FeldElement e = einheiten[i][j];
+				FieldUnit e = units[i][j];
 				int id = e.getID();
 				if(id < 11){
 					//Obere Kante
-					if(e.getKante(1) == 0) e.setKante(1, 1);
-					else e.setKante(2, 1);
+					if(e.getEdge(1) == 0) e.setEdge(1, 1);
+					else e.setEdge(2, 1);
 				}
 				if(id > 89){
 					//Untere Kante
-					if(e.getKante(1) == 0) e.setKante(1, 2);
-					else e.setKante(2, 2);
+					if(e.getEdge(1) == 0) e.setEdge(1, 2);
+					else e.setEdge(2, 2);
 				}
 				if((id-(10*(i+1))) == 0){
 					//Rechte Kante
-					if(e.getKante(1) == 0) e.setKante(1, 3);
-					else e.setKante(2, 3);
+					if(e.getEdge(1) == 0) e.setEdge(1, 3);
+					else e.setEdge(2, 3);
 				}
 				if((id-(10*i)) == 1){
 					//Linke Kante
-					if(e.getKante(1) == 0) e.setKante(1, 4);
-					else e.setKante(2, 4);
+					if(e.getEdge(1) == 0) e.setEdge(1, 4);
+					else e.setEdge(2, 4);
 				}
 			}
 		}
@@ -93,26 +93,26 @@ public class Spielfeld {
 		//Weist jedem FeldElement seine direkten Nachbarn zu
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
-				FeldElement lNachbar = null, rNachbar = null, oNachbar = null, uNachbar = null;
+				FieldUnit lNeighbor = null, rNeighbor = null, oNeighbor = null, uNeighbor = null;
 				
 				if(i>1 && i<10){
-					oNachbar = einheiten[i-1][j];
+					oNeighbor = units[i-1][j];
 				}	
 				if(i>0 && i<9){
-					uNachbar = einheiten[i+1][j];
+					uNeighbor = units[i+1][j];
 				}
 				
 				
 				if(j>1 && j<10){
-					lNachbar = einheiten[i][j-1];
+					lNeighbor = units[i][j-1];
 				}
 				
 				if(j>0 && j<9){
-					rNachbar = einheiten[i][j+1];
+					rNeighbor = units[i][j+1];
 				}
 				
 				
-				einheiten[i][j].setNeighbors(lNachbar, rNachbar, oNachbar, uNachbar);
+				units[i][j].setNeighbors(lNeighbor, rNeighbor, oNeighbor, uNeighbor);
 			}
 		}
 	}

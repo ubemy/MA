@@ -1,19 +1,19 @@
 package com.ma.schiffeversenken.model;
 
 public class Block {
-	int felder[];
-	boolean belegt;
+	int fieldUnits[];
+	boolean occupied;
 	
-	public Block(int feld1, int feld2, int feld3, int feld4){
-		felder = new int[]{feld1, feld2, feld3, feld4};
-		belegt = false;
+	public Block(int field1, int field2, int field3, int field4){
+		fieldUnits = new int[]{field1, field2, field3, field4};
+		occupied = false;
 	}
 	
-	public int[] getFelder(){
-		return felder;
+	public int[] getFieldUnits(){
+		return fieldUnits;
 	}
 	
-	public boolean getBelegt(){
-		return belegt;
+	public boolean getOccupied(){
+		return occupied;
 	}
 }

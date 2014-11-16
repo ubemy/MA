@@ -8,13 +8,13 @@ public class MaikTestKlasse {
 	public MaikTestKlasse(){
 		//Eine Klasse zum testen
 		
-		Zerstoerer z = new Zerstoerer("Zerstoerer");
-		Uboot u = new Uboot("Uboot");
+		Destroyer z = new Destroyer("Zerstoerer");
+		Submarine u = new Submarine("Uboot");
 		
-		Schiff[] schiffe = new Schiff[]{z, u};
-		Spielfeld feld = new Spielfeld(0);
+		Ship[] schiffe = new Ship[]{z, u};
+		Field feld = new Field(0);
 		
 		ShipPlacement sp = new ShipPlacement();
-		sp.platziereSchiffe(feld, schiffe);
+		sp.placeShips(feld, schiffe);
 	}
 }

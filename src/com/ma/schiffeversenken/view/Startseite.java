@@ -48,24 +48,24 @@ public class Startseite extends Activity {
 			@Override
 			public void onClick(View v) {
 				try{
-					Zerstoerer z = new Zerstoerer("Zerstörer");
-					Uboot u = new Uboot("Uboot");
+					Destroyer z = new Destroyer("Zerstoerer");
+					Submarine u = new Submarine("Uboot");
 					
-					Schiff[] schiffe = new Schiff[]{new Uboot("Uboot"),
-							new Uboot("Uboot"),
-							new Uboot("Uboot"),
-							new Kreuzer("Kreuzer"),
-							new Kreuzer("Kreuzer"),
-							new Kreuzer("Kreuzer"),
-							new Kreuzer("Kreuzer"),
-							new Zerstoerer("Zerstoerer"),
-							new Zerstoerer("Zerstoerer"),
-							new Schlachtschiff("Schlachtschiff")
+					Ship[] ships = new Ship[]{new Submarine("Uboot"),
+							new Submarine("Uboot"),
+							new Submarine("Uboot"),
+							new Cruiser("Kreuzer"),
+							new Cruiser("Kreuzer"),
+							new Cruiser("Kreuzer"),
+							new Cruiser("Kreuzer"),
+							new Destroyer("Zerstoerer"),
+							new Destroyer("Zerstoerer"),
+							new Battleship("Schlachtschiff")
 							};
-					Spielfeld feld = new Spielfeld(0);
+					Field field = new Field(0);
 					
 					ShipPlacement sp = new ShipPlacement();
-					sp.platziereSchiffe(feld, schiffe);
+					sp.placeShips(field, ships);
 					
 					Intent inte = new Intent(Startseite.this, TestAusgabe.class);
 					inte.putExtra("Test", sp.print());

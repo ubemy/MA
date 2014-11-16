@@ -12,10 +12,10 @@
         android:id="@+id/Vibration_aus_Checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Vibration aus"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="78dp"
-        android:text="Vibration aus" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="45dp" />
 
     <CheckBox
         android:id="@+id/Lautlos_Checkbox"

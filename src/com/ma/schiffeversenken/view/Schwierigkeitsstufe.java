@@ -20,8 +20,8 @@ public class Schwierigkeitsstufe extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schwierigkeitsstufe);
-        Button Normal_Button = null;
-        createButtons(Normal_Button, R.id.Normal_Button, "Normal", SpielFeld.class);
+        Button einfach_Button = null;
+        createButtons(einfach_Button, R.id.Einfach_Button, "Einfach", Main.class);
     }
 
     private void createButtons(Button button, int id, String text, final Class c) {

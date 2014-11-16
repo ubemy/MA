@@ -1,7 +1,21 @@
+package com.ma.schiffeversenken.view.opengl;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
+import android.opengl.GLES20;
+
+
 public class Triangle {
 
     private FloatBuffer vertexBuffer;
-
+	private int mProgram;
+	private int mPositionHandle;
+	private int vertexStride;
+	private int mColorHandle;
+	private int vertexCount;
+	
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
     static float triangleCoords[] = {   // in counterclockwise order:
@@ -31,8 +45,6 @@ public class Triangle {
                     "void main() {" +
                     "  gl_FragColor = vColor;" +
                     "}";
-
-
 
     /*
     In order to draw your shape, you must compile the shader code, add them to a OpenGL ES program
@@ -75,31 +87,44 @@ public class Triangle {
     Create a draw() method for drawing the shape. This code sets the position and color values to
     the shape’s vertex shader and fragment shader, and then executes the drawing function.
      */
-    public void draw() {
-        // Add program to OpenGL ES environment
-        GLES20.glUseProgram(mProgram);
+public void draw() {
+    // Add program to OpenGL ES environment
+    GLES20.glUseProgram(mProgram);
 
-        // get handle to vertex shader's vPosition member
-        mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+    // get handle to vertex shader's vPosition member
+    mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
 
-        // Enable a handle to the triangle vertices
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
+    // Enable a handle to the triangle vertices
+    GLES20.glEnableVertexAttribArray(mPositionHandle);
 
-        // Prepare the triangle coordinate data
-        GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
-                GLES20.GL_FLOAT, false,
-                vertexStride, vertexBuffer);
+    // Prepare the triangle coordinate data
+    GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
+                                 GLES20.GL_FLOAT, false,
+                                 vertexStride, vertexBuffer);
 
-        // get handle to fragment shader's vColor member
-        mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
+    // get handle to fragment shader's vColor member
+    mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
 
-        // Set color for drawing the triangle
-        GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+    // Set color for drawing the triangle
+    GLES20.glUniform4fv(mColorHandle, 1, color, 0);
 
-        // Draw the triangle
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
+    // Draw the triangle
+    GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
 
-        // Disable vertex array
-        GLES20.glDisableVertexAttribArray(mPositionHandle);
+    // Disable vertex array
+    GLES20.glDisableVertexAttribArray(mPositionHandle);
+}
+          
+    public static int loadShader(int type, String shaderCode){
+
+        // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
+        // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
+        int shader = GLES20.glCreateShader(type);
+
+        // add the source code to the shader and compile it
+        GLES20.glShaderSource(shader, shaderCode);
+        GLES20.glCompileShader(shader);
+
+        return shader;
     }
 }

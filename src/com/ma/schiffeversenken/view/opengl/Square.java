@@ -1,11 +1,24 @@
 package com.ma.schiffeversenken.view.opengl;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+import android.opengl.GLES20;
+
 /**
  * Created by xps on 16.11.2014.
  */
 public class Square {
     private FloatBuffer vertexBuffer;
     private ShortBuffer drawListBuffer;
+    private int mProgram;
+	private int mPositionHandle;
+	private int vertexStride;
+	private int mColorHandle;
+	private float[] color;
+	private int vertexCount;
 
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
@@ -33,6 +46,9 @@ public class Square {
                     "void main() {" +
                     "  gl_FragColor = vColor;" +
                     "}";
+	
+
+	
 
     /*
     In order to draw your shape, you must compile the shader code, add them to a OpenGL ES program
@@ -93,8 +109,8 @@ public class Square {
 
         // Prepare the triangle coordinate data
         GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
-                GLES20.GL_FLOAT, false,
-                vertexStride, vertexBuffer);
+                                     GLES20.GL_FLOAT, false,
+                                     vertexStride, vertexBuffer);
 
         // get handle to fragment shader's vColor member
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
@@ -107,5 +123,19 @@ public class Square {
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(mPositionHandle);
+    }
+              
+   
+    public static int loadShader(int type, String shaderCode){
+
+        // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
+        // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
+        int shader = GLES20.glCreateShader(type);
+
+        // add the source code to the shader and compile it
+        GLES20.glShaderSource(shader, shaderCode);
+        GLES20.glCompileShader(shader);
+
+        return shader;
     }
 }

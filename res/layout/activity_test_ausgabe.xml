@@ -12,8 +12,30 @@
         android:id="@+id/Test_Text"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_marginTop="46dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/Test_Text"
+        android:layout_below="@+id/Test_Text"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/Test_Ausgabe_OK_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:text="OK" />
 
 </RelativeLayout>

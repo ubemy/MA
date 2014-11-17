@@ -1,29 +1,98 @@
 package com.ma.schiffeversenken.controller;
 
 import com.ma.schiffeversenken.R;
+import com.ma.schiffeversenken.model.Battleship;
+import com.ma.schiffeversenken.model.Cruiser;
+import com.ma.schiffeversenken.model.Destroyer;
+import com.ma.schiffeversenken.model.Field;
+import com.ma.schiffeversenken.model.Ship;
+import com.ma.schiffeversenken.model.Submarine;
+import com.ma.schiffeversenken.view.Startseite;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TestAusgabe extends Activity {
-
+	Game game;
+	Thread gameThread; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test_ausgabe);
+		
+		Ship[] myships = new Ship[]{new Submarine("Uboot"),
+				new Submarine("Uboot"),
+				new Submarine("Uboot"),
+				new Cruiser("Kreuzer"),
+				new Cruiser("Kreuzer"),
+				new Cruiser("Kreuzer"),
+				new Cruiser("Kreuzer"),
+				new Destroyer("Zerstoerer"),
+				new Destroyer("Zerstoerer"),
+				new Battleship("Schlachtschiff")
+				};
+		
+		Ship[] enemyships = new Ship[]{new Submarine("Uboot"),
+				new Submarine("Uboot"),
+				new Submarine("Uboot"),
+				new Cruiser("Kreuzer"),
+				new Cruiser("Kreuzer"),
+				new Cruiser("Kreuzer"),
+				new Cruiser("Kreuzer"),
+				new Destroyer("Zerstoerer"),
+				new Destroyer("Zerstoerer"),
+				new Battleship("Schlachtschiff")
+				};
+		
+		Field firstField = new Field(0);
+		Field secondField = new Field(1);
+		
+		ShipPlacement sp = new ShipPlacement();
+		sp.placeShips(firstField, myships);
+		
+		ShipPlacement spSecond = new ShipPlacement();
+		spSecond.placeShips(secondField, enemyships);
+		game = new Game(0,firstField, secondField);
+		gameThread = new Thread(game);
+		gameThread.start();
+		
 		TextView ed = (TextView) findViewById(R.id.Test_Text);
 		Intent i = getIntent();
-		ed.setText(i.getStringExtra("Test"));
+		ed.setText(spSecond.print());
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
 		}
+		
+		Button okButton = (Button) findViewById(R.id.Test_Ausgabe_OK_Button);
+		okButton.setText("OK");
+		okButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				try{
+					TextView tv = (TextView) findViewById(R.id.editText1);
+					game.firstGamerAngriff(Integer.parseInt(tv.getText().toString()));
+					String ausgabe = "Nicht getroffen";
+					if(game.getroffen) ausgabe = "Getroffen";
+					
+					Toast t = Toast.makeText(getApplicationContext(), ausgabe, Toast.LENGTH_LONG);
+					t.show();
+				}
+				catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+		});
 	}
 
 	@Override

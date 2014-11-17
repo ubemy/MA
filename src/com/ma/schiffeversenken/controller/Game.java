@@ -2,7 +2,7 @@ package com.ma.schiffeversenken.controller;
 
 import com.ma.schiffeversenken.model.*;
 
-public class Game {
+public class Game implements Runnable {
 	/*
 	 * Gesamte Spiellogik
 	 * - Beinhaltet alle Spieldaten
@@ -16,6 +16,8 @@ public class Game {
 	private int firstGamerAttackID; //Die Feld-ID, die Spieler 1 attackiert
 	private int secondGamerAttackID; //Die Feld-ID, die Spieler 2 attackiert
 	KI ki; //Kuenstlicher Computer Gegner
+	
+	public boolean getroffen = false;
 	
 	public Game(int gameMode, Field firstField, Field secondField){
 		this.gameMode = gameMode;
@@ -146,7 +148,18 @@ public class Game {
 			}
 		}
 		
+		resetActionVariables();
+		
+		getroffen = ret;
+		
 		return ret;
+	}
+	
+	private void resetActionVariables(){
+		firstGamerAction = false;
+		firstGamerAttackID = 0;
+		secondGamerAction = false;
+		secondGamerAttackID = 0;
 	}
 	
 	private int hasSomebodyWon(){
@@ -158,18 +171,31 @@ public class Game {
 		 */
 		int ret = 1;
 		
-		for(Ship ship : firstField.getShips()){
-			if(ship.getDestroyed()){
+		for(Ship ship : secondField.getShips()){
+			if(!ship.getDestroyed()){
 				ret = 2;
 			}
 		}
 		
-		for(Ship ship : secondField.getShips()){
-			if(ship.getDestroyed()){
-				ret = 0;
+		if(ret == 2){
+			for(Ship ship : firstField.getShips()){
+				if(!ship.getDestroyed()){
+					ret = 0;
+				}
 			}
 		}
 		
 		return ret;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try {
+			start();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

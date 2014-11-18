@@ -22,9 +22,9 @@ public class KI extends Activity {
 	private boolean shipDestroyedByLastAttack;
 	private boolean shipHitByLastAttack;
 	private int lastAttackedID;
-	private int[] idHistory = new int[3];
-	private boolean[] hitHistory = new boolean[3];
-	private boolean[] shipDestroyedHistory = new boolean[3];
+	private int[] idHistory = new int[4];
+	private boolean[] hitHistory = new boolean[4];
+	private boolean[] shipDestroyedHistory = new boolean[4];
 	
 	public KI(Field myField, Field enemiesField){
 		this.myField = myField;

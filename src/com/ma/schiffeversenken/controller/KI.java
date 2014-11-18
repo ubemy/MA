@@ -36,7 +36,27 @@ public class KI extends Activity {
 		initHistory();
 	}
 	
+	public void updateHistory(int id, boolean hit, boolean shipDestroyed){
+		/*
+		 * History updaten
+		 * Die History speichert die letzten 4 Angriffe
+		 * - idHistory = Die id der letzten Angriffe.
+		 * - hitHistory = True oder false ob bei den letzten Angriffen ein Schiff getroffen wurde.
+		 * - shipDestroyedHistory = True oder false ob bei den letzten Angriffen ein Schiff zerstoert wurde.
+		 */
+		for(int i=3; i>0; i--){
+			idHistory[i] = idHistory[i-1];
+			hitHistory[i] = hitHistory[i-1];
+			shipDestroyedHistory[i] = shipDestroyedHistory[i-1];
+		}
+		
+		idHistory[0] = id;
+		hitHistory[0] = hit;
+		shipDestroyedHistory[0] = shipDestroyed;
+	}
+	
 	private void initHistory(){
+		//History initialisieren
 		for(int i = 0; i<4; i++){
 			idHistory[i] = 0;
 			hitHistory[i] = false;
@@ -46,7 +66,7 @@ public class KI extends Activity {
 	
 	private Ship[] createShips(){
 		//Benoetigte Schiffe erstellen
-		Ship[] schiffe = new Ship[]{new Submarine("Uboot"),
+		Ship[] ships = new Ship[]{new Submarine("Uboot"),
 				new Submarine("Uboot"),
 				new Submarine("Uboot"),
 				new Cruiser("Kreuzer"),
@@ -58,7 +78,7 @@ public class KI extends Activity {
 				new Battleship("Schlachtschiff")
 				};
 		
-		return schiffe;
+		return ships;
 	}
 	
 	public void setShipDestroyedByLastAttack(boolean destroyed){
@@ -109,43 +129,70 @@ public class KI extends Activity {
 		boolean jump = false;
 		
 		for(int i=0; i<4; i++){
-			if(!jump){
+			if(!jump && ret == 0){
 				if(hitHistory[i]){
 					if(shipDestroyedHistory[i]){
 						jump = true;
 					}
 					else{
-						
+						if((idHistory[i] + 1) <= 100){
+							if(enemiesField.getElementByID(idHistory[i] + 1).getAttacked()){
+								if(enemiesField.getElementByID(idHistory[i]).getEdge(1) != 4 && enemiesField.getElementByID(idHistory[i]).getEdge(2) != 4 && !enemiesField.getElementByID(idHistory[i] - 1).getAttacked()){
+									ret = idHistory[i] - 1;
+								}
+							}
+						}
+						if((idHistory[i] - 1) > 0){
+							if(enemiesField.getElementByID(idHistory[i] - 1).getAttacked()){
+								if(enemiesField.getElementByID(idHistory[i]).getEdge(1) != 3 && enemiesField.getElementByID(idHistory[i]).getEdge(2) != 3 && !enemiesField.getElementByID(idHistory[i] + 1).getAttacked()){
+									ret = idHistory[i] + 1;
+								}
+							}
+						}
+						if((idHistory[i] + 10) <= 100){
+							if(enemiesField.getElementByID(idHistory[i] + 10).getAttacked()){
+								if(enemiesField.getElementByID(idHistory[i]).getEdge(1) != 1 && enemiesField.getElementByID(idHistory[i]).getEdge(2) != 1 && !enemiesField.getElementByID(idHistory[i] - 10).getAttacked()){
+									ret = idHistory[i] - 10;
+								}
+							}
+						}
+						if((idHistory[i] - 10) > 0){
+							if(enemiesField.getElementByID(idHistory[i] - 10).getAttacked()){
+								if(enemiesField.getElementByID(idHistory[i]).getEdge(1) != 2 && enemiesField.getElementByID(idHistory[i]).getEdge(2) != 2 && !enemiesField.getElementByID(idHistory[i] + 10).getAttacked()){
+									ret = idHistory[i] + 10;
+								}
+							}
+						}
 					}
 				}
 			}
 		}
 		
-		if(ret == 0){
+		if((ret == 0) && hitHistory[0]){
 			Random random = new Random();
 			int counter = 0;
 			do{
 				int randomInt = random.nextInt(3) + 1;
 				
-				if(enemiesField.getElementByID(lastAttackedID).getEdge(1) != randomInt && enemiesField.getElementByID(lastAttackedID).getEdge(2) != randomInt){
+				if(enemiesField.getElementByID(idHistory[0]).getEdge(1) != randomInt && enemiesField.getElementByID(idHistory[0]).getEdge(2) != randomInt){
 					if(randomInt == 1){
-						if(!enemiesField.getElementByID(lastAttackedID - 10).getAttacked()){
-							ret = lastAttackedID - 10;
+						if(!enemiesField.getElementByID(idHistory[0] - 10).getAttacked()){
+							ret = idHistory[0] - 10;
 						}
 					}
 					if(randomInt == 2){
-						if(!enemiesField.getElementByID(lastAttackedID + 10).getAttacked()){
-							ret = lastAttackedID + 10;
+						if(!enemiesField.getElementByID(idHistory[0] + 10).getAttacked()){
+							ret = idHistory[0] + 10;
 						}
 					}
 					if(randomInt == 3){
-						if(!enemiesField.getElementByID(lastAttackedID + 1).getAttacked()){
-							ret = lastAttackedID + 1;
+						if(!enemiesField.getElementByID(idHistory[0] + 1).getAttacked()){
+							ret = idHistory[0] + 1;
 						}
 					}
 					if(randomInt == 4){
-						if(!enemiesField.getElementByID(lastAttackedID - 1).getAttacked()){
-							ret = lastAttackedID - 1;
+						if(!enemiesField.getElementByID(idHistory[0] - 1).getAttacked()){
+							ret = idHistory[0] - 1;
 						}
 					}
 				}

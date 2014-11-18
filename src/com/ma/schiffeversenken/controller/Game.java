@@ -123,6 +123,8 @@ public class Game implements Runnable {
 		//Gibt zurueck ob ein gegnerisches Schiff getroffen wurde
 		boolean ret = false;
 		FieldUnit fe;
+		boolean attackHit = false;
+		boolean shipDestroyed = false;
 		
 		if(gamer == 0){
 			fe = secondField.getElementByID(id);
@@ -134,23 +136,24 @@ public class Game implements Runnable {
 		fe.setAttacked(true); //FeldElement als attackiert markieren
 		
 		if(fe.getOccupied()){
+			//Wenn das Feld belegt war
 			ret = true;
 			destroyShip(fe);
-			if(gamer == 1 && gameMode == 0){
-				/*
-				 * Wenn die KI attackiert hat werden zwei Variablen gesetzt,
-				 * damit die KI weiss ob ein Schiff getroffen und/oder zerstoert wurden
-				 */
-				ki.setShipHitByLastAttack(true);
-				if(fe.getPlacedShip().getDestroyed()){
-					ki.setShipDestroyedByLastAttack(true);
-				}
-			}
+			shipDestroyed = fe.getPlacedShip().getDestroyed();
+			attackHit = true;
+		}
+		
+		if(gamer == 1 && gameMode == 0){
+			/*
+			 * Wenn die KI attackiert hat werden zwei Variablen gesetzt,
+			 * damit die KI weiss ob ein Schiff getroffen und/oder zerstoert wurden
+			 */
+			ki.updateHistory(id, attackHit, shipDestroyed);
 		}
 		
 		resetActionVariables();
 		
-		getroffen = ret;
+		getroffen = ret; //Nur zu Testzwecken - Maik
 		
 		return ret;
 	}

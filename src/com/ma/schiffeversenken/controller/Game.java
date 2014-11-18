@@ -17,7 +17,7 @@ public class Game implements Runnable {
 	private int secondGamerAttackID; //Die Feld-ID, die Spieler 2 attackiert
 	KI ki; //Kuenstlicher Computer Gegner
 	
-	public boolean getroffen = false;
+	public boolean getroffen = false; //Nur zu Testzwecken - Maik
 	
 	public Game(int gameMode, Field firstField, Field secondField){
 		this.gameMode = gameMode;
@@ -28,8 +28,8 @@ public class Game implements Runnable {
 		
 		if(gameMode == 0){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
-			Field kiField = new Field(1);
-			ki = new KI(kiField);
+			//Field kiField = new Field(1);
+			ki = new KI(secondField, firstField);
 		}
 	}
 	

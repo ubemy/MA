@@ -41,33 +41,19 @@ public class TestAusgabe extends Activity {
 				new Battleship("Schlachtschiff")
 				};
 		
-		Ship[] enemyships = new Ship[]{new Submarine("Uboot"),
-				new Submarine("Uboot"),
-				new Submarine("Uboot"),
-				new Cruiser("Kreuzer"),
-				new Cruiser("Kreuzer"),
-				new Cruiser("Kreuzer"),
-				new Cruiser("Kreuzer"),
-				new Destroyer("Zerstoerer"),
-				new Destroyer("Zerstoerer"),
-				new Battleship("Schlachtschiff")
-				};
-		
 		Field firstField = new Field(0);
 		Field secondField = new Field(1);
 		
 		ShipPlacement sp = new ShipPlacement();
 		sp.placeShips(firstField, myships);
-		
-		ShipPlacement spSecond = new ShipPlacement();
-		spSecond.placeShips(secondField, enemyships);
+
 		game = new Game(0,firstField, secondField);
 		gameThread = new Thread(game);
 		gameThread.start();
 		
 		TextView ed = (TextView) findViewById(R.id.Test_Text);
 		Intent i = getIntent();
-		ed.setText(spSecond.print());
+		ed.setText(game.ki.sp.print());
 		}
 		catch(Exception ex){
 			ex.printStackTrace();

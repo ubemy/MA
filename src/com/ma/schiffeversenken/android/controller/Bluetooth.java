@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.location.LocationManager;
 
 public class Bluetooth extends Activity {
+	public static final int REQUEST_ENABLE_BT = 12;
 	private BluetoothAdapter bluetoothAdapter;
 	private BluetoothDevice pairedDevice;
 	

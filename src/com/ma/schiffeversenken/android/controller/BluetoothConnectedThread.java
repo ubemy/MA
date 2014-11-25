@@ -14,6 +14,7 @@ public class BluetoothConnectedThread extends Thread {
 	private final BluetoothSocket mmSocket;
     private final InputStream mmInStream;
     private final OutputStream mmOutStream;
+    private Game game;
 
     public BluetoothConnectedThread(BluetoothSocket socket) {
         mmSocket = socket;
@@ -43,6 +44,12 @@ public class BluetoothConnectedThread extends Thread {
                 // Send the obtained bytes to the UI activity
                 /*mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
                         .sendToTarget();*/
+                
+                String readMsg = new String(buffer, 0, bytes);
+                String attackString = "_ATTACK_";
+                if(readMsg.startsWith(attackString)){
+                	game.secondGamerAngriff(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length())));
+                }
             } catch (IOException e) {
                 break;
             }

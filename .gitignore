@@ -31,3 +31,6 @@ MA.iml
 /build.gradle
 /gradlew
 /gradlew.bat
+
+.classpath
+.settings/

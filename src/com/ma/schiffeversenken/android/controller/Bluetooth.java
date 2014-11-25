@@ -1,19 +1,46 @@
 package com.ma.schiffeversenken.android.controller;
 
+import java.util.Set;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.LocationManager;
 
 public class Bluetooth extends Activity {
 	private BluetoothAdapter bluetoothAdapter;
-	private final BluetoothManager bluetoothManager;
+	private BluetoothDevice pairedDevice;
 	
 	public Bluetooth(){
-		bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-		bluetoothAdapter = bluetoothManager.getAdapter();
+		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+	}
+	
+	public boolean discoverDevices(){
+		return bluetoothAdapter.startDiscovery();
+	}
+	
+	public Set<BluetoothDevice> getPairedDevices(){
+		return bluetoothAdapter.getBondedDevices();
+	}
+	
+	public void startServer(){
+		//Server starten
+		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter);
+		btListenThread.start();
+	}
+	
+	public void connectToServer(){
+		/*
+		 * Verbindung mit Server aufbauen.
+		 * pairedDevice = Der Server, mit dem verbunden werden soll
+		 */
+		BluetoothConnectThread btConnectThread = new BluetoothConnectThread(pairedDevice, bluetoothAdapter);
+		btConnectThread.start();
 	}
 	
 	public int blutoothOK(){

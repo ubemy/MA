@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class CreateMultiplayerGame extends Activity {
 	Bluetooth bt;
@@ -22,6 +23,8 @@ public class CreateMultiplayerGame extends Activity {
 		
 		if(btState == 1){
 			//Geraet unterstuetzt kein Bluetooth
+			Toast t = Toast.makeText(getApplicationContext(), "Bluetooth auf diesem Gerät nicht verfügbar", Toast.LENGTH_LONG);
+			t.show();
 		}
 		else if(btState == 2){
 			//Bluetooth ist nicht enabled

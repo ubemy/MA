@@ -1,0 +1,19 @@
+
+textures.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ninepatch
+  rotate: false
+  xy: 1, 1
+  size: 414, 414
+  orig: 414, 414
+  offset: 0, 0
+  index: -1
+snow
+  rotate: false
+  xy: 417, 287
+  size: 110, 128
+  orig: 110, 128
+  offset: 0, 0
+  index: -1

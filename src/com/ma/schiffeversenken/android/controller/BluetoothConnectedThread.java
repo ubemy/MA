@@ -6,9 +6,10 @@ import java.io.OutputStream;
 
 import android.bluetooth.BluetoothSocket;
 
-/*
+/**
  * Wird aufgerufen, wenn eine Verbindung hergestellt wurde.
  * Wird auf Server- und Clientseite verwendet
+ * @author Maik Steinborn
  */
 public class BluetoothConnectedThread extends Thread {
 	private final BluetoothSocket mmSocket;
@@ -16,6 +17,9 @@ public class BluetoothConnectedThread extends Thread {
     private final OutputStream mmOutStream;
     private Game game;
 
+    /*
+     * @param socket ?? 
+     */
     public BluetoothConnectedThread(BluetoothSocket socket) {
         mmSocket = socket;
         InputStream tmpIn = null;

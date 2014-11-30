@@ -7,14 +7,20 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
-/*
+/**
  * Verbindet sich mit einem offenem Server Port (Client)
+ * @author Maik Steinborn
  */
 public class BluetoothConnectThread extends Thread {
 	private final BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
     private final BluetoothAdapter bluetoothAdapter;
  
+    /*
+     * Erstellt eine neues BluetoothConnectThread Objekt
+     * @param device Verbundene Geraete
+     * @param bluetoothAdapter Der Bluetooth Adapter des Geraetes
+     */
     public BluetoothConnectThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter) {
         // Use a temporary object that is later assigned to mmSocket,
         // because mmSocket is final

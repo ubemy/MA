@@ -3,6 +3,7 @@
 	<name>Schiffeversenken-android</name>
 	<comment></comment>
 	<projects>
+		<project>Schiffeversenken-core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

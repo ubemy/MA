@@ -12,11 +12,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
 
+/**
+ * Bluetooth baut Verbindungen auf
+ * und sendet/empfaengt Werte
+ * @author Maik Steinborn
+ */
 public class Bluetooth extends Activity {
 	public static final int REQUEST_ENABLE_BT = 12;
 	private BluetoothAdapter bluetoothAdapter;
 	private BluetoothDevice pairedDevice;
 	
+	/**
+	 * Erzeugt ein neues Bluetooth Objekt
+	 */
 	public Bluetooth(){
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 	}
@@ -29,30 +37,32 @@ public class Bluetooth extends Activity {
 		return bluetoothAdapter.getBondedDevices();
 	}
 	
+	/**
+	 * Server starten
+	 */
 	public void startServer(){
-		//Server starten
 		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter);
 		btListenThread.start();
 	}
 	
+	/**
+	 * Verbindung mit Server aufbauen.
+	 * pairedDevice = Der Server, mit dem verbunden werden soll
+	 */
 	public void connectToServer(){
-		/*
-		 * Verbindung mit Server aufbauen.
-		 * pairedDevice = Der Server, mit dem verbunden werden soll
-		 */
 		BluetoothConnectThread btConnectThread = new BluetoothConnectThread(pairedDevice, bluetoothAdapter);
 		btConnectThread.start();
 	}
 	
+	/**
+	 * Prueft ob Bluetooth verfuegbar und enabled ist
+	 * 
+	 * Bluetooth kann ueber folgenden Dialog in einer Avtivity eingeschaltet werden:
+	 * 
+	 * Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+	 * startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+	 */
 	public int blutoothOK(){
-		/*
-		 * Prueft ob Bluetooth verfuegbar und enabled ist
-		 * 
-		 * Bluetooth kann ueber folgenden Dialog in einer Avtivity eingeschaltet werden:
-		 * 
-		 * Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-    	 * startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-		 */
 		int ret = 0;
 		
 		if(bluetoothAdapter == null){

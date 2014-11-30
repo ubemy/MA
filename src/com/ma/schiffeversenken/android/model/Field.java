@@ -1,19 +1,30 @@
 package com.ma.schiffeversenken.android.model;
 
+/**
+ * Das Spielfeld
+ * @author Maik Steinborn
+ */
 public class Field {
-	/*
+	/**
 	 * einheiten = Das Spielfeld besteht aus 10x10 Einheiten
 	 * einheiten[y-Achse (Zeile)][x-Achse (Spalte)]
 	 */
 	FieldUnit[][] units = new FieldUnit[10][10];
+	/**
+	 * Menge von platzierten Schiffen auf diesem Spielfeld
+	 */
 	Ship[] placedShips;
-	/*
+	/**
 	 * typ = Gibt den Typ des Spielfelds an.
 	 * Eigenes Spielfeld = 0;
 	 * Gegnerisches Spielfeld = 1; 
 	 */
 	int typ;
 	
+	/**
+	 * Erstellt ein Field Objekt
+	 * @param typ Typ des Spielfelds (0=Eigenes Spielfeld, 1=Gegnerisches Spielfeld)
+	 */
 	public Field(int typ){
 		try{
 			this.typ = typ;
@@ -26,18 +37,35 @@ public class Field {
 		}
 	}
 	
+	/**
+	 * Setzt die platzierten Schiffe
+	 * @param ships Schiffe, die zu diesem Spielfeld zugeordnet werden sollen
+	 */
 	public void setShips(Ship[] ships){
 		this.placedShips = ships;
 	}
 	
+	/**
+	 * Gibt die platzierten Schiffe zurueck
+	 * @return Die platzierten Schiffe
+	 */
 	public Ship[] getShips(){
 		return this.placedShips;
 	}
 	
+	/**
+	 * Gibt die FeldEinheiten zurueck
+	 * @return Die FeldEinheiten
+	 */
 	public FieldUnit[][] getFieldUnits(){
 		return units;
 	}
 	
+	/**
+	 * Gibt das FeldElement passend zu der ID zurueck
+	 * @param id Die gesuchte ID
+	 * @return Das FeldElement passend zu der ID
+	 */
 	public FieldUnit getElementByID(int id){
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
@@ -47,8 +75,10 @@ public class Field {
 		return null;
 	}
 	
+	/**
+	 * Erstellt das Spielfeld, das aus 10x10 Feldelementen besteht
+	 */
 	private void create(){
-		//Erstellt das Spielfeld, das aus 10x10 Feldelementen besteht
 		int id=0;
 		
 		for (int i=0;i<10;i++){
@@ -59,8 +89,10 @@ public class Field {
 		}
 	}
 	
+	/**
+	 * Markiert, dass dieses FeldElement an einer Kante platziert ist 
+	 */
 	private void createKante(){
-		//Markiert, dass dieses FeldElement an einer Kante platziert ist
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
 				FieldUnit e = units[i][j];
@@ -89,8 +121,10 @@ public class Field {
 		}
 	}
 	
+	/**
+	 * Weist jedem FeldElement seine direkten Nachbarn zu
+	 */
 	private void createNeighbors(){
-		//Weist jedem FeldElement seine direkten Nachbarn zu
 		for (int i=0;i<10;i++){
 			for(int j=0;j<10;j++){
 				FieldUnit lNeighbor = null, rNeighbor = null, oNeighbor = null, uNeighbor = null;

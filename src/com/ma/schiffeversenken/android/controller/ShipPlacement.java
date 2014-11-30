@@ -4,21 +4,30 @@ import java.util.Random;
 
 import com.ma.schiffeversenken.android.model.*;
 
+/**
+ * Steuert das automatische Platzieren der Schiffe
+ * fuer beide Spiele
+ * @author Maik Steinborn
+ */
 public class ShipPlacement {
-	/*
-	 * Steuer das automatische Platzieren der Schiffe
-	 * fuer beide Spieler
-	 */
 	Block blocks[];
 	Field t;
 	
+	/**
+	 * Erstellt das ShipPlacement Objekt
+	 */
 	public ShipPlacement() {
 		blocks = new Block[25];
 	}
 	
+	/**
+	 * Platziert die Schiffe automatisch auf dem Spielfeld
+	 * @param field
+	 * @param ships
+	 */
 	public void placeShips(Field field, Ship[] ships){
 		this.t = field;
-		//Platziert die Schiffe automatisch auf dem Spielfeld
+
 		createBlocks(field);
 		Random random = new Random();
 		field.setShips(ships);
@@ -71,7 +80,15 @@ public class ShipPlacement {
 			}
 		}
 	}
-	
+
+	/**
+	 * FeldElement als markiert markieren und das Schiff setzen
+	 * @param counter Gibt an in welche Richtung das Schiff platziert wurde (oben, unten, rechts, links)
+	 * @param size Größe des Schiffs
+	 * @param id ID des Startfeldes
+	 * @param field Spielfeld
+	 * @param ship Das zu platzierende Schiff
+	 */
 	private void markElements(int counter, int size, int id, Field field, Ship ship){
 		int temp=0;
 		int finalCounter = 0;
@@ -117,6 +134,14 @@ public class ShipPlacement {
 		return ret;
 	}
 	
+	/**
+	 * Prüft ob die benötigten Felder frei oder belegt sind
+	 * @param horver Gibt an in welcher Richtung das Schiff platziert werden soll (oben, unten, rechts, links)
+	 * @param ship Das zu platzierende Schiff
+	 * @param id Die ID des Startfeldes
+	 * @param feld Spielfeld
+	 * @return Gibt zurueck ob die Felder frei oder belegt sind
+	 */
 	private boolean checkEinheit(int horver, Ship ship, int id, Field feld){
 		int size = ship.getSize();
 		boolean ret = true;
@@ -146,6 +171,14 @@ public class ShipPlacement {
 		return ret;
 	}
 	
+	/**
+	 * Prüft eine Reihe von Feldern ob diese frei oder belegt sind
+	 * @param counter Die ID wird mit dem counter multipliziert, um nach oben, unten, rechts oder links zu gehen
+	 * @param size Groesse des Schiffs
+	 * @param id ID des Startfeldes
+	 * @param feld Spielfeld
+	 * @return Gibt zurueck ob die Felder frei oder belegt sind
+	 */
 	private boolean checkID(int counter, int size, int id, Field feld){
 		boolean ret = true;
 		int temp=0;
@@ -165,6 +198,12 @@ public class ShipPlacement {
 		return ret;
 	}
 	
+	/**
+	 * Prueft ob das Feld an einer Kante liegt
+	 * @param counter Die ID wird mit dem counter multipliziert, um nach oben, unten, rechts oder links zu gehen
+	 * @param element Das FeldElement, das uberprueft werden soll
+	 * @return Gibt true zurueck, wenn das Element an einer Kante liegt
+	 */
 	private boolean checkEdge(int counter, FieldUnit element){
 		int kRichtung = 0;
 		boolean ret = false;
@@ -174,7 +213,6 @@ public class ShipPlacement {
 				id==11 || id==21 || id==31 || id==41 || id==51 || id==61 ||
 				id==71 || id==81 || id==20 || id==30 || id==40 || id==50 ||
 				id==60 || id==70 || id==80){
-			String test="Hallo";
 		}
 		
 		if(counter == 1) kRichtung = 3;
@@ -187,6 +225,11 @@ public class ShipPlacement {
 		return ret;
 	}
 	
+	/**
+	 * Sucht den passenden Block zu einer Feld-ID
+	 * @param id Die ID, die gesucht wird
+	 * @return Der Block, zu der gesuchten ID
+	 */
 	private Block getBlockById(int id){
 		for(Block b : blocks){
 			for(int i:b.getFieldUnits()){
@@ -198,6 +241,12 @@ public class ShipPlacement {
 		return null;
 	}
 	
+	/**
+	 * Prueft ob der Block belegt ist
+	 * @param random Die ID des Blocks
+	 * @param ship Das zu platzierende Schiff
+	 * @return Gibt zurueck ob der Block frei oder belegt ist
+	 */
 	private boolean checkBlock(int random, Ship ship){
 		boolean ret = true;
 		
@@ -211,8 +260,11 @@ public class ShipPlacement {
 		return ret;
 	}
 	
+	/**
+	 * Teil das Spielfeld in 25 identische Bloecke auf
+	 * @param feld Spielfeld
+	 */
 	private void createBlocks(Field feld){
-		//Teil das Spielfeld in 25 identische Blï¿½cke auf
 		int k=0;
 		FieldUnit[][] einheiten = feld.getFieldUnits();
 		for(int i=0; i<10; i=i+2){

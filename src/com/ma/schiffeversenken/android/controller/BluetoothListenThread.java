@@ -7,8 +7,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 
-/*
- * Ein Thread der auf einkommende Verbindungsanfragen wartet (Server) 
+/**
+ * Ein Thread der auf einkommende Verbindungsanfragen wartet (Server)
+ * @author Maik Steinborn 
  */
 public class BluetoothListenThread extends Thread{
 	private final BluetoothServerSocket mmServerSocket;

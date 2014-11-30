@@ -2,23 +2,39 @@ package com.ma.schiffeversenken.android.controller;
 
 import com.ma.schiffeversenken.android.model.*;
 
+/**
+ * Gesamte Spiellogik
+ * - Beinhaltet alle Spieldaten
+ * - Kommuniziert mit beiden Spielern
+ * @author Maik Steinborn
+ */
 public class Game implements Runnable {
-	/*
-	 * Gesamte Spiellogik
-	 * - Beinhaltet alle Spieldaten
-	 * - Kommuniziert mit beiden Spielern
+	/**Einzelspieler (=0) oder Mehrspielermodus (=1)*/
+	private int gameMode;
+	/**Spielfeld des Spielerstellers*/
+	private Field firstField;
+	/**Spielfeld des Gastspielers*/
+	private Field secondField;
+	/**Wird auf true gesetzt, wenn Spieler 1 eine Eingabe getaetigt hat*/
+	private boolean firstGamerAction;
+	/**Wird auf true gesetzt, wenn Spieler 2 eine Eingabe getaetigt hat*/
+	private boolean secondGamerAction;
+	/**Die Feld-ID, die Spieler 1 attackiert*/
+	private int firstGamerAttackID;
+	/**Die Feld-ID, die Spieler 2 attackiert*/
+	private int secondGamerAttackID;
+	/**Kuenstlicher Computer Gegner*/
+	KI ki;
+	
+	//Nur zu Testzwecken - Maik
+	public boolean getroffen = false;
+	
+	/**
+	 * Erstellt ein neues Game Objekt
+	 * @param gameMode 0=Einzelspieler; 1=Mehrspieler
+	 * @param firstField Spielfeld des 1. Spielers
+	 * @param secondField Spieldfeld des 2. Spielers
 	 */
-	private int gameMode; //Einzelspieler (=0) oder Mehrspielermodus (=1)
-	private Field firstField; //Spielfeld des Spielerstellers
-	private Field secondField; //Spielfeld des Gastspielers
-	private boolean firstGamerAction; //Wird auf true gesetzt, wenn Spieler 1 eine Eingabe getaetigt hat
-	private boolean secondGamerAction; //Wird auf true gesetzt, wenn Spieler 2 eine Eingabe getaetigt hat
-	private int firstGamerAttackID; //Die Feld-ID, die Spieler 1 attackiert
-	private int secondGamerAttackID; //Die Feld-ID, die Spieler 2 attackiert
-	KI ki; //Kuenstlicher Computer Gegner
-	
-	public boolean getroffen = false; //Nur zu Testzwecken - Maik
-	
 	public Game(int gameMode, Field firstField, Field secondField){
 		this.gameMode = gameMode;
 		this.firstField = firstField;
@@ -33,31 +49,34 @@ public class Game implements Runnable {
 		}
 	}
 	
+	/**
+	 * Die Methode wird von der GUI aufgerufen,
+	 * sobald Spieler 1 auf ein Feld getippt
+	 * hat, das er attackieren moechte
+	 * @param id ID des Feldes, das angegriffen wird
+	 */
 	public void firstGamerAngriff(int id){
-		/*
-		 * Die Methode wird von der GUI aufgerufen,
-		 * sobald Spieler 1 auf ein Feld getippt
-		 * hat, das er attackieren moechte
-		 */
 		this.firstGamerAttackID = id;
 		this.firstGamerAction = true;
 	}
 	
+	/**
+	 * Die Methode wird von der GUI aufgerufen,
+	 * sobald Spieler 2 auf ein Feld getippt
+	 * hat, das er attackieren moechte
+	 * @param id ID des Feldes, das angegriffen wird 
+	 */
 	public void secondGamerAngriff(int id){
-		/*
-		 * Die Methode wird von der GUI aufgerufen,
-		 * sobald Spieler 2 auf ein Feld getippt
-		 * hat, das er attackieren moechte
-		 */
-		this.firstGamerAttackID = id;
-		this.firstGamerAction = true;
+		this.secondGamerAttackID = id;
+		this.secondGamerAction = true;
 	}
 	
+	/**
+	 * Wenn alle FeldElemente eines Schiffes zerstoert wurden,
+	 * wird dieses Schiff als zerstoert markiert
+	 * @param fe Feld, auf dem das Schiff steht, das geprueft wird
+	 */
 	private void destroyShip(FieldUnit fe){
-		/*
-		 * Wenn alle FeldElemente eines Schiffes zerstoert wurden,
-		 * wird dieses Schiff als zerstoert markiert
-		 */
 		boolean destroyed = true;
 		
 		for(FieldUnit f : fe.getPlacedShip().getLocation()){
@@ -119,8 +138,13 @@ public class Game implements Runnable {
 		}while(!end);
 	}
 	
+	/**
+	 * 
+	 * @param id ID des Feldes, das angegriffen wird
+	 * @param gamer 0= Erster Spieler; 1= zweiter Spieler
+	 * @return Boolean ob ein gegnerisches Schiff getroffen wurde
+	 */
 	private boolean gamerAction(int id, int gamer){
-		//Gibt zurueck ob ein gegnerisches Schiff getroffen wurde
 		boolean ret = false;
 		FieldUnit fe;
 		boolean attackHit = false;
@@ -158,6 +182,9 @@ public class Game implements Runnable {
 		return ret;
 	}
 	
+	/**
+	 * Variablen nach Angriff zuruecksetzen
+	 */
 	private void resetActionVariables(){
 		firstGamerAction = false;
 		firstGamerAttackID = 0;
@@ -165,13 +192,14 @@ public class Game implements Runnable {
 		secondGamerAttackID = 0;
 	}
 	
+	/**
+	 * Ueberpruefen ob ein Spieler gewonnen hat
+	 * @return
+	 * - Gibt 1 zurueck, wenn Spieler 1 gewonnen hat
+	 * - Gibt 2 zurueck, wenn Spieler 2 gewonnen hat
+	 * - Gibt 0 zurueck, wenn niemand gewonnen hat 
+	 */
 	private int hasSomebodyWon(){
-		/*
-		 * Ueberpruefen ob ein Spieler gewonnen hat
-		 * - Gibt 1 zurueck, wenn Spieler 1 gewonnen hat
-		 * - Gibt 2 zurueck, wenn Spieler 2 gewonnen hat
-		 * - Gibt 0 zurueck, wenn niemand gewonnen hat
-		 */
 		int ret = 1;
 		
 		for(Ship ship : secondField.getShips()){

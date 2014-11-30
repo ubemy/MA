@@ -15,8 +15,11 @@ import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.model.*;
 import com.ma.schiffeversenken.android.view.Startseite;
 
+/**
+ * Spiellogik des Computer Gegners
+ * @author Maik
+ */
 public class KI extends Activity {
-	//Spiellogik des Computer Gegners
 	private Field myField;
 	private Field enemiesField;
 	private boolean shipDestroyedByLastAttack;
@@ -26,6 +29,11 @@ public class KI extends Activity {
 	private boolean[] hitHistory = new boolean[4];
 	private boolean[] shipDestroyedHistory = new boolean[4];
 	
+	/**
+	 * Erstellt ein neues KI Objekt
+	 * @param myField Spielfeld der KI
+	 * @param enemiesField Spielfeld des Gegners
+	 */
 	public KI(Field myField, Field enemiesField){
 		this.myField = myField;
 		this.enemiesField = enemiesField;
@@ -36,14 +44,14 @@ public class KI extends Activity {
 		initHistory();
 	}
 	
+	/**
+	 * History updaten
+	 * Die History speichert die letzten 4 Angriffe
+	 * - idHistory = Die id der letzten Angriffe.
+	 * - hitHistory = True oder false ob bei den letzten Angriffen ein Schiff getroffen wurde.
+	 * - shipDestroyedHistory = True oder false ob bei den letzten Angriffen ein Schiff zerstoert wurde.
+	 */
 	public void updateHistory(int id, boolean hit, boolean shipDestroyed){
-		/*
-		 * History updaten
-		 * Die History speichert die letzten 4 Angriffe
-		 * - idHistory = Die id der letzten Angriffe.
-		 * - hitHistory = True oder false ob bei den letzten Angriffen ein Schiff getroffen wurde.
-		 * - shipDestroyedHistory = True oder false ob bei den letzten Angriffen ein Schiff zerstoert wurde.
-		 */
 		for(int i=3; i>0; i--){
 			idHistory[i] = idHistory[i-1];
 			hitHistory[i] = hitHistory[i-1];
@@ -55,8 +63,10 @@ public class KI extends Activity {
 		shipDestroyedHistory[0] = shipDestroyed;
 	}
 	
+	/**
+	 * History initialisieren
+	 */
 	private void initHistory(){
-		//History initialisieren
 		for(int i = 0; i<4; i++){
 			idHistory[i] = 0;
 			hitHistory[i] = false;
@@ -64,8 +74,11 @@ public class KI extends Activity {
 		}
 	}
 	
+	/**
+	 * Benoetigte Schiffe erstellen
+	 * @return Erstellt Schiffe
+	 */
 	private Ship[] createShips(){
-		//Benoetigte Schiffe erstellen
 		Ship[] ships = new Ship[]{new Submarine("Uboot"),
 				new Submarine("Uboot"),
 				new Submarine("Uboot"),
@@ -96,8 +109,11 @@ public class KI extends Activity {
 		sp.placeShips(myField, ships);
 	}
 	
+	/**
+	 * Den Gegner attackieren
+	 * @return ID des Feldes, das attackiert werden soll
+	 */
 	public int attack(){
-		//Den Gegner attackieren
 		Random random = new Random();
 		int nextAttackID = 0;
 		int idForContinueLastAttack = getIDForContinueLastAttack();

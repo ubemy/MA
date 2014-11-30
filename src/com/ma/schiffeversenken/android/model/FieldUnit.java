@@ -1,9 +1,10 @@
 package com.ma.schiffeversenken.android.model;
 
+/**
+ * Das Spielfeld besteht aus 100 FeldElementen
+ * @author Maik
+ */
 public class FieldUnit {
-	/*
-	 * Das Spielfeld besteht aus 100 FeldElementen
-	 */
 	FieldUnit lNeighbor, rNeighbor, oNeighbor, uNeighbor; //Direkte Nachbar dieses Feldes
 	Ship placedShip; //Schiff, das auf diesem FeldElement steht
 	int id;

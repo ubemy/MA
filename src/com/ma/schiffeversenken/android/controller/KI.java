@@ -5,7 +5,7 @@ import com.ma.schiffeversenken.android.model.*;
 
 /**
  * Spiellogik des Computer Gegners
- * @author Maik
+ * @author Maik Steinborn
  */
 public class KI {
 	private Field myField;
@@ -104,7 +104,7 @@ public class KI {
 	public int attack(){
 		Random random = new Random();
 		int nextAttackID = 0;
-		int idForContinueLastAttack = getIDForContinueLastAttack();
+		int idForContinueLastAttack = getIDForContinueLastAttack2();
 		
 		if(idForContinueLastAttack != 0){
 			//Den letzten Angriff fortfuehren

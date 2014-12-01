@@ -15,8 +15,6 @@ public abstract class Ship {
 	FieldUnit[] location;
 	/**Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten*/
 	private int orientation;
-	/**Segment des Schiffs: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil*/
-	private int segment;
 	
 	/**
 	 * Erstellt ein Ship Objekt

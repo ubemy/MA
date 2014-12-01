@@ -18,6 +18,8 @@ public class FieldUnit {
 	int edge1=0;
 	int edge2=0;
 	private boolean attacked;
+	/**Segment des Schiffs: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil*/
+	private int shipSegment;
 	
 	//OpenGL Elemente
 	private TextureRegion drawFeld;
@@ -26,13 +28,17 @@ public class FieldUnit {
 	private float xpos;
 	private float ypos;
 	
-	public FieldUnit(int id,float xpos, float ypos){
+	public FieldUnit(int id, float xpos, float ypos){
 		this.id=id;
 		this.occupied = false;
 		this.attacked = false;
 		this.placedShip=null;
 		this.xpos=xpos;
 		this.ypos=ypos;
+	}
+	
+	public int getSegment(){
+		return this.shipSegment;
 	}
 	
 	public void setAttacked(boolean attacked){
@@ -69,8 +75,9 @@ public class FieldUnit {
 		return id;
 	}
 	
-	public void placeShip(Ship ship){
+	public void placeShip(Ship ship, int shipSegment){
 		this.placedShip = ship;
+		this.shipSegment = shipSegment;
 	}
 	
 	public Ship getPlacedShip(){

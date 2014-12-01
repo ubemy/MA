@@ -60,7 +60,7 @@ public class ShipPlacement {
 			FieldUnit tempElement = field.getElementByID(randomID);
 			tempElement.setOccupied(true);
 			//TODO: X\Y Koordinate an Schiff uebergeben, wenn belegt
-			tempElement.placeShip(ship);
+			tempElement.placeShip(ship, 2);
 			ship.setStandort(tempElement, 0, orientation);
 			int schiffSize=ship.getSize();
 			
@@ -88,17 +88,20 @@ public class ShipPlacement {
 	 * @param id ID des Startfeldes
 	 * @param field Spielfeld
 	 * @param ship Das zu platzierende Schiff
+	 * @param orientation Die Orientierung des Schiffs (nach oben/unten/rechts/links gerichtet)
 	 */
 	private void markElements(int counter, int size, int id, Field field, Ship ship, int orientation){
 		int temp=0;
+		int shipSegment = 1;
 		int finalCounter = 0;
 		for(int i=1;i<size;i++){
 			finalCounter = counter*i;
 			temp=id+finalCounter;
 			if(temp>0 && temp<101){
 				FieldUnit tempElement = field.getElementByID(temp);
+				if(i==(size-1)) shipSegment = 2;
 				tempElement.setOccupied(true);
-				tempElement.placeShip(ship);
+				tempElement.placeShip(ship, shipSegment);
 				ship.setStandort(tempElement, i, orientation);
 			}
 		}

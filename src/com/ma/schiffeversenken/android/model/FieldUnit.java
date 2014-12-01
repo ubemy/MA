@@ -37,7 +37,7 @@ public class FieldUnit {
 		this.ypos=ypos;
 	}
 	
-	public int getSegment(){
+	public int getShipSegment(){
 		return this.shipSegment;
 	}
 	

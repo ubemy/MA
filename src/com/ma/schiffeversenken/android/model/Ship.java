@@ -13,6 +13,10 @@ public abstract class Ship {
 	String name;
 	/**Felder auf denen das Schiff platziert ist*/
 	FieldUnit[] location;
+	/**Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten*/
+	private int orientation;
+	/**Segment des Schiffs: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil*/
+	private int segment;
 	
 	/**
 	 * Erstellt ein Ship Objekt
@@ -24,6 +28,15 @@ public abstract class Ship {
 		this.size=size;
 		this.destroyed = false;
 		this.location = new FieldUnit[size];
+	}
+		
+	/**
+	 * Gibt die Orientierung des Schiffs zurueck
+	 * @return Die Orientierung des Schiffs
+	 */
+	public int getOrientation()
+	{
+		return this.orientation;
 	}
 	
 	/**
@@ -62,9 +75,11 @@ public abstract class Ship {
 	 * Setzt den Standort des Schiffs
 	 * @param element Das FeldElement
 	 * @param i Indizes der FeldElemente, auf denen das Schiff steht
+	 * @param orientation Die Orientierung des Schiffs (nach oben/unten/rechts/links gerichtet)
 	 */
-	public void setStandort(FieldUnit element, int i){
+	public void setStandort(FieldUnit element, int i, int orientation){
 		this.location[i] = element;
+		this.orientation = orientation;
 	}
 	
 	/**

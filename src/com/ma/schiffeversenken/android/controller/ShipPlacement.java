@@ -33,7 +33,7 @@ public class ShipPlacement {
 		field.setShips(ships);
 		for(Ship ship:ships){
 			int randomID = 0;
-			int horver = 0;
+			int orientation = 0;
 			int run=0;
 			boolean ok = false;
 			
@@ -48,9 +48,9 @@ public class ShipPlacement {
 				
 				do{
 					//Pruefen ob das FeldElement schon belegt ist
-					horver = random.nextInt(3);
+					orientation = random.nextInt(3);
 					run++;
-					ok = checkEinheit(horver, ship, randomID, field);
+					ok = checkEinheit(orientation, ship, randomID, field);
 				}while(!ok && run<4);
 			}while(!ok);
 			
@@ -61,21 +61,21 @@ public class ShipPlacement {
 			tempElement.setOccupied(true);
 			//TODO: X\Y Koordinate an Schiff uebergeben, wenn belegt
 			tempElement.placeShip(ship);
-			ship.setStandort(tempElement, 0);
+			ship.setStandort(tempElement, 0, orientation);
 			int schiffSize=ship.getSize();
 			
 			if(schiffSize>1){
-				if(horver == 0){
-					markElements(1, schiffSize, randomID, field, ship);
+				if(orientation == 0){
+					markElements(1, schiffSize, randomID, field, ship, orientation);
 				}
-				else if(horver == 1){
-					markElements(-10, schiffSize, randomID, field, ship);
+				else if(orientation == 1){
+					markElements(-10, schiffSize, randomID, field, ship, orientation);
 				}
-				else if(horver == 2){
-					markElements(-1, schiffSize, randomID, field, ship);
+				else if(orientation == 2){
+					markElements(-1, schiffSize, randomID, field, ship, orientation);
 				}
-				else if(horver == 3){
-					markElements(10, schiffSize, randomID, field, ship);
+				else if(orientation == 3){
+					markElements(10, schiffSize, randomID, field, ship, orientation);
 				}
 			}
 		}
@@ -89,7 +89,7 @@ public class ShipPlacement {
 	 * @param field Spielfeld
 	 * @param ship Das zu platzierende Schiff
 	 */
-	private void markElements(int counter, int size, int id, Field field, Ship ship){
+	private void markElements(int counter, int size, int id, Field field, Ship ship, int orientation){
 		int temp=0;
 		int finalCounter = 0;
 		for(int i=1;i<size;i++){
@@ -99,7 +99,7 @@ public class ShipPlacement {
 				FieldUnit tempElement = field.getElementByID(temp);
 				tempElement.setOccupied(true);
 				tempElement.placeShip(ship);
-				ship.setStandort(tempElement, i);
+				ship.setStandort(tempElement, i, orientation);
 			}
 		}
 	}

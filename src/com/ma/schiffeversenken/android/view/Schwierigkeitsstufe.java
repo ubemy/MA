@@ -23,6 +23,7 @@ public class Schwierigkeitsstufe extends Activity {
         setContentView(R.layout.activity_schwierigkeitsstufe);
         Button einfach_Button = null;
         createButtons(einfach_Button, R.id.Einfach_Button, "Einfach", AndroidLauncher.class);
+        System.out.println(R.id.Einfach_Button);
     }
 
     private void createButtons(Button button, int id, String text, final Class c) {

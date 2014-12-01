@@ -1,25 +1,13 @@
 package com.ma.schiffeversenken.android.controller;
 
-import java.io.FileNotFoundException;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter; 
 import java.util.Random;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.util.Log;
-
-import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.model.*;
-import com.ma.schiffeversenken.android.view.Startseite;
 
 /**
  * Spiellogik des Computer Gegners
  * @author Maik
  */
-public class KI extends Activity {
+public class KI {
 	private Field myField;
 	private Field enemiesField;
 	private boolean shipDestroyedByLastAttack;

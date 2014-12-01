@@ -3,17 +3,132 @@ textures.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-ninepatch
+snow
+  rotate: false
+  xy: 1, 837
+  size: 110, 128
+  orig: 110, 128
+  offset: 0, 0
+  index: -1
+hzshipback
+  rotate: false
+  xy: 113, 645
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+hzshipbackattacked
+  rotate: false
+  xy: 436, 645
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+hzshipfront
+  rotate: false
+  xy: 1, 323
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+hzshipfrontattacked
+  rotate: false
+  xy: 324, 323
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+hzshipmiddle
+  rotate: false
+  xy: 647, 323
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+hzshipmiddleattacked
   rotate: false
   xy: 1, 1
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+shipback
+  rotate: false
+  xy: 324, 1
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+shipbackattacked
+  rotate: false
+  xy: 647, 1
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+
+textures2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+wholeship
+  rotate: false
+  xy: 1, 1
+  size: 320, 960
+  orig: 320, 960
+  offset: 0, 0
+  index: -1
+ninepatch
+  rotate: false
+  xy: 323, 547
   size: 414, 414
   orig: 414, 414
   offset: 0, 0
   index: -1
-snow
+shipfront
   rotate: false
-  xy: 417, 287
-  size: 110, 128
-  orig: 110, 128
+  xy: 323, 225
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+shipfrontattacked
+  rotate: false
+  xy: 646, 225
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+
+textures3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+shipmiddle
+  rotate: false
+  xy: 1, 645
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+shipmiddleattacked
+  rotate: false
+  xy: 1, 323
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+water
+  rotate: false
+  xy: 324, 645
+  size: 321, 320
+  orig: 321, 320
+  offset: 0, 0
+  index: -1
+waterattacked
+  rotate: false
+  xy: 1, 1
+  size: 321, 320
+  orig: 321, 320
   offset: 0, 0
   index: -1

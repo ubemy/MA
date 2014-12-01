@@ -1,5 +1,7 @@
 package com.ma.schiffeversenken.android.controller;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.ma.schiffeversenken.android.model.*;
 
 /**
@@ -7,6 +9,7 @@ import com.ma.schiffeversenken.android.model.*;
  * - Beinhaltet alle Spieldaten
  * - Kommuniziert mit beiden Spielern
  * @author Maik Steinborn
+ * @author Klaus Schlender
  */
 public class Game implements Runnable {
 	/**Einzelspieler (=0) oder Mehrspielermodus (=1)*/
@@ -229,4 +232,17 @@ public class Game implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * Zeichnet die beiden Spielfelder mit den jeweiligen Zuständen
+	 * @param batch SpriteBatch worauf gezeichnet wird.
+	 * @param atlas Textures
+	 */
+	public void draw(SpriteBatch batch, TextureAtlas atlas) {
+		// TODO Auto-generated method stub
+		firstField.draw(batch,atlas);
+		secondField.draw(batch,atlas);
+	}
+	
+	
 }

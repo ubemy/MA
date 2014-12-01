@@ -1,8 +1,12 @@
 package com.ma.schiffeversenken.android.model;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 /**
  * Das Spielfeld
  * @author Maik Steinborn
+ * @author Klaus Schlender
  */
 public class Field {
 	/**
@@ -77,14 +81,25 @@ public class Field {
 	
 	/**
 	 * Erstellt das Spielfeld, das aus 10x10 Feldelementen besteht
+	 * Hierbei wird auch die Position je Feld in der Scene übergeben.
 	 */
 	private void create(){
+		//TODO Optimierung der Drawables
+		int xverschiebung=32;
+		int yverschiebung=32;
+		if(this.typ==1){
+			yverschiebung*=11;
+		}
+		int xpos=0;
+		int ypos=0;
 		int id=0;
 		
 		for (int i=0;i<10;i++){
+			ypos=i*xverschiebung;
 			for(int j=0;j<10;j++){
 				id++;
-				units[i][j] = new FieldUnit(id);
+				//TODO Testen auf funktion beim Zeichen
+				units[i][j] = new FieldUnit(id,(xpos+j*xverschiebung)+xverschiebung,ypos+yverschiebung);
 			}
 		}
 	}
@@ -147,6 +162,20 @@ public class Field {
 				
 				
 				units[i][j].setNeighbors(lNeighbor, rNeighbor, oNeighbor, uNeighbor);
+			}
+		}
+	}
+	
+	/**
+	 * Iteriert über alle Feldelemente die gezeichnet werden.
+	 * @param batch SpriteBatch fürs Zeichnen
+	 * @param atlas 
+	 */
+	public void draw(SpriteBatch batch, TextureAtlas atlas){
+		for (int i=0;i<10;i++){
+			for(int j=0;j<10;j++){
+				//TODO Drawing
+				units[i][j].draw(batch, atlas);
 			}
 		}
 	}

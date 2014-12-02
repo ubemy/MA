@@ -34,7 +34,7 @@ public class Startseite extends Activity {
 			createButtons(startSpielButton, R.id.Start_Spiel_Button, "Spiel starten", Spielermodus.class);
 			createButtons(einstellungenButton, R.id.Einstellungen_Button, "Einstellungen", Einstellungen.class);
 			createButtons(hilfeButton, R.id.Hilfe_Button, "Hilfe", Hilfe.class);
-			testButton();
+			//testButton();
 			SharedPreferences sp = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);
 			Editor editor = sp.edit();
 			editor.putString("lautlos", "false");
@@ -46,43 +46,43 @@ public class Startseite extends Activity {
 		}
 	}
 	
-	private void testButton(){
-		Button startSpielButton = (Button) findViewById(R.id.Test_Button);
-		startSpielButton.setText("Test");
-		startSpielButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				try{
-					Destroyer z = new Destroyer("Zerstoerer");
-					Submarine u = new Submarine("Uboot");
-					
-					Ship[] ships = new Ship[]{new Submarine("Uboot"),
-							new Submarine("Uboot"),
-							new Submarine("Uboot"),
-							new Cruiser("Kreuzer"),
-							new Cruiser("Kreuzer"),
-							new Cruiser("Kreuzer"),
-							new Cruiser("Kreuzer"),
-							new Destroyer("Zerstoerer"),
-							new Destroyer("Zerstoerer"),
-							new Battleship("Schlachtschiff")
-							};
-					Field field = new Field(0);
-					
-					ShipPlacement sp = new ShipPlacement();
-					sp.placeShips(field, ships);
-					
-					Intent inte = new Intent(Startseite.this, TestAusgabe.class);
-					inte.putExtra("Test", sp.print());
-					startActivity(inte);
-				}
-				catch(Exception ex){
-					ex.printStackTrace();
-				}
-			}
-		});
-	}
+//	private void testButton(){
+//		Button startSpielButton = (Button) findViewById(R.id.Test_Button);
+//		startSpielButton.setText("Test");
+//		startSpielButton.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				try{
+//					Destroyer z = new Destroyer("Zerstoerer");
+//					Submarine u = new Submarine("Uboot");
+//					
+//					Ship[] ships = new Ship[]{new Submarine("Uboot"),
+//							new Submarine("Uboot"),
+//							new Submarine("Uboot"),
+//							new Cruiser("Kreuzer"),
+//							new Cruiser("Kreuzer"),
+//							new Cruiser("Kreuzer"),
+//							new Cruiser("Kreuzer"),
+//							new Destroyer("Zerstoerer"),
+//							new Destroyer("Zerstoerer"),
+//							new Battleship("Schlachtschiff")
+//							};
+//					Field field = new Field(0);
+//					
+//					ShipPlacement sp = new ShipPlacement();
+//					sp.placeShips(field, ships);
+//					
+//					Intent inte = new Intent(Startseite.this, TestAusgabe.class);
+//					inte.putExtra("Test", sp.print());
+//					startActivity(inte);
+//				}
+//				catch(Exception ex){
+//					ex.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	
 	private void createButtons(Button button, int id, String text, final Class c){
 		/*

@@ -1,6 +1,7 @@
 package com.ma.schiffeversenken.android.controller;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -21,18 +22,23 @@ public class BluetoothConnectThread extends Thread {
      * @param device Verbundene Geraete
      * @param bluetoothAdapter Der Bluetooth Adapter des Geraetes
      */
-    public BluetoothConnectThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter) {
+    public BluetoothConnectThread(Set<BluetoothDevice> devices, BluetoothAdapter bluetoothAdapter) {
         // Use a temporary object that is later assigned to mmSocket,
         // because mmSocket is final
         BluetoothSocket tmp = null;
-        this.mmDevice = device;
+        this.mmDevice = null;
         this.bluetoothAdapter = bluetoothAdapter;
  
         // Get a BluetoothSocket to connect with the given BluetoothDevice
         try {
             // MY_UUID is the app's UUID string, also used by the server code
-            tmp = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
+        	for(BluetoothDevice device : devices){
+        		tmp = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
+        	}
         } catch (IOException e) { }
+        catch(Exception ex){
+        	ex.printStackTrace();
+        }
         mmSocket = tmp;
     }
  

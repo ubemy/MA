@@ -31,12 +31,9 @@ public class CreateMultiplayerGame extends Activity {
 			Toast t = Toast.makeText(getApplicationContext(), "Bluetooth auf diesem Gerät nicht verfügbar", Toast.LENGTH_LONG);
 			t.show();
 		}
-		else if(btState == 2){
-			//Bluetooth ist nicht enabled
-			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		    startActivityForResult(enableBtIntent, bt.REQUEST_ENABLE_BT);
-		}
-		else if(btState == 0){
+		else{
+			Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+			startActivityForResult(getVisible, 0);
 			bt.startServer();
 		}
 	}

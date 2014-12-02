@@ -18,7 +18,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/pairedDevicesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/Test_Text"
@@ -34,8 +34,8 @@
         android:id="@+id/Test_Ausgabe_OK_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_below="@+id/editText1"
+        android:layout_alignLeft="@+id/pairedDevicesText"
+        android:layout_below="@+id/pairedDevicesText"
         android:text="OK" />
 
 </RelativeLayout>

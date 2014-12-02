@@ -2,6 +2,9 @@ package com.ma.schiffeversenken.android.controller;
 
 import java.util.Set;
 
+import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
+
+import android.R;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -11,6 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
 
 /**
  * Verwaltet die Bluetooth Verbindung
@@ -23,7 +28,8 @@ public class Bluetooth extends Activity {
 	/**Der Bluetooth Adapter des Geraets*/
 	private BluetoothAdapter bluetoothAdapter;
 	/**Die verbundenen Geraete*/
-	private BluetoothDevice pairedDevice;
+	private Set<BluetoothDevice> pairedDevices;
+	
 	
 	/**
 	 * Erzeugt ein neues Bluetooth Objekt
@@ -31,12 +37,17 @@ public class Bluetooth extends Activity {
 	public Bluetooth(){
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 	}
+
 	
 	/**Sucht verfuegbare Geraete*/
 	public boolean discoverDevices(){
-		return bluetoothAdapter.startDiscovery();
+		return bluetoothAdapter.startDiscovery();		
 	}
-	
+
+	public void stopDiscoverDevices(){
+		bluetoothAdapter.cancelDiscovery();
+	}
+		
 	/**
 	 * Gibt die verbundenen Geraete zurueck
 	 * @return Die verbundenen Geraete
@@ -58,7 +69,7 @@ public class Bluetooth extends Activity {
 	 * pairedDevice = Der Server, mit dem verbunden werden soll
 	 */
 	public void connectToServer(){
-		BluetoothConnectThread btConnectThread = new BluetoothConnectThread(pairedDevice, bluetoothAdapter);
+		BluetoothConnectThread btConnectThread = new BluetoothConnectThread(pairedDevices, bluetoothAdapter);
 		btConnectThread.start();
 	}
 	

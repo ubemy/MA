@@ -91,6 +91,10 @@ public class Game implements Runnable {
 		fe.getPlacedShip().setDestroyed(destroyed);
 	}
 	
+	/**
+	 * Startet das Game. Wird aufgerufen, wenn das Game Thread gestartet wird
+	 * @throws InterruptedException
+	 */
 	public void start() throws InterruptedException{
 		boolean end = false;
 		boolean hitShip = false;
@@ -222,6 +226,9 @@ public class Game implements Runnable {
 		return ret;
 	}
 
+	/**
+	 * Startet das Game Thread
+	 */
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub

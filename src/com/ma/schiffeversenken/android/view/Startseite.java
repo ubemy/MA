@@ -18,6 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Android Activity zur Auswahl folgender Optionen:
+ * Spiel starten, Einstellungen, Hilfe
+ * @author Maik Steinborn
+ */
 public class Startseite extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -14,6 +14,10 @@ import android.bluetooth.BluetoothSocket;
 public class BluetoothListenThread extends Thread{
 	private final BluetoothServerSocket mmServerSocket;
 
+	/**
+	 * Erstellt ein BluetoothListenThread Objekt
+	 * @param bluetoothAdapter Der Bluetooth Adapter des Gereats
+	 */
 	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter){
 		// Use a temporary object that is later assigned to mmServerSocket,
         // because mmServerSocket is final

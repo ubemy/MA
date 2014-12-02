@@ -10,7 +10,9 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Maik Steinborn
  */
 public class ShipPlacement {
+	/**Das Spielfeld wird in 25 Bloecke aufgeteilt. Die Bloecke werden in dieser Variable gespeichert*/
 	Block blocks[];
+	/**Das Spielfeld*/
 	Field t;
 	
 	/**

@@ -10,6 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Android Activity zur Auswahl ob ein Mehrspieler Spiel erstellt
+ * oder an einem Mehrspieler Spiel teilgenommen werden soll
+ * @author Maik Steinborn
+ */
 public class Multiplayer extends Activity {
 
 	@Override

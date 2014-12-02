@@ -10,6 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Android Activity zur Auswahl des Spielermodus
+ * @author Maik Steinborn
+ */
 public class Spielermodus extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -8,13 +8,15 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Maik Steinborn
  */
 public class KI {
+	/**Das Spielfeld der KI*/
 	private Field myField;
+	/**Das gegnerische Spielfeld*/
 	private Field enemiesField;
-	private boolean shipDestroyedByLastAttack;
-	private boolean shipHitByLastAttack;
-	private int lastAttackedID;
+	/**Die ID's der letzten 4 Angriffe*/
 	private int[] idHistory = new int[4];
+	/**True oder False ob bei den letzten 4 Angriffen ein Schiff getroffen wurde*/
 	private boolean[] hitHistory = new boolean[4];
+	/**True oder False ob bei den letzten 4 Angriffen ein Schiff zerstoert wurde*/
 	private boolean[] shipDestroyedHistory = new boolean[4];
 	
 	/**
@@ -25,9 +27,6 @@ public class KI {
 	public KI(Field myField, Field enemiesField){
 		this.myField = myField;
 		this.enemiesField = enemiesField;
-		this.shipDestroyedByLastAttack = false;
-		this.shipHitByLastAttack = false;
-		this.lastAttackedID = 0;
 		setShips(createShips());
 		initHistory();
 	}
@@ -35,9 +34,9 @@ public class KI {
 	/**
 	 * History updaten
 	 * Die History speichert die letzten 4 Angriffe
-	 * - idHistory = Die id der letzten Angriffe.
-	 * - hitHistory = True oder false ob bei den letzten Angriffen ein Schiff getroffen wurde.
-	 * - shipDestroyedHistory = True oder false ob bei den letzten Angriffen ein Schiff zerstoert wurde.
+	 * @param id Die id der letzten Angriffe
+	 * @param hit True oder False ob bei den letzten Angriffen ein Schiff getroffen wurde
+	 * @param shipDestroyed True oder False ob bei den letzten Angriffen ein Schiff zerstoert wurde
 	 */
 	public void updateHistory(int id, boolean hit, boolean shipDestroyed){
 		for(int i=3; i>0; i--){
@@ -82,17 +81,13 @@ public class KI {
 		return ships;
 	}
 	
-	public void setShipDestroyedByLastAttack(boolean destroyed){
-		this.shipDestroyedByLastAttack = destroyed;
-	}
-	
-	public void setShipHitByLastAttack(boolean hit){
-		this.shipHitByLastAttack = hit;
-	}
-	
 	public ShipPlacement sp = new ShipPlacement(); //Nur zu Testzwecken als globale Variable
+	
+	/**
+	 * Schiffe auf dem Spielfeld der KI platzieren
+	 * @param ships Die Schiffe, die platziert werden
+	 */
 	private void setShips(Ship[] ships){
-		//Schiffe platzieren
 		sp = new ShipPlacement();
 		sp.placeShips(myField, ships);
 	}
@@ -104,7 +99,7 @@ public class KI {
 	public int attack(){
 		Random random = new Random();
 		int nextAttackID = 0;
-		int idForContinueLastAttack = getIDForContinueLastAttack2();
+		int idForContinueLastAttack = getIDForContinueLastAttack();
 		
 		if(idForContinueLastAttack != 0){
 			//Den letzten Angriff fortfuehren
@@ -118,17 +113,16 @@ public class KI {
 			}while(enemiesField.getElementByID(nextAttackID).getAttacked());
 		}
 		
-		//Werte reinigen
-		shipDestroyedByLastAttack = false;
-		shipHitByLastAttack = false;
-		
-		lastAttackedID = nextAttackID;
-		
 		//Ausgewaehltes FeldElement attackieren
 		return nextAttackID;
 	}
 	
-	private int getIDForContinueLastAttack2(){
+	/**
+	 * Berechnet die ID, die von der KI angegriffen werden soll,
+	 * wenn die KI in der vorherigen Spielrunde ein gegnerisches Schiff getroffen hat
+	 * @return Die ID des Feldelements, das angegriffen werden soll
+	 */
+	private int getIDForContinueLastAttack(){
 		int ret = 0;
 		boolean jump = false;
 		
@@ -172,6 +166,18 @@ public class KI {
 			}
 		}
 		
+		ret = getIDAfterOneAttackToShip(ret);
+		
+		return ret;
+	}
+
+	/**
+	 * Wenn das gegnerische Schiff getroffen und erst einmal angegriffen wurde,
+	 * wird durch Zufall bestimmt in welche Richtung der nächste Angriff geht
+	 * @param ret Die aktuelle ID, die angegriffen wird
+	 * @return Die neue ID, die angegriffen werden soll
+	 */
+	private int getIDAfterOneAttackToShip(int ret) {
 		if((ret == 0) && hitHistory[0]){
 			Random random = new Random();
 			int counter = 0;
@@ -204,91 +210,6 @@ public class KI {
 				counter++;
 			}while(ret == 0 && counter < 4);
 		}
-		
-		return ret;
-	}
-	
-	private int getIDForContinueLastAttack(){
-		int ret = 0;
-		//LastAttackedHistory implementieren
-		if(shipHitByLastAttack){
-			if(!shipDestroyedByLastAttack){
-				if((lastAttackedID + 1) <= 100){
-					if(enemiesField.getElementByID(lastAttackedID + 1).getAttacked()){
-						if(enemiesField.getElementByID(lastAttackedID).getEdge(1) != 4 && enemiesField.getElementByID(lastAttackedID).getEdge(2) != 4 && myField.getElementByID(lastAttackedID - 1).getAttacked()){
-							ret = lastAttackedID - 1;
-						}
-						if(enemiesField.getElementByID(lastAttackedID + 1).getEdge(1) != 3 && enemiesField.getElementByID(lastAttackedID).getEdge(2) != 3 && myField.getElementByID(lastAttackedID + 1).getAttacked()){
-							ret = lastAttackedID + 2;
-						}
-					}
-				}
-				if((lastAttackedID - 1) > 0){
-					if(enemiesField.getElementByID(lastAttackedID - 1).getAttacked()){
-						if(enemiesField.getElementByID(lastAttackedID).getEdge(1) != 3 && enemiesField.getElementByID(lastAttackedID).getEdge(2) != 3 && myField.getElementByID(lastAttackedID + 1).getAttacked()){
-							ret = lastAttackedID + 1;
-						}
-						if(enemiesField.getElementByID(lastAttackedID - 1).getEdge(1) != 4 && enemiesField.getElementByID(lastAttackedID).getEdge(2) != 4 && myField.getElementByID(lastAttackedID - 1).getAttacked()){
-							ret = lastAttackedID - 2;
-						}
-					}
-				}
-				if((lastAttackedID + 10) <= 100){
-					if(enemiesField.getElementByID(lastAttackedID + 10).getAttacked()){
-						if(enemiesField.getElementByID(lastAttackedID).getEdge(1) != 1 && enemiesField.getElementByID(lastAttackedID).getEdge(2) != 1 && myField.getElementByID(lastAttackedID - 10).getAttacked()){
-							ret = lastAttackedID - 10;
-						}
-						if(enemiesField.getElementByID(lastAttackedID + 10).getEdge(1) != 2 && enemiesField.getElementByID(lastAttackedID).getEdge(2) != 2 && myField.getElementByID(lastAttackedID + 10).getAttacked()){
-							ret = lastAttackedID + 20;
-						}
-					}
-				}
-				if((lastAttackedID - 10) > 0){
-					if(enemiesField.getElementByID(lastAttackedID - 10).getAttacked()){
-						if(enemiesField.getElementByID(lastAttackedID).getEdge(1) != 2 && enemiesField.getElementByID(lastAttackedID).getEdge(2) != 2 && myField.getElementByID(lastAttackedID + 10).getAttacked()){
-							ret = lastAttackedID + 10;
-						}
-						if(enemiesField.getElementByID(lastAttackedID - 10).getEdge(1) != 1 && enemiesField.getElementByID(lastAttackedID).getEdge(2) != 1 && myField.getElementByID(lastAttackedID - 10).getAttacked()){
-							ret = lastAttackedID - 20;
-						}
-					}
-				}
-				
-				if(ret == 0){
-					Random random = new Random();
-					int counter = 0;
-					do{
-						int randomInt = random.nextInt(3) + 1;
-						
-						if(enemiesField.getElementByID(lastAttackedID).getEdge(1) != randomInt && enemiesField.getElementByID(lastAttackedID).getEdge(2) != randomInt){
-							if(randomInt == 1){
-								if(!enemiesField.getElementByID(lastAttackedID - 10).getAttacked()){
-									ret = lastAttackedID - 10;
-								}
-							}
-							if(randomInt == 2){
-								if(!enemiesField.getElementByID(lastAttackedID + 10).getAttacked()){
-									ret = lastAttackedID + 10;
-								}
-							}
-							if(randomInt == 3){
-								if(!enemiesField.getElementByID(lastAttackedID + 1).getAttacked()){
-									ret = lastAttackedID + 1;
-								}
-							}
-							if(randomInt == 4){
-								if(!enemiesField.getElementByID(lastAttackedID - 1).getAttacked()){
-									ret = lastAttackedID - 1;
-								}
-							}
-						}
-						
-						counter++;
-					}while(ret == 0 && counter < 4);
-				}
-			}
-		}
-		
 		return ret;
 	}
 }

@@ -17,7 +17,8 @@ public class BluetoothConnectedThread extends Thread {
     private final OutputStream mmOutStream;
     private Game game;
 
-    /*
+    /**
+     * Erstellt ein BluetoothConnectedThread Objekt
      * @param socket ?? 
      */
     public BluetoothConnectedThread(BluetoothSocket socket) {

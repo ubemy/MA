@@ -16,8 +16,8 @@ public class BluetoothConnectThread extends Thread {
     private final BluetoothDevice mmDevice;
     private final BluetoothAdapter bluetoothAdapter;
  
-    /*
-     * Erstellt eine neues BluetoothConnectThread Objekt
+    /**
+     * Erstellt ein BluetoothConnectThread Objekt
      * @param device Verbundene Geraete
      * @param bluetoothAdapter Der Bluetooth Adapter des Geraetes
      */

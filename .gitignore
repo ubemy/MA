@@ -32,6 +32,5 @@ MA.iml
 /gradlew
 /gradlew.bat
 
-.classpath
-.settings/
-/doc/
+doc
+/

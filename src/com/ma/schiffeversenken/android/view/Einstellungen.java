@@ -16,6 +16,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+/**
+ * Android Activity zum Ändern der Spieleinstellungen
+ * @author Maik Steinborn
+ */
 public class Einstellungen extends Activity {
 	
 	@Override

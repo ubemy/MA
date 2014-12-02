@@ -13,13 +13,16 @@ import android.content.IntentFilter;
 import android.location.LocationManager;
 
 /**
- * Bluetooth baut Verbindungen auf
- * und sendet/empfaengt Werte
+ * Verwaltet die Bluetooth Verbindung
  * @author Maik Steinborn
  */
 public class Bluetooth extends Activity {
+	/**Eine Konstante, die an die Methode startActivityForResult() uebergeben wird,
+	 * wenn das Bluetooth nicht eingeschaltet*/
 	public static final int REQUEST_ENABLE_BT = 12;
+	/**Der Bluetooth Adapter des Geraets*/
 	private BluetoothAdapter bluetoothAdapter;
+	/**Die verbundenen Geraete*/
 	private BluetoothDevice pairedDevice;
 	
 	/**
@@ -29,10 +32,15 @@ public class Bluetooth extends Activity {
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 	}
 	
+	/**Sucht verfuegbare Geraete*/
 	public boolean discoverDevices(){
 		return bluetoothAdapter.startDiscovery();
 	}
 	
+	/**
+	 * Gibt die verbundenen Geraete zurueck
+	 * @return Die verbundenen Geraete
+	 */
 	public Set<BluetoothDevice> getPairedDevices(){
 		return bluetoothAdapter.getBondedDevices();
 	}
@@ -56,11 +64,7 @@ public class Bluetooth extends Activity {
 	
 	/**
 	 * Prueft ob Bluetooth verfuegbar und enabled ist
-	 * 
-	 * Bluetooth kann ueber folgenden Dialog in einer Avtivity eingeschaltet werden:
-	 * 
-	 * Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-	 * startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+	 * @return 0=Bluetooth ist eingeschaltet, 1=Geraet unterstuetzt kein Bluetooth, 2=Bluetooth ist disabled
 	 */
 	public int blutoothOK(){
 		int ret = 0;

@@ -105,7 +105,8 @@ public class Field {
 	}
 	
 	/**
-	 * Markiert, dass dieses FeldElement an einer Kante platziert ist 
+	 * Markiert, dass dieses FeldElement an einer Kante platziert ist
+	 * und in welcher Richtung die Kante liegt
 	 */
 	private void createKante(){
 		for (int i=0;i<10;i++){
@@ -137,7 +138,7 @@ public class Field {
 	}
 	
 	/**
-	 * Weist jedem FeldElement seine direkten Nachbarn zu
+	 * Weist jedem Feldelement seine direkten Nachbarn zu
 	 */
 	private void createNeighbors(){
 		for (int i=0;i<10;i++){

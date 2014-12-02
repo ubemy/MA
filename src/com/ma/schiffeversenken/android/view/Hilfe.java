@@ -6,6 +6,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.ma.schiffeversenken.android.R;
 
+/**
+ * Android Activity zum Anzeigen des Hilfe Textes
+ * @author Maik Steinborn
+ */
 public class Hilfe extends Activity {
 
 	@Override

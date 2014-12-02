@@ -14,6 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Android Activity zur Auswahl der Schwierigkeitsstufe
+ * @author Maik Steinborn
+ */
 public class Schwierigkeitsstufe extends Activity {
 //Test
 

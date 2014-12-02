@@ -10,7 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+/**
+ * Android Activity zum Erstellen eines Mehrspieler Spiels
+ * @author Maik Steinborn
+ */
 public class CreateMultiplayerGame extends Activity {
+	/**Bluetooth Objekt zur Verwaltung der Bluetooth Verbindung*/
 	Bluetooth bt;
 	
 	@Override

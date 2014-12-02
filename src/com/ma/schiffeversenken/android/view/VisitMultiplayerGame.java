@@ -12,6 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+/**
+ * Android Activity zur Teilnahme an einem Mehrspieler Spiel
+ * @author Maik Steinborn
+ */
 public class VisitMultiplayerGame extends Activity {
 	Bluetooth bt;
 	
@@ -31,7 +35,7 @@ public class VisitMultiplayerGame extends Activity {
 		else if(btState == 2){
 			//Bluetooth ist nicht enabled
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		    startActivityForResult(enableBtIntent, bt.REQUEST_ENABLE_BT);
+		    startActivityForResult(enableBtIntent, Bluetooth.REQUEST_ENABLE_BT);
 		}
 		else if(btState == 0){
 			bt.connectToServer();

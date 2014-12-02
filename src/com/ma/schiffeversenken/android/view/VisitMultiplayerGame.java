@@ -48,7 +48,7 @@ public class VisitMultiplayerGame extends Activity {
 			// Create the result Intent and include the MAC address
 			/*final Intent intent = new Intent();
 			intent.putExtra(EXTRA_DEVICE_ADDRESS, address);*/
-			//bt.connectToServer();
+			bt.connectToServer(address);
 
 			// Set result and finish this Activity
 			//VisitMultiplayerGame.this.setResult(Activity.RESULT_OK, intent);

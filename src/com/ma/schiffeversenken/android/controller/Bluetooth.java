@@ -1,5 +1,6 @@
 package com.ma.schiffeversenken.android.controller;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
@@ -53,7 +54,8 @@ public class Bluetooth extends Activity {
 	 * @return Die verbundenen Geraete
 	 */
 	public Set<BluetoothDevice> getPairedDevices(){
-		return bluetoothAdapter.getBondedDevices();
+		pairedDevices = bluetoothAdapter.getBondedDevices();
+		return pairedDevices; 
 	}
 	
 	/**
@@ -68,9 +70,20 @@ public class Bluetooth extends Activity {
 	 * Verbindung mit Server aufbauen.
 	 * pairedDevice = Der Server, mit dem verbunden werden soll
 	 */
-	public void connectToServer(){
-		BluetoothConnectThread btConnectThread = new BluetoothConnectThread(pairedDevices, bluetoothAdapter);
-		btConnectThread.start();
+	public void connectToServer(String mac){
+		BluetoothDevice device = null;
+		
+		for(Iterator<BluetoothDevice> it = pairedDevices.iterator(); it.hasNext();){
+			if(it.next().getAddress() == mac){
+				device = it.next();
+				break;
+			}
+		}
+		
+		if(device != null){
+			BluetoothConnectThread btConnectThread = new BluetoothConnectThread(device, bluetoothAdapter);
+			btConnectThread.start();
+		}
 	}
 	
 	/**

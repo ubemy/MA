@@ -255,7 +255,7 @@ public class FieldUnit {
 		} else if (getAttacked() && getPlacedShip() == null) {
 			textureName = "waterattacked";
 		} else {
-			textureName = "water";
+			textureName = "water12"; 
 		}
 		drawFeld = atlas.findRegion(textureName);
 		sprite = new Sprite(drawFeld);

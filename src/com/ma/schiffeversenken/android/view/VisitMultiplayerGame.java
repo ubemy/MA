@@ -73,13 +73,6 @@ public class VisitMultiplayerGame extends Activity {
 			newDevicesListView.setAdapter(this.mNewDevicesArrayAdapter);
 			newDevicesListView.setOnItemClickListener(this.mDeviceClickListener);
 
-			// Register for broadcasts when a device is discovered
-			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-			this.registerReceiver(this.mReceiver, filter);
-
-			// Register for broadcasts when discovery has finished
-			filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-			this.registerReceiver(this.mReceiver, filter);
 			mReceiver = new BroadcastReceiver() {
 			    public void onReceive(Context context, Intent intent) {
 			        String action = intent.getAction();
@@ -88,6 +81,7 @@ public class VisitMultiplayerGame extends Activity {
 						final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 						if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
 							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+							bt.addPairedDevice(device);
 						}
 					} else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
 						VisitMultiplayerGame.this.setProgressBarIndeterminateVisibility(false);
@@ -98,6 +92,14 @@ public class VisitMultiplayerGame extends Activity {
 					}
 			    }
 			};
+			
+			// Register for broadcasts when a device is discovered
+			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+			this.registerReceiver(this.mReceiver, filter);
+
+			// Register for broadcasts when discovery has finished
+			filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+			this.registerReceiver(this.mReceiver, filter);
 			
 			// Get a set of currently paired devices
 			final Set<BluetoothDevice> pairedDevices = bt.getPairedDevices();
@@ -135,20 +137,11 @@ public class VisitMultiplayerGame extends Activity {
 		    startActivityForResult(enableBtIntent, Bluetooth.REQUEST_ENABLE_BT);
 		}
 		else if(btState == 0){
-			IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-			try{
-			registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
-			}
-			catch(Exception ex){
-				ex.printStackTrace();
-			}
 			bt.getPairedDevices();
 			bt.discoverDevices();
-			
-			//bt.connectToServer();
 		}
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

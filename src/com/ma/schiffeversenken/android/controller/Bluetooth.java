@@ -1,6 +1,10 @@
 package com.ma.schiffeversenken.android.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
@@ -30,6 +34,7 @@ public class Bluetooth extends Activity {
 	private BluetoothAdapter bluetoothAdapter;
 	/**Die verbundenen Geraete*/
 	private Set<BluetoothDevice> pairedDevices;
+	private List<BluetoothDevice> allDevices;
 	
 	
 	/**
@@ -37,6 +42,7 @@ public class Bluetooth extends Activity {
 	 */
 	public Bluetooth(){
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		allDevices = new ArrayList();
 	}
 
 	
@@ -54,8 +60,23 @@ public class Bluetooth extends Activity {
 	 * @return Die verbundenen Geraete
 	 */
 	public Set<BluetoothDevice> getPairedDevices(){
-		pairedDevices = bluetoothAdapter.getBondedDevices();
+		pairedDevices = bluetoothAdapter.getBondedDevices();	
+		
+		for(Iterator<BluetoothDevice> it = pairedDevices.iterator(); it.hasNext();){
+			allDevices.add(it.next());
+		}
+		
 		return pairedDevices; 
+	}
+	
+	public void addPairedDevices(Set<BluetoothDevice> devices){
+		for(Iterator<BluetoothDevice> it = devices.iterator(); it.hasNext();){
+			pairedDevices.add(it.next());
+		}
+	}
+	
+	public void addPairedDevice(BluetoothDevice device){
+		allDevices.add(device);
 	}
 	
 	/**
@@ -73,9 +94,17 @@ public class Bluetooth extends Activity {
 	public void connectToServer(String mac){
 		BluetoothDevice device = null;
 		
+		/*
 		for(Iterator<BluetoothDevice> it = pairedDevices.iterator(); it.hasNext();){
-			if(it.next().getAddress() == mac){
+			if(it.next().getAddress().equals(mac)){
 				device = it.next();
+				break;
+			}
+		}*/
+		
+		for(BluetoothDevice dev : allDevices){
+			if(dev.getAddress().equals(mac)){
+				device = dev;
 				break;
 			}
 		}

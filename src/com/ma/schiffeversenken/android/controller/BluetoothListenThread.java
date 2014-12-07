@@ -24,7 +24,8 @@ public class BluetoothListenThread extends Thread{
         BluetoothServerSocket tmp = null;
         try {
             // MY_UUID is the app's UUID string, also used by the client code
-            tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.randomUUID());
+            //tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.randomUUID());
+        	tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"));
         } catch (IOException e) { }
         mmServerSocket = tmp;
 	}

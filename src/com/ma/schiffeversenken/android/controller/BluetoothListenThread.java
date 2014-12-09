@@ -17,15 +17,21 @@ import android.bluetooth.BluetoothSocket;
 public class BluetoothListenThread extends Thread{
 	private final BluetoothServerSocket mmServerSocket;
 	CreateMultiplayerGame cmgClass;
+	BluetoothAdapter bluetoothAdapter;
+	private Game game;
+	
 	/**
 	 * Erstellt ein BluetoothListenThread Objekt
 	 * @param bluetoothAdapter Der Bluetooth Adapter des Gereats
 	 */
-	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter, CreateMultiplayerGame cmgClass){
+	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter, CreateMultiplayerGame cmgClass, Game game){
 		// Use a temporary object that is later assigned to mmServerSocket,
         // because mmServerSocket is final
         BluetoothServerSocket tmp = null;
+        this.bluetoothAdapter = bluetoothAdapter;
         this.cmgClass = cmgClass;
+        this.game = game;
+        
         try {
             // MY_UUID is the app's UUID string, also used by the client code
             //tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.randomUUID());
@@ -60,7 +66,7 @@ public class BluetoothListenThread extends Thread{
     }
 
 	private void manageConnectedSocket(BluetoothSocket mmSocket) {
-    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket);
+    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter, this.game);
     	btConnectedThread.start();
 	}
 	

@@ -5,6 +5,8 @@ import java.util.Set;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.controller.Bluetooth;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectThread;
+import com.ma.schiffeversenken.android.controller.Game;
+import com.ma.schiffeversenken.android.model.Field;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -48,14 +50,12 @@ public class VisitMultiplayerGame extends Activity {
 			final String info = ((TextView) pView).getText().toString();
 			final String address = info.substring(info.length() - 17);
 
-			// Create the result Intent and include the MAC address
-			/*final Intent intent = new Intent();
-			intent.putExtra(EXTRA_DEVICE_ADDRESS, address);*/
-			bt.connectToServer(address);
-
-			// Set result and finish this Activity
-			//VisitMultiplayerGame.this.setResult(Activity.RESULT_OK, intent);
-			VisitMultiplayerGame.this.finish();
+			Field enemiesField = new Field(0);
+			Field myField = new Field(1);
+			
+			Game game = new Game(1, enemiesField, myField, false, true);
+			
+			bt.connectToServer(address, VisitMultiplayerGame.this, game);
 		}
 	};
 	
@@ -76,9 +76,6 @@ public class VisitMultiplayerGame extends Activity {
 			final ListView newDevicesListView = (ListView) this.findViewById(R.id.detectedDevicesLV);
 			newDevicesListView.setAdapter(this.mNewDevicesArrayAdapter);
 			newDevicesListView.setOnItemClickListener(this.mDeviceClickListener);
-			//VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add("Neue Geraete werden gesucht!");
-
-			
 
 			mReceiver = new BroadcastReceiver() {
 			    public void onReceive(Context context, Intent intent) {
@@ -157,6 +154,19 @@ public class VisitMultiplayerGame extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.visit_multiplayer_game, menu);
 		return true;
+	}
+	
+	/**
+	 * Dieser Toast muss ueber den UI Thread ausgeführt werden, da er von außerhalb aufgerufen wird
+	 * @param message Text, der als Toast angezeigt wird
+	 */
+	public void showToast(final String message){
+	    runOnUiThread(new Runnable() {
+	        public void run()
+	        {
+	            Toast.makeText(VisitMultiplayerGame.this, message, Toast.LENGTH_SHORT).show();
+	        }
+	    });
 	}
 
 	@Override

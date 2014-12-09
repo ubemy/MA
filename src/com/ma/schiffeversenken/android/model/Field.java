@@ -26,6 +26,7 @@ public class Field {
 	 * Spielfeld = 1;
 	 */
 	int typ;
+	
 	int size=MyGdxGameField.size;
 	// graphics High and width
 	private int h = Gdx.graphics.getHeight();
@@ -125,6 +126,7 @@ public class Field {
 		}
 		
 		//Verschiebung in die scene
+		
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				units[i][j].setXpos(units[i][j].getXpos()-w-size);

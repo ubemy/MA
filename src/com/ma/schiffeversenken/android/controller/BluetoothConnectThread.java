@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
+import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
+import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -16,23 +19,26 @@ public class BluetoothConnectThread extends Thread {
 	private final BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
     private final BluetoothAdapter bluetoothAdapter;
+    VisitMultiplayerGame vmgClass;
+    Game game;
  
     /**
      * Erstellt ein BluetoothConnectThread Objekt
      * @param device Verbundene Geraete
      * @param bluetoothAdapter Der Bluetooth Adapter des Geraetes
      */
-    public BluetoothConnectThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter) {
+    public BluetoothConnectThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter, VisitMultiplayerGame vmgClass, Game game) {
         // Use a temporary object that is later assigned to mmSocket,
         // because mmSocket is final
         BluetoothSocket tmp = null;
         this.mmDevice = null;
         this.bluetoothAdapter = bluetoothAdapter;
+        this.vmgClass = vmgClass;
+        this.game = game;
  
         // Get a BluetoothSocket to connect with the given BluetoothDevice
         try {
             // MY_UUID is the app's UUID string, also used by the server code
-    		//tmp = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
         	tmp = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"));
         } catch (IOException e) { }
         catch(Exception ex){
@@ -62,8 +68,12 @@ public class BluetoothConnectThread extends Thread {
     }
  
     private void manageConnectedSocket(BluetoothSocket mmSocket) {
-    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket);
+    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, vmgClass, null, this.bluetoothAdapter, this.game);
     	btConnectedThread.start();
+    	
+    	boolean attackHit = true;
+    	boolean shipDestroyed = false;
+    	btConnectedThread.write((new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes());
 	}
 
 	/** Will cancel an in-progress connection, and close the socket */

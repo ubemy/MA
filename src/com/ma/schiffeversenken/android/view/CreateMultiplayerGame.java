@@ -2,6 +2,9 @@ package com.ma.schiffeversenken.android.view;
 
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.controller.Bluetooth;
+import com.ma.schiffeversenken.android.controller.Game;
+import com.ma.schiffeversenken.android.model.Field;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -44,7 +47,12 @@ public class CreateMultiplayerGame extends Activity {
 			progress.setMessage("Auf Mitspieler warten");
 			progress.setIndeterminate(true);
 			progress.show();
-			bt.startServer(this);
+			
+			Field firstField = new Field(0);
+			Field secondField = new Field(1);
+			Game game = new Game(1, firstField, secondField, true, false);
+			
+			bt.startServer(this, game);
 		}
 	}
 
@@ -65,5 +73,18 @@ public class CreateMultiplayerGame extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	/**
+	 * Dieser Toast muss ueber den UI Thread ausgeführt werden, da er von außerhalb aufgerufen wird
+	 * @param message Text, der als Toast angezeigt wird
+	 */
+	public void showToast(final String message){
+	    runOnUiThread(new Runnable() {
+	        public void run()
+	        {
+	            Toast.makeText(CreateMultiplayerGame.this, message, Toast.LENGTH_SHORT).show();
+	        }
+	    });
 	}
 }

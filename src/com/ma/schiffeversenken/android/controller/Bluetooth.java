@@ -43,7 +43,7 @@ public class Bluetooth extends Activity {
 	 */
 	public Bluetooth(){
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		allDevices = new ArrayList();
+		allDevices = new ArrayList<BluetoothDevice>();
 	}
 
 	
@@ -83,8 +83,8 @@ public class Bluetooth extends Activity {
 	/**
 	 * Server starten
 	 */
-	public void startServer(CreateMultiplayerGame cmgClass){
-		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter, cmgClass);
+	public void startServer(CreateMultiplayerGame cmgClass, Game game){
+		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter, cmgClass, game);
 		btListenThread.start();
 	}
 	
@@ -92,16 +92,8 @@ public class Bluetooth extends Activity {
 	 * Verbindung mit Server aufbauen.
 	 * pairedDevice = Der Server, mit dem verbunden werden soll
 	 */
-	public void connectToServer(String mac){
+	public void connectToServer(String mac, VisitMultiplayerGame vmgClass, Game game){
 		BluetoothDevice device = null;
-		
-		/*
-		for(Iterator<BluetoothDevice> it = pairedDevices.iterator(); it.hasNext();){
-			if(it.next().getAddress().equals(mac)){
-				device = it.next();
-				break;
-			}
-		}*/
 		
 		for(BluetoothDevice dev : allDevices){
 			if(dev.getAddress().equals(mac)){
@@ -111,7 +103,7 @@ public class Bluetooth extends Activity {
 		}
 		
 		if(device != null){
-			BluetoothConnectThread btConnectThread = new BluetoothConnectThread(device, bluetoothAdapter);
+			BluetoothConnectThread btConnectThread = new BluetoothConnectThread(device, bluetoothAdapter, vmgClass, game);
 			btConnectThread.start();
 		}
 	}

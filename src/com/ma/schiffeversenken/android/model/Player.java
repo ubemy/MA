@@ -37,7 +37,7 @@ public class Player implements Serializable {
 		firstField = new Field(0);
 		secondField = new Field(1);
 		// TODO Support moere gameModes...
-		this.game = new Game(0, firstField, secondField);
+		this.game = new Game(0, firstField, secondField, false, false);
 	}
 
 	public void update() {

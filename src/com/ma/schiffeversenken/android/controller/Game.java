@@ -27,7 +27,13 @@ public class Game implements Runnable {
 	/**Die Feld-ID, die Spieler 2 attackiert*/
 	private int secondGamerAttackID;
 	/**Kuenstlicher Computer Gegner*/
-	KI ki;
+	private KI ki;
+	private BluetoothConnectedThread btConnectedThread;
+	private boolean primaryBTGame;
+	private boolean secondaryBTGame;
+	private boolean returnAttackHit;
+	private boolean returnShipDestroyed;
+	private boolean returnValuesAvailable;
 	
 	//Nur zu Testzwecken - Maik
 	public boolean getroffen = false;
@@ -38,18 +44,24 @@ public class Game implements Runnable {
 	 * @param firstField Spielfeld des 1. Spielers
 	 * @param secondField Spieldfeld des 2. Spielers
 	 */
-	public Game(int gameMode, Field firstField, Field secondField){
+	public Game(int gameMode, Field firstField, Field secondField, boolean primaryBTGame, boolean secondaryBTGame){
 		this.gameMode = gameMode;
 		this.firstField = firstField;
 		this.secondField = secondField;
-		this.firstGamerAction = false;
-		this.secondGamerAction = false;
+		this.primaryBTGame = primaryBTGame;
+		this.secondaryBTGame = secondaryBTGame;
+		
+		resetActionVariables();
 		
 		if(gameMode == 0){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
 			//Field kiField = new Field(1);
 			ki = new KI(secondField, firstField);
 		}
+	}
+	
+	public void setConnectedThread(BluetoothConnectedThread btConnectedThread){
+		this.btConnectedThread = btConnectedThread;
 	}
 	
 	/**
@@ -145,6 +157,11 @@ public class Game implements Runnable {
 		}while(!end);
 	}
 	
+	public void setReturnValues(boolean returnAttackHit, boolean returnShipDestroyed){
+		this.returnAttackHit = returnAttackHit;
+		this.returnShipDestroyed = returnShipDestroyed;
+	}
+	
 	/**
 	 * 
 	 * @param id ID des Feldes, das angegriffen wird
@@ -156,6 +173,7 @@ public class Game implements Runnable {
 		FieldUnit fe;
 		boolean attackHit = false;
 		boolean shipDestroyed = false;
+		boolean done = false;
 		
 		if(gamer == 0){
 			fe = secondField.getElementByID(id);
@@ -166,12 +184,49 @@ public class Game implements Runnable {
 		
 		fe.setAttacked(true); //FeldElement als attackiert markieren
 		
-		if(fe.getOccupied()){
-			//Wenn das Feld belegt war
-			ret = true;
+		if(primaryBTGame || secondaryBTGame){
+			byte[] attackString = (new String("_ATTACK_" + Integer.toString(id))).getBytes();
+			
+			if(primaryBTGame && gamer == 0){
+				btConnectedThread.write(attackString);	
+			}
+			else if(secondaryBTGame && gamer == 1){
+				btConnectedThread.write(attackString);
+			}
+			
+			while(!returnValuesAvailable){
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			ret = returnAttackHit;
 			destroyShip(fe);
-			shipDestroyed = fe.getPlacedShip().getDestroyed();
-			attackHit = true;
+			shipDestroyed = returnShipDestroyed;
+			attackHit = returnAttackHit;
+			
+			done = true;
+		}
+		
+		if(!done){
+			if(fe.getOccupied()){
+				//Wenn das Feld belegt war
+				ret = true;
+				destroyShip(fe);
+				shipDestroyed = fe.getPlacedShip().getDestroyed();
+				attackHit = true;
+			}
+			
+			byte[] returnString = (new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes();
+			
+			if(secondaryBTGame && gamer == 0){
+				btConnectedThread.write(returnString);
+			}
+			else if(primaryBTGame && gamer == 1){
+				btConnectedThread.write(returnString);
+			}
 		}
 		
 		if(gamer == 1 && gameMode == 0){
@@ -197,6 +252,9 @@ public class Game implements Runnable {
 		firstGamerAttackID = 0;
 		secondGamerAction = false;
 		secondGamerAttackID = 0;
+		returnAttackHit = false;
+		returnShipDestroyed = false;
+		returnValuesAvailable = false;
 	}
 	
 	/**

@@ -3,6 +3,9 @@ package com.ma.schiffeversenken.android.controller;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
+
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
@@ -13,15 +16,16 @@ import android.bluetooth.BluetoothSocket;
  */
 public class BluetoothListenThread extends Thread{
 	private final BluetoothServerSocket mmServerSocket;
-
+	CreateMultiplayerGame cmgClass;
 	/**
 	 * Erstellt ein BluetoothListenThread Objekt
 	 * @param bluetoothAdapter Der Bluetooth Adapter des Gereats
 	 */
-	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter){
+	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter, CreateMultiplayerGame cmgClass){
 		// Use a temporary object that is later assigned to mmServerSocket,
         // because mmServerSocket is final
         BluetoothServerSocket tmp = null;
+        this.cmgClass = cmgClass;
         try {
             // MY_UUID is the app's UUID string, also used by the client code
             //tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.randomUUID());
@@ -32,6 +36,7 @@ public class BluetoothListenThread extends Thread{
 	
 	public void run() {
         BluetoothSocket socket = null;
+        
         // Keep listening until exception occurs or a socket is returned
         while (true) {
             try {
@@ -39,6 +44,7 @@ public class BluetoothListenThread extends Thread{
             } catch (IOException e) {
                 break;
             }
+            this.cmgClass.progress.dismiss();
             // If a connection was accepted
             if (socket != null) {
                 // Do work to manage the connection (in a separate thread)

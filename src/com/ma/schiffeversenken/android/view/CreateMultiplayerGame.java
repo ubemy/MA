@@ -3,6 +3,7 @@ package com.ma.schiffeversenken.android.view;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.controller.Bluetooth;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 public class CreateMultiplayerGame extends Activity {
 	/**Bluetooth Objekt zur Verwaltung der Bluetooth Verbindung*/
 	Bluetooth bt;
+	public ProgressDialog progress;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +29,22 @@ public class CreateMultiplayerGame extends Activity {
 		int btState = bt.blutoothOK();
 		
 		if(btState == 1){
-			//Geraet unterstuetzt kein Bluetooth
+			/*
+			 * Geraet unterstuetzt kein Bluetooth
+			 * Meldung ausgeben und zum vorheriger Activity wechseln
+			 */
 			Toast t = Toast.makeText(getApplicationContext(), "Bluetooth auf diesem Gerät nicht verfügbar", Toast.LENGTH_LONG);
 			t.show();
+			finish();
 		}
 		else{
 			Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 			startActivityForResult(getVisible, 0);
-			bt.startServer();
+			progress = new ProgressDialog(this);
+			progress.setMessage("Auf Mitspieler warten");
+			progress.setIndeterminate(true);
+			progress.show();
+			bt.startServer(this);
 		}
 	}
 

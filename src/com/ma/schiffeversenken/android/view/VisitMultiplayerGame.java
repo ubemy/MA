@@ -7,6 +7,7 @@ import com.ma.schiffeversenken.android.controller.Bluetooth;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectThread;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -31,6 +32,8 @@ import android.widget.TextView;
 public class VisitMultiplayerGame extends Activity {
 	public static String EXTRA_DEVICE_ADDRESS = "device_address";
 	Bluetooth bt;
+	TextView status;
+	ProgressDialog progress;
 	private ArrayAdapter<String> mPairedDevicesArrayAdapter;
 	private ArrayAdapter<String> mNewDevicesArrayAdapter;
 	private BroadcastReceiver mReceiver;
@@ -61,6 +64,7 @@ public class VisitMultiplayerGame extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_visit_multiplayer_game);
 		bt = new Bluetooth();
+		status = (TextView) findViewById(R.id.visit_game_status);
 		
 		try{
 			this.mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -72,6 +76,9 @@ public class VisitMultiplayerGame extends Activity {
 			final ListView newDevicesListView = (ListView) this.findViewById(R.id.detectedDevicesLV);
 			newDevicesListView.setAdapter(this.mNewDevicesArrayAdapter);
 			newDevicesListView.setOnItemClickListener(this.mDeviceClickListener);
+			//VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add("Neue Geraete werden gesucht!");
+
+			
 
 			mReceiver = new BroadcastReceiver() {
 			    public void onReceive(Context context, Intent intent) {
@@ -87,8 +94,10 @@ public class VisitMultiplayerGame extends Activity {
 						VisitMultiplayerGame.this.setProgressBarIndeterminateVisibility(false);
 						VisitMultiplayerGame.this.setTitle("Select a device to connect...");
 						if (VisitMultiplayerGame.this.mNewDevicesArrayAdapter.getCount() == 0) {
-							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add("No devices found!");
+							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add("Keine Geraete gefunden!");
 						}
+						status.setText("Bitte ein Geraet auswaehlen!");
+						progress.dismiss();
 					}
 			    }
 			};
@@ -109,27 +118,23 @@ public class VisitMultiplayerGame extends Activity {
 					this.mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 				}
 			} else {
-				this.mPairedDevicesArrayAdapter.add("No devices have been paired!");
+				this.mPairedDevicesArrayAdapter.add("Keine gekoppelten Geraete!");
 			}
 			}
 			catch(Exception ex){
 				ex.printStackTrace();
 			}
 		
-		
-		/*
-		try{
-		bt = new Bluetooth();
-		}
-		catch(Exception ex){
-			ex.printStackTrace();
-		}*/
 		int btState = bt.blutoothOK();
 		
 		if(btState == 1){
-			//Geraet unterstuetzt kein Bluetooth
+			/*
+			 * Geraet unterstuetzt kein Bluetooth
+			 * Meldung ausgeben und zum vorheriger Activity wechseln
+			 */
 			Toast t = Toast.makeText(getApplicationContext(), "Bluetooth auf diesem Gerät nicht verfügbar", Toast.LENGTH_LONG);
 			t.show();
+			finish();
 		}
 		else if(btState == 2){
 			//Bluetooth ist nicht enabled
@@ -139,6 +144,11 @@ public class VisitMultiplayerGame extends Activity {
 		else if(btState == 0){
 			bt.getPairedDevices();
 			bt.discoverDevices();
+			
+			progress = new ProgressDialog(this);
+			progress.setMessage("Neue Geräte werden gesucht");
+			progress.setIndeterminate(true);
+			progress.show();
 		}
 	}
 	

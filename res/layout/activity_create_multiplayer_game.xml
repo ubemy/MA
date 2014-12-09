@@ -9,7 +9,7 @@
     tools:context="com.ma.schiffeversenken.android.view.CreateMultiplayerGame" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/visit_game_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
@@ -18,7 +18,7 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/visit_game_status"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
         android:text="Button" />

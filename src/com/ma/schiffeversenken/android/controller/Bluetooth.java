@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 
 import android.R;
@@ -82,8 +83,8 @@ public class Bluetooth extends Activity {
 	/**
 	 * Server starten
 	 */
-	public void startServer(){
-		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter);
+	public void startServer(CreateMultiplayerGame cmgClass){
+		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter, cmgClass);
 		btListenThread.start();
 	}
 	

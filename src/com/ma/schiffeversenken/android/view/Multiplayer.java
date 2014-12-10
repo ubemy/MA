@@ -16,7 +16,9 @@ import android.widget.Button;
  * @author Maik Steinborn
  */
 public class Multiplayer extends Activity {
-
+	/**
+	 * Erstellt eine Multiplayer Activity
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -17,20 +17,31 @@ import android.widget.Toast;
  * @author Maik Steinborn
  */
 public class BluetoothConnectedThread extends Thread {
-	private final BluetoothSocket mmSocket;
-    private final InputStream mmInStream;
-    private final OutputStream mmOutStream;
+	/**Bluetooth Socket Objekt*/
+	private final BluetoothSocket bluetoothSocket;
+	/**Eingehender Stream*/
+    private final InputStream inStream;
+    /**Ausgehender Stream*/
+    private final OutputStream outStream;
+    /**Initialisiertes Game Objekt*/
     private Game game;
-    VisitMultiplayerGame vmgClass;
-    CreateMultiplayerGame cmgClass;
-    BluetoothAdapter bluetoothAdapter;
+    /**Initialisiertes VisitMultiplayerGame Objekt*/
+    private VisitMultiplayerGame vmgClass;
+    /**Initialisiertes CreateMultiplayerGame Objekt*/
+    private CreateMultiplayerGame cmgClass;
+    /**Bluetooth Adapter Objekt*/
+    private BluetoothAdapter bluetoothAdapter;
 
     /**
      * Erstellt ein BluetoothConnectedThread Objekt
-     * @param socket ?? 
+     * @param socket Erstellte Bluetooth Socket Verbindung
+     * @param vmgClass Initialisiertes VisitMultiplayerGame Objekt
+     * @param cmgClass Initialisiertes CreateMultiplayerGame Objekt
+     * @param bluetoothAdapter Bluetooth Adapter Objekt
+     * @param game Initialisiertes Game Objekt
      */
     public BluetoothConnectedThread(BluetoothSocket socket, VisitMultiplayerGame vmgClass, CreateMultiplayerGame cmgClass, BluetoothAdapter bluetoothAdapter, Game game) {
-        mmSocket = socket;
+    	bluetoothSocket = socket;
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
         this.vmgClass = vmgClass;
@@ -40,18 +51,20 @@ public class BluetoothConnectedThread extends Thread {
  
         this.game.setConnectedThread(this);
         
-        // Get the input and output streams, using temp objects because
-        // member streams are final
+        //Temporaeres Objekt benutze, da Streams final sind
         try {
             tmpIn = socket.getInputStream();
             tmpOut = socket.getOutputStream();
         } catch (IOException e) { }
  
-        mmInStream = tmpIn;
-        mmOutStream = tmpOut;
+        inStream = tmpIn;
+        outStream = tmpOut;
     	sendHello();
     }
  
+    /**
+     * Thread starten
+     */
     public void run() {
         byte[] buffer = new byte[1024];  // buffer store for the stream
         int bytes; // bytes returned from read()
@@ -59,11 +72,11 @@ public class BluetoothConnectedThread extends Thread {
         // Keep listening to the InputStream until an exception occurs
         while (true) {
             try {
-                // Read from the InputStream
-                bytes = mmInStream.read(buffer);
-                // Send the obtained bytes to the UI activity
-                /*mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
-                        .sendToTarget();*/
+                /*
+                 * Vom InputStream lesen
+                 * Und dann je nach Art der Message Aktion ausfuehren
+                 */
+                bytes = inStream.read(buffer);
                 
                 String readMsg = new String(buffer, 0, bytes);
                 String attackString = "_ATTACK_";
@@ -93,25 +106,23 @@ public class BluetoothConnectedThread extends Thread {
         }
     }
  
+    /**
+     * Bei erfolgreich aufgebauter Verbindung wird der Namen dieses Geraetes an
+     * das Remote Geraet gesendet. Dieser erscheint dort dann als Toast
+     */
     private void sendHello(){
     	String sendString = new String("_HELLO_" + bluetoothAdapter.getName());
     	write(sendString.getBytes());
     }
     
-    /* Call this from the main activity to send data to the remote device */
+    /**
+     * Daten ueber Bluetooth Socket senden
+     */
     public void write(byte[] bytes) {
         try {
-            mmOutStream.write(bytes);
+        	outStream.write(bytes);
         } catch (IOException e) { 
         	e.printStackTrace();
         }
     }
- 
-    /* Call this from the main activity to shutdown the connection */
-    public void cancel() {
-        try {
-            mmSocket.close();
-        } catch (IOException e) { }
-    }
-
 }

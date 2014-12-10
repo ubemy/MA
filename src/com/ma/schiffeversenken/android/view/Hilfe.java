@@ -11,7 +11,9 @@ import com.ma.schiffeversenken.android.R;
  * @author Maik Steinborn
  */
 public class Hilfe extends Activity {
-
+	/**
+	 * Erstellt eine Hilfe Activity
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

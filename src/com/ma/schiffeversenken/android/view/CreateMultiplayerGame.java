@@ -21,8 +21,12 @@ import android.widget.Toast;
 public class CreateMultiplayerGame extends Activity {
 	/**Bluetooth Objekt zur Verwaltung der Bluetooth Verbindung*/
 	Bluetooth bt;
+	/**ProgressDialog, der angezeigt wird, wenn auf ein Mitspieler gewartet wird*/
 	public ProgressDialog progress;
 	
+	/**
+	 * Erstellt eine CreateMultiplayerGame Activity
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,9 +52,11 @@ public class CreateMultiplayerGame extends Activity {
 			progress.setIndeterminate(true);
 			progress.show();
 			
+			/*
+			 * Field Klasse gibt aktuell noch Fehler
 			Field firstField = new Field(0);
-			Field secondField = new Field(1);
-			Game game = new Game(1, firstField, secondField, true, false);
+			Field secondField = new Field(1);*/
+			Game game = new Game(1, null, null, true, false);
 			
 			bt.startServer(this, game);
 		}

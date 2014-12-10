@@ -19,7 +19,6 @@ import android.widget.Button;
  * @author Maik Steinborn
  */
 public class Schwierigkeitsstufe extends Activity {
-//Test
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

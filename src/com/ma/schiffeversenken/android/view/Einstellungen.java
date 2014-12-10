@@ -21,7 +21,9 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  * @author Maik Steinborn
  */
 public class Einstellungen extends Activity {
-	
+	/**
+	 * Erstellt eine Einstellungen Activity
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

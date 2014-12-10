@@ -16,10 +16,13 @@ import android.bluetooth.BluetoothSocket;
  * @author Maik Steinborn
  */
 public class BluetoothConnectThread extends Thread {
-	private final BluetoothSocket mmSocket;
-    private final BluetoothDevice mmDevice;
+	/**Client Bluetooth Socket*/
+	private final BluetoothSocket bluetoothSocket;
+	/**BluetoothAdapter Objekt, das spaeter an den BluetoothConnectedThread-Thread weitergegeben wird*/
     private final BluetoothAdapter bluetoothAdapter;
+    /**Initialisiertes VisitMultiplayerGame Objekt*/
     VisitMultiplayerGame vmgClass;
+    /**Initialisiertes Game Objekt, das spaeter an den BluetoothConnectedThread-Thread weitergegeben wird*/
     Game game;
  
     /**
@@ -27,60 +30,57 @@ public class BluetoothConnectThread extends Thread {
      * @param device Verbundene Geraete
      * @param bluetoothAdapter Der Bluetooth Adapter des Geraetes
      */
-    public BluetoothConnectThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter, VisitMultiplayerGame vmgClass, Game game) {
-        // Use a temporary object that is later assigned to mmSocket,
-        // because mmSocket is final
+    public BluetoothConnectThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter, VisitMultiplayerGame vmgClass, Game game, String uuid) {
+    	//Temporaeres Objekt benutze, da bluetoothSocket final ist
         BluetoothSocket tmp = null;
-        this.mmDevice = null;
         this.bluetoothAdapter = bluetoothAdapter;
         this.vmgClass = vmgClass;
         this.game = game;
  
-        // Get a BluetoothSocket to connect with the given BluetoothDevice
+        //Bluetoothsocket erstellen
         try {
-            // MY_UUID is the app's UUID string, also used by the server code
-        	tmp = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"));
+        	tmp = device.createRfcommSocketToServiceRecord(UUID.fromString(uuid));
         } catch (IOException e) { }
         catch(Exception ex){
         	ex.printStackTrace();
         }
-        mmSocket = tmp;
+        bluetoothSocket = tmp;
     }
  
     public void run() {
-        // Cancel discovery because it will slow down the connection
+        //Suche stoppen
     	bluetoothAdapter.cancelDiscovery();
  
         try {
-            // Connect the device through the socket. This will block
-            // until it succeeds or throws an exception
-            mmSocket.connect();
+            /*
+             * Mit Server ueber den Socket verbinden
+             * Blockiert, bis Verbindung hergestellt wurde
+             * Oder Fehler zurueck kommt
+             */
+        	bluetoothSocket.connect();
         } catch (IOException connectException) {
-            // Unable to connect; close the socket and get out
+            //Fehler beim Connect
             try {
-                mmSocket.close();
+            	bluetoothSocket.close();
             } catch (IOException closeException) { }
             return;
         }
  
-        // Do work to manage the connection (in a separate thread)
-        manageConnectedSocket(mmSocket);
+        //Verbindung in separatem Thread verwalten
+        manageConnectedSocket(bluetoothSocket);
     }
  
-    private void manageConnectedSocket(BluetoothSocket mmSocket) {
-    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, vmgClass, null, this.bluetoothAdapter, this.game);
+    /**
+     * Erstellt ein Thread, das sich um die bestehende Verbindung verwaltet und
+     * Ein- und ausgehende Streams verwaltet
+     * @param socket Aufgebaute Bluetooth Socket Verbindung zum Server
+     */
+    private void manageConnectedSocket(BluetoothSocket socket) {
+    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(socket, vmgClass, null, this.bluetoothAdapter, this.game);
     	btConnectedThread.start();
     	
     	boolean attackHit = true;
     	boolean shipDestroyed = false;
     	btConnectedThread.write((new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes());
 	}
-
-	/** Will cancel an in-progress connection, and close the socket */
-    public void cancel() {
-        try {
-            mmSocket.close();
-        } catch (IOException e) { }
-    }
-
 }

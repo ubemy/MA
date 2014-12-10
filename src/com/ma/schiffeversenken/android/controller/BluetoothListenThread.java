@@ -15,48 +15,54 @@ import android.bluetooth.BluetoothSocket;
  * @author Maik Steinborn 
  */
 public class BluetoothListenThread extends Thread{
-	private final BluetoothServerSocket mmServerSocket;
-	CreateMultiplayerGame cmgClass;
-	BluetoothAdapter bluetoothAdapter;
+	/**Lauschender Server Socket, der auf eine Clientverbindung wartet*/
+	private final BluetoothServerSocket serverSocket;
+	/**Initialisiertes CreateMultiplayerGame Objekt*/
+	private CreateMultiplayerGame cmgClass;
+	/**BluetoothAdapter Objekt, das spaeter an den BluetoothConnectedThread-Thread weitergegeben wird*/
+	private BluetoothAdapter bluetoothAdapter;
+	/**Initialisiertes Game Objekt, das spaeter an den BluetoothConnectedThread-Thread weitergegeben wird*/
 	private Game game;
 	
 	/**
 	 * Erstellt ein BluetoothListenThread Objekt
 	 * @param bluetoothAdapter Der Bluetooth Adapter des Gereats
 	 */
-	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter, CreateMultiplayerGame cmgClass, Game game){
-		// Use a temporary object that is later assigned to mmServerSocket,
-        // because mmServerSocket is final
+	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter, CreateMultiplayerGame cmgClass, Game game, String uuid){
+        //Temporaeres Objekt benutze, da serverSocket final ist
         BluetoothServerSocket tmp = null;
         this.bluetoothAdapter = bluetoothAdapter;
         this.cmgClass = cmgClass;
         this.game = game;
         
         try {
-            // MY_UUID is the app's UUID string, also used by the client code
-            //tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.randomUUID());
-        	tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"));
+        	tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.fromString(uuid));
         } catch (IOException e) { }
-        mmServerSocket = tmp;
+        serverSocket = tmp;
 	}
 	
 	public void run() {
         BluetoothSocket socket = null;
         
-        // Keep listening until exception occurs or a socket is returned
         while (true) {
             try {
-                socket = mmServerSocket.accept();
+            	/*
+            	 * Auf Verbindung vom Client warten
+            	 * Blockiert, bis Client Verbindung aufbaut
+            	 * Oder Fehler zurueckgegeben wird
+            	 */
+                socket = serverSocket.accept();
             } catch (IOException e) {
                 break;
             }
+            //Wenn eine Verbindung angenommen wurde
             this.cmgClass.progress.dismiss();
-            // If a connection was accepted
+            
             if (socket != null) {
-                // Do work to manage the connection (in a separate thread)
+                //Verbindung in separatem Thread verwalten
                 manageConnectedSocket(socket);
                 try {
-					mmServerSocket.close();
+					serverSocket.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -65,16 +71,13 @@ public class BluetoothListenThread extends Thread{
         }
     }
 
+	/**
+     * Erstellt ein Thread, das sich um die bestehende Verbindung verwaltet und
+     * Ein- und ausgehende Streams verwaltet
+     * @param socket Aufgebaute Bluetooth Socket Verbindung zum Server
+     */
 	private void manageConnectedSocket(BluetoothSocket mmSocket) {
     	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter, this.game);
     	btConnectedThread.start();
 	}
-	
-    /** Will cancel the listening socket, and cause the thread to finish */
-    public void cancel() {
-        try {
-            mmServerSocket.close();
-        } catch (IOException e) { }
-    }
-
 }

@@ -32,33 +32,48 @@ import android.widget.TextView;
  * @author Maik Steinborn
  */
 public class VisitMultiplayerGame extends Activity {
-	public static String EXTRA_DEVICE_ADDRESS = "device_address";
+	/**Bluetooth Objekt, das die Bluetooth Verbindung verwaltet*/
 	Bluetooth bt;
+	/**Zeigt Meldungen in der Activity an, die die Bluetooth Verbindung betrifft*/
 	TextView status;
+	/**ProgressDialog, der angezeigt wird, wenn neue Geraete gesucht werden*/
 	ProgressDialog progress;
+	/**Menge von gekoppelten Bluetooth Geraeten*/
 	private ArrayAdapter<String> mPairedDevicesArrayAdapter;
+	/**Menge von neuen Bluetooth Geraeten*/
 	private ArrayAdapter<String> mNewDevicesArrayAdapter;
+	/**Wird aufgerufen, wenn ein neues Bluetooth Geraet gefunden wurde oder
+	 * die Suche beendet wurde*/
 	private BroadcastReceiver mReceiver;
 	
+	/**
+	 * Wird aufgerufen, wenn ein Geraet ausgewaehlt wurde
+	 */
 	private final OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
 		@Override
 		public void onItemClick(final AdapterView<?> pAdapterView, final View pView, final int pPosition, final long pID) {
-			// Cancel discovery because it's costly and we're about to connect
+			// Suche abbrechen, weil bereits ein Geraet ausgewaehlt wurde
 			bt.stopDiscoverDevices();
 
-			// Get the device MAC address, which is the last 17 chars in the View
+			// Die MAC-Adresse des Geraets herausfiltern
 			final String info = ((TextView) pView).getText().toString();
 			final String address = info.substring(info.length() - 17);
 
+			/*
+			 *Field Klasse gibt aktuell noch Fehler 
+			 *
 			Field enemiesField = new Field(0);
-			Field myField = new Field(1);
+			Field myField = new Field(1);*/
 			
-			Game game = new Game(1, enemiesField, myField, false, true);
+			Game game = new Game(1, null, null, false, true);
 			
 			bt.connectToServer(address, VisitMultiplayerGame.this, game);
 		}
 	};
 	
+	/**
+	 * Erstellt eine VisitMultiplayerGame Activity
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,30 +95,32 @@ public class VisitMultiplayerGame extends Activity {
 			mReceiver = new BroadcastReceiver() {
 			    public void onReceive(Context context, Intent intent) {
 			        String action = intent.getAction();
-			        // When discovery finds a device
+			        
 			        if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+			        	//Wenn ein neues Bluetooth Geraet gefunden wurde
 						final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 						if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
 							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 							bt.addPairedDevice(device);
 						}
 					} else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+						//Wenn die Suche nach neuen Geraeten abgeschlossen wurde
 						VisitMultiplayerGame.this.setProgressBarIndeterminateVisibility(false);
 						VisitMultiplayerGame.this.setTitle("Select a device to connect...");
 						if (VisitMultiplayerGame.this.mNewDevicesArrayAdapter.getCount() == 0) {
-							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add("Keine Geraete gefunden!");
+							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add("Keine Geräte gefunden!");
 						}
-						status.setText("Bitte ein Geraet auswaehlen!");
+						status.setText("Bitte ein Gerät auswaehlen!");
 						progress.dismiss();
 					}
 			    }
 			};
 			
-			// Register for broadcasts when a device is discovered
+			//Event Handler registrieren, wenn Geraet gefunden wurde
 			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 			this.registerReceiver(this.mReceiver, filter);
 
-			// Register for broadcasts when discovery has finished
+			//Event Handler registrieren, wenn Suche beendet wurde gefunden wurde
 			filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 			this.registerReceiver(this.mReceiver, filter);
 			
@@ -115,7 +132,7 @@ public class VisitMultiplayerGame extends Activity {
 					this.mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 				}
 			} else {
-				this.mPairedDevicesArrayAdapter.add("Keine gekoppelten Geraete!");
+				this.mPairedDevicesArrayAdapter.add("Keine gekoppelten Geräte!");
 			}
 			}
 			catch(Exception ex){

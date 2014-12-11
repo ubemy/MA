@@ -3,6 +3,7 @@ package com.ma.schiffeversenken.android.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.MyGdxGameField;
 
 /**
@@ -27,7 +28,7 @@ public class Field {
 	 */
 	int typ;
 	
-	int size=MyGdxGameField.size;
+	int size=GameFieldScreen.size;
 	// graphics High and width
 	private int h = Gdx.graphics.getHeight();
 	private int w = Gdx.graphics.getWidth();

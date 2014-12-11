@@ -31,6 +31,14 @@ public class Player implements Serializable {
 	// private String textureLocation;
 	private TextureAtlas atlas;
 
+	public Player() {
+		super();
+		firstField = new Field(0);
+		secondField = new Field(1);
+		// TODO Support moere gameModes...
+		this.game = new Game(0, firstField, secondField, false, false);
+	}
+	
 	public Player(TextureAtlas textures) {
 		super();
 		atlas = textures;

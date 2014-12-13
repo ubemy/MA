@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.ma.schiffeversenken.android.model.Player;
 
 public class GameFieldScreen implements Screen {
@@ -48,20 +49,35 @@ public class GameFieldScreen implements Screen {
 
 	// Texturen
 	private TextureAtlas atlas;
-	private int[] background = {0},water={1},ships={2},attack={3};
+	private int[] background = { 0 }, water = { 1 }, ships = { 2 },
+			attack = { 3 };
 
 	@Override
 	public void show() {
-
+		// Tiled Maps laden um diese zu nutzen
+		map = new TmxMapLoader().load("maps/map.tmx"); 
+				
+		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");
+				
 		// graphics High and width
 		h = Gdx.graphics.getHeight();
 		w = Gdx.graphics.getWidth();
 		// Wegen resize Aufruf nach erstellen ist die übergabe von w/h unnötig
 		camera = new OrthographicCamera();
 		//camera.zoom 1.4	camera.position.x 510.0 camera.position.y 710.0
-		 camera.position.set((h/2)-(size/2), w, 0);
-		 System.out.println("w"+w+" h"+h);
-		 camera.zoom=1.33f;
+		camera.viewportWidth = w;
+		camera.viewportHeight = h;
+		float layerX = mapTileLayer.getWidth() * mapTileLayer.getTileWidth() / 2;
+		float layerY = mapTileLayer.getHeight() * mapTileLayer.getTileHeight() / 2;
+	    camera.position.set(layerX,layerY , 0);
+	    //zoomarichmetik um jede Auflösung zu unterstützen
+	    float zoomfaktor= ((0.95f*1920/h));
+	    System.out.println(zoomfaktor);
+	    
+	    camera.zoom=zoomfaktor;
+		camera.update();
+//		 camera.position.set((h/2)-(size/2), w, 0);
+//		 System.out.println("w"+w+" h"+h);
 		// camera.lookAt(0, 0, 0);
 		// camera.translate(h/2, h/2+size, h*4);
 		// camera.near = 0.1f;
@@ -72,10 +88,7 @@ public class GameFieldScreen implements Screen {
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.8f,
 				0.8f, 0.8f, 1.0f));
 
-		// Tiled Maps laden um diese zu nutzen
-		map = new TmxMapLoader().load("maps/map.tmx"); 
 		
-		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");
 
 		// Get Texture Pack
 		atlas = new TextureAtlas(Gdx.files.internal("graphics//textures.atlas"));
@@ -118,30 +131,30 @@ public class GameFieldScreen implements Screen {
 		renderer.setView(camera);
 		renderer.render();
 
-		//Animation bg
+		// Animation bg
 		renderer.render(ships);
-		
+
 		// Draw Stuff
 		batch.begin();
 		player.draw(batch, atlas);
 		ship.draw(batch);
 		batch.end();
-		
-		//Animation bg
+
+		// Animation bg
 		renderer.render(attack);
-		
-		//TODO Animate Fireing some canons and ships getting into position.
+
+		// TODO Animate Fireing some canons and ships getting into position.
 		player.animatedTiles();
-		
+
 	}
-
-
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO globale variable oder referenz auf map größe
 		camera.viewportWidth = width;
 		camera.viewportHeight = height;
+		// camera.position.set(width/2f, height/2f, 0);
+		// camera.zoom=0.5f;
 		camera.update();
 	}
 

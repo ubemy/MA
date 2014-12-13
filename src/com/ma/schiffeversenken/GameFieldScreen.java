@@ -6,11 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -51,6 +48,7 @@ public class GameFieldScreen implements Screen {
 
 	// Texturen
 	private TextureAtlas atlas;
+	private int[] background = {0},water={1},ships={2},attack={3};
 
 	@Override
 	public void show() {
@@ -60,7 +58,10 @@ public class GameFieldScreen implements Screen {
 		w = Gdx.graphics.getWidth();
 		// Wegen resize Aufruf nach erstellen ist die übergabe von w/h unnötig
 		camera = new OrthographicCamera();
-		// camera.position.set(0, 0, 0);
+		//camera.zoom 1.4	camera.position.x 510.0 camera.position.y 710.0
+		 camera.position.set((h/2)-(size/2), w, 0);
+		 System.out.println("w"+w+" h"+h);
+		 camera.zoom=1.33f;
 		// camera.lookAt(0, 0, 0);
 		// camera.translate(h/2, h/2+size, h*4);
 		// camera.near = 0.1f;
@@ -72,11 +73,13 @@ public class GameFieldScreen implements Screen {
 				0.8f, 0.8f, 1.0f));
 
 		// Tiled Maps laden um diese zu nutzen
-		map = new TmxMapLoader().load("maps/map.tmx");
+		map = new TmxMapLoader().load("maps/map.tmx"); 
+		
 		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");
 
 		// Get Texture Pack
 		atlas = new TextureAtlas(Gdx.files.internal("graphics//textures.atlas"));
+		
 
 		// renderer kann man noch ein skalierungsfaktor mitgeben.
 		renderer = new OrthogonalTiledMapRenderer(map);
@@ -89,7 +92,7 @@ public class GameFieldScreen implements Screen {
 		// init ships
 		playerShips = new ArrayList<EntityShip>();
 		enemyShips = new ArrayList<EntityShip>();
-		player = new Player(playerShips, enemyShips, atlas, mapTileLayer);
+		player = new Player(playerShips, enemyShips, atlas, map);
 
 		// Shiff Zeichnen TODO löschen den auskommentierten code
 		 Sprite sprite2 = new Sprite(atlas.findRegion("shipmiddle"));
@@ -115,13 +118,24 @@ public class GameFieldScreen implements Screen {
 		renderer.setView(camera);
 		renderer.render();
 
+		//Animation bg
+		renderer.render(ships);
+		
 		// Draw Stuff
 		batch.begin();
 		player.draw(batch, atlas);
 		ship.draw(batch);
 		batch.end();
-
+		
+		//Animation bg
+		renderer.render(attack);
+		
+		//TODO Animate Fireing some canons and ships getting into position.
+		player.animatedTiles();
+		
 	}
+
+
 
 	@Override
 	public void resize(int width, int height) {
@@ -134,6 +148,7 @@ public class GameFieldScreen implements Screen {
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
+		dispose();
 
 	}
 

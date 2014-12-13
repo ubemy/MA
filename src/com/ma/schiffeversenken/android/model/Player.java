@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.android.controller.Game;
@@ -15,7 +16,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
@@ -31,11 +38,16 @@ public class Player implements Serializable {
 	Game game;
 	private Field firstField;
 	private Field secondField;
+	TiledMap map;
 
-	public Player(ArrayList<EntityShip> playerShips, ArrayList<EntityShip> enemyShips,TextureAtlas a, TiledMapTileLayer mtl) {
+	public Player(ArrayList<EntityShip> playerShips,
+			ArrayList<EntityShip> enemyShips, TextureAtlas a, TiledMap m) {
 		super();
-		firstField = new Field(0,playerShips,a,mtl);
-		secondField = new Field(1,enemyShips,a,mtl);
+		map = m;
+		firstField = new Field(0, playerShips, a, (TiledMapTileLayer) map
+				.getLayers().get("0"));
+		secondField = new Field(1, enemyShips, a, (TiledMapTileLayer) map
+				.getLayers().get("0"));
 		// TODO Support moere gameModes...
 		this.game = new Game(0, firstField, secondField, false, false);
 	}
@@ -50,11 +62,11 @@ public class Player implements Serializable {
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			camera.translate(+10, 0);
 		} else if (Gdx.input.isKeyPressed(Keys.PLUS)) {
-			if(camera.zoom>0.1f)
-			camera.zoom=camera.zoom-0.1f;
+			if (camera.zoom > 0.1f)
+				camera.zoom = camera.zoom - 0.1f;
 		} else if (Gdx.input.isKeyPressed(Keys.MINUS)) {
-			if(camera.zoom<2.0f)
-			camera.zoom=camera.zoom+0.1f;
+			if (camera.zoom < 2.0f)
+				camera.zoom = camera.zoom + 0.1f;
 		}
 
 	}
@@ -135,6 +147,52 @@ public class Player implements Serializable {
 	 */
 	public void draw(Batch batch, TextureAtlas a) {
 		game.draw(batch, a);
+	}
+
+	public void animatedTiles() {
+		// Animatad Tiles
+		// FrameArray für zwei verschiedene Bilder
+		Array<StaticTiledMapTile> frameTiles = new Array<StaticTiledMapTile>(3);
+
+		// Iterieren und holen der Animierten tiles für das FrameArray
+		Iterator<TiledMapTile> tiles = map.getTileSets().getTileSet("ships")
+				.iterator();
+		while (tiles.hasNext()) {
+			TiledMapTile tile = tiles.next();
+			if (tile.getProperties().containsKey("gunattack")
+					&& tile.getProperties().get("gunattack", String.class)
+							.equals("1"))
+				frameTiles.add((StaticTiledMapTile) tile);
+		}
+
+		// Erstellen der Animierten Tile
+		AnimatedTiledMapTile animatedTile = new AnimatedTiledMapTile(1 / 3f,
+				frameTiles);
+
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("3");// 0=attack,
+																				// 1=ships,
+																				// 2=water,
+																				// 3=land
+
+		// iteration über das TileGrid
+		for (int x = 0; x < layer.getHeight(); x++) {
+			for (int y = 0; y < layer.getHeight(); y++) {
+				Cell cell = layer.getCell(x, y);
+				if (cell != null) {
+
+					// Wenn das die gesuchte zelle ist.
+					// if(cell.getTile().getProperties().containsKey("attack")
+					// &&
+					// cell.getTile().getProperties().get("attack",String.class).equals("1")){
+					if (cell.getTile().getProperties().containsKey("gunattack") && cell.getTile().getProperties()
+							.get("gunattack", String.class).equals("1")) {
+						// Animierte Tile der cell zuordnen.
+						cell.setTile(animatedTile);
+					}
+				}
+			}
+		}
+
 	}
 
 }

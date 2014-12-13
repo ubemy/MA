@@ -69,7 +69,7 @@ public class GameFieldScreen implements Screen {
 		camera.viewportHeight = h;
 		float layerX = mapTileLayer.getWidth() * mapTileLayer.getTileWidth() / 2;
 		float layerY = mapTileLayer.getHeight() * mapTileLayer.getTileHeight() / 2;
-	    camera.position.set(layerX,layerY , 0);
+	    camera.position.set(layerX,layerY , 0); 
 	    //zoomarichmetik um jede Auflösung zu unterstützen
 	    float zoomfaktor= ((0.95f*1920/h));
 	    System.out.println(zoomfaktor);
@@ -126,6 +126,7 @@ public class GameFieldScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.setProjectionMatrix(camera.combined);
+		
 
 		// dem Renderer die camera übergeben.
 		renderer.setView(camera);

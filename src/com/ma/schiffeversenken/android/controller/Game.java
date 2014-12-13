@@ -1,5 +1,6 @@
 package com.ma.schiffeversenken.android.controller;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.ma.schiffeversenken.android.model.*;
@@ -215,7 +216,7 @@ public class Game implements Runnable {
 				//Wenn das Feld belegt war
 				ret = true;
 				destroyShip(fe);
-				shipDestroyed = fe.getPlacedShip().getDestroyed();
+				shipDestroyed = fe.getPlacedShip().isDestroyed();
 				attackHit = true;
 			}
 			
@@ -268,14 +269,14 @@ public class Game implements Runnable {
 		int ret = 1;
 		
 		for(Ship ship : secondField.getShips()){
-			if(!ship.getDestroyed()){
+			if(!ship.isDestroyed()){
 				ret = 2;
 			}
 		}
 		
 		if(ret == 2){
 			for(Ship ship : firstField.getShips()){
-				if(!ship.getDestroyed()){
+				if(!ship.isDestroyed()){
 					ret = 0;
 				}
 			}
@@ -303,10 +304,10 @@ public class Game implements Runnable {
 	 * @param batch SpriteBatch worauf gezeichnet wird.
 	 * @param atlas Textures
 	 */
-	public void draw(SpriteBatch batch, TextureAtlas atlas) {
+	public void draw(Batch batch, TextureAtlas atlas) {
 		// TODO Auto-generated method stub
-		firstField.draw(batch,atlas);
-		secondField.draw(batch,atlas);
+		firstField.draw(batch);
+		secondField.draw(batch);
 	}
 	
 	

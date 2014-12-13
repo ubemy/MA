@@ -1,8 +1,14 @@
 package com.ma.schiffeversenken.android.model;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.MyGdxGameField;
 
@@ -27,11 +33,14 @@ public class Field {
 	 * Spielfeld = 1;
 	 */
 	int typ;
-	
-	int size=GameFieldScreen.size;
+
+	int size = GameFieldScreen.size;
 	// graphics High and width
 	private int h = Gdx.graphics.getHeight();
 	private int w = Gdx.graphics.getWidth();
+	private TextureAtlas atlas;
+	private TiledMapTileLayer mapTileLayer;
+	private ArrayList<EntityShip> drawShips;
 
 	/**
 	 * Erstellt ein Field Objekt
@@ -51,14 +60,101 @@ public class Field {
 		}
 	}
 
+	public Field(int typ, ArrayList<EntityShip> d, TextureAtlas a,
+			TiledMapTileLayer mtl) {
+		try {
+			this.typ = typ;
+			this.atlas = a;
+			this.mapTileLayer = mtl;
+			drawShips = d;
+			create(drawShips);
+			createNeighbors();
+			createKante();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	/**
-	 * Setzt die platzierten Schiffe
+	 * Setzt die platzierten Schiffe nach Erstellung.
 	 * 
 	 * @param ships
 	 *            Schiffe, die zu diesem Spielfeld zugeordnet werden sollen
 	 */
 	public void setShips(Ship[] ships) {
 		this.placedShips = ships;
+
+		// Für das Zeichnen bekommt jedes ship sein EntityShip
+		for (Ship ship : ships) {
+			// Finden der geeigneten Textur
+			String textureName;
+			switch (ship.getShipSegment()) {
+			case 0:// 0=Vorderteil
+				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
+					if (!ship.isDestroyed()) {
+						textureName = "hzshipfront";
+					} else {
+						textureName = "hzshipfrontattacked";
+					}
+				} else {// Vertikal
+					if (!ship.isDestroyed()) {
+						textureName = "shipfront";
+					} else {
+						textureName = "shipfrontattacked";
+					}
+				}
+				break;
+			case 2:// 2=Hinterteil
+				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
+					if (!ship.isDestroyed()) {
+						textureName = "hzshipback";
+					} else {
+						textureName = "hzshipbackattacked";
+					}
+				} else {// Vertikal
+					if (!ship.isDestroyed()) {
+						textureName = "shipback";
+					} else {
+						textureName = "shipbackattacked";
+					}
+				}
+				break;
+			default:// 1=Mittelteil
+				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
+					if (!ship.isDestroyed()) {
+						textureName = "hzshipmiddle";
+					} else {
+						textureName = "hzshipmiddleattacked";
+					}
+				} else {// Vertikal
+					if (!ship.isDestroyed()) {
+						textureName = "shipmiddle";
+					} else {
+						textureName = "shipmiddleattacked";
+					}
+				}
+				break;
+			}
+			// Setzen der EntityShip für das Schiff
+			EntityShip tmpEntity = new EntityShip(new Sprite(
+					atlas.findRegion(textureName)), mapTileLayer);
+			drawShips.add(tmpEntity);
+			System.out.println("Add an EntityShip");// TODO Remove sout
+			ship.setEntityShipDrawUnit(tmpEntity);
+		}
+
+		// Hier wird für jedes EntityShip festgelegt wo es gezeichnet wird.
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				if (units[i][j].getOccupied()) {
+					units[i][j]
+							.getPlacedShip()
+							.getEntityShipDrawUnit()
+							.setPosition(units[i][j].getXpos(),
+									units[i][j].getYpos());
+				}
+			}
+		}
 	}
 
 	/**
@@ -101,42 +197,53 @@ public class Field {
 	 * auch die Position je Feld in der Scene übergeben.
 	 */
 	private void create() {
-		// TODO Optimierung der Drawables
-		int xverschiebung = size;
-		int yverschiebung = size;
-		if (this.typ == 1) {
-			yverschiebung *= 11;
+		int id = 0;
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				id++;
+				units[i][j] = new FieldUnit(id);
+			}
 		}
-		int xpos = 0;
-		int ypos = 0;
+	}
+
+	/**
+	 * Überladene Methode create
+	 * 
+	 * @param drawShips
+	 *            hält ArrayList EntityShip der Klasse Player
+	 */
+	private void create(ArrayList<EntityShip> drawShips) {
+		int size = GameFieldScreen.size;
+		int cellPosX = 1;
+		int cellPosY = 1;
+		if (this.typ == 1) {
+			cellPosY += 10;
+		}
+		float layerW = mapTileLayer.getWidth();
+		float layerH = mapTileLayer.getHeight();
+		;
 		int id = 0;
 
 		for (int i = 0; i < 10; i++) {
-			if (i == 0) {
-				ypos = i * xverschiebung;
-			} else {
-				ypos = i * xverschiebung;
-			}
 			for (int j = 0; j < 10; j++) {
 				id++;
-				
+
 				// TODO Testen auf funktion beim Zeichen
-				units[i][j] = new FieldUnit(id, (xpos + j * xverschiebung),
-						ypos + yverschiebung);
+				units[i][j] = new FieldUnit(id, (j + cellPosX) * layerW,
+						(i + cellPosY) * layerH);
 			}
 		}
-		
-		//Verschiebung in die scene
-		
+
+		// Debugging ausgabe der positionen auf konsole
+		System.out.println("Neues Feld: ");
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				units[i][j].setXpos(units[i][j].getXpos()-w-size);
-				units[i][j].setYpos(units[i][j].getYpos()-h*1.8f-size);	
-				//Debugging
-				System.out.println("Field Erstellt: x:"+units[i][j].getXpos()
-						+" y:"+units[i][j].getYpos());
+				// Debugging
+				System.out.println("FieldUnit: x:" + units[i][j].getXpos()
+						+ " y:" + units[i][j].getYpos());
 			}
 		}
+
 	}
 
 	/**
@@ -209,8 +316,6 @@ public class Field {
 		}
 	}
 
-	
-	
 	/**
 	 * Iteriert über alle Feldelemente die gezeichnet werden.
 	 * 
@@ -218,12 +323,17 @@ public class Field {
 	 *            SpriteBatch fürs Zeichnen
 	 * @param atlas
 	 */
-	public void draw(SpriteBatch batch, TextureAtlas atlas) {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				// TODO Drawing
-				units[i][j].draw(batch, atlas, size);
-			}
+	public void draw(Batch batch) {
+
+		for (EntityShip entityShip : drawShips) {
+			entityShip.draw(batch);
 		}
+
+		// for (int i = 0; i < 10; i++) {
+		// for (int j = 0; j < 10; j++) {
+		// // TODO Drawing
+		// units[i][j].draw(batch, atlas, size);
+		// }
+		// }
 	}
 }

@@ -12,8 +12,6 @@ import com.ma.schiffeversenken.android.model.Player;
 
 public class MyGdxGameField extends Game {
 	
-	
-
 	/**
 	 * create initialisiert das Grundgerüst für das Zeichnen mit OpenGL ES 2.0
 	 * es wird nur einmal ausgeführt

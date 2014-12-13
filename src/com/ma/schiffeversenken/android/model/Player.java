@@ -5,12 +5,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
+import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
@@ -27,36 +32,29 @@ public class Player implements Serializable {
 	private Field firstField;
 	private Field secondField;
 
-	// Drawables
-	// private String textureLocation;
-	private TextureAtlas atlas;
-
-	public Player() {
+	public Player(ArrayList<EntityShip> playerShips, ArrayList<EntityShip> enemyShips,TextureAtlas a, TiledMapTileLayer mtl) {
 		super();
-		firstField = new Field(0);
-		secondField = new Field(1);
-		// TODO Support moere gameModes...
-		this.game = new Game(0, firstField, secondField, false, false);
-	}
-	
-	public Player(TextureAtlas textures) {
-		super();
-		atlas = textures;
-		firstField = new Field(0);
-		secondField = new Field(1);
+		firstField = new Field(0,playerShips,a,mtl);
+		secondField = new Field(1,enemyShips,a,mtl);
 		// TODO Support moere gameModes...
 		this.game = new Game(0, firstField, secondField, false, false);
 	}
 
-	public void update() {
+	public void update(OrthographicCamera camera) {
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
-
+			camera.translate(0, 10);
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-
+			camera.translate(-10, 0);
 		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-
+			camera.translate(0, -10);
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-
+			camera.translate(+10, 0);
+		} else if (Gdx.input.isKeyPressed(Keys.PLUS)) {
+			if(camera.zoom>0.1f)
+			camera.zoom=camera.zoom-0.1f;
+		} else if (Gdx.input.isKeyPressed(Keys.MINUS)) {
+			if(camera.zoom<2.0f)
+			camera.zoom=camera.zoom+0.1f;
 		}
 
 	}
@@ -73,7 +71,9 @@ public class Player implements Serializable {
 
 	/**
 	 * Methode dient der serialisierung eines Objectes zu einem ByteArray.
-	 * @param obj Das zu serialisierende Object.
+	 * 
+	 * @param obj
+	 *            Das zu serialisierende Object.
 	 * @return ByteArray der das serialiserte Object hält.
 	 * @throws IOException
 	 */
@@ -87,7 +87,9 @@ public class Player implements Serializable {
 
 	/**
 	 * Methode dient der deserialisierung eines Objectes aus einem ByteArray.
-	 * @param bytes ByteArray eines Objectes.
+	 * 
+	 * @param bytes
+	 *            ByteArray eines Objectes.
 	 * @return deserialisiertes Objekt wird zurückgeliefert.
 	 * @throws IOException
 	 * @throws ClassNotFoundException
@@ -108,12 +110,31 @@ public class Player implements Serializable {
 
 	}
 
+	public Field getFirstField() {
+		return firstField;
+	}
+
+	public void setFirstField(Field firstField) {
+		this.firstField = firstField;
+	}
+
+	public Field getSecondField() {
+		return secondField;
+	}
+
+	public void setSecondField(Field secondField) {
+		this.secondField = secondField;
+	}
+
 	/**
 	 * Methode zum Zeichnen der Szene
-	 * @param batch SpriteBatch wird fürs Zeichnen übergeben.
+	 * 
+	 * @param batch
+	 *            SpriteBatch wird fürs Zeichnen übergeben.
+	 * @param atlas
 	 */
-	public void draw(SpriteBatch batch) {
-		game.draw(batch,atlas);
+	public void draw(Batch batch, TextureAtlas a) {
+		game.draw(batch, a);
 	}
 
 }

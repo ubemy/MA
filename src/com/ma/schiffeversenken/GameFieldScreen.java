@@ -1,5 +1,7 @@
 package com.ma.schiffeversenken;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +23,7 @@ import com.ma.schiffeversenken.android.model.Player;
 public class GameFieldScreen implements Screen {
 
 	private TiledMap map;
+	private TiledMapTileLayer mapTileLayer;
 	// Renderer hält einen SpriteBatch fürs zeichnen bereit
 	private OrthogonalTiledMapRenderer renderer;
 	private Batch batch;
@@ -40,6 +43,10 @@ public class GameFieldScreen implements Screen {
 
 	// Spiellogic
 	private Player player;
+	private ArrayList<EntityShip> playerShips;
+	private ArrayList<EntityShip> enemyShips;
+
+	// TEstzwecke
 	private EntityShip ship;
 
 	// Texturen
@@ -65,34 +72,44 @@ public class GameFieldScreen implements Screen {
 				0.8f, 0.8f, 1.0f));
 
 		// Tiled Maps laden um diese zu nutzen
-		map = new TmxMapLoader().load("maps/schiffeversenken.tmx");
+		map = new TmxMapLoader().load("maps/map.tmx");
+		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");
+
+		// Get Texture Pack
+		atlas = new TextureAtlas(Gdx.files.internal("graphics//textures.atlas"));
 
 		// renderer kann man noch ein skalierungsfaktor mitgeben.
 		renderer = new OrthogonalTiledMapRenderer(map);
 
 		// SpriteBatch vom Renderer
 		batch = renderer.getSpriteBatch();
-		// Creating Player and Game Fields
-		// ...TODO
-		player = new Player(atlas);
 
-		// Get Texture Pack
-		atlas = new TextureAtlas(Gdx.files.internal("graphics//textures.atlas"));
-		// Shiff Zeichnen
-		ship = new EntityShip(new Sprite(atlas.findRegion("shipmiddle")),
-				(TiledMapTileLayer) map.getLayers().get("0"));
-//		ship.setPosition(11 * ship.getCollisionLayer().getTileWidth(),
-//				38 * ship.getCollisionLayer().getTileHeight());
-		ship.setPosition(11 * ship.getCollisionLayer().getTileWidth(),
-				(ship.getCollisionLayer().getHeight()-38) * ship.getCollisionLayer().getTileHeight());
+		// Creating Ships for Player and Game Fields
+		// ...TODO
+		// init ships
+		playerShips = new ArrayList<EntityShip>();
+		enemyShips = new ArrayList<EntityShip>();
+		player = new Player(playerShips, enemyShips, atlas, mapTileLayer);
+
+		// Shiff Zeichnen TODO löschen den auskommentierten code
+		 Sprite sprite2 = new Sprite(atlas.findRegion("shipmiddle"));
+		 sprite2.setSize(size, size);
+		 sprite2.setOrigin(sprite2.getWidth(), sprite2.getHeight());
+		 ship = new EntityShip(sprite2, mapTileLayer);
+		 ship.setPosition(1 * mapTileLayer.getTileHeight(),
+		 1 * mapTileLayer.getTileWidth());
 
 	}
 
 	@Override
 	public void render(float delta) {
+		player.update(camera);
+		camera.update();
 		// Render the things after show()
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		batch.setProjectionMatrix(camera.combined);
 
 		// dem Renderer die camera übergeben.
 		renderer.setView(camera);
@@ -100,8 +117,10 @@ public class GameFieldScreen implements Screen {
 
 		// Draw Stuff
 		batch.begin();
+		player.draw(batch, atlas);
 		ship.draw(batch);
 		batch.end();
+
 	}
 
 	@Override
@@ -132,6 +151,7 @@ public class GameFieldScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		atlas.dispose();
 		player.dispose();// TODO Rekursiv alle texturen
 		batch.dispose();
 		map.dispose();

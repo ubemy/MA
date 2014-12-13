@@ -3,66 +3,206 @@ textures.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-hzshipback
+explosion
   rotate: false
-  xy: 1, 646
-  size: 321, 321
-  orig: 321, 321
+  xy: 0, 133
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
-hzshipmiddle
+hzshipback
   rotate: false
-  xy: 1, 323
-  size: 321, 321
-  orig: 321, 321
+  xy: 0, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+hzshipbackattacked
+  rotate: false
+  xy: 64, 133
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 hzshipfront
   rotate: false
-  xy: 324, 646
-  size: 320, 321
-  orig: 320, 321
+  xy: 0, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+hzshipfrontattacked
+  rotate: false
+  xy: 64, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+hzshipmiddle
+  rotate: false
+  xy: 128, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+hzshipmiddleattacked
+  rotate: false
+  xy: 64, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+hzsmallship
+  rotate: false
+  xy: 128, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+hzsmallshipattacked
+  rotate: false
+  xy: 192, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lhzshipback
+  rotate: false
+  xy: 128, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lhzshipbackattacked
+  rotate: false
+  xy: 192, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lhzshipfront
+  rotate: false
+  xy: 256, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lhzshipfrontattacked
+  rotate: false
+  xy: 192, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lhzshipmiddle
+  rotate: false
+  xy: 256, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lhzshipmiddleattacked
+  rotate: false
+  xy: 320, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lhzsmallship
+  rotate: false
+  xy: 256, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+lhzsmallshipattacked
+  rotate: false
+  xy: 320, 67
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 shipback
   rotate: false
-  xy: 1, 1
-  size: 321, 320
-  orig: 321, 320
+  xy: 384, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+shipbackattacked
+  rotate: false
+  xy: 320, 1
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 shipfront
   rotate: false
-  xy: 646, 647
-  size: 321, 320
-  orig: 321, 320
+  xy: 384, 67
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 shipfrontattacked
   rotate: false
-  xy: 324, 324
-  size: 321, 320
-  orig: 321, 320
+  xy: 448, 133
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 shipmiddle
   rotate: false
-  xy: 324, 2
-  size: 321, 320
-  orig: 321, 320
+  xy: 384, 1
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
-water12
+shipmiddleattacked
   rotate: false
-  xy: 647, 325
-  size: 321, 320
-  orig: 321, 320
+  xy: 448, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+smallship
+  rotate: false
+  xy: 512, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+smallship2
+  rotate: false
+  xy: 448, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+smallshipattacked
+  rotate: false
+  xy: 512, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+smallshipattacked2
+  rotate: false
+  xy: 576, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+water
+  rotate: false
+  xy: 512, 1
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 waterattacked
   rotate: false
-  xy: 647, 3
-  size: 321, 320
-  orig: 321, 320
+  xy: 576, 67
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1

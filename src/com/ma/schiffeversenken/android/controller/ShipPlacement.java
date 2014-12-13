@@ -24,6 +24,8 @@ public class ShipPlacement {
 	
 	/**
 	 * Platziert die Schiffe automatisch auf dem Spielfeld
+	 * Erst das Erstellen von ships, danach das Platzieren in field
+	 * 
 	 * @param field
 	 * @param ships
 	 */
@@ -32,7 +34,7 @@ public class ShipPlacement {
 
 		createBlocks(field);
 		Random random = new Random();
-		field.setShips(ships);
+		//Erstellen der Schiffe danach erst im field setzen.
 		for(Ship ship:ships){
 			int randomID = 0;
 			int orientation = 0;
@@ -81,6 +83,8 @@ public class ShipPlacement {
 				}
 			}
 		}
+		//Setzen von ships
+		field.setShips(ships);
 	}
 
 	/**

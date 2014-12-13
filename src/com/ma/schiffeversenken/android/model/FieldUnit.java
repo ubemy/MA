@@ -1,5 +1,6 @@
 package com.ma.schiffeversenken.android.model;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -40,6 +41,19 @@ public class FieldUnit {
 
 	/**
 	 * Erstellt ein neues FieldUnit Objekt
+	 * 
+	 * @param id
+	 *            Die eindeutige ID dieses Feldelements
+	 */
+	public FieldUnit(int id) {
+		this.id = id;
+		this.occupied = false;
+		this.attacked = false;
+		this.placedShip = null;
+	}
+
+	/**
+	 * Überladener Konstruktor
 	 * 
 	 * @param id
 	 *            Die eindeutige ID dieses Feldelements
@@ -159,6 +173,7 @@ public class FieldUnit {
 	 *            Segment des Schiffs: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil
 	 */
 	public void placeShip(Ship ship, int shipSegment) {
+		ship.setShipSegment(shipSegment);
 		this.placedShip = ship;
 		this.shipSegment = shipSegment;
 	}
@@ -195,9 +210,9 @@ public class FieldUnit {
 		this.occupied = occupied;
 	}
 
-	
 	/**
 	 * Für das Zeichnen in Opengl Koordinaten benötigt
+	 * 
 	 * @return position
 	 */
 	public float getXpos() {
@@ -206,6 +221,7 @@ public class FieldUnit {
 
 	/**
 	 * Für das Zeichnen in Opengl Koordinaten benötigt
+	 * 
 	 * @return position
 	 */
 	public void setXpos(float xpos) {
@@ -214,6 +230,7 @@ public class FieldUnit {
 
 	/**
 	 * Für das Zeichnen in Opengl Koordinaten benötigt
+	 * 
 	 * @return position
 	 */
 	public float getYpos() {
@@ -222,48 +239,11 @@ public class FieldUnit {
 
 	/**
 	 * Für das Zeichnen in Opengl Koordinaten benötigt
+	 * 
 	 * @return position
 	 */
 	public void setYpos(float ypos) {
 		this.ypos = ypos;
 	}
 
-	/**
-	 * TODO Maik nach den variablen fragen und Abklären wegen Zeichnen.
-	 * 
-	 * @param batch
-	 *            ist die SpriteBach die fürs Zeichnen übergeben wird.
-	 * @param atlas
-	 *            hält alle benötigten Texturelemente mit namen
-	 */
-	public void draw(SpriteBatch batch, TextureAtlas atlas, int size) {
-		// TODO Auslesen ob das Schiff Horizontal oder Vertikal steht
-		if (getAttacked() && getPlacedShip() != null) {
-			// TODO wenn Front
-			textureName = "shipfrontattacked";
-			// TODO wenn Mittelteil
-			textureName = "shipmiddleattacked";
-			// TODO wenn Back
-			textureName = "shipbackattacked";
-		} else if (!getAttacked() && getPlacedShip() != null) {
-			// TODO wenn Front
-			textureName = "shipfront";
-			// TODO wenn Mittelteil
-			textureName = "shipmiddle";
-			// TODO wenn Back
-			textureName = "shipback";
-		} else if (getAttacked() && getPlacedShip() == null) {
-			textureName = "waterattacked";
-		} else {
-			textureName = "water12"; 
-		}
-		drawFeld = atlas.findRegion(textureName);
-		sprite = new Sprite(drawFeld);
-		sprite.setSize(size, size);
-		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-		sprite.setPosition(xpos, ypos);
-		sprite.draw(batch);
-		// TODO Testen was besser ist über batch oder sprite das Zeichen
-		// batch.draw(drawFeld, xpos, ypos);
-	}
 }

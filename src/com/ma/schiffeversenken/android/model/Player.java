@@ -169,21 +169,18 @@ public class Player implements Serializable {
 		AnimatedTiledMapTile animatedTile = new AnimatedTiledMapTile(1 / 3f,
 				frameTiles);
 
-		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("3");// 0=attack,
-																				// 1=ships,
-																				// 2=water,
-																				// 3=land
+		// 3=attack,2=ships,1=water, 0=land
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("3");
+																				// 
+																				// 
+																				//
 
 		// iteration über das TileGrid
 		for (int x = 0; x < layer.getHeight(); x++) {
 			for (int y = 0; y < layer.getHeight(); y++) {
 				Cell cell = layer.getCell(x, y);
 				if (cell != null) {
-
 					// Wenn das die gesuchte zelle ist.
-					// if(cell.getTile().getProperties().containsKey("attack")
-					// &&
-					// cell.getTile().getProperties().get("attack",String.class).equals("1")){
 					if (cell.getTile().getProperties().containsKey("gunattack") && cell.getTile().getProperties()
 							.get("gunattack", String.class).equals("1")) {
 						// Animierte Tile der cell zuordnen.

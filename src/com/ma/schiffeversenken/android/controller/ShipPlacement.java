@@ -105,7 +105,7 @@ public class ShipPlacement {
 			temp=id+finalCounter;
 			if(temp>0 && temp<101){
 				FieldUnit tempElement = field.getElementByID(temp);
-				if(i==(size-1)) shipSegment = 2;
+				if(i==(size-1)) shipSegment = 0;
 				tempElement.setOccupied(true);
 				tempElement.placeShip(ship, shipSegment);
 				ship.setStandort(tempElement, i, orientation);

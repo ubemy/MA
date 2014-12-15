@@ -7,7 +7,7 @@ import com.ma.schiffeversenken.EntityShip;
  * 
  * @author Maik
  */
-public abstract class Ship {
+public class Ship {
 	/** Laenge des Schiffs */
 	int size;
 	/** Boolean ob das Schiff zerstoert ist */

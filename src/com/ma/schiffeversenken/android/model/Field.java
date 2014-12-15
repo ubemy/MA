@@ -20,7 +20,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.MyGdxGameField;
-import com.ma.schiffeversenken.Tile;
 
 /**
  * Das Spielfeld

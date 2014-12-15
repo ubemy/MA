@@ -66,16 +66,16 @@ public class KI {
 	 * @return Erstellt Schiffe
 	 */
 	private Ship[] createShips(){
-		Ship[] ships = new Ship[]{new Submarine("Uboot"),
-				new Submarine("Uboot"),
-				new Submarine("Uboot"),
-				new Cruiser("Kreuzer"),
-				new Cruiser("Kreuzer"),
-				new Cruiser("Kreuzer"),
-				new Cruiser("Kreuzer"),
-				new Destroyer("Zerstoerer"),
-				new Destroyer("Zerstoerer"),
-				new Battleship("Schlachtschiff")
+		Ship[] ships = new Ship[]{new Ship("Uboot", 2),
+				new Ship("Uboot", 2),
+				new Ship("Uboot", 2),
+				new Ship("Kreuzer", 1),
+				new Ship("Kreuzer", 1),
+				new Ship("Kreuzer", 1),
+				new Ship("Kreuzer", 1),
+				new Ship("Zerstoerer", 3),
+				new Ship("Zerstoerer", 3),
+				new Ship("Schlachtschiff", 4)
 				};
 		
 		return ships;

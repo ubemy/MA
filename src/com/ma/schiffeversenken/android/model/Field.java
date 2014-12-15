@@ -14,7 +14,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.MyGdxGameField;
-import com.ma.schiffeversenken.Tile;
 
 /**
  * Das Spielfeld

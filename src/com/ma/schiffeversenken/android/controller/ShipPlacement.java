@@ -64,7 +64,7 @@ public class ShipPlacement {
 			FieldUnit tempElement = field.getElementByID(randomID);
 			tempElement.setOccupied(true);
 			//TODO: X\Y Koordinate an Schiff uebergeben, wenn belegt
-			tempElement.placeShip(ship, 2);
+			tempElement.placeShip(ship, 0);
 			ship.setStandort(tempElement, 0, orientation);
 			int schiffSize=ship.getSize();
 			

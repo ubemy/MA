@@ -105,26 +105,29 @@ public class Field {
 	 *            TiledMapTileSet wo die Texturen gespeichert sind
 	 */
 	private void getShipTileSetTextures(TiledMapTileSet st) {
-		
-		//DEPRECATED START
-//		int colTexture = 5;
-//		int rowTexture = 6;
-//		
-//		//Holen der einzelenn Schifftexturen aus der Gesamten Textur in ein 2D Array.
-//		Texture tmpST = st.iterator().next().getTextureRegion().getTexture();
-//		TextureRegion[][] tmp = TextureRegion.split(tmpST, tmpST.getWidth()/colTexture, tmpST.getHeight()/rowTexture);
-//
-//		//Holen der Texturen in ein 1D Array
-//		TextureRegion[] shipFrames = new TextureRegion[colTexture*rowTexture];
-//		int index = 0;
-//		for (int i = 0; i < rowTexture; i++) {
-//			for (int j = 0; j < colTexture; j++) {
-//				shipFrames[index++] = tmp[i][j];
-//			}
-//		}
-		//DEPRECATED END
-		
-		//Setzen der Einzelnen Texturen in eine TreeMap<key,value>.
+
+		// DEPRECATED START
+		// int colTexture = 5;
+		// int rowTexture = 6;
+		//
+		// //Holen der einzelenn Schifftexturen aus der Gesamten Textur in ein
+		// 2D Array.
+		// Texture tmpST = st.iterator().next().getTextureRegion().getTexture();
+		// TextureRegion[][] tmp = TextureRegion.split(tmpST,
+		// tmpST.getWidth()/colTexture, tmpST.getHeight()/rowTexture);
+		//
+		// //Holen der Texturen in ein 1D Array
+		// TextureRegion[] shipFrames = new
+		// TextureRegion[colTexture*rowTexture];
+		// int index = 0;
+		// for (int i = 0; i < rowTexture; i++) {
+		// for (int j = 0; j < colTexture; j++) {
+		// shipFrames[index++] = tmp[i][j];
+		// }
+		// }
+		// DEPRECATED END
+
+		// Setzen der Einzelnen Texturen in eine TreeMap<key,value>.
 		this.shipTextures = new TreeMap<String, TextureRegion>();
 		Iterator<TiledMapTile> iter = st.iterator();
 		TiledMapTile tile;
@@ -152,65 +155,140 @@ public class Field {
 		// Koordinaten.
 		for (Ship ship : ships) {
 			// Finden der geeigneten Textur
-			System.out.println(ship.getName()+ship.getOrientation());
-			String textureName;
-//			if(ship.getLocation().)
-			switch (ship.getShipSegment()) {
-			case 0:// 0=Vorderteil
-				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
-					if (!ship.isDestroyed()) {
-						textureName = "rhf";
-					} else {
-						textureName = "rhfa";
+			String textureName = "";
+			System.out.println("Schiffname:" + ship.getName());
+			int index = 0;
+			if (ship.getSize() > 1) {
+
+
+				for (FieldUnit unit : ship.location) {
+					
+					System.out.println("Schiffsteil:" + unit.getShipSegment());
+
+					//Bugfix draw front
+//					int segment;
+//					if(index<1){
+//						segment=0;
+//					}else{
+//						segment=unit.getShipSegment();
+//					}
+					
+					
+					switch (unit.getShipSegment()) {
+
+					case 0:// 0=Vorderteil
+						if (unit.getPlacedShip().getOrientation() == 0
+								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
+							if (!ship.isDestroyed()) {
+								textureName = "rhf";
+							} else {
+								textureName = "rhfa";
+							}
+						} else {// Vertikal
+							if (!ship.isDestroyed()) {
+//								textureName = "dvf";// TODO Add downstairs texture
+								textureName = "uvf";
+							} else {
+//								textureName = "dvfa";
+								textureName = "uvfa";
+							}
+						}
+						break;
+					case 1:// 1=Mittelteil
+						if (unit.getPlacedShip().getOrientation() == 0
+								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
+							if (!ship.isDestroyed()) {
+								textureName = "rhm";
+							} else {
+								textureName = "rhma";
+							}
+						} else {// Vertikal
+							if (!ship.isDestroyed()) {
+								// textureName = "dvm";//TODO Add upstairs
+								// texture
+								textureName = "uvm";
+							} else {
+								// textureName = "dvma";
+								textureName = "uvma";
+							}
+						}
+						break;
+					case 2:// 2=Hinterteil
+						if (unit.getPlacedShip().getOrientation() == 0
+								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
+							if (!ship.isDestroyed()) {
+								textureName = "rhb";
+							} else {
+								textureName = "rhba";
+							}
+						} else {// Vertikal
+							if (!ship.isDestroyed()) {
+								// textureName = "dvb";//TODO Add upstairs
+								// texture
+								textureName = "uvb";
+							} else {
+								// textureName = "dvba";
+								textureName = "uvba";
+							}
+						}
+						
+						break;
 					}
-				} else {// Vertikal
+					// Hinzufügen von Schiffsteil
+					drawShips.add(new EntityShip(shipTextures.get(textureName),
+							new Vector2(unit.getXpos(), unit.getYpos()),
+							new Vector2(size, size), mapTileLayer));
+					ship.setEntityShipDrawUnit(drawShips.get(drawShips.size()-1));
+					
+					
+				}
+			} else {// Kleines Schiff
+				FieldUnit unit = ship.location[0];
+				System.out.println("Schiffsteil:" + unit.getShipSegment());
+				if (ship.getOrientation() == 0) {// Rechts
 					if (!ship.isDestroyed()) {
-						textureName = "uvf";
+						textureName = "rhk";
 					} else {
-						textureName = "uvfa";
+						textureName = "rhka";
+					}
+				} else if (ship.getOrientation() == 1) {// Oben
+					if (!ship.isDestroyed()) {
+						textureName = "uvk";
+					} else {
+						textureName = "uvka";
+					}
+				} else if (ship.getOrientation() == 2) {// links
+					if (!ship.isDestroyed()) {
+						// textureName = "lvk";//TODO add left texture
+						textureName = "rhk";
+					} else {
+						// textureName = "lvka";
+						textureName = "rhka";
+					}
+				} else if (ship.getOrientation() == 3) {// unten
+					if (!ship.isDestroyed()) {
+						textureName = "dvk";
+					} else {
+						textureName = "dvka";
 					}
 				}
-				break;
-			case 2:// 2=Hinterteil
-				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
-					if (!ship.isDestroyed()) {
-						textureName = "rhb";
-					} else {
-						textureName = "rhba";
-					}
-				} else {// Vertikal
-					if (!ship.isDestroyed()) {
-						textureName = "uvb";
-					} else {
-						textureName = "uvba";
-					}
-				}
-				break;
-			default:// 1=Mittelteil
-				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
-					if (!ship.isDestroyed()) {
-						textureName = "rhm";
-					} else {
-						textureName = "rhma";
-					}
-				} else {// Vertikal
-					if (!ship.isDestroyed()) {
-						textureName = "uvm";
-					} else {
-						textureName = "uvma";
-					}
-				}
-				break;
+				// Hinzufügen von Schiffsteil
+				drawShips.add(new EntityShip(shipTextures.get(textureName),
+						new Vector2(unit.getXpos(), unit.getYpos()),
+						new Vector2(size, size), mapTileLayer));
+				ship.setEntityShipDrawUnit(drawShips.get(drawShips.size()-1));
 			}
 
+			// DEPRECATED START
 			// Setzen der EntityShip für das Schiff
-			EntityShip tmpEntity;
-			System.out.println(textureName);
-			tmpEntity = new EntityShip(shipTextures.get(textureName),
-					new Vector2(0f, 0f), new Vector2(size, size), mapTileLayer);
-
-			drawShips.add(tmpEntity);
-			ship.setEntityShipDrawUnit(tmpEntity);
+			// EntityShip tmpEntity;
+			// System.out.println(textureName);
+			// tmpEntity = new EntityShip(shipTextures.get(textureName),
+			// new Vector2(0f, 0f), new Vector2(size, size), mapTileLayer);
+			//
+			// drawShips.add(tmpEntity);
+			// ship.setEntityShipDrawUnit(tmpEntity);
+			// DEPRECATED START
 		}
 
 		// Hier wird für jedes EntityShip festgelegt wo es gezeichnet wird.
@@ -278,9 +356,9 @@ public class Field {
 				id++;
 
 				// TODO Testen auf funktion beim Zeichen
-				units[i][j] = new FieldUnit(id, 
-						(j + cellPosX)* mapTileLayer.getTileWidth(), 
-						(i + cellPosY)* mapTileLayer.getTileHeight());
+				units[i][j] = new FieldUnit(id, (j + cellPosX)
+						* mapTileLayer.getTileWidth(), (i + cellPosY)
+						* mapTileLayer.getTileHeight());
 			}
 		}
 

@@ -4,15 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 //public class EntityShip extends Sprite {
 	public class EntityShip {
 	
 	//Texturkoordinaten
-	float x,y,width,height;
-	Texture texture;
+	private Vector2 position,size;
+	TextureRegion shipTextureRegion;
+	Rectangle bounds;
 
 	/** Bewegung */
 	private Vector2 velocity = new Vector2();
@@ -22,19 +26,18 @@ import com.badlogic.gdx.math.Vector2;
 	TiledMapTileLayer collisionLayer;
 
 	
-	public EntityShip(float x, float y, float width, float height, Texture texture, TiledMapTileLayer c) {
+	public EntityShip(TextureRegion t ,Vector2 pos, Vector2 size, TiledMapTileLayer c) {
 		// Übergabe des Sprite, wie das Schiff aussehen soll.
-//		super();
 		// Übergabe des ColissionLayer
 		collisionLayer = c;
-		this.x=x;
-		this.y=y;
-		this.width = width;
-		this.height = height;
-		this.texture = texture;
+		this.position = pos;
+		this.size = size;
+		this.shipTextureRegion = t;
+		this.bounds = new Rectangle(position.x, position.y, size.x, size.y);
 	}
 
 	private void update(float deltaTime) {
+		bounds.set(position.x, position.y, size.x, size.y);
 //		// Bewegung erzeugen, Gravity nach unten mal die zeit
 //		velocity.y -= gravity * deltaTime;
 //		// Gravity abfangen um nicht ins extreme zu gehen.
@@ -205,34 +208,35 @@ import com.badlogic.gdx.math.Vector2;
 	
 
 	public float getX() {
-		return x;
+		return position.x;
 	}
 	
 	
 	public float getY() {
-		return y;
+		return position.y;
 	}
 
 	public void setX(float x) {
-		this.x=x;
+		this.position.x=x;
 	}
 	
 
 	public void setY(float y) {
-		this.y=y;
+		this.position.y=y;
 	}
 
 	public void render(Batch batch) {
 		// Beim Zeichnen wird update vorher aufgerufen mit xpos und ypos
 		// aktualisiert
 		update(Gdx.graphics.getDeltaTime());
-		batch.draw(texture, getX(), getY(), width, height);	
+		batch.draw(shipTextureRegion,position.x, position.y, size.x, size.y);
+//		batch.draw(new Sprite(texture.getTextureRegion().getTexture()), x, y, texture.getTextureRegion().getTexture().getWidth(), texture.getTextureRegion().getTexture().getHeight());	
 	
 	}
 
 	public void setPosition(float xpos, float ypos) {
-		this.x=xpos;
-		this.y=ypos;
+		this.position.x=xpos;
+		this.position.y=ypos;
 		
 	}
 	

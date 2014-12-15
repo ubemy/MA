@@ -2,15 +2,21 @@ package com.ma.schiffeversenken.android.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+import com.badlogic.gdx.math.Vector2;
 import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.MyGdxGameField;
@@ -39,15 +45,15 @@ public class Field {
 	int typ;
 
 	// Einheitsgröße der Texturen
-	int size;
+	float size;
 	// graphics High and width
 	private int h = Gdx.graphics.getHeight();
 	private int w = Gdx.graphics.getWidth();
-	private TextureAtlas atlas;
 	private TiledMapTileLayer mapTileLayer;
 	// TODO EntityShip or Tile
 	private ArrayList<EntityShip> drawShips;
 	private Iterator<EntityShip> tileIterator;
+	private TreeMap<String, TextureRegion> shipTextures;
 
 	/**
 	 * Erstellt ein Field Objekt
@@ -67,18 +73,69 @@ public class Field {
 		}
 	}
 
-	public Field(int typ, TextureAtlas a,TiledMapTileLayer mtl) {
+	/**
+	 * Überladener Konstruktor erstellt ein Field Objekt
+	 * 
+	 * @param typ
+	 *            Typ des Spielfelds (0=Eigenes Spielfeld, 1=Gegnerisches
+	 *            Spielfeld)
+	 * @param shipTextures
+	 *            SchiffsTexturen aus TiledMapTileSet
+	 * @param mtl
+	 *            Tilemap Layer aus TiledMapTileLayer
+	 */
+	public Field(int typ, TiledMapTileSet shipTextures, TiledMapTileLayer mtl) {
 		try {
 			this.typ = typ;
-			this.atlas = a;
 			this.mapTileLayer = mtl;
-			this.size=mtl.getCell(0, 0).getTile().getTextureRegion().getRegionWidth();
+			this.size = mtl.getTileHeight();
 			drawShips = new ArrayList<EntityShip>();
+			getShipTileSetTextures(shipTextures);
 			create();
 			createNeighbors();
 			createKante();
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	/**
+	 * Diese Methode speichert alle Schiffstexturen in einer Treemap
+	 * 
+	 * @param st
+	 *            TiledMapTileSet wo die Texturen gespeichert sind
+	 */
+	private void getShipTileSetTextures(TiledMapTileSet st) {
+		
+		//DEPRECATED START
+//		int colTexture = 5;
+//		int rowTexture = 6;
+//		
+//		//Holen der einzelenn Schifftexturen aus der Gesamten Textur in ein 2D Array.
+//		Texture tmpST = st.iterator().next().getTextureRegion().getTexture();
+//		TextureRegion[][] tmp = TextureRegion.split(tmpST, tmpST.getWidth()/colTexture, tmpST.getHeight()/rowTexture);
+//
+//		//Holen der Texturen in ein 1D Array
+//		TextureRegion[] shipFrames = new TextureRegion[colTexture*rowTexture];
+//		int index = 0;
+//		for (int i = 0; i < rowTexture; i++) {
+//			for (int j = 0; j < colTexture; j++) {
+//				shipFrames[index++] = tmp[i][j];
+//			}
+//		}
+		//DEPRECATED END
+		
+		//Setzen der Einzelnen Texturen in eine TreeMap<key,value>.
+		this.shipTextures = new TreeMap<String, TextureRegion>();
+		Iterator<TiledMapTile> iter = st.iterator();
+		TiledMapTile tile;
+		while (iter.hasNext()) {
+			tile = iter.next();
+			// Wenn wir ein Tile mit propertie name haben
+			if (tile.getProperties().get("name") != null) {
+				shipTextures.put(tile.getProperties().get("name").toString(),
+						tile.getTextureRegion());
+			}
 		}
 	}
 
@@ -89,63 +146,69 @@ public class Field {
 	 *            Schiffe, die zu diesem Spielfeld zugeordnet werden sollen
 	 */
 	public void setShips(Ship[] ships) {
-		//Vorher das setzen der Schiffe
+		// Vorher das setzen der Schiffe
 		this.placedShips = ships;
 
-		// Für das Zeichnen bekommt jedes Schiff sein EntityShip danach die Koordinaten.
+		// Für das Zeichnen bekommt jedes Schiff sein EntityShip danach die
+		// Koordinaten.
 		for (Ship ship : ships) {
 			// Finden der geeigneten Textur
+			System.out.println(ship.getName()+ship.getOrientation());
 			String textureName;
+//			if(ship.getLocation().)
 			switch (ship.getShipSegment()) {
 			case 0:// 0=Vorderteil
 				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
 					if (!ship.isDestroyed()) {
-						textureName = "hzshipfront";
+						textureName = "rhf";
 					} else {
-						textureName = "hzshipfrontattacked";
+						textureName = "rhfa";
 					}
 				} else {// Vertikal
 					if (!ship.isDestroyed()) {
-						textureName = "shipfront";
+						textureName = "uvf";
 					} else {
-						textureName = "shipfrontattacked";
+						textureName = "uvfa";
 					}
 				}
 				break;
 			case 2:// 2=Hinterteil
 				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
 					if (!ship.isDestroyed()) {
-						textureName = "hzshipback";
+						textureName = "rhb";
 					} else {
-						textureName = "hzshipbackattacked";
+						textureName = "rhba";
 					}
 				} else {// Vertikal
 					if (!ship.isDestroyed()) {
-						textureName = "shipback";
+						textureName = "uvb";
 					} else {
-						textureName = "shipbackattacked";
+						textureName = "uvba";
 					}
 				}
 				break;
 			default:// 1=Mittelteil
 				if (ship.getOrientation() == 0 || ship.getOrientation() == 2) {// Horizontal
 					if (!ship.isDestroyed()) {
-						textureName = "hzshipmiddle";
+						textureName = "rhm";
 					} else {
-						textureName = "hzshipmiddleattacked";
+						textureName = "rhma";
 					}
 				} else {// Vertikal
 					if (!ship.isDestroyed()) {
-						textureName = "shipmiddle";
+						textureName = "uvm";
 					} else {
-						textureName = "shipmiddleattacked";
+						textureName = "uvma";
 					}
 				}
 				break;
 			}
-			// Setzen der EntityShip für das Schiff	
+
+			// Setzen der EntityShip für das Schiff
 			EntityShip tmpEntity;
-			tmpEntity = new EntityShip(0f, 0f, size, size, atlas.findRegion(textureName).getTexture(), mapTileLayer);
+			System.out.println(textureName);
+			tmpEntity = new EntityShip(shipTextures.get(textureName),
+					new Vector2(0f, 0f), new Vector2(size, size), mapTileLayer);
 
 			drawShips.add(tmpEntity);
 			ship.setEntityShipDrawUnit(tmpEntity);
@@ -206,22 +269,19 @@ public class Field {
 	 */
 	private void create() {
 		int cellPosX = 1;
-		int cellPosY = 1;
+		int cellPosY = 5;
 		if (this.typ == 1) {
 			cellPosY += 10;
 		}
-		float layerW = mapTileLayer.getWidth();
-		float layerH = mapTileLayer.getHeight();
-		;
 		int id = 0;
-
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				id++;
 
 				// TODO Testen auf funktion beim Zeichen
-				units[i][j] = new FieldUnit(id, (j + cellPosX) * layerW,
-						(i + cellPosY) * layerH);
+				units[i][j] = new FieldUnit(id, 
+						(j + cellPosX)* mapTileLayer.getTileWidth(), 
+						(i + cellPosY)* mapTileLayer.getTileHeight());
 			}
 		}
 
@@ -316,15 +376,15 @@ public class Field {
 	 */
 	public void draw(Batch batch) {
 
-		//Rendern aller Schiffe
-		//TODO Player Ships
+		// Rendern aller Schiffe
+		// TODO Player Ships
 		tileIterator = drawShips.iterator();
 		EntityShip curShip;
-		while(tileIterator.hasNext()){
-			curShip=tileIterator.next();
+		while (tileIterator.hasNext()) {
+			curShip = tileIterator.next();
 			curShip.render(batch);
 		}
-		
+
 		// for (int i = 0; i < 10; i++) {
 		// for (int j = 0; j < 10; j++) {
 		// // TODO Drawing
@@ -334,8 +394,6 @@ public class Field {
 	}
 
 	public ArrayList<EntityShip> getTiledShips() {
-		;
-
 		return drawShips;
 	}
 }

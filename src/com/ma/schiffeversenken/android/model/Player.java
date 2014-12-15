@@ -20,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
@@ -40,12 +41,12 @@ public class Player implements Serializable {
 	private Field secondField;
 	TiledMap map;
 
-	public Player(TextureAtlas a, TiledMap m) {
+	public Player(TiledMapTileSet tileSet, TiledMap m) {
 		super();
 		map = m;
-		firstField = new Field(0, a, (TiledMapTileLayer) map
+		firstField = new Field(0, tileSet, (TiledMapTileLayer) map
 				.getLayers().get("0"));
-		secondField = new Field(1, a, (TiledMapTileLayer) map
+		secondField = new Field(1, tileSet, (TiledMapTileLayer) map
 				.getLayers().get("0"));
 		// TODO Support moere gameModes...
 		this.game = new Game(0, firstField, secondField, false, false);

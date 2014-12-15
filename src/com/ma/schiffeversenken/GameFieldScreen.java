@@ -18,10 +18,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.ma.schiffeversenken.android.model.Player;
 
 public class GameFieldScreen implements Screen {
@@ -30,6 +33,8 @@ public class GameFieldScreen implements Screen {
 
 	private TiledMap map;
 	private TiledMapTileLayer mapTileLayer;
+	private TiledMapTileSet tileSetShips;
+	
 	// Renderer hält einen SpriteBatch fürs zeichnen bereit
 	private OrthogonalTiledMapRenderer renderer;
 	private Batch batch;
@@ -64,13 +69,16 @@ public class GameFieldScreen implements Screen {
 
 
 
+
 	@Override
 	public void show() {
 		// Gdx.app.log(TITLE, "show()");
-		// Tiled Maps laden um diese zu nutzen
+		// Tiled Maps,Layer und tileSet laden um diese zu nutzen
 		map = new TmxMapLoader().load("maps/map.tmx");
-
 		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");
+		tileSetShips = map.getTileSets().getTileSet("ships");
+		
+		
 
 		// Get Texture Pack TODO Texturen aus TiledMap holen.
 		atlas = new TextureAtlas(Gdx.files.internal("graphics//textures.atlas"));
@@ -106,18 +114,19 @@ public class GameFieldScreen implements Screen {
 		// SpriteBatch vom Renderer
 		batch = renderer.getSpriteBatch();
 
-		player = new Player(atlas, map);
+		player = new Player(tileSetShips, map);
 
 		// Neuer ShapeRenderer um Objektlayer zu zeichnen fürs GameGrid
 		sr = new ShapeRenderer();
 
 		// Shiff Zeichnen TODO löschen den Test code
+	
 //		Sprite sprite2 = new Sprite(atlas.findRegion("shipmiddle"));
 //		sprite2.setSize(size, size);
 //		sprite2.setOrigin(sprite2.getWidth(), sprite2.getHeight());
-//		ship = new EntityShip(sprite2, mapTileLayer);
-//		ship.setPosition(1 * mapTileLayer.getTileHeight(),
-//				1 * mapTileLayer.getTileWidth());
+//		ship = new EntityShip(tileSetShips.iterator().next().getTextureRegion().getTexture(), 
+//				new Vector2(1*mapTileLayer.getTileWidth(),5*mapTileLayer.getTileHeight()), 
+//				new Vector2(size,size), mapTileLayer);
 		// ENDE Shiff Zeichnen TODO löschen den Test code
 
 		// Tiles Array um Shiffe auf Ebene zu projezieren.
@@ -147,8 +156,7 @@ public class GameFieldScreen implements Screen {
 		// Draw Stuff
 		batch.begin();
 		player.draw(batch, atlas);
-//		ship.draw(batch);
-		
+//		ship.render(batch);
 
 		
 		batch.end();

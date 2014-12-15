@@ -40,13 +40,12 @@ public class Player implements Serializable {
 	private Field secondField;
 	TiledMap map;
 
-	public Player(ArrayList<EntityShip> playerShips,
-			ArrayList<EntityShip> enemyShips, TextureAtlas a, TiledMap m) {
+	public Player(TextureAtlas a, TiledMap m) {
 		super();
 		map = m;
-		firstField = new Field(0, playerShips, a, (TiledMapTileLayer) map
+		firstField = new Field(0, a, (TiledMapTileLayer) map
 				.getLayers().get("0"));
-		secondField = new Field(1, enemyShips, a, (TiledMapTileLayer) map
+		secondField = new Field(1, a, (TiledMapTileLayer) map
 				.getLayers().get("0"));
 		// TODO Support moere gameModes...
 		this.game = new Game(0, firstField, secondField, false, false);

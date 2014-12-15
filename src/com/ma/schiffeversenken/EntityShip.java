@@ -1,12 +1,18 @@
 package com.ma.schiffeversenken;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
-public class EntityShip extends Sprite {
+//public class EntityShip extends Sprite {
+	public class EntityShip {
+	
+	//Texturkoordinaten
+	float x,y,width,height;
+	Texture texture;
 
 	/** Bewegung */
 	private Vector2 velocity = new Vector2();
@@ -15,20 +21,17 @@ public class EntityShip extends Sprite {
 
 	TiledMapTileLayer collisionLayer;
 
-	public EntityShip(Sprite sprite, TiledMapTileLayer c) {
+	
+	public EntityShip(float x, float y, float width, float height, Texture texture, TiledMapTileLayer c) {
 		// Übergabe des Sprite, wie das Schiff aussehen soll.
-		super(sprite);
+//		super();
 		// Übergabe des ColissionLayer
 		collisionLayer = c;
-	}
-
-	@Override
-	public void draw(Batch batch) {
-		// Beim Zeichnen wird update vorher aufgerufen mit xpos und ypos
-		// aktualisiert
-		update(Gdx.graphics.getDeltaTime());
-
-		super.draw(batch);
+		this.x=x;
+		this.y=y;
+		this.width = width;
+		this.height = height;
+		this.texture = texture;
 	}
 
 	private void update(float deltaTime) {
@@ -198,6 +201,39 @@ public class EntityShip extends Sprite {
 
 	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
 		this.collisionLayer = collisionLayer;
+	}
+	
+
+	public float getX() {
+		return x;
+	}
+	
+	
+	public float getY() {
+		return y;
+	}
+
+	public void setX(float x) {
+		this.x=x;
+	}
+	
+
+	public void setY(float y) {
+		this.y=y;
+	}
+
+	public void render(Batch batch) {
+		// Beim Zeichnen wird update vorher aufgerufen mit xpos und ypos
+		// aktualisiert
+		update(Gdx.graphics.getDeltaTime());
+		batch.draw(texture, getX(), getY(), width, height);	
+	
+	}
+
+	public void setPosition(float xpos, float ypos) {
+		this.x=xpos;
+		this.y=ypos;
+		
 	}
 	
 	

@@ -1,16 +1,20 @@
 package com.ma.schiffeversenken.android.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.MyGdxGameField;
+import com.ma.schiffeversenken.Tile;
 
 /**
  * Das Spielfeld
@@ -34,13 +38,16 @@ public class Field {
 	 */
 	int typ;
 
-	int size = GameFieldScreen.size;
+	// Einheitsgröße der Texturen
+	int size;
 	// graphics High and width
 	private int h = Gdx.graphics.getHeight();
 	private int w = Gdx.graphics.getWidth();
 	private TextureAtlas atlas;
 	private TiledMapTileLayer mapTileLayer;
+	// TODO EntityShip or Tile
 	private ArrayList<EntityShip> drawShips;
+	private Iterator<EntityShip> tileIterator;
 
 	/**
 	 * Erstellt ein Field Objekt
@@ -60,14 +67,14 @@ public class Field {
 		}
 	}
 
-	public Field(int typ, ArrayList<EntityShip> d, TextureAtlas a,
-			TiledMapTileLayer mtl) {
+	public Field(int typ, TextureAtlas a,TiledMapTileLayer mtl) {
 		try {
 			this.typ = typ;
 			this.atlas = a;
 			this.mapTileLayer = mtl;
-			drawShips = d;
-			create(drawShips);
+			this.size=mtl.getCell(0, 0).getTile().getTextureRegion().getRegionWidth();
+			drawShips = new ArrayList<EntityShip>();
+			create();
 			createNeighbors();
 			createKante();
 		} catch (Exception ex) {
@@ -82,9 +89,10 @@ public class Field {
 	 *            Schiffe, die zu diesem Spielfeld zugeordnet werden sollen
 	 */
 	public void setShips(Ship[] ships) {
+		//Vorher das setzen der Schiffe
 		this.placedShips = ships;
 
-		// Für das Zeichnen bekommt jedes ship sein EntityShip
+		// Für das Zeichnen bekommt jedes Schiff sein EntityShip danach die Koordinaten.
 		for (Ship ship : ships) {
 			// Finden der geeigneten Textur
 			String textureName;
@@ -135,11 +143,11 @@ public class Field {
 				}
 				break;
 			}
-			// Setzen der EntityShip für das Schiff
-			EntityShip tmpEntity = new EntityShip(new Sprite(
-					atlas.findRegion(textureName)), mapTileLayer);
+			// Setzen der EntityShip für das Schiff	
+			EntityShip tmpEntity;
+			tmpEntity = new EntityShip(0f, 0f, size, size, atlas.findRegion(textureName).getTexture(), mapTileLayer);
+
 			drawShips.add(tmpEntity);
-			System.out.println("Add an EntityShip");// TODO Remove sout
 			ship.setEntityShipDrawUnit(tmpEntity);
 		}
 
@@ -197,23 +205,6 @@ public class Field {
 	 * auch die Position je Feld in der Scene übergeben.
 	 */
 	private void create() {
-		int id = 0;
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				id++;
-				units[i][j] = new FieldUnit(id);
-			}
-		}
-	}
-
-	/**
-	 * Überladene Methode create
-	 * 
-	 * @param drawShips
-	 *            hält ArrayList EntityShip der Klasse Player
-	 */
-	private void create(ArrayList<EntityShip> drawShips) {
-		int size = GameFieldScreen.size;
 		int cellPosX = 1;
 		int cellPosY = 1;
 		if (this.typ == 1) {
@@ -325,15 +316,26 @@ public class Field {
 	 */
 	public void draw(Batch batch) {
 
-		for (EntityShip entityShip : drawShips) {
-			entityShip.draw(batch);
+		//Rendern aller Schiffe
+		//TODO Player Ships
+		tileIterator = drawShips.iterator();
+		EntityShip curShip;
+		while(tileIterator.hasNext()){
+			curShip=tileIterator.next();
+			curShip.render(batch);
 		}
-
+		
 		// for (int i = 0; i < 10; i++) {
 		// for (int j = 0; j < 10; j++) {
 		// // TODO Drawing
 		// units[i][j].draw(batch, atlas, size);
 		// }
 		// }
+	}
+
+	public ArrayList<EntityShip> getTiledShips() {
+		;
+
+		return drawShips;
 	}
 }

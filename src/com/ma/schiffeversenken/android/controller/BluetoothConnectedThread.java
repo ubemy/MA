@@ -72,34 +72,39 @@ public class BluetoothConnectedThread extends Thread {
         // Keep listening to the InputStream until an exception occurs
         while (true) {
             try {
-                /*
-                 * Vom InputStream lesen
-                 * Und dann je nach Art der Message Aktion ausfuehren
-                 */
-                bytes = inStream.read(buffer);
-                
-                String readMsg = new String(buffer, 0, bytes);
-                String attackString = "_ATTACK_";
-                String welcomeString = "_HELLO_";
-                String returnString = "_RETURN_";
-                if(readMsg.startsWith(attackString)){
-                	game.secondGamerAngriff(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length() + 1))); 
-                }
-                else if(readMsg.startsWith(welcomeString)){
-                	String helloString = "Erfolgreich verbunden mit " + readMsg.substring(welcomeString.length());
-                	if(vmgClass != null){
-                		this.vmgClass.showToast(helloString);
-                	}
-                	else{
-                		this.cmgClass.showToast(helloString);
-                	}
-                }
-                else if(readMsg.startsWith(returnString)){
-                	boolean returnAttackHit = Boolean.parseBoolean(readMsg.substring(readMsg.indexOf(returnString) + returnString.length() + 1, returnString.indexOf("_", returnString.indexOf("_" + 1))));                	
-                	boolean returnShipDestroyed = Boolean.parseBoolean(readMsg.substring(readMsg.indexOf(returnString) + returnString.length() + 1, returnString.indexOf("_", returnString.indexOf("_" + 1))));;
-                	
-                	game.setReturnValues(returnAttackHit, returnShipDestroyed);
-                }
+            	if(bluetoothSocket.isConnected()){
+	                /*
+	                 * Vom InputStream lesen
+	                 * Und dann je nach Art der Message Aktion ausfuehren
+	                 */
+	                bytes = inStream.read(buffer);
+	                
+	                String readMsg = new String(buffer, 0, bytes);
+	                String attackString = "_ATTACK_";
+	                String welcomeString = "_HELLO_";
+	                String returnString = "_RETURN_";
+	                if(readMsg.startsWith(attackString)){
+	                	game.secondGamerAngriff(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length() + 1))); 
+	                }
+	                else if(readMsg.startsWith(welcomeString)){
+	                	String helloString = "Erfolgreich verbunden mit " + readMsg.substring(welcomeString.length());
+	                	if(vmgClass != null){
+	                		this.vmgClass.showToast(helloString);
+	                	}
+	                	else{
+	                		this.cmgClass.showToast(helloString);
+	                	}
+	                }
+	                else if(readMsg.startsWith(returnString)){
+	                	boolean returnAttackHit = Boolean.parseBoolean(readMsg.substring(readMsg.indexOf(returnString) + returnString.length() + 1, returnString.indexOf("_", returnString.indexOf("_" + 1))));                	
+	                	boolean returnShipDestroyed = Boolean.parseBoolean(readMsg.substring(readMsg.indexOf(returnString) + returnString.length() + 1, returnString.indexOf("_", returnString.indexOf("_" + 1))));;
+	                	
+	                	game.setReturnValues(returnAttackHit, returnShipDestroyed);
+	                }
+            	}
+            	else{
+            		//Wenn die Bluetooth Verbindung unterbrochen ist
+            	}
             } catch (IOException e) {
                 break;
             }

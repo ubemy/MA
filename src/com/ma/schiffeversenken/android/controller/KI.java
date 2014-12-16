@@ -217,6 +217,10 @@ public class KI {
 		return ret;
 	}
 
+	/**
+	 * Gibt das gegnerische Feld zurueck
+	 * @return Das gegnerische Feld
+	 */
 	public Field getEnemiesField() {
 		return enemiesField;
 	}

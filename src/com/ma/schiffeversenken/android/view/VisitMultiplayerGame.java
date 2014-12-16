@@ -199,6 +199,7 @@ public class VisitMultiplayerGame extends Activity {
 	}
 	
 	/**
+	 * Activity wird beendet
 	 * BroadcastReceiver deregistrieren
 	 */
 	@Override

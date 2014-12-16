@@ -5,6 +5,10 @@ import java.util.Random;
 import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Ship;
 
+/**
+ * Spielstrategie der KI in der Schwierigkeitsstufe Schwierig
+ * @author Maik Steinborn
+ */
 public class DifficultStrategy implements KIStrategy{
 	/**Das initialisierte KI Objekt*/
 	KI ki;

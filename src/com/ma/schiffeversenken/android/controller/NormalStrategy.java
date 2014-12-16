@@ -2,6 +2,10 @@ package com.ma.schiffeversenken.android.controller;
 
 import java.util.Random;
 
+/**
+ * Spielstrategie der KI in der Schwierigkeitsstufe Normal
+ * @author Maik Steinborn
+ */
 public class NormalStrategy implements KIStrategy{
 	/**Das initialisierte KI Objekt*/
 	KI ki;

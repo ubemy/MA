@@ -77,8 +77,6 @@ public class GameFieldScreen implements Screen {
 		map = new TmxMapLoader().load("maps/map.tmx");
 		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");
 		tileSetShips = map.getTileSets().getTileSet("ships");
-		
-		
 
 		// Get Texture Pack TODO Texturen aus TiledMap holen.
 		atlas = new TextureAtlas(Gdx.files.internal("graphics//textures.atlas"));

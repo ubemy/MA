@@ -106,11 +106,13 @@ public class VisitMultiplayerGame extends Activity {
 					} else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
 						//Wenn die Suche nach neuen Geraeten abgeschlossen wurde
 						VisitMultiplayerGame.this.setProgressBarIndeterminateVisibility(false);
-						VisitMultiplayerGame.this.setTitle("Select a device to connect...");
 						if (VisitMultiplayerGame.this.mNewDevicesArrayAdapter.getCount() == 0) {
-							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add("Keine Geräte gefunden!");
+							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add(getString(R.string.NoDevicesFound));
 						}
-						status.setText("Bitte ein Gerät auswaehlen!");
+						else{
+							status.setText(getString(R.string.PleaseSelectADevice));
+						}
+						
 						progress.dismiss();
 					}
 			    }
@@ -132,7 +134,7 @@ public class VisitMultiplayerGame extends Activity {
 					this.mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 				}
 			} else {
-				this.mPairedDevicesArrayAdapter.add("Keine gekoppelten Geräte!");
+				this.mPairedDevicesArrayAdapter.add(getString(R.string.NoPairedDevices));
 			}
 			}
 			catch(Exception ex){
@@ -146,7 +148,7 @@ public class VisitMultiplayerGame extends Activity {
 			 * Geraet unterstuetzt kein Bluetooth
 			 * Meldung ausgeben und zum vorheriger Activity wechseln
 			 */
-			Toast t = Toast.makeText(getApplicationContext(), "Bluetooth auf diesem Gerät nicht verfügbar", Toast.LENGTH_LONG);
+			Toast t = Toast.makeText(getApplicationContext(), getString(R.string.BluetoothNotAvailable), Toast.LENGTH_LONG);
 			t.show();
 			finish();
 		}
@@ -160,7 +162,7 @@ public class VisitMultiplayerGame extends Activity {
 			bt.discoverDevices();
 			
 			progress = new ProgressDialog(this);
-			progress.setMessage("Neue Geräte werden gesucht");
+			progress.setMessage(getString(R.string.SearchingForNewDevices));
 			progress.setIndeterminate(true);
 			progress.show();
 		}

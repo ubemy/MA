@@ -40,7 +40,7 @@ public class CreateMultiplayerGame extends Activity {
 			 * Geraet unterstuetzt kein Bluetooth
 			 * Meldung ausgeben und zum vorheriger Activity wechseln
 			 */
-			Toast t = Toast.makeText(getApplicationContext(), "Bluetooth auf diesem Gerät nicht verfügbar", Toast.LENGTH_LONG);
+			Toast t = Toast.makeText(getApplicationContext(), getString(R.string.BluetoothNotAvailable), Toast.LENGTH_LONG);
 			t.show();
 			finish();
 		}
@@ -48,7 +48,7 @@ public class CreateMultiplayerGame extends Activity {
 			Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 			startActivityForResult(getVisible, 0);
 			progress = new ProgressDialog(this);
-			progress.setMessage("Auf Mitspieler warten");
+			progress.setMessage(getString(R.string.WaitForTakers));
 			progress.setIndeterminate(true);
 			progress.show();
 			

@@ -61,11 +61,13 @@ public class DifficultStrategy implements KIStrategy{
 	private int getIDForSecureAttack(){
 		int ret = 0;
 		
+		outerloop:
 		for(Ship ship : ki.getEnemiesField().getShips()){
 			if(!ship.isDestroyed()){
 				for(FieldUnit fu : ship.getLocation()){
 					if(!fu.getAttacked()){
 						ret = fu.getID();
+						break outerloop; 
 					}
 				}
 			}

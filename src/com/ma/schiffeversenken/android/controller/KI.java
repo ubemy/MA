@@ -25,10 +25,10 @@ public class KI {
 	 * @param myField Spielfeld der KI
 	 * @param enemiesField Spielfeld des Gegners
 	 */
-	public KI(Field myField, Field enemiesField, KIStrategy kiStrategy){
+	public KI(Field myField, Field enemiesField){
 		this.myField = myField;
 		this.enemiesField = enemiesField;
-		this.kiStrategy = kiStrategy;
+		this.kiStrategy = new NormalStrategy(this);
 		setShips(createShips());
 		initHistory();
 	}

@@ -1,33 +1,22 @@
 package com.ma.schiffeversenken.android.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
-
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
-
-import android.R;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
 
 /**
  * Verwaltet die Bluetooth Verbindung
  * @author Maik Steinborn
  */
 public class Bluetooth extends Activity {
+	private static final int BLUETOOTH_NOT_SUPPORTED = 1;
+	private static final int BLUETOOTH_DISABLED = 2;
 	/**Eine Konstante, die an die Methode startActivityForResult() uebergeben wird,
 	 * wenn das Bluetooth nicht eingeschaltet*/
 	public static final int REQUEST_ENABLE_BT = 12;
@@ -123,12 +112,12 @@ public class Bluetooth extends Activity {
 		
 		if(bluetoothAdapter == null){
 			//Geraet unterstuetzt kein Bluetooth
-			ret = 1;
+			ret = BLUETOOTH_NOT_SUPPORTED;
 		}
 		else{
 			if(!bluetoothAdapter.isEnabled()){
 				//Wenn Bluetooth disabled ist, Bluetooth enablen
-				ret = 2;
+				ret = BLUETOOTH_DISABLED;
 			}
 		}
 		

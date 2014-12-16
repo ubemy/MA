@@ -3,8 +3,6 @@ package com.ma.schiffeversenken.android.view;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.controller.Bluetooth;
 import com.ma.schiffeversenken.android.controller.Game;
-import com.ma.schiffeversenken.android.model.Field;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;

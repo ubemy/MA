@@ -10,6 +10,34 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Maik Steinborn
  */
 public class ShipPlacement {
+	/**Rechte Kante*/
+	public static final int EDGE_RIGHT = 0;
+	/**Obere Kante*/
+	public static final int EDGE_ABOVE = 1;
+	/**Linke Kante*/
+	public static final int EDGE_LEFT = 2;
+	/**Untere Kante*/
+	public static final int EDGE_BELOW = 3;
+	/**Vorderes Schiff Segment*/
+	public static final int SHIP_SEGMENT_FRONT = 0;
+	/**Mittleres Schiff Segment*/
+	public static final int SHIP_SEGMENT_MIDDLE = 1;
+	/**Hinteres Schiff Segment*/
+	public static final int SHIP_SEGMENT_BACK = 2;
+	/**Anzahl der Feldelement - 1*/
+	public static final int FIELD_SIZE_MINUS_ONE = 99;
+	/**Ausrichtung des Schiffs nach rechts*/
+	public static final int SHIP_ORIENTATION_RIGHT = 0;
+	/**Ausrichtung des Schiffs nach oben*/
+	public static final int SHIP_ORIENTATION_ABOVE = 1;
+	/**Ausrichtung des Schiffs nach links*/
+	public static final int SHIP_ORIENTATION_LEFT = 2;
+	/**Ausrichtung des Schiffs nach unten*/
+	public static final int SHIP_ORIENTATION_BELOW = 3;
+	/**Anzahl der moeglichen Ausrichtungen eines Schiffs*/
+	public static final int NUMBER_OF_ORIENTATIOS_MINUS_ONE = 3;
+	/**Anzahl der Bloecke*/
+	public static final int NUMBER_OF_BLOCKS = 25;
 	/**Das Spielfeld wird in 25 Bloecke aufgeteilt. Die Bloecke werden in dieser Variable gespeichert*/
 	Block blocks[];
 	/**Das Spielfeld*/
@@ -19,7 +47,7 @@ public class ShipPlacement {
 	 * Erstellt das ShipPlacement Objekt
 	 */
 	public ShipPlacement() {
-		blocks = new Block[25];
+		blocks = new Block[NUMBER_OF_BLOCKS];
 	}
 	
 	/**
@@ -44,15 +72,13 @@ public class ShipPlacement {
 			do{
 				do{
 					//Pruefen ob der Block schon belegt ist.
-					do{
-						//Zufaellige Zahl erstellen
-						randomID = random.nextInt(100);
-					}while(randomID == 0);
+					//Zufaellige Zahl erstellen
+					randomID = random.nextInt(FIELD_SIZE_MINUS_ONE) + 1;
 				}while(!checkBlock(randomID, ship));
 				
 				do{
 					//Pruefen ob das FeldElement schon belegt ist
-					orientation = random.nextInt(3);
+					orientation = random.nextInt(NUMBER_OF_ORIENTATIOS_MINUS_ONE);
 					run++;
 					ok = checkEinheit(orientation, ship, randomID, field);
 				}while(!ok && run<4);
@@ -64,21 +90,21 @@ public class ShipPlacement {
 			FieldUnit tempElement = field.getElementByID(randomID);
 			tempElement.setOccupied(true);
 			//TODO: X\Y Koordinate an Schiff uebergeben, wenn belegt
-			tempElement.placeShip(ship, 2);
+			tempElement.placeShip(ship, SHIP_SEGMENT_BACK);
 			ship.setStandort(tempElement, 0, orientation);
 			int schiffSize=ship.getSize();
 			
 			if(schiffSize>1){
-				if(orientation == 0){
+				if(orientation == SHIP_ORIENTATION_RIGHT){
 					markElements(1, schiffSize, randomID, field, ship, orientation);
 				}
-				else if(orientation == 1){
+				else if(orientation == SHIP_ORIENTATION_ABOVE){
 					markElements(-10, schiffSize, randomID, field, ship, orientation);
 				}
-				else if(orientation == 2){
+				else if(orientation == SHIP_ORIENTATION_LEFT){
 					markElements(-1, schiffSize, randomID, field, ship, orientation);
 				}
-				else if(orientation == 3){
+				else if(orientation == SHIP_ORIENTATION_BELOW){
 					markElements(10, schiffSize, randomID, field, ship, orientation);
 				}
 			}
@@ -98,14 +124,14 @@ public class ShipPlacement {
 	 */
 	private void markElements(int counter, int size, int id, Field field, Ship ship, int orientation){
 		int temp=0;
-		int shipSegment = 1;
+		int shipSegment = SHIP_SEGMENT_MIDDLE;
 		int finalCounter = 0;
 		for(int i=1;i<size;i++){
 			finalCounter = counter*i;
 			temp=id+finalCounter;
 			if(temp>0 && temp<101){
 				FieldUnit tempElement = field.getElementByID(temp);
-				if(i==(size-1)) shipSegment = 0;
+				if(i==(size-1)) shipSegment = SHIP_SEGMENT_FRONT;
 				tempElement.setOccupied(true);
 				tempElement.placeShip(ship, shipSegment);
 				ship.setStandort(tempElement, i, orientation);
@@ -151,7 +177,7 @@ public class ShipPlacement {
 	 * @param feld Spielfeld
 	 * @return Gibt zurueck ob die Felder frei oder belegt sind
 	 */
-	private boolean checkEinheit(int horver, Ship ship, int id, Field feld){
+	private boolean checkEinheit(int orientation, Ship ship, int id, Field feld){
 		int size = ship.getSize();
 		boolean ret = true;
 		
@@ -159,19 +185,19 @@ public class ShipPlacement {
 			ret = false;
 		}
 		else {
-			if(horver == 0){
+			if(orientation == SHIP_ORIENTATION_RIGHT){
 				//Nach rechts gerichtetes Schiff
 				ret = checkID(1, size, id, feld);
 			}
-			else if(horver == 1){
+			else if(orientation == SHIP_ORIENTATION_ABOVE){
 				//Nach oben gerichtetes Schiff
 				ret = checkID(-10, size, id, feld);
 			}
-			else if(horver == 2){
+			else if(orientation == SHIP_ORIENTATION_LEFT){
 				//Nach links gerichtetes Schiff
 				ret = checkID(-1, size, id, feld);
 			}
-			else if(horver == 3){
+			else if(orientation == SHIP_ORIENTATION_BELOW){
 				//Nach unten gerichtetes Schiff
 				ret = checkID(10, size, id, feld);
 			}
@@ -224,10 +250,10 @@ public class ShipPlacement {
 				id==60 || id==70 || id==80){
 		}
 		
-		if(counter == 1) kRichtung = 3;
-		else if(counter == -1) kRichtung = 4;
-		else if(counter == 10) kRichtung = 2;
-		else if(counter == -10) kRichtung = 1;
+		if(counter == 1) kRichtung = EDGE_RIGHT;
+		else if(counter == -1) kRichtung = EDGE_LEFT;
+		else if(counter == 10) kRichtung = EDGE_BELOW;
+		else if(counter == -10) kRichtung = EDGE_ABOVE;
 		
 		if(element.getEdge(1) == kRichtung || element.getEdge(2) == kRichtung) ret = true;
 		

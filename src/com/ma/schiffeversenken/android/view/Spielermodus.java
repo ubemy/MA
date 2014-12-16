@@ -27,7 +27,7 @@ public class Spielermodus extends Activity {
 		createButtons(multiplayerGameButton, R.id.Mehrspieler_Button, "Mehrspieler", Multiplayer.class);
 	}
 
-	private void createButtons(Button button, int id, String text, final Class c){
+	private <E> void createButtons(Button button, int id, String text, final Class <E> c){
 		/*
 		 * Buttons erstellen
 		 */

@@ -2,10 +2,7 @@ package com.ma.schiffeversenken.android.controller;
 
 import java.io.IOException;
 import java.util.UUID;
-
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
-
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;

@@ -3,13 +3,10 @@ package com.ma.schiffeversenken.android.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
-import android.widget.Toast;
 
 /**
  * Wird aufgerufen, wenn eine Verbindung hergestellt wurde.
@@ -17,6 +14,7 @@ import android.widget.Toast;
  * @author Maik Steinborn
  */
 public class BluetoothConnectedThread extends Thread {
+	private static final int BUFFER_SIZE = 1024;
 	/**Bluetooth Socket Objekt*/
 	private final BluetoothSocket bluetoothSocket;
 	/**Eingehender Stream*/
@@ -66,7 +64,7 @@ public class BluetoothConnectedThread extends Thread {
      * Thread starten
      */
     public void run() {
-        byte[] buffer = new byte[1024];  // buffer store for the stream
+        byte[] buffer = new byte[BUFFER_SIZE];  // buffer store for the stream
         int bytes; // bytes returned from read()
  
         // Keep listening to the InputStream until an exception occurs

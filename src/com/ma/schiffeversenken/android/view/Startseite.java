@@ -2,12 +2,6 @@ package com.ma.schiffeversenken.android.view;
 
 
 import com.ma.schiffeversenken.android.R;
-import com.ma.schiffeversenken.android.R.id;
-import com.ma.schiffeversenken.android.R.layout;
-import com.ma.schiffeversenken.android.R.menu;
-import com.ma.schiffeversenken.android.controller.*;
-import com.ma.schiffeversenken.android.model.*;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -84,7 +78,7 @@ public class Startseite extends Activity {
 //		});
 //	}
 	
-	private void createButtons(Button button, int id, String text, final Class c){
+	private <E> void createButtons(Button button, int id, String text, final Class<E> c){
 		/*
 		 * Buttons erstellen
 		 */

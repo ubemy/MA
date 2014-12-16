@@ -28,6 +28,14 @@ import com.ma.schiffeversenken.MyGdxGameField;
  * @author Klaus Schlender
  */
 public class Field {
+	/**Rechte Kante*/
+	public static final int EDGE_RIGHT = 0;
+	/**Obere Kante*/
+	public static final int EDGE_ABOVE = 1;
+	/**Linke Kante*/
+	public static final int EDGE_LEFT = 2;
+	/**Untere Kante*/
+	public static final int EDGE_BELOW = 3;
 	/**
 	 * einheiten = Das Spielfeld besteht aus 10x10 Einheiten einheiten[y-Achse
 	 * (Zeile)][x-Achse (Spalte)]
@@ -386,30 +394,38 @@ public class Field {
 				if (id < 11) {
 					// Obere Kante
 					if (e.getEdge(1) == 0)
-						e.setEdge(1, 1);
+						//e.setEdge(1, 1);
+						e.setEdge(1, EDGE_ABOVE);
 					else
-						e.setEdge(2, 1);
+						//e.setEdge(2, 1);
+						e.setEdge(2, EDGE_ABOVE);
 				}
 				if (id > 89) {
 					// Untere Kante
 					if (e.getEdge(1) == 0)
-						e.setEdge(1, 2);
+						//e.setEdge(1, 2);
+						e.setEdge(1, EDGE_BELOW);
 					else
-						e.setEdge(2, 2);
+						//e.setEdge(2, 2);
+						e.setEdge(2, EDGE_BELOW);
 				}
 				if ((id - (10 * (i + 1))) == 0) {
 					// Rechte Kante
 					if (e.getEdge(1) == 0)
-						e.setEdge(1, 3);
+						//e.setEdge(1, 3);
+						e.setEdge(1, EDGE_RIGHT);
 					else
-						e.setEdge(2, 3);
+						//e.setEdge(2, 3);
+						e.setEdge(2, EDGE_RIGHT);
 				}
 				if ((id - (10 * i)) == 1) {
 					// Linke Kante
 					if (e.getEdge(1) == 0)
-						e.setEdge(1, 4);
+						//e.setEdge(1, 4);
+						e.setEdge(1, EDGE_LEFT);
 					else
-						e.setEdge(2, 4);
+						//e.setEdge(2, 4);
+						e.setEdge(2, EDGE_LEFT);
 				}
 			}
 		}

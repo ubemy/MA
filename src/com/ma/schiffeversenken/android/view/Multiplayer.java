@@ -1,7 +1,6 @@
 package com.ma.schiffeversenken.android.view;
 
 import com.ma.schiffeversenken.android.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,7 +48,7 @@ public class Multiplayer extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void createButtons(Button button, int id, String text, final Class c) {
+	private <E> void createButtons(Button button, int id, String text, final Class<E> c) {
         /*
          * Buttons erstellen
          */

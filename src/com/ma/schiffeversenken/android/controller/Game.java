@@ -1,7 +1,6 @@
 package com.ma.schiffeversenken.android.controller;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.ma.schiffeversenken.android.model.*;
 
@@ -13,6 +12,20 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Klaus Schlender
  */
 public class Game implements Runnable {
+	/**Einzelspielermodus*/
+	private final static int GAME_MODE_SINGLE_PLAYER = 0;
+	/**Mehrspielermodus*/
+	private final static int GAME_MODE_MULTI_PLAYER = 1;
+	/**500 millisekunden*/
+	private final static int FIVEHUNDRED_MS = 500;
+	/**1000 millisekunden*/
+	private final static int THOUSAND_MS = 1000;
+	/**50 millisekunden*/
+	private final static int FIFTY_MS = 50;
+	/**Erster Spieler*/
+	private final static int FIRST_GAMER = 0;
+	/**Zweiter Spieler*/
+	private final static int SECOND_GAMER = 1;
 	/**Einzelspieler (=0) oder Mehrspielermodus (=1)*/
 	private int gameMode;
 	/**Spielfeld des Spielerstellers*/
@@ -54,7 +67,7 @@ public class Game implements Runnable {
 		
 		resetActionVariables();
 		
-		if(gameMode == 0){
+		if(gameMode == GAME_MODE_SINGLE_PLAYER){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
 			//Field kiField = new Field(1);
 			ki = new KI(secondField, firstField);
@@ -118,21 +131,21 @@ public class Game implements Runnable {
 				//Auf Eingabe von Benutzer warten
 				do{
 					while(!firstGamerAction){
-						Thread.sleep(500);
+						Thread.sleep(FIVEHUNDRED_MS);
 					}
 					hitShip = gamerAction(firstGamerAttackID, gamersTurn);
 				}while(hitShip);
 				gamersTurn++;
 			}
 			else{
-				if(gameMode == 0){
+				if(gameMode == GAME_MODE_SINGLE_PLAYER){
 					//Wenn GameMode == 0 == Einzelspieler, dann KI attackieren lassen
 					do{
 						/*
 						 * Die Schleife wird solange durchlaufen,
 						 * bis der Spieler ins Leere trifft
 						 */
-						Thread.sleep(1000);
+						Thread.sleep(THOUSAND_MS);
 						hitShip = gamerAction(ki.attack(), gamersTurn);
 					}while(hitShip);
 				}
@@ -144,7 +157,7 @@ public class Game implements Runnable {
 						 * bis der Spieler ins Leere trifft
 						 */
 						while(!secondGamerAction){
-							Thread.sleep(500);
+							Thread.sleep(FIVEHUNDRED_MS);
 						}
 						hitShip = gamerAction(secondGamerAttackID, gamersTurn);
 					}while(hitShip);
@@ -188,16 +201,16 @@ public class Game implements Runnable {
 		if(primaryBTGame || secondaryBTGame){
 			byte[] attackString = (new String("_ATTACK_" + Integer.toString(id))).getBytes();
 			
-			if(primaryBTGame && gamer == 0){
+			if(primaryBTGame && gamer == FIRST_GAMER){
 				btConnectedThread.write(attackString);	
 			}
-			else if(secondaryBTGame && gamer == 1){
+			else if(secondaryBTGame && gamer == SECOND_GAMER){
 				btConnectedThread.write(attackString);
 			}
 			
 			while(!returnValuesAvailable){
 				try {
-					Thread.sleep(50);
+					Thread.sleep(FIFTY_MS);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -230,7 +243,7 @@ public class Game implements Runnable {
 			}
 		}
 		
-		if(gamer == 1 && gameMode == 0){
+		if(gamer == SECOND_GAMER && gameMode == GAME_MODE_SINGLE_PLAYER){
 			/*
 			 * Wenn die KI attackiert hat werden zwei Variablen gesetzt,
 			 * damit die KI weiss ob ein Schiff getroffen und/oder zerstoert wurden

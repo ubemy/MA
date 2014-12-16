@@ -28,4 +28,12 @@
         android:layout_below="@+id/Lautlos_Checkbox"
         android:text="Vibration aus" />
 
+    <SeekBar
+        android:id="@+id/volumeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/Vibration_aus_Checkbox"
+        android:layout_below="@+id/Vibration_aus_Checkbox"
+        android:layout_marginTop="72dp" />
+
 </RelativeLayout>

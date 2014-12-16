@@ -32,7 +32,7 @@ MA.iml
 /gradlew
 /gradlew.bat
 
-doc
-/
+doc/
+
 .classpath
 Thumbs.db

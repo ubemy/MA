@@ -197,4 +197,13 @@ public class VisitMultiplayerGame extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	/**
+	 * BroadcastReceiver deregistrieren
+	 */
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(mReceiver);
+	}
 }

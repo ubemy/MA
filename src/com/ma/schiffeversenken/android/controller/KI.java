@@ -168,28 +168,32 @@ public class KI {
 					}
 					else{
 						if((idHistory[i] + 1) <= FIELD_SIZE){
-							if(getEnemiesField().getElementByID(idHistory[i] + 1).getAttacked()){
+							//if(getEnemiesField().getElementByID(idHistory[i] + 1).getAttacked()){
+							if((idHistory[i] + 1) == idHistory[i+1]){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_LEFT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_LEFT && !getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
 									ret = idHistory[i] - 1;
 								}
 							}
 						}
 						if((idHistory[i] - 1) > 0){
-							if(getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
+							//if(getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
+							if((idHistory[i] - 1) == idHistory[i+1]){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_RIGHT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_RIGHT && !getEnemiesField().getElementByID(idHistory[i] + 1).getAttacked()){
 									ret = idHistory[i] + 1;
 								}
 							}
 						}
 						if((idHistory[i] + 10) <= FIELD_SIZE){
-							if(getEnemiesField().getElementByID(idHistory[i] + 10).getAttacked()){
+							//if(getEnemiesField().getElementByID(idHistory[i] + 10).getAttacked()){
+							if((idHistory[i] + 10) == idHistory[i+1]){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_ABOVE && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_ABOVE && !getEnemiesField().getElementByID(idHistory[i] - 10).getAttacked()){
 									ret = idHistory[i] - 10;
 								}
 							}
 						}
 						if((idHistory[i] - 10) > 0){
-							if(getEnemiesField().getElementByID(idHistory[i] - 10).getAttacked()){
+							//if(getEnemiesField().getElementByID(idHistory[i] - 10).getAttacked()){
+							if((idHistory[i] - 10) == idHistory[i+1]){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_BELOW && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_BELOW && !getEnemiesField().getElementByID(idHistory[i] + 10).getAttacked()){
 									ret = idHistory[i] + 10;
 								}

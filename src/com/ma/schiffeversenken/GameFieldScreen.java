@@ -34,7 +34,7 @@ public class GameFieldScreen implements Screen {
 	private TiledMap map;
 	private TiledMapTileLayer mapTileLayer;
 	private TiledMapTileSet tileSetShips;
-	
+
 	// Renderer hält einen SpriteBatch fürs zeichnen bereit
 	private OrthogonalTiledMapRenderer renderer;
 	private Batch batch;
@@ -66,9 +66,6 @@ public class GameFieldScreen implements Screen {
 
 	// ShapeRenderer für GridObjekte
 	private ShapeRenderer sr;
-
-
-
 
 	@Override
 	public void show() {
@@ -118,19 +115,21 @@ public class GameFieldScreen implements Screen {
 		sr = new ShapeRenderer();
 
 		// Shiff Zeichnen TODO löschen den Test code
-	
-//		Sprite sprite2 = new Sprite(atlas.findRegion("shipmiddle"));
-//		sprite2.setSize(size, size);
-//		sprite2.setOrigin(sprite2.getWidth(), sprite2.getHeight());
-//		ship = new EntityShip(tileSetShips.iterator().next().getTextureRegion().getTexture(), 
-//				new Vector2(1*mapTileLayer.getTileWidth(),5*mapTileLayer.getTileHeight()), 
-//				new Vector2(size,size), mapTileLayer);
+
+		// Sprite sprite2 = new Sprite(atlas.findRegion("shipmiddle"));
+		// sprite2.setSize(size, size);
+		// sprite2.setOrigin(sprite2.getWidth(), sprite2.getHeight());
+		// ship = new
+		// EntityShip(tileSetShips.iterator().next().getTextureRegion().getTexture(),
+		// new
+		// Vector2(1*mapTileLayer.getTileWidth(),5*mapTileLayer.getTileHeight()),
+		// new Vector2(size,size), mapTileLayer);
 		// ENDE Shiff Zeichnen TODO löschen den Test code
 
 		// Tiles Array um Shiffe auf Ebene zu projezieren.
-		//tilesPlayerShips TODO
+		// tilesPlayerShips TODO
 		tilesEnemyShips = player.getSecondField().getTiledShips();
-	
+
 	}
 
 	@Override
@@ -153,10 +152,7 @@ public class GameFieldScreen implements Screen {
 
 		// Draw Stuff
 		batch.begin();
-		player.draw(batch, atlas);
-//		ship.render(batch);
-
-		
+		player.draw(batch);
 		batch.end();
 
 		// Animation bg
@@ -224,7 +220,7 @@ public class GameFieldScreen implements Screen {
 		player.dispose();// TODO Rekursiv alle texturen
 		batch.dispose();
 		map.dispose();
-//		ship.getTexture().dispose();// Wichtig texturen dispose()
+		// ship.getTexture().dispose();// Wichtig texturen dispose()
 
 	}
 

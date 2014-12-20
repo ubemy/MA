@@ -317,7 +317,8 @@ public class Game implements Runnable {
 	 * @param batch SpriteBatch worauf gezeichnet wird.
 	 * @param atlas Textures
 	 */
-	public void draw(Batch batch, TextureAtlas atlas) {
+//	@Deprecated
+	public void draw(Batch batch) {
 		// TODO Auto-generated method stub
 		firstField.draw(batch);
 		secondField.draw(batch);

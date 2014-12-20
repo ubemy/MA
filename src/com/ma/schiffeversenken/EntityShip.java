@@ -239,6 +239,16 @@ import com.badlogic.gdx.math.Vector2;
 		this.position.y=ypos;
 		
 	}
+
+	public TextureRegion getShipTextureRegion() {
+		return shipTextureRegion;
+	}
+
+	public void setShipTextureRegion(TextureRegion shipTextureRegion) {
+		this.shipTextureRegion = shipTextureRegion;
+	}
+	
+	
 	
 	
 }

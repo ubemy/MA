@@ -145,8 +145,9 @@ public class Player implements Serializable {
 	 *            SpriteBatch wird fürs Zeichnen übergeben.
 	 * @param atlas
 	 */
-	public void draw(Batch batch, TextureAtlas a) {
-		game.draw(batch, a);
+//	@Deprecated
+	public void draw(Batch batch) {
+		game.draw(batch);
 	}
 
 	public void animatedTiles() {

@@ -28,13 +28,13 @@ import com.ma.schiffeversenken.MyGdxGameField;
  * @author Klaus Schlender
  */
 public class Field {
-	/**Rechte Kante*/
+	/** Rechte Kante */
 	public static final int EDGE_RIGHT = 0;
-	/**Obere Kante*/
+	/** Obere Kante */
 	public static final int EDGE_ABOVE = 1;
-	/**Linke Kante*/
+	/** Linke Kante */
 	public static final int EDGE_LEFT = 2;
-	/**Untere Kante*/
+	/** Untere Kante */
 	public static final int EDGE_BELOW = 3;
 	/**
 	 * einheiten = Das Spielfeld besteht aus 10x10 Einheiten einheiten[y-Achse
@@ -167,51 +167,38 @@ public class Field {
 			System.out.println("Schiffname:" + ship.getName());
 			int index = 0;
 			if (ship.getSize() > 1) {
-
-
 				for (FieldUnit unit : ship.location) {
-					
 					System.out.println("Schiffsteil:" + unit.getShipSegment());
-
-					//Bugfix draw front
-//					int segment;
-//					if(index<1){
-//						segment=0;
-//					}else{
-//						segment=unit.getShipSegment();
-//					}
-					
-					
 					switch (unit.getShipSegment()) {
-
 					case 0:// 0=Vorderteil
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
-							if (!ship.isDestroyed()) {
-								textureName = "rhf";
+							if (!unit.getPlacedShip().isDestroyed()) {
+								textureName = "rhb";
 							} else {
-								textureName = "rhfa";
+								textureName = "rhba";
 							}
 						} else {// Vertikal
-							if (!ship.isDestroyed()) {
-//								textureName = "dvf";// TODO Add downstairs texture
-								textureName = "uvf";
+							if (!unit.getPlacedShip().isDestroyed()) {
+								// textureName = "dvb";//TODO Add upstairs
+								// texture
+								textureName = "uvb";
 							} else {
-//								textureName = "dvfa";
-								textureName = "uvfa";
+								// textureName = "dvba";
+								textureName = "uvba";
 							}
 						}
 						break;
 					case 1:// 1=Mittelteil
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
-							if (!ship.isDestroyed()) {
+							if (!unit.getPlacedShip().isDestroyed()) {
 								textureName = "rhm";
 							} else {
 								textureName = "rhma";
 							}
 						} else {// Vertikal
-							if (!ship.isDestroyed()) {
+							if (!unit.getPlacedShip().isDestroyed()) {
 								// textureName = "dvm";//TODO Add upstairs
 								// texture
 								textureName = "uvm";
@@ -224,67 +211,76 @@ public class Field {
 					case 2:// 2=Hinterteil
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
-							if (!ship.isDestroyed()) {
-								textureName = "rhb";
+							if (!unit.getPlacedShip().isDestroyed()) {
+								textureName = "rhf";
 							} else {
-								textureName = "rhba";
+								textureName = "rhfa";
 							}
 						} else {// Vertikal
-							if (!ship.isDestroyed()) {
-								// textureName = "dvb";//TODO Add upstairs
+							if (!unit.getPlacedShip().isDestroyed()) {
+								// textureName = "dvf";// TODO Add downstairs
 								// texture
-								textureName = "uvb";
+								textureName = "uvf";
 							} else {
-								// textureName = "dvba";
-								textureName = "uvba";
+								// textureName = "dvfa";
+								textureName = "uvfa";
 							}
 						}
-						
 						break;
 					}
 					// Hinzufügen von Schiffsteil
-					drawShips.add(new EntityShip(shipTextures.get(textureName),
-							new Vector2(unit.getXpos(), unit.getYpos()),
-							new Vector2(size, size), mapTileLayer));
-					ship.setEntityShipDrawUnit(drawShips.get(drawShips.size()-1));
-					
-					
+					EntityShip tmpShip = new EntityShip(
+							shipTextures.get(textureName), new Vector2(
+									unit.getXpos(), unit.getYpos()),
+							new Vector2(size, size), mapTileLayer);
+					ship.setEntityShipDrawUnit(tmpShip);
+					drawShips.add(tmpShip);
+					System.out.println("Schiffsteilkoord: x"
+							+ ship.getEntityShipDrawUnit().getX() + " y"
+							+ ship.getEntityShipDrawUnit().getY() + " grafik:"
+							+ textureName);
 				}
 			} else {// Kleines Schiff
 				FieldUnit unit = ship.location[0];
 				System.out.println("Schiffsteil:" + unit.getShipSegment());
-				if (ship.getOrientation() == 0) {// Rechts
+				if (unit.getPlacedShip().getOrientation() == 0) {// Rechts
 					if (!ship.isDestroyed()) {
 						textureName = "rhk";
 					} else {
 						textureName = "rhka";
 					}
-				} else if (ship.getOrientation() == 1) {// Oben
-					if (!ship.isDestroyed()) {
+				} else if (unit.getPlacedShip().getOrientation() == 1) {// Oben
+					if (!unit.getPlacedShip().isDestroyed()) {
 						textureName = "uvk";
 					} else {
 						textureName = "uvka";
 					}
-				} else if (ship.getOrientation() == 2) {// links
-					if (!ship.isDestroyed()) {
+				} else if (unit.getPlacedShip().getOrientation() == 2) {// links
+					if (!unit.getPlacedShip().isDestroyed()) {
 						// textureName = "lvk";//TODO add left texture
 						textureName = "rhk";
 					} else {
 						// textureName = "lvka";
 						textureName = "rhka";
 					}
-				} else if (ship.getOrientation() == 3) {// unten
-					if (!ship.isDestroyed()) {
+				} else if (unit.getPlacedShip().getOrientation() == 3) {// unten
+					if (!unit.getPlacedShip().isDestroyed()) {
 						textureName = "dvk";
 					} else {
 						textureName = "dvka";
 					}
 				}
 				// Hinzufügen von Schiffsteil
-				drawShips.add(new EntityShip(shipTextures.get(textureName),
-						new Vector2(unit.getXpos(), unit.getYpos()),
-						new Vector2(size, size), mapTileLayer));
-				ship.setEntityShipDrawUnit(drawShips.get(drawShips.size()-1));
+				EntityShip tmpShip = new EntityShip(
+						shipTextures.get(textureName), new Vector2(
+								unit.getXpos(), unit.getYpos()), new Vector2(
+								size, size), mapTileLayer);
+				ship.setEntityShipDrawUnit(tmpShip);
+				drawShips.add(tmpShip);
+//				System.out.println("Schiffsteilkoord: x"
+//						+ ship.getEntityShipDrawUnit().getX() + " y"
+//						+ ship.getEntityShipDrawUnit().getY() + " grafik:"
+//						+ textureName);
 			}
 
 			// DEPRECATED START
@@ -300,17 +296,17 @@ public class Field {
 		}
 
 		// Hier wird für jedes EntityShip festgelegt wo es gezeichnet wird.
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				if (units[i][j].getOccupied()) {
-					units[i][j]
-							.getPlacedShip()
-							.getEntityShipDrawUnit()
-							.setPosition(units[i][j].getXpos(),
-									units[i][j].getYpos());
-				}
-			}
-		}
+//		for (int i = 0; i < 10; i++) {
+//			for (int j = 0; j < 10; j++) {
+//				if (units[i][j].getOccupied()) {
+//					units[i][j]
+//							.getPlacedShip()
+//							.getEntityShipDrawUnit()
+//							.setPosition(units[i][j].getXpos(),
+//									units[i][j].getYpos());
+//				}
+//			}
+//		}
 	}
 
 	/**
@@ -394,37 +390,37 @@ public class Field {
 				if (id < 11) {
 					// Obere Kante
 					if (e.getEdge(1) == 0)
-						//e.setEdge(1, 1);
+						// e.setEdge(1, 1);
 						e.setEdge(1, EDGE_ABOVE);
 					else
-						//e.setEdge(2, 1);
+						// e.setEdge(2, 1);
 						e.setEdge(2, EDGE_ABOVE);
 				}
 				if (id > 89) {
 					// Untere Kante
 					if (e.getEdge(1) == 0)
-						//e.setEdge(1, 2);
+						// e.setEdge(1, 2);
 						e.setEdge(1, EDGE_BELOW);
 					else
-						//e.setEdge(2, 2);
+						// e.setEdge(2, 2);
 						e.setEdge(2, EDGE_BELOW);
 				}
 				if ((id - (10 * (i + 1))) == 0) {
 					// Rechte Kante
 					if (e.getEdge(1) == 0)
-						//e.setEdge(1, 3);
+						// e.setEdge(1, 3);
 						e.setEdge(1, EDGE_RIGHT);
 					else
-						//e.setEdge(2, 3);
+						// e.setEdge(2, 3);
 						e.setEdge(2, EDGE_RIGHT);
 				}
 				if ((id - (10 * i)) == 1) {
 					// Linke Kante
 					if (e.getEdge(1) == 0)
-						//e.setEdge(1, 4);
+						// e.setEdge(1, 4);
 						e.setEdge(1, EDGE_LEFT);
 					else
-						//e.setEdge(2, 4);
+						// e.setEdge(2, 4);
 						e.setEdge(2, EDGE_LEFT);
 				}
 			}
@@ -467,6 +463,7 @@ public class Field {
 	 *            SpriteBatch fürs Zeichnen
 	 * @param atlas
 	 */
+//	@Deprecated
 	public void draw(Batch batch) {
 
 		// Rendern aller Schiffe
@@ -477,6 +474,8 @@ public class Field {
 			curShip = tileIterator.next();
 			curShip.render(batch);
 		}
+		
+	
 
 		// for (int i = 0; i < 10; i++) {
 		// for (int j = 0; j < 10; j++) {
@@ -486,7 +485,24 @@ public class Field {
 		// }
 	}
 
+	/**
+	 * Methode gibt ein Array von EntityShip zurück die gezeichnet werden können.
+	 * 
+	 * @return out rrayList<EntityShip> fürs Zeichnen 
+	 */
 	public ArrayList<EntityShip> getTiledShips() {
+//		ArrayList<EntityShip> out = new ArrayList<EntityShip>();
+//
+//		if(placedShips==null)
+//			System.out.println("LOL!");
+//		for (Ship ship : placedShips) {
+//			for (FieldUnit unit : ship.location) {
+//			out.add(unit.getPlacedShip().getEntityShipDrawUnit());
+//			System.out.println("Schiffsteilkoord: x"
+//					+ unit.getPlacedShip().getEntityShipDrawUnit().getX() + " y"
+//					+ unit.getPlacedShip().getEntityShipDrawUnit().getY());
+//			}
+//		}
 		return drawShips;
 	}
 }

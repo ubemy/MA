@@ -192,5 +192,9 @@ public class Player implements Serializable {
 		}
 
 	}
+	
+	public Game getGame(){
+		return game;
+	}
 
 }

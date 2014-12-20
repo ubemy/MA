@@ -8,9 +8,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,13 +20,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.ma.schiffeversenken.android.model.Player;
 
 public class GameFieldScreen implements Screen {
@@ -67,8 +67,24 @@ public class GameFieldScreen implements Screen {
 	// ShapeRenderer für GridObjekte
 	private ShapeRenderer sr;
 
+	private float layerX;
+	private float layerY;
+	private float layerZoom;
+	private boolean intro;
+
+	//Intro Textur
+	private Texture introTexture ;
+	private TextureRegion introTextureRegion;
+
+	private boolean playerSettingShips;
+
+
+
 	@Override
 	public void show() {
+		// Initialisieren von Intro
+		intro = true;
+		playerSettingShips = true;
 		// Gdx.app.log(TITLE, "show()");
 		// Tiled Maps,Layer und tileSet laden um diese zu nutzen
 		map = new TmxMapLoader().load("maps/map.tmx");
@@ -86,14 +102,13 @@ public class GameFieldScreen implements Screen {
 		// camera.zoom 1.4 camera.position.x 510.0 camera.position.y 710.0
 		camera.viewportWidth = w;
 		camera.viewportHeight = h;
-		float layerX = mapTileLayer.getWidth() * mapTileLayer.getTileWidth()
-				/ 2;
-		float layerY = mapTileLayer.getHeight() * mapTileLayer.getTileHeight()
-				/ 2;
-		camera.position.set(layerX, layerY, 0);
+		layerX = mapTileLayer.getWidth() * mapTileLayer.getTileWidth() / 2;
+		layerY = mapTileLayer.getHeight() * mapTileLayer.getTileHeight() / 2;
+		camera.position.set(-layerX, layerY, 0);
 		// zoomarichmetik um jede Auflösung zu unterstützen
 		float zoomfaktor = ((0.95f * 1920 / h));
 		camera.zoom = zoomfaktor;
+		layerZoom= camera.zoom;
 		camera.update();
 
 		// Ambiente
@@ -112,17 +127,11 @@ public class GameFieldScreen implements Screen {
 		// Neuer ShapeRenderer um Objektlayer zu zeichnen fürs GameGrid
 		sr = new ShapeRenderer();
 
-		// Shiff Zeichnen TODO löschen den Test code
+		//Intro Textur setzen
+		 introTexture = new Texture(Gdx.files.internal("graphics//Intro.png"));
+		 introTextureRegion = new TextureRegion(introTexture);
 
-		// Sprite sprite2 = new Sprite(atlas.findRegion("shipmiddle"));
-		// sprite2.setSize(size, size);
-		// sprite2.setOrigin(sprite2.getWidth(), sprite2.getHeight());
-		// ship = new
-		// EntityShip(tileSetShips.iterator().next().getTextureRegion().getTexture(),
-		// new
-		// Vector2(1*mapTileLayer.getTileWidth(),5*mapTileLayer.getTileHeight()),
-		// new Vector2(size,size), mapTileLayer);
-		// ENDE Shiff Zeichnen TODO löschen den Test code
+		
 
 	}
 
@@ -145,6 +154,25 @@ public class GameFieldScreen implements Screen {
 		renderer.render(ships);
 
 		// Draw Stuff
+		// Intro Kamerabewegung mit Wasser
+		if (intro && (camera.position.x < layerX)) {
+			camera.position.x += 10;
+			batch.begin();
+			batch.draw(introTextureRegion,-layerX*2,0);
+			batch.end();
+		} else if(intro) {
+			camera.position.x = layerX;
+			intro = false;
+		}
+		//Spieleramzug
+		if(!intro && playerSettingShips){
+			camera.position.y = camera.position.y/4;
+			camera.zoom = layerZoom*0.5f;
+			//Wenn alle schiffe gesetzt sind playerSettingShips=false;
+			
+		}
+		
+		//Spielfelder
 		batch.begin();
 		player.draw(batch);
 		batch.end();
@@ -155,20 +183,22 @@ public class GameFieldScreen implements Screen {
 		// TODO Animate Fireing some canons and ships getting into position.
 		player.animatedTiles();
 
+		if (!intro) {
 		// render Objects
 		// Wie renderer.setView(camera.combined) Transformieren der Shapes auf
-		// die cam position.
+		// die cam position/koordinaten.
 		sr.setProjectionMatrix(camera.combined);
 		sr.setColor(Color.GRAY);
-
 		// RectangleMapObject, CircleMapObject,
-		// PolylineMapObject, EllipseMapObject, PolygonMapObject.
-		for (MapObject object : map.getLayers().get("GameField").getObjects()) {
-			if (object instanceof RectangleMapObject) {
-				Rectangle rt = ((RectangleMapObject) object).getRectangle();
-				sr.begin(ShapeType.Line);
-				sr.rect(rt.x, rt.y, rt.width, rt.height);
-				sr.end();
+		// PolylineMapObject, EllipseMapObject, PolygonMapObject.	
+			for (MapObject object : map.getLayers().get("GameField")
+					.getObjects()) {
+				if (object instanceof RectangleMapObject) {
+					Rectangle rt = ((RectangleMapObject) object).getRectangle();
+					sr.begin(ShapeType.Line);
+					sr.rect(rt.x, rt.y, rt.width, rt.height);
+					sr.end();
+				}
 			}
 		}
 
@@ -214,6 +244,7 @@ public class GameFieldScreen implements Screen {
 		player.dispose();// TODO Rekursiv alle texturen
 		batch.dispose();
 		map.dispose();
+		introTexture.dispose();
 		// ship.getTexture().dispose();// Wichtig texturen dispose()
 
 	}

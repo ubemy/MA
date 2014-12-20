@@ -111,6 +111,7 @@ public class ShipPlacement {
 		}
 		//Setzen von ships
 		field.setShips(ships);
+		System.out.println(print());
 	}
 
 	/**
@@ -153,6 +154,28 @@ public class ShipPlacement {
 						if(temp.getPlacedShip().getName()=="Schlachtschiff")ret += "S";
 						if(temp.getPlacedShip().getName()=="Kreuzer")ret += "K";
 						if(temp.getPlacedShip().getName()=="Zerstoerer")ret += "Z";
+					}
+					catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}
+				else{
+					ret += "O";
+				}
+			}
+			ret += "#\r\n";
+		}
+		ret += "#############\r\n";
+		
+		
+		ret+="#############\r\n";
+		for(int i=0;i<10;i++){
+			ret += "#";
+			for(int j=0;j<10;j++){
+				FieldUnit temp = t.getFieldUnits()[i][j];
+				if(temp.getOccupied()){
+					try{
+						if(temp.getPlacedShip()!=null)ret += "X";
 					}
 					catch(Exception ex){
 						ex.printStackTrace();

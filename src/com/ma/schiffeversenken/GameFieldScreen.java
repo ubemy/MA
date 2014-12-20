@@ -166,8 +166,9 @@ public class GameFieldScreen implements Screen {
 		}
 		//Spieleramzug
 		if(!intro && playerSettingShips){
-			camera.position.y = camera.position.y/4;
-			camera.zoom = layerZoom*0.5f;
+			camera.position.x = layerX*0.80f;
+			camera.position.y = layerY*1f;
+			camera.zoom = layerZoom*0.7f;
 			//Wenn alle schiffe gesetzt sind playerSettingShips=false;
 			
 		}

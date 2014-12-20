@@ -158,17 +158,14 @@ public class Field {
 	public void setShips(Ship[] ships) {
 		// Vorher das setzen der Schiffe
 		this.placedShips = ships;
-
 		// Für das Zeichnen bekommt jedes Schiff sein EntityShip danach die
 		// Koordinaten.
 		for (Ship ship : ships) {
 			// Finden der geeigneten Textur
 			String textureName = "";
-			System.out.println("Schiffname:" + ship.getName());
 			int index = 0;
 			if (ship.getSize() > 1) {
 				for (FieldUnit unit : ship.location) {
-					System.out.println("Schiffsteil:" + unit.getShipSegment());
 					switch (unit.getShipSegment()) {
 					case 0:// 0=Vorderteil
 						if (unit.getPlacedShip().getOrientation() == 0
@@ -235,14 +232,10 @@ public class Field {
 							new Vector2(size, size), mapTileLayer);
 					ship.setEntityShipDrawUnit(tmpShip);
 					drawShips.add(tmpShip);
-					System.out.println("Schiffsteilkoord: x"
-							+ ship.getEntityShipDrawUnit().getX() + " y"
-							+ ship.getEntityShipDrawUnit().getY() + " grafik:"
-							+ textureName);
 				}
 			} else {// Kleines Schiff
 				FieldUnit unit = ship.location[0];
-				System.out.println("Schiffsteil:" + unit.getShipSegment());
+
 				if (unit.getPlacedShip().getOrientation() == 0) {// Rechts
 					if (!ship.isDestroyed()) {
 						textureName = "rhk";
@@ -277,11 +270,8 @@ public class Field {
 								size, size), mapTileLayer);
 				ship.setEntityShipDrawUnit(tmpShip);
 				drawShips.add(tmpShip);
-//				System.out.println("Schiffsteilkoord: x"
-//						+ ship.getEntityShipDrawUnit().getX() + " y"
-//						+ ship.getEntityShipDrawUnit().getY() + " grafik:"
-//						+ textureName);
 			}
+			
 
 			// DEPRECATED START
 			// Setzen der EntityShip für das Schiff
@@ -293,22 +283,10 @@ public class Field {
 			// drawShips.add(tmpEntity);
 			// ship.setEntityShipDrawUnit(tmpEntity);
 			// DEPRECATED START
+		
+
 		}
-
-		// Hier wird für jedes EntityShip festgelegt wo es gezeichnet wird.
-//		for (int i = 0; i < 10; i++) {
-//			for (int j = 0; j < 10; j++) {
-//				if (units[i][j].getOccupied()) {
-//					units[i][j]
-//							.getPlacedShip()
-//							.getEntityShipDrawUnit()
-//							.setPosition(units[i][j].getXpos(),
-//									units[i][j].getYpos());
-//				}
-//			}
-//		}
 	}
-
 	/**
 	 * Gibt die platzierten Schiffe zurueck
 	 * 
@@ -365,17 +343,6 @@ public class Field {
 						* mapTileLayer.getTileHeight());
 			}
 		}
-
-		// Debugging ausgabe der positionen auf konsole
-		System.out.println("Neues Feld: ");
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				// Debugging
-				System.out.println("FieldUnit: x:" + units[i][j].getXpos()
-						+ " y:" + units[i][j].getYpos());
-			}
-		}
-
 	}
 
 	/**
@@ -463,46 +430,38 @@ public class Field {
 	 *            SpriteBatch fürs Zeichnen
 	 * @param atlas
 	 */
-//	@Deprecated
+	// @Deprecated
 	public void draw(Batch batch) {
-
 		// Rendern aller Schiffe
-		// TODO Player Ships
 		tileIterator = drawShips.iterator();
 		EntityShip curShip;
 		while (tileIterator.hasNext()) {
 			curShip = tileIterator.next();
 			curShip.render(batch);
-		}
-		
-	
 
-		// for (int i = 0; i < 10; i++) {
-		// for (int j = 0; j < 10; j++) {
-		// // TODO Drawing
-		// units[i][j].draw(batch, atlas, size);
-		// }
-		// }
+		}
+
 	}
 
 	/**
-	 * Methode gibt ein Array von EntityShip zurück die gezeichnet werden können.
+	 * Methode gibt ein Array von EntityShip zurück die gezeichnet werden
+	 * können.
 	 * 
-	 * @return out rrayList<EntityShip> fürs Zeichnen 
+	 * @return out rrayList<EntityShip> fürs Zeichnen
 	 */
 	public ArrayList<EntityShip> getTiledShips() {
-//		ArrayList<EntityShip> out = new ArrayList<EntityShip>();
-//
-//		if(placedShips==null)
-//			System.out.println("LOL!");
-//		for (Ship ship : placedShips) {
-//			for (FieldUnit unit : ship.location) {
-//			out.add(unit.getPlacedShip().getEntityShipDrawUnit());
-//			System.out.println("Schiffsteilkoord: x"
-//					+ unit.getPlacedShip().getEntityShipDrawUnit().getX() + " y"
-//					+ unit.getPlacedShip().getEntityShipDrawUnit().getY());
-//			}
-//		}
+		// ArrayList<EntityShip> out = new ArrayList<EntityShip>();
+		//
+		// if(placedShips==null)
+		// System.out.println("LOL!");
+		// for (Ship ship : placedShips) {
+		// for (FieldUnit unit : ship.location) {
+		// out.add(unit.getPlacedShip().getEntityShipDrawUnit());
+		// System.out.println("Schiffsteilkoord: x"
+		// + unit.getPlacedShip().getEntityShipDrawUnit().getX() + " y"
+		// + unit.getPlacedShip().getEntityShipDrawUnit().getY());
+		// }
+		// }
 		return drawShips;
 	}
 }

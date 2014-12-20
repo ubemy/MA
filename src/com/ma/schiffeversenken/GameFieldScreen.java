@@ -93,8 +93,6 @@ public class GameFieldScreen implements Screen {
 		camera.position.set(layerX, layerY, 0);
 		// zoomarichmetik um jede Auflösung zu unterstützen
 		float zoomfaktor = ((0.95f * 1920 / h));
-		System.out.println(zoomfaktor);
-
 		camera.zoom = zoomfaktor;
 		camera.update();
 
@@ -125,10 +123,6 @@ public class GameFieldScreen implements Screen {
 		// Vector2(1*mapTileLayer.getTileWidth(),5*mapTileLayer.getTileHeight()),
 		// new Vector2(size,size), mapTileLayer);
 		// ENDE Shiff Zeichnen TODO löschen den Test code
-
-		// Tiles Array um Shiffe auf Ebene zu projezieren.
-		// tilesPlayerShips TODO
-		tilesEnemyShips = player.getSecondField().getTiledShips();
 
 	}
 

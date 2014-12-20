@@ -218,13 +218,13 @@ public class ShipPlacement {
 		boolean ret = true;
 		int temp=0;
 		int finalCounter = 0;
-		for(int i=1;i<=size;i++){
+		for(int i=0;i<size;i++){
 			finalCounter = counter*i;
 			temp=id+finalCounter;
 			if(temp>0 && temp<101){
 				FieldUnit tempElement = feld.getElementByID(temp); 
 				if(tempElement.getOccupied()) ret = false;
-				if((size-i)>0){
+				else if((size-i)>0){
 					if(checkEdge(counter, tempElement)) ret = false;
 				}
 			}

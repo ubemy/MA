@@ -54,8 +54,8 @@ public class Field {
 	// Einheitsgröße der Texturen
 	float size;
 	// graphics High and width
-	private int h = Gdx.graphics.getHeight();
-	private int w = Gdx.graphics.getWidth();
+	private int h;
+	private int w;
 	private TiledMapTileLayer mapTileLayer;
 	// TODO EntityShip or Tile
 	private ArrayList<EntityShip> drawShips;
@@ -72,8 +72,8 @@ public class Field {
 	public Field(int typ) {
 		try {
 			this.typ = typ;
-			create();
-			createNeighbors();
+			create(true);
+			//createNeighbors();
 			createKante();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -93,6 +93,8 @@ public class Field {
 	 */
 	public Field(int typ, TiledMapTileSet shipTextures, TiledMapTileLayer mtl) {
 		try {
+			h = Gdx.graphics.getHeight();
+			w = Gdx.graphics.getWidth();
 			this.typ = typ;
 			this.mapTileLayer = mtl;
 			this.size = mtl.getTileHeight();
@@ -345,6 +347,18 @@ public class Field {
 		}
 	}
 
+	private void create(boolean test) {
+		int id = 0;
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				id++;
+
+				// TODO Testen auf funktion beim Zeichen
+				units[i][j] = new FieldUnit(id);
+			}
+		}
+	}
+	
 	/**
 	 * Markiert, dass dieses FeldElement an einer Kante platziert ist und in
 	 * welcher Richtung die Kante liegt

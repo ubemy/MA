@@ -19,12 +19,32 @@ public class Spielermodus extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spielermodus);
+
+		Button singlePlayerButton = (Button) findViewById(R.id.Einzelspieler_Button);
+		Button multiPlayerButton = (Button) findViewById(R.id.Mehrspieler_Button);
 		
-		Button einzelSpielerButton = null;
-		Button multiplayerGameButton = null;
+		singlePlayerButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), GamePreferencesActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				
-		createButtons(einzelSpielerButton, R.id.Einzelspieler_Button, "Einzelspieler", Schwierigkeitsstufe.class);
-		createButtons(multiplayerGameButton, R.id.Mehrspieler_Button, "Mehrspieler", Multiplayer.class);
+				startActivity(intent);
+			}
+		});
+		
+		multiPlayerButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), Multiplayer.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				
+				startActivity(intent);
+			}
+		});
+		
 	}
 
 	private <E> void createButtons(Button button, int id, String text, final Class <E> c){

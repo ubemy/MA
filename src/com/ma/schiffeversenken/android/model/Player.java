@@ -58,13 +58,13 @@ public class Player implements Serializable {
 	public void update(OrthographicCamera camera) {
 		
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			camera.translate(0, 10);
+//			camera.translate(0, 10);
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			camera.translate(-10, 0);
+//			camera.translate(-10, 0);
 		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			camera.translate(0, -10);
+//			camera.translate(0, -10);
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			camera.translate(+10, 0);
+//			camera.translate(+10, 0);
 		} else if (Gdx.input.isKeyPressed(Keys.PLUS)) {
 			if (camera.zoom > 0.1f)
 				camera.zoom = camera.zoom - 0.1f;

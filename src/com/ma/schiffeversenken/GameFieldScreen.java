@@ -70,10 +70,7 @@ public class GameFieldScreen implements Screen {
 	private float layerX;
 	private float layerY;
 	private float layerZoom;
-	private int state = 0;// 0=Intro, 1=FullView 2=GameFieldZoom, 3=PlayerShips,
-							// 4=EnemyShips
-	private boolean intro;
-	private boolean playerFieldAction;
+	private ArrayList <Boolean> state;// 0=Intro, 1=FullView 2=GameFieldZoom, 3=PlayerShips,4=EnemyShips,5=GameGrid
 
 	// Intro Textur
 	private Texture introTexture;
@@ -90,6 +87,8 @@ public class GameFieldScreen implements Screen {
 	private TextureRegion randTextureRegionUp;
 
 	private TextureRegion randTextureRegionUpRight;
+
+	private boolean gameGridMode=true;
 
 	@Override
 	public void show() {
@@ -123,6 +122,14 @@ public class GameFieldScreen implements Screen {
 		gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, controller);
 		Gdx.input.setInputProcessor(gestureDetector);
 
+		//State initialisieren
+		state = new ArrayList<Boolean>();
+		for (int i=0;i<6;i++) {
+			state.add(new Boolean(false));
+		}
+		//Intro
+		state.set(0,new Boolean(true));
+		
 		// Ambiente
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.8f,
@@ -158,7 +165,7 @@ public class GameFieldScreen implements Screen {
 	public void render(float delta) {
 		// Gdx.app.log(TITLE, "render(...)");
 		player.update(camera);
-		controller.update();
+		controller.update(state);
 		camera.update();
 		// Render the things after show()
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -171,10 +178,7 @@ public class GameFieldScreen implements Screen {
 
 		//Animation bg
 		renderer.render(ships);
-
-		// Intro Kamerabewegung mit Wasser
-		setNewCameraStatePosition();
-
+		
 		// Draw Stuff
 		//Randgebiete
 		batch.begin();
@@ -197,11 +201,15 @@ public class GameFieldScreen implements Screen {
 		batch.draw(introTextureRegion, layerX * 2*2, -layerY*2);
 		//unten
 		batch.draw(introTextureRegion, -layerX * 2*2, -layerY*2*2);
+		batch.draw(introTextureRegion, -layerX * 2, -layerY*2*2);
 		batch.draw(introTextureRegion, 0, -layerY*2*2);
+		batch.draw(introTextureRegion, layerX * 2, -layerY*2*2);
 		batch.draw(introTextureRegion, layerX * 2*2, -layerY*2*2);
 		//oben
 		batch.draw(introTextureRegion, -layerX * 2*2, layerY*2*2);
+		batch.draw(introTextureRegion, -layerX * 2, layerY*2*2);
 		batch.draw(introTextureRegion, 0, layerY*2*2);
+		batch.draw(introTextureRegion, layerX * 2, layerY*2*2);
 		batch.draw(introTextureRegion, layerX * 2*2, layerY*2*2);
 		batch.end();
 		
@@ -216,7 +224,7 @@ public class GameFieldScreen implements Screen {
 		// TODO Animate Fireing some canons and ships getting into position.
 		player.animatedTiles();
 
-		if (state > 0) {
+		if (state.get(5)) {
 			// render Objects
 			// Wie renderer.setView(camera.combined) Transformieren der Shapes
 			// auf
@@ -238,105 +246,7 @@ public class GameFieldScreen implements Screen {
 
 	}
 
-	/**
-	 * Methode setzt die Kamera auf gewünschte position je nach Status. 0=Intro,
-	 * 1=FullView 2=FullView smooth, 3=GameFieldZoom, 4=PlayerShips,
-	 * 5=EnemyShips
-	 */
-	private void setNewCameraStatePosition() {
-		// Intro
-		if (state == 0 && (camera.position.x < layerX)) {
-			camera.position.x += 5;
-
-		} else if (state == 0) {
-			camera.position.x = layerX;
-			state = 1;
-		}
-		// 1=FullView
-		if (state == 1) {
-			if (camera.position.x > layerX) {
-				camera.position.x -= 5f;
-				if (camera.position.x < layerX)
-					camera.position.x = layerX;
-			}
-			
-			if (camera.position.x < layerX) {
-				camera.position.x += 5f;
-				if (camera.position.x > layerX)
-					camera.position.x = layerX;
-			}
-			
-			if (camera.position.y > layerY) {
-				camera.position.y -= 5f;
-			if (camera.position.y < layerY)
-				camera.position.y = layerY;
-			}
-			
-			if (camera.position.y < layerY) {
-				camera.position.y += 5f;
-				if (camera.position.y > layerY)
-					camera.position.y = layerY;
-			}
-			
-			if (camera.zoom > layerZoom) {
-				camera.zoom -= 0.02f;
-				if(camera.zoom < layerZoom)
-					camera.zoom=layerZoom;
-			}
-			
-			if (camera.zoom < layerZoom) {
-				camera.zoom += 0.02f;
-				if (camera.zoom > layerZoom)
-					camera.zoom = layerZoom;
-			}
-			
-		}
-
-		// 1=FullView smooth
-		if (state == 2) {
-			if (camera.position.x > layerX) {
-				camera.position.x -= 2f;
-			}
-			if (camera.position.x < layerX) {
-				camera.position.x += 2f;
-			}
-			if (camera.position.y > layerY) {
-				camera.position.y -= 2f;
-			}
-			if (camera.position.y < layerY) {
-				camera.position.y += 2f;
-			}
-			if (camera.zoom > layerZoom) {
-				camera.zoom -= 0.01f;
-			}
-			if (camera.zoom < layerZoom) {
-				camera.zoom += 0.01f;
-			}
-		}
-
-		if (state == 3) {
-			if (camera.position.x > layerX * 0.80f) {
-				camera.position.x -= 2f;
-			}
-			if (camera.position.x < layerX * 0.80f) {
-				camera.position.x += 2f;
-			}
-			if (camera.position.y > layerY) {
-				camera.position.y -= 2f;
-			}
-			if (camera.position.y < layerY) {
-				camera.position.y += 2f;
-			}
-			if (camera.zoom > layerZoom * 0.7f) {
-				camera.zoom -= 0.01f;
-			}
-			if (camera.zoom < layerZoom * 0.7f) {
-				camera.zoom += 0.01f;
-			}
-		}
-
-	}
-
+	
 	@Override
 	public void resize(int width, int height) {
 		// Gdx.app.log(TITLE, "resize(...)");

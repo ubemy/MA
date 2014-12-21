@@ -30,7 +30,7 @@
     <string name="schlachtschiff_row_title">Schlachtschiff(0 bis 2)</string>
     <string name="uboot_row_title">Uboot(0 bis 3)</string>
     <string name="kreuzer_boat_row_title">Kreuzer(0 bis 4)</string>
-    <string name="grid_topic_row_title">Bitte Wählen Sie Ihre Spielstrategie</string>
+    <string name="grid_topic_row_title">Wähle eine Spielstrategie</string>
     <string name="grid_topic_row_title2">Drücken Sie Start\num zu Beginnen</string>
     <string name="schwierigkeitsstufe">KI-Stärke(1 bis 3)</string>
     <string name="plus">+</string>

@@ -61,32 +61,32 @@ public class GamePreferences implements Parcelable{
 		return mSchlachtschiffNumber;
 	}
 
-	public void setSchlachtschiffNumber(int mSchlachtschiffNumber) {
-		this.mSchlachtschiffNumber = mSchlachtschiffNumber;
+	public void setSchlachtschiffNumber(int s) {
+		this.mSchlachtschiffNumber = s;
 	}
 
 	public int getUbootNumber() {
 		return mUbootNumber;
 	}
 
-	public void setUbootNumber(int mUbootNumber) {
-		this.mUbootNumber = mUbootNumber;
+	public void setUbootNumber(int s) {
+		this.mUbootNumber = s;
 	}
 
 	public int getKreuzerNumber() {
 		return mKreuzerNumber;
 	}
 
-	public void setKreuzerNumber(int mKreuzerNumber) {
-		this.mKreuzerNumber = mKreuzerNumber;
+	public void setKreuzerNumber(int s) {
+		this.mKreuzerNumber = s;
 	}
 
 	public int getSchwierigkeitStufe() {
 		return mSchwierigkeitStufe;
 	}
 
-	public void setSchwierigkeitStufe(int mSchwierigkeitStufe) {
-		this.mSchwierigkeitStufe = mSchwierigkeitStufe;
+	public void setSchwierigkeitStufe(int s) {
+		this.mSchwierigkeitStufe = s;
 	}
 
 	public void writeToParcel(Parcel out, int flags)  {

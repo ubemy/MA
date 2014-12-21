@@ -55,11 +55,11 @@ public class KI {
 	 * @param myField Spielfeld der KI
 	 * @param enemiesField Spielfeld des Gegners
 	 */
-	public KI(Field myField, Field enemiesField){
+	public KI(Field myField, Field enemiesField, boolean test){
 		this.myField = myField;
 		this.enemiesField = enemiesField;
 		this.kiStrategy = new NormalStrategy(this);
-		setShips(createShips());
+		setShips(createShips(), test);
 		initHistory();
 	}
 	
@@ -119,9 +119,9 @@ public class KI {
 	 * Schiffe auf dem Spielfeld der KI platzieren
 	 * @param ships Die Schiffe, die platziert werden
 	 */
-	private void setShips(Ship[] ships){
+	private void setShips(Ship[] ships, boolean test){
 		sp = new ShipPlacement();
-		sp.placeShips(myField, ships);
+		sp.placeShips(myField, ships, test);
 	}
 	
 	/**
@@ -151,6 +151,16 @@ public class KI {
 		return nextAttackID;
 	}
 	
+	private boolean idHistoryContains(int id){
+		boolean ret = false;
+		
+		for(int i=0; i<4; i++){
+			if(idHistory[i] == id) ret = true;
+		}
+		
+		return ret;
+	}
+	
 	/**
 	 * Berechnet die ID, die von der KI angegriffen werden soll,
 	 * wenn die KI in der vorherigen Spielrunde ein gegnerisches Schiff getroffen hat
@@ -159,6 +169,7 @@ public class KI {
 	int getIDForContinueLastAttack(){
 		int ret = 0;
 		boolean jump = false;
+		//int lastHistory = 1;
 		
 		for(int i=0; i<4; i++){
 			if(!jump && ret == 0){
@@ -167,9 +178,12 @@ public class KI {
 						jump = true;
 					}
 					else{
+						//if(i == 3) lastHistory = -1;
+						
 						if((idHistory[i] + 1) <= FIELD_SIZE){
 							//if(getEnemiesField().getElementByID(idHistory[i] + 1).getAttacked()){
-							if((idHistory[i] + 1) == idHistory[i+1]){
+							//if((idHistory[i] + 1) == idHistory[i+lastHistory]){
+							if(idHistoryContains(idHistory[i] + 1)){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_LEFT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_LEFT && !getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
 									ret = idHistory[i] - 1;
 								}
@@ -177,7 +191,8 @@ public class KI {
 						}
 						if((idHistory[i] - 1) > 0){
 							//if(getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
-							if((idHistory[i] - 1) == idHistory[i+1]){
+							//if((idHistory[i] - 1) == idHistory[i+lastHistory]){
+							if(idHistoryContains(idHistory[i] - 1)){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_RIGHT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_RIGHT && !getEnemiesField().getElementByID(idHistory[i] + 1).getAttacked()){
 									ret = idHistory[i] + 1;
 								}
@@ -185,7 +200,8 @@ public class KI {
 						}
 						if((idHistory[i] + 10) <= FIELD_SIZE){
 							//if(getEnemiesField().getElementByID(idHistory[i] + 10).getAttacked()){
-							if((idHistory[i] + 10) == idHistory[i+1]){
+							//if((idHistory[i] + 10) == idHistory[i+lastHistory]){
+							if(idHistoryContains(idHistory[i] + 10)){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_ABOVE && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_ABOVE && !getEnemiesField().getElementByID(idHistory[i] - 10).getAttacked()){
 									ret = idHistory[i] - 10;
 								}
@@ -193,7 +209,8 @@ public class KI {
 						}
 						if((idHistory[i] - 10) > 0){
 							//if(getEnemiesField().getElementByID(idHistory[i] - 10).getAttacked()){
-							if((idHistory[i] - 10) == idHistory[i+1]){
+							//if((idHistory[i] - 10) == idHistory[i+lastHistory]){
+							if(idHistoryContains(idHistory[i] - 10)){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_BELOW && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_BELOW && !getEnemiesField().getElementByID(idHistory[i] + 10).getAttacked()){
 									ret = idHistory[i] + 10;
 								}

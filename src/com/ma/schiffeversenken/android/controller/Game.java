@@ -70,7 +70,7 @@ public class Game implements Runnable {
 		if(gameMode == GAME_MODE_SINGLE_PLAYER){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
 			//Field kiField = new Field(1);
-			ki = new KI(secondField, firstField);
+			ki = new KI(secondField, firstField, false);
 		}
 	}
 	

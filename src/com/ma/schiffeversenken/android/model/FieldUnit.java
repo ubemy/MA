@@ -23,10 +23,10 @@ public class FieldUnit {
 	boolean occupied;
 	/**
 	 * Wenn das Feldelement direkt an einer oder zwei Kante\n liegt, gibt dieser
-	 * Wert die Richtung der Kante\n an: 1=Obere Kante, 2=Untere Kante, 3=Rechte
-	 * Kante, 4=Linke Kante
+	 * Wert die Richtung der Kante\n an: 0 = Rechte Kante, 1 = Obere Kante, 2 = Linke
+	 *         Kante, 3 = Rechte Kante
 	 */
-	int edge1 = 0, edge2 = 0;
+	int edge1 = -1, edge2 = -1;
 	/** True oder False ob dieses Feldelement bereits attackiert wurde */
 	private boolean attacked;
 	/** Segment des Schiffs: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil */
@@ -121,8 +121,8 @@ public class FieldUnit {
 	 * 
 	 * @param edge
 	 *            1 = 1. Kante oder 2 = 2. Kante des Feldelements
-	 * @return Art der Kante: 1 = Obere Kante, 2 = Untere Kante, 3 = Rechte
-	 *         Kante, 4 = Linke Kante
+	 * @return Art der Kante: 0 = Rechte Kante, 1 = Obere Kante, 2 = Linke
+	 *         Kante, 3 = Rechte Kante
 	 */
 	public int getEdge(int edge) {
 		int ret = 0;

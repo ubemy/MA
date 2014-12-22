@@ -2,6 +2,9 @@ package com.ma.schiffeversenken.android.controller;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
 import com.ma.schiffeversenken.android.model.*;
 
 /**
@@ -11,7 +14,9 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Maik Steinborn
  * @author Klaus Schlender
  */
-public class Game implements Runnable {
+public class Game implements Runnable, Serializable {
+
+	private static final long serialVersionUID = 1L;
 	/**Einzelspielermodus*/
 	private final static int GAME_MODE_SINGLE_PLAYER = 0;
 	/**Mehrspielermodus*/
@@ -322,6 +327,18 @@ public class Game implements Runnable {
 		// TODO Auto-generated method stub
 		firstField.draw(batch);
 		secondField.draw(batch);
+	}
+
+	@Override
+	public void write(Json json) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

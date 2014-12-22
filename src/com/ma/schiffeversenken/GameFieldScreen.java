@@ -148,27 +148,8 @@ public class GameFieldScreen implements Screen {
 		batch = renderer.getSpriteBatch();
 
 		//TODO LADEN ERWEITERN
-		if (Gdx.files.local("data/player.bin").exists() && Gdx.files.isLocalStorageAvailable()) {
-			System.out.println("Player Exists. Reading File ...");
-			try {
-				player = Player.readPlayer();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if(player==null){
-				player = new Player(tileSetShips, map);
-				System.out
-				.println("player.dat does exist, but null. Creating new player ...");
-			}
-			//TODO TEST OB LADEN GEHT
-		} else {
-			System.out
-					.println("Player does not exist. Creating new player ...");
-			player = new Player(tileSetShips, map);
-			//TODO TEST OB LADEN
-		}
+		loadPlayerData();
+		
 
 		// Neuer ShapeRenderer um Objektlayer zu zeichnen fürs GameGrid
 		sr = new ShapeRenderer();
@@ -186,6 +167,36 @@ public class GameFieldScreen implements Screen {
 		randTextureRegionUpRight = new TextureRegion(randTexture);
 		randTextureRegionUpRight.flip(true, true);
 
+	}
+
+	/**
+	 * Methode lädt alte Spieldaten
+	 */
+	private void loadPlayerData() {
+		if (Gdx.files.local("player.bin").exists() && Gdx.files.isLocalStorageAvailable()) {
+			System.out.println("Player Exists. Reading File ...");
+			try {
+				player = Player.readPlayer(tileSetShips, map);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//TODO TEST OB LADEN GEHT
+		} else {
+			System.out
+					.println("Player does not exist. Creating new player ...");
+			try {
+				player = new Player(tileSetShips, map);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//TODO TEST OB LADEN
+		}
 	}
 
 	@Override

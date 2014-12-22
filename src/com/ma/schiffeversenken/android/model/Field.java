@@ -17,6 +17,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
 import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.MyGdxGameField;
@@ -27,7 +30,9 @@ import com.ma.schiffeversenken.MyGdxGameField;
  * @author Maik Steinborn
  * @author Klaus Schlender
  */
-public class Field {
+public class Field implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	/** Rechte Kante */
 	public static final int EDGE_RIGHT = 0;
 	/** Obere Kante */
@@ -477,5 +482,17 @@ public class Field {
 		// }
 		// }
 		return drawShips;
+	}
+
+	@Override
+	public void write(Json json) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -20,7 +20,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.OpenableColumns;
 
-public class GamePreferences implements Parcelable, Serializable{
+public class GamePreferences implements Parcelable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -207,16 +207,5 @@ public class GamePreferences implements Parcelable, Serializable{
 		return o.readObject();
 	}
 
-	@Override
-	public void write(Json json) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void read(Json json, JsonValue jsonData) {
-		// TODO Auto-generated method stub
-		
-	}
 		
 }

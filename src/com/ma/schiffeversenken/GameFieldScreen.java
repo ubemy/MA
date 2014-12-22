@@ -1,7 +1,11 @@
 package com.ma.schiffeversenken;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import android.content.Context;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -25,6 +29,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.ma.schiffeversenken.android.model.GamePreferences;
 import com.ma.schiffeversenken.android.model.Player;
 
 public class GameFieldScreen implements Screen {
@@ -70,7 +75,8 @@ public class GameFieldScreen implements Screen {
 	private float layerX;
 	private float layerY;
 	private float layerZoom;
-	private ArrayList <Boolean> state;// 0=Intro, 1=FullView 2=GameFieldZoom, 3=PlayerShips,4=EnemyShips,5=GameGrid
+	private ArrayList<Boolean> state;// 0=Intro, 1=FullView 2=GameFieldZoom,
+										// 3=PlayerShips,4=EnemyShips,5=GameGrid
 
 	// Intro Textur
 	private Texture introTexture;
@@ -88,7 +94,7 @@ public class GameFieldScreen implements Screen {
 
 	private TextureRegion randTextureRegionUpRight;
 
-	private boolean gameGridMode=true;
+	GamePreferences mGamePreferences;
 
 	@Override
 	public void show() {
@@ -122,14 +128,14 @@ public class GameFieldScreen implements Screen {
 		gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, controller);
 		Gdx.input.setInputProcessor(gestureDetector);
 
-		//State initialisieren
+		// State initialisieren
 		state = new ArrayList<Boolean>();
-		for (int i=0;i<6;i++) {
+		for (int i = 0; i < 6; i++) {
 			state.add(new Boolean(false));
 		}
-		//Intro
-		state.set(0,new Boolean(true));
-		
+		// Intro
+		state.set(0, new Boolean(true));
+
 		// Ambiente
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.8f,
@@ -141,7 +147,28 @@ public class GameFieldScreen implements Screen {
 		// SpriteBatch vom Renderer
 		batch = renderer.getSpriteBatch();
 
-		player = new Player(tileSetShips, map);
+		//TODO LADEN ERWEITERN
+		if (Gdx.files.local("data/player.bin").exists() && Gdx.files.isLocalStorageAvailable()) {
+			System.out.println("Player Exists. Reading File ...");
+			try {
+				player = Player.readPlayer();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if(player==null){
+				player = new Player(tileSetShips, map);
+				System.out
+				.println("player.dat does exist, but null. Creating new player ...");
+			}
+			//TODO TEST OB LADEN GEHT
+		} else {
+			System.out
+					.println("Player does not exist. Creating new player ...");
+			player = new Player(tileSetShips, map);
+			//TODO TEST OB LADEN
+		}
 
 		// Neuer ShapeRenderer um Objektlayer zu zeichnen fürs GameGrid
 		sr = new ShapeRenderer();
@@ -149,13 +176,13 @@ public class GameFieldScreen implements Screen {
 		// Intro Textur setzen
 		introTexture = new Texture(Gdx.files.internal("graphics//Intro.png"));
 		introTextureRegion = new TextureRegion(introTexture);
-		
+
 		randTexture = new Texture(Gdx.files.internal("graphics//Rand.png"));
 		randTextureRegion = new TextureRegion(randTexture);
 		randTextureRegion.flip(true, false);
 		randTextureRegionUp = new TextureRegion(randTexture);
 		randTextureRegionUp.flip(false, true);
-		
+
 		randTextureRegionUpRight = new TextureRegion(randTexture);
 		randTextureRegionUpRight.flip(true, true);
 
@@ -172,47 +199,47 @@ public class GameFieldScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
 
-		//Dem Renderer die camera übergeben.
+		// Dem Renderer die camera übergeben.
 		renderer.setView(camera);
 		renderer.render();
 
-		//Animation bg
+		// Animation bg
 		renderer.render(ships);
-		
+
 		// Draw Stuff
-		//Randgebiete
+		// Randgebiete
 		batch.begin();
-		batch.draw(introTextureRegion, -layerX * 2, layerY*2);
-		batch.draw(introTextureRegion, -layerX * 2, -layerY*2);
-		batch.draw(randTextureRegionUp, 0, layerY*2);
-		batch.draw(randTextureRegionUpRight, layerX * 2, layerY*2);
-		batch.draw(introTextureRegion, 0, -layerY*2);
-		batch.draw(introTextureRegion, layerX * 2, -layerY*2);
+		batch.draw(introTextureRegion, -layerX * 2, layerY * 2);
+		batch.draw(introTextureRegion, -layerX * 2, -layerY * 2);
+		batch.draw(randTextureRegionUp, 0, layerY * 2);
+		batch.draw(randTextureRegionUpRight, layerX * 2, layerY * 2);
+		batch.draw(introTextureRegion, 0, -layerY * 2);
+		batch.draw(introTextureRegion, layerX * 2, -layerY * 2);
 		batch.draw(randTextureRegion, layerX * 2, 0);
 		batch.draw(introTextureRegion, -layerX * 2, 0);
-		//Weiter Außerhalb
-		//links
-		batch.draw(introTextureRegion, -layerX * 2*2, layerY*2);
-		batch.draw(introTextureRegion, -layerX * 2*2, 0);
-		batch.draw(introTextureRegion, -layerX * 2*2, -layerY*2);
-		//rechts
-		batch.draw(introTextureRegion, layerX * 2*2, layerY*2);
-		batch.draw(introTextureRegion, layerX * 2*2, 0);
-		batch.draw(introTextureRegion, layerX * 2*2, -layerY*2);
-		//unten
-		batch.draw(introTextureRegion, -layerX * 2*2, -layerY*2*2);
-		batch.draw(introTextureRegion, -layerX * 2, -layerY*2*2);
-		batch.draw(introTextureRegion, 0, -layerY*2*2);
-		batch.draw(introTextureRegion, layerX * 2, -layerY*2*2);
-		batch.draw(introTextureRegion, layerX * 2*2, -layerY*2*2);
-		//oben
-		batch.draw(introTextureRegion, -layerX * 2*2, layerY*2*2);
-		batch.draw(introTextureRegion, -layerX * 2, layerY*2*2);
-		batch.draw(introTextureRegion, 0, layerY*2*2);
-		batch.draw(introTextureRegion, layerX * 2, layerY*2*2);
-		batch.draw(introTextureRegion, layerX * 2*2, layerY*2*2);
+		// Weiter Außerhalb
+		// links
+		batch.draw(introTextureRegion, -layerX * 2 * 2, layerY * 2);
+		batch.draw(introTextureRegion, -layerX * 2 * 2, 0);
+		batch.draw(introTextureRegion, -layerX * 2 * 2, -layerY * 2);
+		// rechts
+		batch.draw(introTextureRegion, layerX * 2 * 2, layerY * 2);
+		batch.draw(introTextureRegion, layerX * 2 * 2, 0);
+		batch.draw(introTextureRegion, layerX * 2 * 2, -layerY * 2);
+		// unten
+		batch.draw(introTextureRegion, -layerX * 2 * 2, -layerY * 2 * 2);
+		batch.draw(introTextureRegion, -layerX * 2, -layerY * 2 * 2);
+		batch.draw(introTextureRegion, 0, -layerY * 2 * 2);
+		batch.draw(introTextureRegion, layerX * 2, -layerY * 2 * 2);
+		batch.draw(introTextureRegion, layerX * 2 * 2, -layerY * 2 * 2);
+		// oben
+		batch.draw(introTextureRegion, -layerX * 2 * 2, layerY * 2 * 2);
+		batch.draw(introTextureRegion, -layerX * 2, layerY * 2 * 2);
+		batch.draw(introTextureRegion, 0, layerY * 2 * 2);
+		batch.draw(introTextureRegion, layerX * 2, layerY * 2 * 2);
+		batch.draw(introTextureRegion, layerX * 2 * 2, layerY * 2 * 2);
 		batch.end();
-		
+
 		// Spielfelder
 		batch.begin();
 		player.draw(batch);
@@ -246,7 +273,6 @@ public class GameFieldScreen implements Screen {
 
 	}
 
-	
 	@Override
 	public void resize(int width, int height) {
 		// Gdx.app.log(TITLE, "resize(...)");
@@ -269,7 +295,11 @@ public class GameFieldScreen implements Screen {
 	@Override
 	public void pause() {
 		// Gdx.app.log(TITLE, "pause()");
-		// TODO Auto-generated method stub
+		try {
+			Player.savePlayer(player);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -277,12 +307,17 @@ public class GameFieldScreen implements Screen {
 	public void resume() {
 		// Gdx.app.log(TITLE, "resume()");
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void dispose() {
 		// Gdx.app.log(TITLE, "dispose()");
+		try {
+			Player.savePlayer(player);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		atlas.dispose();
 		player.dispose();// TODO Rekursiv alle texturen
 		batch.dispose();

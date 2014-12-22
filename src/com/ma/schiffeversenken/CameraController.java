@@ -118,6 +118,7 @@ class CameraController implements GestureListener {
 			camera.position.x = layerX;
 			state.set(0,new Boolean(false));
 			state.set(1,new Boolean(true));
+			state.set(5,new Boolean(true));
 			System.out.println("BB");
 		}
 		// 1=FullView
@@ -165,22 +166,22 @@ class CameraController implements GestureListener {
 		if (state.get(2)) {
 			System.out.println("DD");
 			if (camera.position.x > layerX) {
-				camera.position.x -= 2f;
+				camera.position.x -= 200f;
 			}
 			if (camera.position.x < layerX) {
-				camera.position.x += 2f;
+				camera.position.x += 200f;
 			}
 			if (camera.position.y > layerY) {
-				camera.position.y -= 2f;
+				camera.position.y -= 200f;
 			}
 			if (camera.position.y < layerY) {
-				camera.position.y += 2f;
+				camera.position.y += 200f;
 			}
 			if (camera.zoom > layerZoom) {
-				camera.zoom -= 0.01f;
+				camera.zoom -= 0.2f;
 			}
 			if (camera.zoom < layerZoom) {
-				camera.zoom += 0.01f;
+				camera.zoom += 0.2f;
 			}
 		}
 

@@ -224,7 +224,7 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/start_button_preferences"
+        android:id="@+id/start_button_pref"
         android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/RelativeLayout04"

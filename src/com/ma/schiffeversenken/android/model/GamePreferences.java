@@ -1,10 +1,28 @@
 package com.ma.schiffeversenken.android.model;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
+
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.OpenableColumns;
 
-public class GamePreferences implements Parcelable{
+public class GamePreferences implements Parcelable, Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	
 	public static final String GAME_PREFERENCES_TAG = "GamePreferences";
 	
@@ -37,6 +55,14 @@ public class GamePreferences implements Parcelable{
 		mUbootNumber = DEFAULT_UBOOT_NUMBER;
 		mKreuzerNumber = DEFAULT_KREUZER_NUMBER;
 		mSchwierigkeitStufe = DEFAULT_SCHWIERIGKEIT_NUMBER;
+	}
+	
+	public GamePreferences (Integer z,Integer s,Integer u,Integer k,Integer ki) {
+		mZerstoererNumber = z;
+		mSchlachtschiffNumber = s;
+		mUbootNumber = u;
+		mKreuzerNumber = k;
+		mSchwierigkeitStufe=ki;
 	}
 	
 	private GamePreferences (Parcel in) {
@@ -82,7 +108,7 @@ public class GamePreferences implements Parcelable{
 	}
 
 	public int getSchwierigkeitStufe() {
-		return mSchwierigkeitStufe;
+			return mSchwierigkeitStufe;
 	}
 
 	public void setSchwierigkeitStufe(int s) {
@@ -118,6 +144,79 @@ public class GamePreferences implements Parcelable{
 				mSchlachtschiffNumber + 
 				mUbootNumber + 
 				mKreuzerNumber;
+	}
+	
+	public static void saveGamePreferences(GamePreferences p) throws IOException {
+		if(Gdx.files.isLocalStorageAvailable()){
+			ArrayList<Integer> map = new ArrayList<Integer>();
+			map.add(p.getZerstoererNumber());
+			map.add(p.getSchlachtschiffNumber());
+			map.add(p.getUbootNumber());
+			map.add(p.getKreuzerNumber());
+			map.add(p.getSchwierigkeitStufe());
+			
+		FileHandle file = Gdx.files.local("preferences.bin");
+		try {
+			file.writeBytes(serialize(map), false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		}
+	}
+
+	public static GamePreferences readGamePreferences() throws IOException,
+			ClassNotFoundException {
+		GamePreferences pref = null;
+		if(Gdx.files.isLocalStorageAvailable()){
+			
+		FileHandle file = Gdx.files.local("preferences.bin");
+		ArrayList<Integer> map = (ArrayList<Integer>) deserialize(file.readBytes());
+		int i=0;
+		pref = new GamePreferences(map.get(i++),map.get(i++),map.get(i++),map.get(i++),map.get(i++));
+		}
+		return pref;
+	}
+
+	/**
+	 * Methode dient der serialisierung eines Objectes zu einem ByteArray.
+	 * 
+	 * @param obj
+	 *            Das zu serialisierende Object.
+	 * @return ByteArray der das serialiserte Object hält.
+	 * @throws IOException
+	 */
+	public static byte[] serialize(Object obj) throws IOException {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		ObjectOutputStream o = new ObjectOutputStream(b);
+		o.writeObject(obj);
+		return b.toByteArray();
+	}
+
+	/**
+	 * Methode dient der deserialisierung eines Objectes aus einem ByteArray.
+	 * 
+	 * @param bytes
+	 *            ByteArray eines Objectes.
+	 * @return deserialisiertes Objekt wird zurückgeliefert.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+		ByteArrayInputStream b = new ByteArrayInputStream(bytes);
+		ObjectInputStream o = new ObjectInputStream(b);
+		return o.readObject();
+	}
+
+	@Override
+	public void write(Json json) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		// TODO Auto-generated method stub
+		
 	}
 		
 }

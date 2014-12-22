@@ -12,6 +12,7 @@ import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -43,28 +44,44 @@ public class Player implements Serializable {
 	private Field firstField;
 	private Field secondField;
 	TiledMap map;
+	GamePreferences pref;
 
 	public Player(TiledMapTileSet tileSet, TiledMap m) {
 		super();
 		map = m;
-		firstField = new Field(0, tileSet, (TiledMapTileLayer) map
-				.getLayers().get("0"));
-		secondField = new Field(1, tileSet, (TiledMapTileLayer) map
-				.getLayers().get("0"));
+		firstField = new Field(0, tileSet, (TiledMapTileLayer) map.getLayers()
+				.get("0"));
+		secondField = new Field(1, tileSet, (TiledMapTileLayer) map.getLayers()
+				.get("0"));
 		// TODO Support moere gameModes...
 		this.game = new Game(0, firstField, secondField, false, false);
+		
+		if (Gdx.files.local("preferences.dat").exists()) {
+			System.out.println("GamePreferences Exists. Reading File ...");
+			try {
+				pref = GamePreferences.readGamePreferences();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out
+					.println("GamePreferences does not exist. Creating new Standard GamePreferences ...");
+			pref = new GamePreferences();
+		}
 	}
 
 	public void update(OrthographicCamera camera) {
-		
+
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
-//			camera.translate(0, 10);
+			// camera.translate(0, 10);
 		} else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-//			camera.translate(-10, 0);
+			// camera.translate(-10, 0);
 		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-//			camera.translate(0, -10);
+			// camera.translate(0, -10);
 		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-//			camera.translate(+10, 0);
+			// camera.translate(+10, 0);
 		} else if (Gdx.input.isKeyPressed(Keys.PLUS)) {
 			if (camera.zoom > 0.1f)
 				camera.zoom = camera.zoom - 0.1f;
@@ -73,48 +90,6 @@ public class Player implements Serializable {
 				camera.zoom = camera.zoom + 0.1f;
 		}
 
-	}
-
-	@Override
-	public void write(Json json) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void read(Json json, JsonValue jsonData) {
-		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * Methode dient der serialisierung eines Objectes zu einem ByteArray.
-	 * 
-	 * @param obj
-	 *            Das zu serialisierende Object.
-	 * @return ByteArray der das serialiserte Object hält.
-	 * @throws IOException
-	 */
-	@SuppressWarnings("unused")
-	public static byte[] serialize(Object obj) throws IOException {
-		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		ObjectOutputStream o = new ObjectOutputStream(b);
-		o.writeObject(obj);
-		return b.toByteArray();
-	}
-
-	/**
-	 * Methode dient der deserialisierung eines Objectes aus einem ByteArray.
-	 * 
-	 * @param bytes
-	 *            ByteArray eines Objectes.
-	 * @return deserialisiertes Objekt wird zurückgeliefert.
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	public static Object deserialize(byte[] bytes) throws IOException,
-			ClassNotFoundException {
-		ByteArrayInputStream b = new ByteArrayInputStream(bytes);
-		ObjectInputStream o = new ObjectInputStream(b);
-		return o.readObject();
 	}
 
 	/**
@@ -149,7 +124,7 @@ public class Player implements Serializable {
 	 *            SpriteBatch wird fürs Zeichnen übergeben.
 	 * @param atlas
 	 */
-//	@Deprecated
+	// @Deprecated
 	public void draw(Batch batch) {
 		game.draw(batch);
 	}
@@ -176,9 +151,9 @@ public class Player implements Serializable {
 
 		// 3=attack,2=ships,1=water, 0=land
 		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("3");
-																				// 
-																				// 
-																				//
+		//
+		//
+		//
 
 		// iteration über das TileGrid
 		for (int x = 0; x < layer.getHeight(); x++) {
@@ -186,8 +161,9 @@ public class Player implements Serializable {
 				Cell cell = layer.getCell(x, y);
 				if (cell != null) {
 					// Wenn das die gesuchte zelle ist.
-					if (cell.getTile().getProperties().containsKey("gunattack") && cell.getTile().getProperties()
-							.get("gunattack", String.class).equals("1")) {
+					if (cell.getTile().getProperties().containsKey("gunattack")
+							&& cell.getTile().getProperties()
+									.get("gunattack", String.class).equals("1")) {
 						// Animierte Tile der cell zuordnen.
 						cell.setTile(animatedTile);
 					}
@@ -196,9 +172,70 @@ public class Player implements Serializable {
 		}
 
 	}
-	
-	public Game getGame(){
+
+	public Game getGame() {
 		return game;
 	}
 
+	public static void savePlayer(Player player) throws IOException {
+		if(Gdx.files.isLocalStorageAvailable()){
+		FileHandle file = Gdx.files.local("data/player.bin");
+		try {
+			file.writeBytes(serialize(player), false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		}
+	}
+
+	public static Player readPlayer() throws IOException,
+			ClassNotFoundException {
+		Player player = null;
+		if(Gdx.files.isLocalStorageAvailable()){
+		FileHandle file = Gdx.files.local("data/player.bin");
+		player = (Player) deserialize(file.readBytes());
+		}
+		return player;
+	}
+
+	/**
+	 * Methode dient der serialisierung eines Objectes zu einem ByteArray.
+	 * 
+	 * @param obj
+	 *            Das zu serialisierende Object.
+	 * @return ByteArray der das serialiserte Object hält.
+	 * @throws IOException
+	 */
+	public static byte[] serialize(Object obj) throws IOException {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		ObjectOutputStream o = new ObjectOutputStream(b);
+		o.writeObject(obj);
+		return b.toByteArray();
+	}
+
+	/**
+	 * Methode dient der deserialisierung eines Objectes aus einem ByteArray.
+	 * 
+	 * @param bytes
+	 *            ByteArray eines Objectes.
+	 * @return deserialisiertes Objekt wird zurückgeliefert.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public static Object deserialize(byte[] bytes) throws IOException,
+			ClassNotFoundException {
+		ByteArrayInputStream b = new ByteArrayInputStream(bytes);
+		ObjectInputStream o = new ObjectInputStream(b);
+		return o.readObject();
+	}
+
+	@Override
+	public void write(Json json) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		// TODO Auto-generated method stub
+	}
 }

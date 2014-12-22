@@ -1,6 +1,10 @@
 package com.ma.schiffeversenken.android.view;
 
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,16 +13,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ma.schiffeversenken.android.model.GamePreferences;
+import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
 
 public class GamePreferencesActivity extends Activity implements
 		OnClickListener {
 
 	private GamePreferences mGamePreferences;
+	private Bundle savedInstanceState;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.savedInstanceState = savedInstanceState;
 		setContentView(R.layout.activity_game_preferences);
 
 		// If activity is being recreated due to a configuration change, restore
@@ -46,6 +53,8 @@ public class GamePreferencesActivity extends Activity implements
 		((Button) findViewById(R.id.schwierigkeitstufe_minus))
 				.setOnClickListener(this);
 		((Button) findViewById(R.id.schwierigkeitstufe_plus))
+				.setOnClickListener(this);
+		((Button) findViewById(R.id.start_button_pref))
 				.setOnClickListener(this);
 
 		drawGamePreferences();
@@ -173,26 +182,38 @@ public class GamePreferencesActivity extends Activity implements
 					.setText(Integer.toString(mGamePreferences
 							.getSchwierigkeitStufe()));
 			break;
+		case R.id.start_button_pref:
 
-		// case R.id.Start_Spiel_Button:
-		//
-		// finish();
-		//
-		// break;
+			try {
 
-		case R.id.start_button_preferences:
+				ArrayList<Integer> map = new ArrayList<Integer>();
+				map.add(mGamePreferences.getZerstoererNumber());
+				map.add(mGamePreferences.getSchlachtschiffNumber());
+				map.add(mGamePreferences.getUbootNumber());
+				map.add(mGamePreferences.getKreuzerNumber());
+				map.add(mGamePreferences.getSchwierigkeitStufe());
 
-			if (checkMinimumShips()) {
-				Intent intent = new Intent(getApplicationContext(),
-						ShipConfigurationActivity.class);
-				intent.putExtra(GamePreferences.GAME_PREFERENCES_TAG,
-						mGamePreferences);
+				String FILENAME = "preferences.bin";
+				FileOutputStream fos = openFileOutput(FILENAME,
+						Context.MODE_PRIVATE);
+				fos.write(mGamePreferences.serialize(map));
+				fos.close();
 
-				startActivity(intent);
+				if (checkMinimumShips()) {
+					Intent intent = new Intent(GamePreferencesActivity.this,
+							AndroidLauncher.class);
+					// intent.putExtra(GamePreferences.GAME_PREFERENCES_TAG,
+					// mGamePreferences);
+					startActivity(intent);
+
+				} else {
+					((TextView) findViewById(R.id.grid_topic_row_title))
+							.setText("Ein Schiff auswählen");
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-
 			break;
-
 		default:
 			break;
 		}
@@ -200,14 +221,9 @@ public class GamePreferencesActivity extends Activity implements
 
 	private boolean checkMinimumShips() {
 
-		if ((mGamePreferences.getZerstoererNumber()
-				+ mGamePreferences.getSchlachtschiffNumber()
-				+ mGamePreferences.getUbootNumber() + mGamePreferences
-					.getKreuzerNumber()) > 0) {
+		if (mGamePreferences.getTotalShips() > 0) {
 			return true;
-		} else {
-
-			return false;
 		}
+		return false;
 	}
 }

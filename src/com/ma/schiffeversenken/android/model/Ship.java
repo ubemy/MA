@@ -1,11 +1,14 @@
 package com.ma.schiffeversenken.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.ma.schiffeversenken.EntityShip;
 
 /**
- * Interface fuer alle Schiffe
+ * Fuer alle Schiffe
  * 
- * @author Maik
+ * @author Maik, Klaus
  */
 public class Ship {
 	/** Laenge des Schiffs */
@@ -35,11 +38,12 @@ public class Ship {
 		this.size = size;
 		this.destroyed = false;
 		this.location = new FieldUnit[size];
-	}
 
+	}
+	
 	/**
-	 * Gibt die Orientierung des Schiffs zurueck
-	 * Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten 
+	 * Gibt die Orientierung des Schiffs zurueck Ausrichtung des Schiffs:
+	 * 0=rechts, 1=oben, 2=links, 3=unten
 	 * 
 	 * @return Die Orientierung des Schiffs
 	 */
@@ -115,7 +119,8 @@ public class Ship {
 	}
 
 	/**
-	 * Gibt das Segment des Schiffs zurück: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil
+	 * Gibt das Segment des Schiffs zurück: 0=Vorderteil, 1=Mittelteil,
+	 * 2=Hinterteil
 	 * 
 	 * @return Das Segment des Schiffs
 	 */
@@ -125,18 +130,21 @@ public class Ship {
 
 	/**
 	 * Das Schiff bekommt eine EntityShip Unit übergeben für das Zeichnen
-	 * @param e EntityShip für das Zeichnen des Schiffteils 
+	 * 
+	 * @param e
+	 *            EntityShip für das Zeichnen des Schiffteils
 	 */
 	public void setEntityShipDrawUnit(EntityShip e) {
-		this.entityShip=e;
-		
+		this.entityShip = e;
+
 	}
-	
+
 	/**
 	 * Gibt das EntityShip von dem Schiff für das Zeichnen zurück
 	 */
 	public EntityShip getEntityShipDrawUnit() {
 		return entityShip;
-		
+
 	}
+
 }

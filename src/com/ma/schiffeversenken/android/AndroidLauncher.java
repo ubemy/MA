@@ -11,7 +11,6 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
-		
 		//setup um GL20 anstelle GL10 zu nutzen.
 		cfg.useGLSurfaceView20API18=true;
 		//Sichert eine menge Batteriekapazität, wird deaktiviert solange nicht genutzt.

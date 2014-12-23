@@ -1,6 +1,10 @@
 package com.ma.schiffeversenken.android.controller;
 
 import java.util.Random;
+
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
 import com.ma.schiffeversenken.android.model.*;
 
 /**
@@ -8,6 +12,7 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Maik Steinborn
  */
 public class KI {
+
 	/**Rechte Kante*/
 	public static final int EDGE_RIGHT = 0;
 	/**Obere Kante*/
@@ -54,12 +59,15 @@ public class KI {
 	 * Erstellt ein neues KI Objekt
 	 * @param myField Spielfeld der KI
 	 * @param enemiesField Spielfeld des Gegners
+	 * @param loadedGame Boolean ob das Spiel geladen wurde
 	 */
-	public KI(Field myField, Field enemiesField, boolean test){
+	public KI(Field myField, Field enemiesField, boolean test,boolean loadedGame){
 		this.myField = myField;
 		this.enemiesField = enemiesField;
 		this.kiStrategy = new NormalStrategy(this);
-		setShips(createShips(), test);
+		if(!loadedGame){//myField hat schon Schiffe
+			setShips(createShips(), test);
+		}
 		initHistory();
 	}
 	

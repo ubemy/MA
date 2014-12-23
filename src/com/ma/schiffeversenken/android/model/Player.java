@@ -56,7 +56,7 @@ public class Player implements Serializable {
 		secondField = new Field(1, tileSet, (TiledMapTileLayer) map.getLayers()
 				.get("0"));
 		// TODO Support moere gameModes...
-		this.game = new Game(0, firstField, secondField, false, false);
+		this.game = new Game(0, firstField, secondField, false, false,false);
 
 		if (Gdx.files.isLocalStorageAvailable()
 				&& Gdx.files.local("preferences.bin").exists()) {
@@ -207,10 +207,8 @@ public class Player implements Serializable {
 		if (Gdx.files.isLocalStorageAvailable()) {
 
 			
-			FileHandle file = Gdx.files.local("player_game.bin");
+			FileHandle file = Gdx.files.local("player_firstField.bin");
 			try {
-				file.writeBytes(serialize(game), false);
-				file = Gdx.files.local("player_firstField.bin");
 				file.writeBytes(serialize(firstField), false);
 				file = Gdx.files.local("player_secondField.bin");
 				file.writeBytes(serialize(secondField), false);
@@ -227,23 +225,20 @@ public class Player implements Serializable {
 			throws IOException, ClassNotFoundException {
 		Player player = null;
 
-		Game tmpgame;
 		Field tmpfirstField;
 		Field tmpsecondField;
 		ArrayList<Integer> tmpgameSettings;
 
 		if (Gdx.files.isLocalStorageAvailable()) {
 
-			FileHandle file = Gdx.files.local("player_game.bin");
-			tmpgame = (Game) deserialize(file.readBytes());
-			file = Gdx.files.local("player_firstField.bin");
+			FileHandle file = Gdx.files.local("player_firstField.bin");
 			tmpfirstField = (Field) deserialize(file.readBytes());
 			file = Gdx.files.local("player_secondField.bin");
 			tmpsecondField = (Field) deserialize(file.readBytes());
 			file = Gdx.files.local("player_gameSettings.bin");
 			tmpgameSettings = (ArrayList<Integer>) deserialize(file.readBytes());
 
-			player = new Player(tileSet, m, tmpgame, tmpfirstField,
+			player = new Player(tileSet, m, new Game(0, tmpfirstField, tmpsecondField,false,false,true), tmpfirstField,
 					tmpsecondField, tmpgameSettings);
 		}
 		return player;

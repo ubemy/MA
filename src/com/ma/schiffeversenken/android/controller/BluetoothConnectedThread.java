@@ -3,8 +3,13 @@ package com.ma.schiffeversenken.android.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 
@@ -13,7 +18,10 @@ import android.bluetooth.BluetoothSocket;
  * Wird auf Server- und Clientseite verwendet
  * @author Maik Steinborn
  */
-public class BluetoothConnectedThread extends Thread {
+public class BluetoothConnectedThread extends Thread implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	private static final int BUFFER_SIZE = 1024;
 	/**Bluetooth Socket Objekt*/
 	private final BluetoothSocket bluetoothSocket;
@@ -128,4 +136,16 @@ public class BluetoothConnectedThread extends Thread {
         	e.printStackTrace();
         }
     }
+
+	@Override
+	public void write(Json json) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		// TODO Auto-generated method stub
+		
+	}
 }

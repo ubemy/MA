@@ -14,9 +14,8 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Maik Steinborn
  * @author Klaus Schlender
  */
-public class Game implements Runnable, Serializable {
+public class Game implements Runnable {
 
-	private static final long serialVersionUID = 1L;
 	/**Einzelspielermodus*/
 	private final static int GAME_MODE_SINGLE_PLAYER = 0;
 	/**Mehrspielermodus*/
@@ -63,8 +62,9 @@ public class Game implements Runnable, Serializable {
 	 * @param gameMode 0=Einzelspieler; 1=Mehrspieler
 	 * @param firstField Spielfeld des 1. Spielers
 	 * @param secondField Spieldfeld des 2. Spielers
+	 * @param loadedGame Boolean ob das Spiel geladen wurde
 	 */
-	public Game(int gameMode, Field firstField, Field secondField, boolean primaryBTGame, boolean secondaryBTGame){
+	public Game(int gameMode, Field firstField, Field secondField, boolean primaryBTGame, boolean secondaryBTGame,boolean loadedGame){
 		this.gameMode = gameMode;
 		this.firstField = firstField;
 		this.secondField = secondField;
@@ -77,7 +77,7 @@ public class Game implements Runnable, Serializable {
 		if(gameMode == GAME_MODE_SINGLE_PLAYER){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
 			//Field kiField = new Field(1);
-			ki = new KI(secondField, firstField, false);
+			ki = new KI(secondField, firstField, false,loadedGame);
 		}
 	}
 	
@@ -349,19 +349,5 @@ public class Game implements Runnable, Serializable {
 		// TODO Auto-generated method stub
 		firstField.draw(batch);
 		secondField.draw(batch);
-	}
-
-	@Override
-	public void write(Json json) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void read(Json json, JsonValue jsonData) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+	}	
 }

@@ -173,7 +173,6 @@ public class FieldUnit {
 	 *            Segment des Schiffs: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil
 	 */
 	public void placeShip(Ship ship, int shipSegment) {
-		ship.setShipSegment(shipSegment);
 		this.placedShip = ship;
 		this.shipSegment = shipSegment;
 	}

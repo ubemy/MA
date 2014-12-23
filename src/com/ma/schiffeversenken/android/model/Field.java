@@ -353,6 +353,17 @@ public class Field implements Serializable {
 		}
 		return null;
 	}
+	
+	public FieldUnit getElementByXPosYPos(float xPos, float yPos) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				if ((units[i][j].getXpos() == xPos) && (units[i][j].getYpos() == yPos))
+					return units[i][j];
+			}
+		}
+		
+		return null;
+	}
 
 	/**
 	 * Erstellt das Spielfeld, das aus 10x10 Feldelementen besteht Hierbei wird

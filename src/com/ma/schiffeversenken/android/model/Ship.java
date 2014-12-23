@@ -21,8 +21,7 @@ public class Ship {
 	FieldUnit[] location;
 	/** Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten */
 	private int orientation;
-	/** Segment des Schiffs: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil */
-	private int shipSegment;
+	/** Dient zum Zeichnen des Schiffs*/
 	private EntityShip entityShip;
 
 	/**
@@ -111,21 +110,6 @@ public class Ship {
 	 */
 	public FieldUnit[] getLocation() {
 		return this.location;
-	}
-
-	public void setShipSegment(int s) {
-		shipSegment = s;
-
-	}
-
-	/**
-	 * Gibt das Segment des Schiffs zurück: 0=Vorderteil, 1=Mittelteil,
-	 * 2=Hinterteil
-	 * 
-	 * @return Das Segment des Schiffs
-	 */
-	public int getShipSegment() {
-		return shipSegment;
 	}
 
 	/**

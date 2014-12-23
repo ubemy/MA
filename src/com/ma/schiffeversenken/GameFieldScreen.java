@@ -123,8 +123,11 @@ public class GameFieldScreen implements Screen {
 		layerZoom = camera.zoom;
 		camera.update();
 
+		//TODO LADEN ERWEITERN
+		loadPlayerData();
+		
 		// Controls
-		controller = new CameraController(camera, layerX, layerY, layerZoom);
+		controller = new CameraController(camera, layerX, layerY, layerZoom, player);
 		gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, controller);
 		Gdx.input.setInputProcessor(gestureDetector);
 
@@ -148,7 +151,7 @@ public class GameFieldScreen implements Screen {
 		batch = renderer.getSpriteBatch();
 
 		//TODO LADEN ERWEITERN
-		loadPlayerData();
+		//loadPlayerData();
 		
 
 		// Neuer ShapeRenderer um Objektlayer zu zeichnen fürs GameGrid

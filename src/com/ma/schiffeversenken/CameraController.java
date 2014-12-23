@@ -8,6 +8,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
+import com.ma.schiffeversenken.android.controller.Game;
+import com.ma.schiffeversenken.android.model.Player;
 
 class CameraController implements GestureListener {
 	float velX, velY;
@@ -15,19 +17,22 @@ class CameraController implements GestureListener {
 	float initialScale = 1;
 	OrthographicCamera camera;
 	float layerX, layerY, layerZoom;
+	Game game;
 
 	public CameraController(OrthographicCamera c, float mx, float my,
-			float mzoom) {
+			float mzoom, Player player) {
 		this.camera = c;
 		this.layerX = mx;
 		this.layerY = my;
 		this.layerZoom = mzoom;
+		this.game = player.getGame();
 	}
 
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
 		flinging = false;
 		initialScale = camera.zoom;
+		game.touchEvent(x, y);
 		return false;
 	}
 

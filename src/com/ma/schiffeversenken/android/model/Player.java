@@ -74,7 +74,7 @@ public class Player implements Serializable {
 			gameSettings.add(1);// KI
 		}
 	}
-
+	
 	/**
 	 * TODO
 	 * @param tileSet

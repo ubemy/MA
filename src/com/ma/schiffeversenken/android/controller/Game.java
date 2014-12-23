@@ -53,6 +53,7 @@ public class Game implements Runnable, Serializable {
 	private boolean returnAttackHit;
 	private boolean returnShipDestroyed;
 	private boolean returnValuesAvailable;
+	int gamersTurn;
 	
 	//Nur zu Testzwecken - Maik
 	public boolean getroffen = false;
@@ -69,6 +70,7 @@ public class Game implements Runnable, Serializable {
 		this.secondField = secondField;
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
+		this.gamersTurn = 0;
 		
 		resetActionVariables();
 		
@@ -84,12 +86,33 @@ public class Game implements Runnable, Serializable {
 	}
 	
 	/**
+	 * Wird aufgerufen, wenn ein Touch Event auftritt
+	 * Holt die ID, des angegriffenen Feldelements und greift dies an
+	 * @param xPos x-Position des Touch-Events
+	 * @param yPos y-Position des Touch-Events
+	 */
+	public void touchEvent(float xPos, float yPos){
+		FieldUnit fieldUnit = null;
+		
+		if(gamersTurn == 0){
+			fieldUnit = secondField.getElementByXPosYPos(xPos, yPos);
+			if(fieldUnit != null) firstGamerAttack(fieldUnit.getID());
+		}
+		else{
+			fieldUnit = firstField.getElementByXPosYPos(xPos, yPos);
+			if(fieldUnit != null) secondGamerAttack(fieldUnit.getID());
+		}
+	}
+	
+	
+	
+	/**
 	 * Die Methode wird von der GUI aufgerufen,
 	 * sobald Spieler 1 auf ein Feld getippt
 	 * hat, das er attackieren moechte
 	 * @param id ID des Feldes, das angegriffen wird
 	 */
-	public void firstGamerAngriff(int id){
+	public void firstGamerAttack(int id){
 		this.firstGamerAttackID = id;
 		this.firstGamerAction = true;
 	}
@@ -100,7 +123,7 @@ public class Game implements Runnable, Serializable {
 	 * hat, das er attackieren moechte
 	 * @param id ID des Feldes, das angegriffen wird 
 	 */
-	public void secondGamerAngriff(int id){
+	public void secondGamerAttack(int id){
 		this.secondGamerAttackID = id;
 		this.secondGamerAction = true;
 	}
@@ -129,7 +152,6 @@ public class Game implements Runnable, Serializable {
 	public void start() throws InterruptedException{
 		boolean end = false;
 		boolean hitShip = false;
-		int gamersTurn = 0;
 		
 		do{
 			if(gamersTurn == 0){

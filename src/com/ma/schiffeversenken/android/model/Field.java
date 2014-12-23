@@ -78,7 +78,7 @@ public class Field implements Serializable {
 		try {
 			this.typ = typ;
 			create(true);
-			//createNeighbors();
+			// createNeighbors();
 			createKante();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -174,32 +174,49 @@ public class Field implements Serializable {
 			if (ship.getSize() > 1) {
 				for (FieldUnit unit : ship.location) {
 					switch (unit.getShipSegment()) {
-					case 0:// 0=Vorderteil
+					case 2:// 0=Vorderteil
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
-							if (!unit.getPlacedShip().isDestroyed()) {
-								textureName = "rhb";
-							} else {
-								textureName = "rhba";
+							if (unit.getPlacedShip().getOrientation() == 0) {// Rechts
+								if (!unit.getPlacedShip().isDestroyed()) {
+									textureName = "rhb";
+								} else {
+									textureName = "rhba";
+								}
+							} else {// Links
+								if (!unit.getPlacedShip().isDestroyed()) {
+									textureName = "lhb";
+								} else {
+									textureName = "lhba";
+								}
 							}
 						} else {// Vertikal
 							if (!unit.getPlacedShip().isDestroyed()) {
 								// textureName = "dvb";//TODO Add upstairs
 								// texture
-								textureName = "uvb";
+								textureName = "uvf";
 							} else {
 								// textureName = "dvba";
-								textureName = "uvba";
+								textureName = "uvfa";
 							}
 						}
 						break;
 					case 1:// 1=Mittelteil
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
-							if (!unit.getPlacedShip().isDestroyed()) {
-								textureName = "rhm";
-							} else {
-								textureName = "rhma";
+							if (unit.getPlacedShip().getOrientation() == 0) {// rechts
+
+								if (!unit.getPlacedShip().isDestroyed()) {
+									textureName = "rhm";
+								} else {
+									textureName = "rhma";
+								}
+							} else {// links
+								if (!unit.getPlacedShip().isDestroyed()) {
+									textureName = "lhm";
+								} else {
+									textureName = "lhma";
+								}
 							}
 						} else {// Vertikal
 							if (!unit.getPlacedShip().isDestroyed()) {
@@ -212,22 +229,31 @@ public class Field implements Serializable {
 							}
 						}
 						break;
-					case 2:// 2=Hinterteil
+					case 0:// 2=Hinterteil
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
-							if (!unit.getPlacedShip().isDestroyed()) {
-								textureName = "rhf";
-							} else {
-								textureName = "rhfa";
+							if (unit.getPlacedShip().getOrientation() == 0) {// rechts
+								if (!unit.getPlacedShip().isDestroyed()) {
+									textureName = "rhf";
+								} else {
+									textureName = "rhfa";
+								}
+
+							} else {// links
+								if (!unit.getPlacedShip().isDestroyed()) {
+									textureName = "lhf";
+								} else {
+									textureName = "lhfa";
+								}
 							}
 						} else {// Vertikal
 							if (!unit.getPlacedShip().isDestroyed()) {
 								// textureName = "dvf";// TODO Add downstairs
 								// texture
-								textureName = "uvf";
+								textureName = "uvb";
 							} else {
 								// textureName = "dvfa";
-								textureName = "uvfa";
+								textureName = "uvba";
 							}
 						}
 						break;
@@ -278,7 +304,6 @@ public class Field implements Serializable {
 				ship.setEntityShipDrawUnit(tmpShip);
 				drawShips.add(tmpShip);
 			}
-			
 
 			// DEPRECATED START
 			// Setzen der EntityShip für das Schiff
@@ -290,10 +315,10 @@ public class Field implements Serializable {
 			// drawShips.add(tmpEntity);
 			// ship.setEntityShipDrawUnit(tmpEntity);
 			// DEPRECATED START
-		
 
 		}
 	}
+
 	/**
 	 * Gibt die platzierten Schiffe zurueck
 	 * 
@@ -363,7 +388,7 @@ public class Field implements Serializable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Markiert, dass dieses FeldElement an einer Kante platziert ist und in
 	 * welcher Richtung die Kante liegt
@@ -487,12 +512,12 @@ public class Field implements Serializable {
 	@Override
 	public void write(Json json) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

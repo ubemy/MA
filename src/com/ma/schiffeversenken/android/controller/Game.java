@@ -33,9 +33,9 @@ public class Game implements Runnable {
 	/**Einzelspieler (=0) oder Mehrspielermodus (=1)*/
 	private int gameMode;
 	/**Spielfeld des Spielerstellers*/
-	private Field firstField;
+	private Field firstFieldPlayer;
 	/**Spielfeld des Gastspielers*/
-	private Field secondField;
+	private Field secondFieldEnemy;
 	/**Wird auf true gesetzt, wenn Spieler 1 eine Eingabe getaetigt hat*/
 	private boolean firstGamerAction;
 	/**Wird auf true gesetzt, wenn Spieler 2 eine Eingabe getaetigt hat*/
@@ -64,10 +64,10 @@ public class Game implements Runnable {
 	 * @param secondField Spieldfeld des 2. Spielers
 	 * @param loadedGame Boolean ob das Spiel geladen wurde
 	 */
-	public Game(int gameMode, Field firstField, Field secondField, boolean primaryBTGame, boolean secondaryBTGame,boolean loadedGame){
+	public Game(int gameMode, Field firstFieldPlayer, Field secondField, boolean primaryBTGame, boolean secondaryBTGame,boolean loadedGame){
 		this.gameMode = gameMode;
-		this.firstField = firstField;
-		this.secondField = secondField;
+		this.firstFieldPlayer = firstFieldPlayer;
+		this.secondFieldEnemy = secondField;
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
 		this.gamersTurn = 0;
@@ -77,7 +77,7 @@ public class Game implements Runnable {
 		if(gameMode == GAME_MODE_SINGLE_PLAYER){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
 			//Field kiField = new Field(1);
-			ki = new KI(secondField, firstField, false,loadedGame);
+			ki = new KI(secondField, firstFieldPlayer, false,loadedGame);
 		}
 	}
 	
@@ -94,12 +94,12 @@ public class Game implements Runnable {
 	public void touchEvent(float xPos, float yPos){
 		FieldUnit fieldUnit = null;
 		
-		if(gamersTurn == 0){
-			fieldUnit = secondField.getElementByXPosYPos(xPos, yPos);
+		if(gamersTurn==0){//Wenn Spieler am Zug greife Gegnerfeld an
+			fieldUnit = secondFieldEnemy.getElementByXPosYPos(xPos, yPos);
 			if(fieldUnit != null) firstGamerAttack(fieldUnit.getID());
 		}
 		else{
-			fieldUnit = firstField.getElementByXPosYPos(xPos, yPos);
+			fieldUnit = firstFieldPlayer.getElementByXPosYPos(xPos, yPos);
 			if(fieldUnit != null) secondGamerAttack(fieldUnit.getID());
 		}
 	}
@@ -154,7 +154,7 @@ public class Game implements Runnable {
 		boolean hitShip = false;
 		
 		do{
-			if(gamersTurn == 0){
+			if(gamersTurn==0){
 				//Auf Eingabe von Benutzer warten
 				do{
 					while(!firstGamerAction){
@@ -217,13 +217,14 @@ public class Game implements Runnable {
 		boolean done = false;
 		
 		if(gamer == 0){
-			fe = secondField.getElementByID(id);
+			fe = secondFieldEnemy.getElementByID(id);
 		}
 		else{
-			fe = firstField.getElementByID(id);
+			fe = firstFieldPlayer.getElementByID(id);
 		}
 		
 		fe.setAttacked(true); //FeldElement als attackiert markieren
+		//TODO Event das Angriff zeichnet
 		
 		if(primaryBTGame || secondaryBTGame){
 			byte[] attackString = (new String("_ATTACK_" + Integer.toString(id))).getBytes();
@@ -308,14 +309,14 @@ public class Game implements Runnable {
 	private int hasSomebodyWon(){
 		int ret = 1;
 		
-		for(Ship ship : secondField.getShips()){
+		for(Ship ship : secondFieldEnemy.getShips()){
 			if(!ship.isDestroyed()){
 				ret = 2;
 			}
 		}
 		
 		if(ret == 2){
-			for(Ship ship : firstField.getShips()){
+			for(Ship ship : firstFieldPlayer.getShips()){
 				if(!ship.isDestroyed()){
 					ret = 0;
 				}
@@ -347,7 +348,16 @@ public class Game implements Runnable {
 //	@Deprecated
 	public void draw(Batch batch) {
 		// TODO Auto-generated method stub
-		firstField.draw(batch);
-		secondField.draw(batch);
-	}	
+		firstFieldPlayer.draw(batch);
+		secondFieldEnemy.draw(batch);
+	}
+
+	public Field getFirstFieldPlayer() {
+		return firstFieldPlayer;
+	}
+
+	public Field getSecondFieldEnemy() {
+		return secondFieldEnemy;
+	}
+	
 }

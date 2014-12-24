@@ -43,6 +43,7 @@ class CameraController implements GestureListener {
 		Gdx.app.log("GestureDetectorTest", "tap at " + x + ", " + y
 				+ ", count: " + count);
 		// game.touchEvent(x, y);
+		game.getFirstFieldPlayer().generateNewShipplacement();
 		return false;
 	}
 
@@ -116,6 +117,12 @@ class CameraController implements GestureListener {
 	 * @param layerZoom
 	 */
 	private void setNewCameraStatePosition(ArrayList<Boolean> state) {
+		if(!state.get(0)){
+//			game.
+		}
+		
+		
+		
 		// Intro
 		if (state.get(0) && (camera.position.x < layerX)) {
 			camera.position.y = layerY;
@@ -167,13 +174,10 @@ class CameraController implements GestureListener {
 					camera.zoom = layerZoom;
 			}
 
-			// State Wechsel
-			changeStateTo(state, 2, true);
 		}
 
 		// 2=GameField Zoom
 		if (state.get(2)) {
-			changeStateTo(state, 2, true);
 			faktorX = 0.8f;
 			faktorY = 1.0f;
 			faktorZoom = 0.72f;
@@ -215,10 +219,53 @@ class CameraController implements GestureListener {
 
 		}
 
+		//PlayerGrid
 		if (state.get(3)) {
-			faktorX = 0.8f;
-			faktorY = 0.8f;
-			faktorZoom = 0.85f;
+			faktorX = 0.75f;
+			faktorY = 0.7f;
+			faktorZoom = 0.65f;
+			if (camera.position.x > layerX * faktorX) {
+				camera.position.x -= 20f;
+				if (camera.position.x < layerX * faktorX)
+					camera.position.x = layerX * faktorX;
+			}
+
+			if (camera.position.x < layerX * faktorX) {
+				camera.position.x += 20f;
+				if (camera.position.x > layerX * faktorX)
+					camera.position.x = layerX * faktorX;
+			}
+
+			if (camera.position.y > layerY * faktorY) {
+				camera.position.y -= 20f;
+				if (camera.position.y < layerY * faktorY)
+					camera.position.y = layerY * faktorY;
+			}
+
+			if (camera.position.y < layerY * faktorY) {
+				camera.position.y += 20f;
+				if (camera.position.y > layerY * faktorY)
+					camera.position.y = layerY * faktorY;
+			}
+
+			if (camera.zoom > layerZoom * faktorZoom) {
+				camera.zoom -= 0.03f;
+				if (camera.zoom < layerZoom * faktorZoom)
+					camera.zoom = layerZoom * faktorZoom;
+			}
+
+			if (camera.zoom < layerZoom * faktorZoom) {
+				camera.zoom += 0.03f;
+				if (camera.zoom > layerZoom * faktorZoom)
+					camera.zoom = layerZoom * faktorZoom;
+			}
+		}
+		
+		//EnemyGrid
+		if (state.get(4)) {
+			faktorX = 0.75f;
+			faktorY = 1.3f;
+			faktorZoom = 0.65f;
 			if (camera.position.x > layerX * faktorX) {
 				camera.position.x -= 20f;
 				if (camera.position.x < layerX * faktorX)

@@ -171,6 +171,7 @@
  <tile id="28">
   <properties>
    <property name="gunattack" value="1"/>
+   <property name="name" value="waterattack"/>
   </properties>
  </tile>
 </tileset>

@@ -105,7 +105,7 @@ public class KI {
 	 * Benoetigte Schiffe erstellen
 	 * @return Erstellt Schiffe
 	 */
-	private Ship[] createShips(){
+	public static Ship[] createShips(){
 		Ship[] ships = new Ship[]{new Ship("Uboot", SUBMARINE_SIZE),
 				new Ship("Uboot", SUBMARINE_SIZE),
 				new Ship("Uboot", SUBMARINE_SIZE),

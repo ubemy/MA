@@ -22,8 +22,7 @@ public class Ship{
 	FieldUnit[] location;
 	/** Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten */
 	private int orientation;
-	/** Dient zum Zeichnen des Schiffs*/
-	private EntityShip entityShip;
+
 
 	/**
 	 * Erstellt ein Ship Objekt
@@ -113,23 +112,6 @@ public class Ship{
 		return this.location;
 	}
 
-	/**
-	 * Das Schiff bekommt eine EntityShip Unit übergeben für das Zeichnen
-	 * 
-	 * @param e
-	 *            EntityShip für das Zeichnen des Schiffteils
-	 */
-	public void setEntityShipDrawUnit(EntityShip e) {
-		this.entityShip = e;
 
-	}
-
-	/**
-	 * Gibt das EntityShip von dem Schiff für das Zeichnen zurück
-	 */
-	public EntityShip getEntityShipDrawUnit() {
-		return entityShip;
-
-	}
 
 }

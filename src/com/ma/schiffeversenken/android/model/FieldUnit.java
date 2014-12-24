@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
+import com.ma.schiffeversenken.EntityShip;
 
 /**
  * Das Spielfeld besteht aus 100 FeldElementen
@@ -41,6 +42,9 @@ public class FieldUnit{
 	private String textureName;
 	private float xpos;
 	private float ypos;
+	private int animationtimer=0;
+	/** Dient zum Zeichnen des Schiffs*/
+	private EntityShip entityShip;
 
 	/**
 	 * Erstellt ein neues FieldUnit Objekt
@@ -248,6 +252,40 @@ public class FieldUnit{
 		this.ypos = ypos;
 	}
 
+	/**
+	 * Das Schiff bekommt eine EntityShip Unit übergeben für das Zeichnen
+	 * 
+	 * @param e
+	 *            EntityShip für das Zeichnen des Schiffteils
+	 */
+	public void setEntityShipDrawUnit(EntityShip e) {
+		this.entityShip = e;
 
+	}
 
+	/**
+	 * Gibt das EntityShip von dem Schiff für das Zeichnen zurück
+	 */
+	public EntityShip getEntityShipDrawUnit() {
+		return entityShip;
+
+	}
+
+	/**
+	 * Animationstimer soll eine animation unterstützen
+	 * durch hochzählen der werte bis zu einem Wert.
+	 * @return int Hilfsvariable Animationstimer 
+	 */
+	public int getAnimationtimer() {
+		return animationtimer;
+	}
+
+	/**
+	 * Animationstimer soll eine animation unterstützen
+	 * durch hochzählen der werte bis zu einem Wert.
+	 * @param animationtimer Wert für die Hilfsvariable
+	 */
+	public void setAnimationtimer(int animationtimer) {
+		this.animationtimer = animationtimer;
+	}
 }

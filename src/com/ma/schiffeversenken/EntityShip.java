@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 	//Texturkoordinaten
 	private Vector2 position,size;
 	TextureRegion shipTextureRegion;
+	TextureRegion shipTextureRegionAttacked;
 	Rectangle bounds;
 
 	/** Bewegung */
@@ -26,13 +27,14 @@ import com.badlogic.gdx.math.Vector2;
 	TiledMapTileLayer collisionLayer;
 
 	
-	public EntityShip(TextureRegion t ,Vector2 pos, Vector2 size, TiledMapTileLayer c) {
+	public EntityShip(TextureRegion t,TextureRegion ta,Vector2 pos, Vector2 size, TiledMapTileLayer c) {
 		// Übergabe des Sprite, wie das Schiff aussehen soll.
 		// Übergabe des ColissionLayer
 		collisionLayer = c;
 		this.position = pos;
 		this.size = size;
 		this.shipTextureRegion = t;
+		this.shipTextureRegionAttacked = ta;
 		this.bounds = new Rectangle(position.x, position.y, size.x, size.y);
 	}
 
@@ -225,11 +227,15 @@ import com.badlogic.gdx.math.Vector2;
 		this.position.y=y;
 	}
 
-	public void render(Batch batch) {
+	public void render(Batch batch,boolean attacked) {
 		// Beim Zeichnen wird update vorher aufgerufen mit xpos und ypos
 		// aktualisiert
 		update(Gdx.graphics.getDeltaTime());
-		batch.draw(shipTextureRegion,position.x, position.y, size.x, size.y);
+		if(!attacked){
+			batch.draw(shipTextureRegion,position.x, position.y, size.x, size.y);
+		}else{
+			batch.draw(shipTextureRegionAttacked,position.x, position.y, size.x, size.y);
+		}
 //		batch.draw(new Sprite(texture.getTextureRegion().getTexture()), x, y, texture.getTextureRegion().getTexture().getWidth(), texture.getTextureRegion().getTexture().getHeight());	
 	
 	}

@@ -244,7 +244,7 @@ public class Game implements Runnable {
 			}
 			
 			ret = returnAttackHit;
-			destroyShip(fe);
+			destroyShip(fe);//Ob Schiff komplett zerstört
 			shipDestroyed = returnShipDestroyed;
 			attackHit = returnAttackHit;
 			

@@ -126,18 +126,18 @@ public class GameFieldScreen implements Screen {
 		//TODO LADEN ERWEITERN
 		loadPlayerData();
 		
-		// Controls
+		//Touch Events 
 		controller = new CameraController(camera, layerX, layerY, layerZoom, player);
 		gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, controller);
 		Gdx.input.setInputProcessor(gestureDetector);
 
 		// State initialisieren
 		state = new ArrayList<Boolean>();
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 8; i++) {
 			state.add(new Boolean(false));
 		}
 		// Intro
-		state.set(0, new Boolean(true));
+		state.set(0, true);
 
 		// Ambiente
 		environment = new Environment();
@@ -148,25 +148,20 @@ public class GameFieldScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 
 		// SpriteBatch vom Renderer
-		batch = renderer.getSpriteBatch();
-
-		//TODO LADEN ERWEITERN
-		//loadPlayerData();
-		
+		batch = renderer.getSpriteBatch();	
 
 		// Neuer ShapeRenderer um Objektlayer zu zeichnen fürs GameGrid
 		sr = new ShapeRenderer();
 
-		// Intro Textur setzen
+
+		//Background Texturen laden.
 		introTexture = new Texture(Gdx.files.internal("graphics//Intro.png"));
 		introTextureRegion = new TextureRegion(introTexture);
-
 		randTexture = new Texture(Gdx.files.internal("graphics//Rand.png"));
 		randTextureRegion = new TextureRegion(randTexture);
 		randTextureRegion.flip(true, false);
 		randTextureRegionUp = new TextureRegion(randTexture);
 		randTextureRegionUp.flip(false, true);
-
 		randTextureRegionUpRight = new TextureRegion(randTexture);
 		randTextureRegionUpRight.flip(true, true);
 
@@ -265,16 +260,28 @@ public class GameFieldScreen implements Screen {
 		// TODO Animate Fireing some canons and ships getting into position.
 		player.animatedTiles();
 
-		if (state.get(5)) {
+		if (state.get(5)||state.get(6)||state.get(7)) {
 			// render Objects
 			// Wie renderer.setView(camera.combined) Transformieren der Shapes
 			// auf
 			// die cam position/koordinaten.
 			sr.setProjectionMatrix(camera.combined);
 			sr.setColor(Color.GRAY);
+			String objektebene = "GameField";
+			if(state.get(5)){
+				objektebene= "GameField";
+			}
+			if(state.get(6)){
+				objektebene= "GameFieldPlayer";
+			}
+			if(state.get(7)){
+				objektebene= "GameFieldEnemy";
+			}
+			
+			
 			// RectangleMapObject, CircleMapObject,
 			// PolylineMapObject, EllipseMapObject, PolygonMapObject.
-			for (MapObject object : map.getLayers().get("GameField")
+			for (MapObject object : map.getLayers().get(objektebene)
 					.getObjects()) {
 				if (object instanceof RectangleMapObject) {
 					Rectangle rt = ((RectangleMapObject) object).getRectangle();
@@ -309,28 +316,30 @@ public class GameFieldScreen implements Screen {
 	@Override
 	public void pause() {
 		// Gdx.app.log(TITLE, "pause()");
-		try {
-			Player.savePlayer(player);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		//TODO Save game fields
+//		try {
+//			Player.savePlayer(player);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
 	}
 
 	@Override
 	public void resume() {
 		// Gdx.app.log(TITLE, "resume()");
-		// TODO Auto-generated method stub
+		////TODO load game fields
 	}
 
 	@Override
 	public void dispose() {
 		// Gdx.app.log(TITLE, "dispose()");
-		try {
-			Player.savePlayer(player);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		//TODO implement save
+//		try {
+//			Player.savePlayer(player);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
 		atlas.dispose();
 		player.dispose();// TODO Rekursiv alle texturen

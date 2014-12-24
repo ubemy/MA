@@ -30,9 +30,7 @@ import com.ma.schiffeversenken.MyGdxGameField;
  * @author Maik Steinborn
  * @author Klaus Schlender
  */
-public class Field implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Field{
 	/** Rechte Kante */
 	public static final int EDGE_RIGHT = 0;
 	/** Obere Kante */
@@ -520,15 +518,4 @@ public class Field implements Serializable {
 		return drawShips;
 	}
 
-	@Override
-	public void write(Json json) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void read(Json json, JsonValue jsonData) {
-		// TODO Auto-generated method stub
-
-	}
 }

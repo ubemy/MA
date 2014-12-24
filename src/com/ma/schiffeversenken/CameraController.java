@@ -18,6 +18,9 @@ class CameraController implements GestureListener {
 	OrthographicCamera camera;
 	float layerX, layerY, layerZoom;
 	Game game;
+	private float faktorX;
+	private float faktorZoom;
+	private float faktorY;
 
 	public CameraController(OrthographicCamera c, float mx, float my,
 			float mzoom, Player player) {
@@ -32,7 +35,6 @@ class CameraController implements GestureListener {
 	public boolean touchDown(float x, float y, int pointer, int button) {
 		flinging = false;
 		initialScale = camera.zoom;
-		game.touchEvent(x, y);
 		return false;
 	}
 
@@ -40,6 +42,7 @@ class CameraController implements GestureListener {
 	public boolean tap(float x, float y, int count, int button) {
 		Gdx.app.log("GestureDetectorTest", "tap at " + x + ", " + y
 				+ ", count: " + count);
+		// game.touchEvent(x, y);
 		return false;
 	}
 
@@ -110,45 +113,44 @@ class CameraController implements GestureListener {
 	 * 
 	 * @param layerY
 	 * @param layerX
-	 * @param layerZoom 
+	 * @param layerZoom
 	 */
-	private void setNewCameraStatePosition(ArrayList<Boolean>  state) {
+	private void setNewCameraStatePosition(ArrayList<Boolean> state) {
 		// Intro
 		if (state.get(0) && (camera.position.x < layerX)) {
-			camera.position.y=layerY;
-			camera.zoom=layerZoom;
+			camera.position.y = layerY;
+			camera.zoom = layerZoom;
 			camera.position.x += 5;
-			System.out.println("AA");
+			// Gdx.app.log("Schiffeversenken 1.0: ","Intro Ausführen");
 		} else if (state.get(0)) {
 			camera.position.x = layerX;
-			state.set(0,new Boolean(false));
-			state.set(1,new Boolean(true));
-			state.set(5,new Boolean(true));
-			System.out.println("BB");
+			// State Wechsel
+			changeStateTo(state, 1, false);
+			Gdx.app.log("Schiffeversenken 1.0: ",
+					"Wechsel zu FullView Ausführen");
 		}
 		// 1=FullView
 		if (state.get(1)) {
-			System.out.println("CC");
 			if (camera.position.x > layerX) {
-				camera.position.x -= 10f;
+				camera.position.x -= 20f;
 				if (camera.position.x < layerX)
 					camera.position.x = layerX;
 			}
 
 			if (camera.position.x < layerX) {
-				camera.position.x += 10f;
+				camera.position.x += 20f;
 				if (camera.position.x > layerX)
 					camera.position.x = layerX;
 			}
 
 			if (camera.position.y > layerY) {
-				camera.position.y -= 10f;
+				camera.position.y -= 20f;
 				if (camera.position.y < layerY)
 					camera.position.y = layerY;
 			}
 
 			if (camera.position.y < layerY) {
-				camera.position.y += 10f;
+				camera.position.y += 20f;
 				if (camera.position.y > layerY)
 					camera.position.y = layerY;
 			}
@@ -165,49 +167,132 @@ class CameraController implements GestureListener {
 					camera.zoom = layerZoom;
 			}
 
+			// State Wechsel
+			changeStateTo(state, 2, true);
 		}
 
-		// 1=FullView smooth
+		// 2=GameField Zoom
 		if (state.get(2)) {
-			System.out.println("DD");
-			if (camera.position.x > layerX) {
-				camera.position.x -= 200f;
+			changeStateTo(state, 2, true);
+			faktorX = 0.8f;
+			faktorY = 1.0f;
+			faktorZoom = 0.72f;
+			if (camera.position.x > layerX * faktorX) {
+				camera.position.x -= 20f;
+				if (camera.position.x < layerX * faktorX)
+					camera.position.x = layerX * faktorX;
 			}
-			if (camera.position.x < layerX) {
-				camera.position.x += 200f;
+
+			if (camera.position.x < layerX * faktorX) {
+				camera.position.x += 20f;
+				if (camera.position.x > layerX * faktorX)
+					camera.position.x = layerX * faktorX;
 			}
-			if (camera.position.y > layerY) {
-				camera.position.y -= 200f;
+
+			if (camera.position.y > layerY * faktorY) {
+				camera.position.y -= 20f;
+				if (camera.position.y < layerY * faktorY)
+					camera.position.y = layerY * faktorY;
 			}
-			if (camera.position.y < layerY) {
-				camera.position.y += 200f;
+
+			if (camera.position.y < layerY * faktorY) {
+				camera.position.y += 20f;
+				if (camera.position.y > layerY * faktorY)
+					camera.position.y = layerY * faktorY;
 			}
-			if (camera.zoom > layerZoom) {
-				camera.zoom -= 0.2f;
+
+			if (camera.zoom > layerZoom * faktorZoom) {
+				camera.zoom -= 0.03f;
+				if (camera.zoom < layerZoom * faktorZoom)
+					camera.zoom = layerZoom * faktorZoom;
 			}
-			if (camera.zoom < layerZoom) {
-				camera.zoom += 0.2f;
+
+			if (camera.zoom < layerZoom * faktorZoom) {
+				camera.zoom += 0.03f;
+				if (camera.zoom > layerZoom * faktorZoom)
+					camera.zoom = layerZoom * faktorZoom;
 			}
+
 		}
 
 		if (state.get(3)) {
-			if (camera.position.x > layerX * 0.80f) {
-				camera.position.x -= 2f;
+			faktorX = 0.8f;
+			faktorY = 0.8f;
+			faktorZoom = 0.85f;
+			if (camera.position.x > layerX * faktorX) {
+				camera.position.x -= 20f;
+				if (camera.position.x < layerX * faktorX)
+					camera.position.x = layerX * faktorX;
 			}
-			if (camera.position.x < layerX * 0.80f) {
-				camera.position.x += 2f;
+
+			if (camera.position.x < layerX * faktorX) {
+				camera.position.x += 20f;
+				if (camera.position.x > layerX * faktorX)
+					camera.position.x = layerX * faktorX;
 			}
-			if (camera.position.y > layerY) {
-				camera.position.y -= 2f;
+
+			if (camera.position.y > layerY * faktorY) {
+				camera.position.y -= 20f;
+				if (camera.position.y < layerY * faktorY)
+					camera.position.y = layerY * faktorY;
 			}
-			if (camera.position.y < layerY) {
-				camera.position.y += 2f;
+
+			if (camera.position.y < layerY * faktorY) {
+				camera.position.y += 20f;
+				if (camera.position.y > layerY * faktorY)
+					camera.position.y = layerY * faktorY;
 			}
-			if (camera.zoom > layerZoom * 0.7f) {
-				camera.zoom -= 0.01f;
+
+			if (camera.zoom > layerZoom * faktorZoom) {
+				camera.zoom -= 0.03f;
+				if (camera.zoom < layerZoom * faktorZoom)
+					camera.zoom = layerZoom * faktorZoom;
 			}
-			if (camera.zoom < layerZoom * 0.7f) {
-				camera.zoom += 0.01f;
+
+			if (camera.zoom < layerZoom * faktorZoom) {
+				camera.zoom += 0.03f;
+				if (camera.zoom > layerZoom * faktorZoom)
+					camera.zoom = layerZoom * faktorZoom;
+			}
+		}
+	}
+
+	/**
+	 * Hilfsmethode, dient dem setzen eines Kamerazustandes.
+	 * 
+	 * 0=Intro, 1=FullView, 2=GameFieldZoom, 3=PlayerShips, 4=EnemyShips,
+	 * 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid
+	 * 
+	 * @param state ArrayList<Boolean> mit den jeweiligen Zuständen
+	 * @param toStateNumber Der ausgewählte Zustand
+	 * @param grid Boolean der im jeweiligen Zustand den Grid Zustand mit aktiviert.
+	 */
+	public static void changeStateTo(ArrayList<Boolean> state,
+			int toStateNumber, boolean grid) {
+		for (int i = 0; i < state.size(); i++) {
+			if (i == toStateNumber) {
+				state.set(i, true);
+				if (grid) {
+					if (toStateNumber == 2) {
+						state.set(5, true);
+						state.set(6, false);
+						state.set(7, false);
+					}
+					if (toStateNumber == 3) {
+						state.set(5, false);
+						state.set(6, true);
+						state.set(7, false);
+					}
+					if (toStateNumber == 4) {
+						state.set(5, false);
+						state.set(6, false);
+						state.set(7, true);
+					}
+				}
+			} else {
+				if(grid&&(i==5||i==6||i==7))
+					continue;
+				state.set(i, false);
 			}
 		}
 

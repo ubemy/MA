@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
 
 /**
  * Das Spielfeld besteht aus 100 FeldElementen
@@ -12,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * @author Maik Steinborn
  * @author Klaus Schlender
  */
-public class FieldUnit {
+public class FieldUnit{
 	/** Direkte Nachbarn dieses Feldes */
 	FieldUnit lNeighbor, rNeighbor, oNeighbor, uNeighbor;
 	/** Schiff, das auf diesem FeldElement steht */
@@ -244,5 +247,7 @@ public class FieldUnit {
 	public void setYpos(float ypos) {
 		this.ypos = ypos;
 	}
+
+
 
 }

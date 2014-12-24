@@ -3,6 +3,7 @@ package com.ma.schiffeversenken.android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.badlogic.gdx.utils.Json.Serializable;
 import com.ma.schiffeversenken.EntityShip;
 
 /**
@@ -10,7 +11,7 @@ import com.ma.schiffeversenken.EntityShip;
  * 
  * @author Maik, Klaus
  */
-public class Ship {
+public class Ship{
 	/** Laenge des Schiffs */
 	int size;
 	/** Boolean ob das Schiff zerstoert ist */

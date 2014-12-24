@@ -113,7 +113,6 @@ public class ShipPlacement {
 		if(!test){
 			//Setzen von ships
 			field.setShips(ships);
-			System.out.println(print());
 		}
 	}
 

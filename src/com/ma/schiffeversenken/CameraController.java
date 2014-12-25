@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.model.Player;
 
@@ -43,7 +44,7 @@ class CameraController implements GestureListener {
 		Gdx.app.log("GestureDetectorTest", "tap at " + x + ", " + y
 				+ ", count: " + count);
 		// game.touchEvent(x, y);
-		game.getFirstFieldPlayer().generateNewShipplacement();
+
 		return false;
 	}
 

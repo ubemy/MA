@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -29,6 +30,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.ma.schiffeversenken.android.model.GamePreferences;
 import com.ma.schiffeversenken.android.model.Player;
 
@@ -64,8 +74,16 @@ public class GameFieldScreen implements Screen {
 	// TEstzwecke
 	private EntityShip ship;
 
-	// Texturen
+	// Texturen für Schrift und buttons
+	private Stage stage;
+	private Skin skin;
+	private Table table;
 	private TextureAtlas atlas;
+	private TextButton buttonGenerateShips=null, buttonSelfPlaceShips=null, buttonStart=null;
+	private BitmapFont white, black;
+	private Label heading;
+
+	// Background State
 	private int[] background = { 0 }, water = { 1 }, ships = { 2 },
 			attack = { 3 };
 
@@ -123,11 +141,12 @@ public class GameFieldScreen implements Screen {
 		layerZoom = camera.zoom;
 		camera.update();
 
-		//TODO LADEN ERWEITERN
+		// TODO LADEN ERWEITERN
 		loadPlayerData();
-		
-		//Touch Events 
-		controller = new CameraController(camera, layerX, layerY, layerZoom, player);
+
+		// Touch Events
+		controller = new CameraController(camera, layerX, layerY, layerZoom,
+				player);
 		gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, controller);
 		Gdx.input.setInputProcessor(gestureDetector);
 
@@ -148,13 +167,12 @@ public class GameFieldScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 
 		// SpriteBatch vom Renderer
-		batch = renderer.getSpriteBatch();	
+		batch = renderer.getSpriteBatch();
 
 		// Neuer ShapeRenderer um Objektlayer zu zeichnen fürs GameGrid
 		sr = new ShapeRenderer();
 
-
-		//Background Texturen laden.
+		// Background Texturen laden.
 		introTexture = new Texture(Gdx.files.internal("graphics//Intro.png"));
 		introTextureRegion = new TextureRegion(introTexture);
 		randTexture = new Texture(Gdx.files.internal("graphics//Rand.png"));
@@ -165,13 +183,95 @@ public class GameFieldScreen implements Screen {
 		randTextureRegionUpRight = new TextureRegion(randTexture);
 		randTextureRegionUpRight.flip(true, true);
 
+		// Schrift und Buttons laden
+		 stage = new Stage();
+
+//		 Gdx.input.setInputProcessor(stage);
+
+		atlas = new TextureAtlas("ui/button.pack");
+		skin = new Skin(atlas);
+
+		table = new Table(skin);
+		// Set table to whole Screen
+		table.setBounds(layerX*0.1f, layerY/2, layerX*0.9f, layerY*0.7f);// Container für Label und Buttons
+
+		//Fonts erstellen
+		white = new BitmapFont(Gdx.files.internal("font/Latin_white.fnt"),
+				false);
+		black = new BitmapFont(Gdx.files.internal("font/Latin_black.fnt"),
+				false);
+
+		// Animationen für den Button
+		TextButtonStyle textButtonStyle = new TextButtonStyle();
+		textButtonStyle.up = skin.getDrawable("buttonUp");
+		textButtonStyle.down = skin.getDrawable("buttonDown");
+		textButtonStyle.pressedOffsetX = 1; // 1 nach x bewegen
+		textButtonStyle.pressedOffsetY = -1;// -1 auf y achse bewegen
+		textButtonStyle.font = black;
+
+		// Button erstellen mit dem Style
+		buttonGenerateShips = new TextButton("generieren",
+				textButtonStyle);
+		buttonGenerateShips.pad(5);
+		buttonGenerateShips.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				player.getGame().getFirstFieldPlayer().generateNewShipplacement();
+			}
+		});
+		
+		buttonSelfPlaceShips = new TextButton("platzieren",textButtonStyle);
+		buttonSelfPlaceShips.pad(5);
+		buttonSelfPlaceShips.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+					player.getGame().getFirstFieldPlayer().resetField();
+				}
+
+			}
+		});
+		
+		buttonStart = new TextButton("Start",textButtonStyle);
+		buttonStart.pad(5);
+		buttonStart.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+					//TODO Starte Spiel
+				}
+
+			}
+		});
+		
+		//Erstellen des Headers
+		LabelStyle headingStyle = new LabelStyle(white,Color.WHITE);
+		heading = new Label("Schiffe", headingStyle);
+		
+		// Hinzufügen vom Elementen zur Tabelle
+//		table.debug();
+		table.center();
+		table.add();
+		table.add(heading);
+		table.add();
+		table.row();
+		table.add(buttonGenerateShips);
+		table.add(buttonStart);
+		table.add(buttonSelfPlaceShips);
+		table.row();
+	
+
+		// table.debug();//Rote lienien zum Debuggen
+		stage.addActor(table);
+
 	}
 
 	/**
 	 * Methode lädt alte Spieldaten
 	 */
 	private void loadPlayerData() {
-		if (Gdx.files.local("player.bin").exists() && Gdx.files.isLocalStorageAvailable()) {
+		if (Gdx.files.local("player.bin").exists()
+				&& Gdx.files.isLocalStorageAvailable()) {
 			System.out.println("Player Exists. Reading File ...");
 			try {
 				player = Player.readPlayer(tileSetShips, map);
@@ -180,7 +280,7 @@ public class GameFieldScreen implements Screen {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//TODO TEST OB LADEN GEHT
+			// TODO TEST OB LADEN GEHT
 		} else {
 			System.out
 					.println("Player does not exist. Creating new player ...");
@@ -193,12 +293,14 @@ public class GameFieldScreen implements Screen {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//TODO TEST OB LADEN
+			// TODO TEST OB LADEN
 		}
 	}
 
 	@Override
 	public void render(float delta) {
+	
+
 		// Gdx.app.log(TITLE, "render(...)");
 		player.update(camera);
 		controller.update(state);
@@ -260,7 +362,7 @@ public class GameFieldScreen implements Screen {
 		// TODO Animate Fireing some canons and ships getting into position.
 		player.animatedTiles();
 
-		if (state.get(5)||state.get(6)||state.get(7)) {
+		if (state.get(5) || state.get(6) || state.get(7)) {
 			// render Objects
 			// Wie renderer.setView(camera.combined) Transformieren der Shapes
 			// auf
@@ -268,17 +370,16 @@ public class GameFieldScreen implements Screen {
 			sr.setProjectionMatrix(camera.combined);
 			sr.setColor(Color.GRAY);
 			String objektebene = "GameField";
-			if(state.get(5)){
-				objektebene= "GameField";
+			if (state.get(5)) {
+				objektebene = "GameField";
 			}
-			if(state.get(6)){
-				objektebene= "GameFieldPlayer";
+			if (state.get(6)) {
+				objektebene = "GameFieldPlayer";
 			}
-			if(state.get(7)){
-				objektebene= "GameFieldEnemy";
+			if (state.get(7)) {
+				objektebene = "GameFieldEnemy";
 			}
-			
-			
+
 			// RectangleMapObject, CircleMapObject,
 			// PolylineMapObject, EllipseMapObject, PolygonMapObject.
 			for (MapObject object : map.getLayers().get(objektebene)
@@ -290,6 +391,16 @@ public class GameFieldScreen implements Screen {
 					sr.end();
 				}
 			}
+		}
+
+		
+		//InputProzessor
+		if(state.get(1)){
+			Gdx.input.setInputProcessor(stage);
+			stage.act(delta);
+			stage.draw();
+		}else{
+		Gdx.input.setInputProcessor(gestureDetector);
 		}
 
 	}
@@ -316,30 +427,30 @@ public class GameFieldScreen implements Screen {
 	@Override
 	public void pause() {
 		// Gdx.app.log(TITLE, "pause()");
-		//TODO Save game fields
-//		try {
-//			Player.savePlayer(player);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		// TODO Save game fields
+		// try {
+		// Player.savePlayer(player);
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
 
 	}
 
 	@Override
 	public void resume() {
 		// Gdx.app.log(TITLE, "resume()");
-		////TODO load game fields
+		// //TODO load game fields
 	}
 
 	@Override
 	public void dispose() {
 		// Gdx.app.log(TITLE, "dispose()");
-		//TODO implement save
-//		try {
-//			Player.savePlayer(player);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		// TODO implement save
+		// try {
+		// Player.savePlayer(player);
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
 
 		atlas.dispose();
 		player.dispose();// TODO Rekursiv alle texturen

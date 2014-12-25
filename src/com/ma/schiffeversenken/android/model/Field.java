@@ -179,6 +179,8 @@ public class Field {
 		sp = new ShipPlacement();
 		sp.placeShips(this, KI.createShips(), false);
 		
+		
+		
 	}
 	
 	
@@ -597,8 +599,22 @@ public class Field {
 		return drawShips;
 	}
 
+	/**
+	 * Methode gibt den Status zurück ob Schiffe auf Feld Plaziert sind.
+	 * @return boolean true oder false
+	 */
+	public boolean isAllShipsSet(){
+		return allShipsSet;
+	}
 
-	
-	
-
+	public void resetField() {
+		try {
+			drawShips = new ArrayList<EntityShip>();
+			create();
+			createNeighbors();
+			createKante();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 }

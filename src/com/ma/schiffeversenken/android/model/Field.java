@@ -339,6 +339,7 @@ public class Field {
 		}
 
 		allShipsSet = true;
+		System.out.println("Schiffe Plaziert!");
 	}
 
 	/**
@@ -610,6 +611,7 @@ public class Field {
 	public void resetField() {
 		try {
 			drawShips = new ArrayList<EntityShip>();
+			allShipsSet=false;
 			create();
 			createNeighbors();
 			createKante();

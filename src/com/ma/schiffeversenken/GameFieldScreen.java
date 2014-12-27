@@ -78,8 +78,9 @@ public class GameFieldScreen implements Screen {
 	private Stage stage;
 	private Skin skin;
 	private Table table;
+	private Table table2;
 	private TextureAtlas atlas;
-	private TextButton buttonGenerateShips=null, buttonSelfPlaceShips=null, buttonStart=null;
+	private TextButton buttonGenerateShips=null, buttonSelfPlaceShips=null, buttonStart=null,buttonClearShips=null;
 	private BitmapFont white, black;
 	private Label heading;
 
@@ -192,14 +193,20 @@ public class GameFieldScreen implements Screen {
 		skin = new Skin(atlas);
 
 		table = new Table(skin);
+		table2 = new Table(skin);
 		// Set table to whole Screen
-		table.setBounds(layerX*0.1f, layerY/2, layerX*0.9f, layerY*0.7f);// Container für Label und Buttons
+		table.setBounds(layerX*0.1f, layerY*0.6f, layerX*0.9f, layerY*0.7f);// Container für Label und Buttons
+		table2.setBounds(layerX*0.1f, layerY*0.5f, layerX*0.9f, layerY*0.7f);// Container für Label und Buttons
 
 		//Fonts erstellen
 		white = new BitmapFont(Gdx.files.internal("font/Latin_white.fnt"),
 				false);
 		black = new BitmapFont(Gdx.files.internal("font/Latin_black.fnt"),
 				false);
+		
+		//Erstellen des Headers
+		final LabelStyle headingStyle = new LabelStyle(white,Color.WHITE);
+		heading = new Label("Schiffe", headingStyle);
 
 		// Animationen für den Button
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -226,9 +233,30 @@ public class GameFieldScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
-					player.getGame().getFirstFieldPlayer().resetField();
+					player.getGame().getFirstFieldPlayer().resetField();//Spielfeld zurücksetzen
 				}
+				CameraController.changeStateTo(state, 3, true);
+				table.clear();
+//				table.center();
+				table.add(buttonGenerateShips);
+				table.add(buttonStart);
+				table.add(buttonClearShips);
+				table2.center();
+				table2.add(new Label("Drücke auf ein Feld",headingStyle));
+				table2.row();
+				table2.add(new Label("um ein Schiff zu platzieren",headingStyle));
+				table2.row();
+				table2.add(new Label("und ziehe es in die gewünschte Richtung",headingStyle));
+			}
+		});
+		
+		buttonClearShips = new TextButton("löschen",textButtonStyle);
+		buttonClearShips.pad(5);
+		buttonClearShips.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
 
+					player.getGame().getFirstFieldPlayer().resetField();//Spielfeld zurücksetzen
 			}
 		});
 		
@@ -238,19 +266,23 @@ public class GameFieldScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+					if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+						//TODO State wechseln und spiel starten.
+					}else{
+						player.getGame().getFirstFieldPlayer().generateNewShipplacement();
+						//TODO State wechseln und spiel starten.
+					}
 					//TODO Starte Spiel
 				}
 
 			}
 		});
 		
-		//Erstellen des Headers
-		LabelStyle headingStyle = new LabelStyle(white,Color.WHITE);
-		heading = new Label("Schiffe", headingStyle);
+
 		
-		// Hinzufügen vom Elementen zur Tabelle
+		// Hinzufügen vom Elementen zur Tabelle Start
 //		table.debug();
-		table.center();
+//		table.center();
 		table.add();
 		table.add(heading);
 		table.add();
@@ -263,6 +295,7 @@ public class GameFieldScreen implements Screen {
 
 		// table.debug();//Rote lienien zum Debuggen
 		stage.addActor(table);
+		stage.addActor(table2);
 
 	}
 
@@ -395,7 +428,7 @@ public class GameFieldScreen implements Screen {
 
 		
 		//InputProzessor
-		if(state.get(1)){
+		if(state.get(1)||state.get(3)){
 			Gdx.input.setInputProcessor(stage);
 			stage.act(delta);
 			stage.draw();

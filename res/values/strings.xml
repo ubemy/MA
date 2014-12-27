@@ -26,8 +26,8 @@
     <string name="title_activity_spiel_einstellungen">SpielEinstellungen</string>
     <string name="single_player_game">Einzelspieler</string>
     <string name="multi_player_game">Mehrspieler</string>
-    <string name="zerstoerer_row_title">Zerstörer(0 bis 1)</string>
-    <string name="schlachtschiff_row_title">Schlachtschiff(0 bis 2)</string>
+    <string name="zerstoerer_row_title">Zerstörer(0 bis 2)</string>
+    <string name="schlachtschiff_row_title">Schlachtschiff(0 bis 1)</string>
     <string name="uboot_row_title">Uboot(0 bis 3)</string>
     <string name="kreuzer_boat_row_title">Kreuzer(0 bis 4)</string>
     <string name="grid_topic_row_title">Wähle eine Spielstrategie</string>

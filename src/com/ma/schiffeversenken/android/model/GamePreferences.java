@@ -26,9 +26,9 @@ public class GamePreferences implements Parcelable{
 	
 	public static final String GAME_PREFERENCES_TAG = "GamePreferences";
 	
-	public static final int MAX_ZERSTOERER_NUMBER = 1;
+	public static final int MAX_ZERSTOERER_NUMBER = 2;
 	public static final int MIN_ZERSTOERER_NUMBER = 0;
-	public static final int MAX_SCHLACHTSCHIFF_NUMBER = 2;
+	public static final int MAX_SCHLACHTSCHIFF_NUMBER = 1;
 	public static final int MIN_SCHLACHTSCHIFF_NUMBER = 0;
 	public static final int MAX_UBOOT_NUMBER = 3;
 	public static final int MIN_UBOOT_NUMBER = 0;
@@ -37,8 +37,8 @@ public class GamePreferences implements Parcelable{
 	public static final int MAX_SCHWIERIGKEIT_NUMBER = 3;
 	public static final int MIN_SCHWIERIGKEIT_NUMBER = 1;
 	
-	public static final int DEFAULT_ZERSTOERER_NUMBER = 1;
-	public static final int DEFAULT_SCHLACHTSCHIFF_NUMBER = 2;
+	public static final int DEFAULT_ZERSTOERER_NUMBER = 2;
+	public static final int DEFAULT_SCHLACHTSCHIFF_NUMBER = 1;
 	public static final int DEFAULT_UBOOT_NUMBER = 3;
 	public static final int DEFAULT_KREUZER_NUMBER = 4;
 	public static final int DEFAULT_SCHWIERIGKEIT_NUMBER = 1;

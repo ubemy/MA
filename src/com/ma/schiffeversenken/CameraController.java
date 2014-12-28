@@ -289,23 +289,31 @@ class CameraController implements GestureListener {
 					tmpUnitLocation[1]=unit;
 					unitLocation = tmpUnitLocation;
 				}
-				if (unit != null && !unit.equals(unitLocation[0])&&!firstShift) {
+				if (unit != null && !unit.equals(unitLocation[unitLocation.length-1])&&!firstShift) {
 					System.out.println("Unit Gefunden secondShift");
-//					// Initialisieren der Schiffstexturen
-//					shipMiddle = new TextureRegion(game.getFirstFieldPlayer()
-//							.getShipTextures().get("rhk"));
-//					shipFront = new TextureRegion(game.getFirstFieldPlayer()
-//							.getShipTextures().get("rhk"));
-//					// Hinzufügen von Schiffsteil
-//					EntityShip tmpShip = new EntityShip(shipBack, shipBack,
-//							new Vector2(unit.getXpos(), unit.getYpos()),
-//							new Vector2(GameFieldScreen.size,
-//									GameFieldScreen.size), game
-//									.getFirstFieldPlayer().getMapTileLayer());
-//					unit.setEntityShipDrawUnit(tmpShip);
-//					unit.setOccupied(true);
-//					// Schiffslänge hinzufügen
-//					unitLocation[0] = unit;
+					// Hinzufügen von Schiffsteil
+					EntityShip tmpShip = new EntityShip(
+							shipFront,
+							shipFrontA,
+								new Vector2(unit.getXpos(), unit.getYpos()),
+								new Vector2(GameFieldScreen.size, GameFieldScreen.size),
+								game.getFirstFieldPlayer().getMapTileLayer());
+						unit.setEntityShipDrawUnit(tmpShip);
+						unit.setOccupied(true);
+					
+					
+					
+					
+					//Setzen der richtigen Schiffstextur für letzen
+					unitLocation[unitLocation.length-1].getEntityShipDrawUnit().setShipTextureRegion(shipMiddle,shipMiddleA);
+					
+					// Schiffslänge hinzufügen
+					FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length+1];
+					for(int i=0;i<unitLocation.length;i++){
+						tmpUnitLocation[i]=unitLocation[i];
+					}
+					tmpUnitLocation[tmpUnitLocation.length-1]=unit;
+					unitLocation = tmpUnitLocation;
 				} 
 				
 				

@@ -156,9 +156,15 @@ public class GameFieldScreen implements Screen {
 		// Intro
 		state.set(0, true);
 		
+		//TODO CameraController übergeben wie viele Schiffe zu setzen.
+		 ArrayList<Integer> schiffsEinstellung = new ArrayList<Integer>(4);
+		 schiffsEinstellung.add(4);//0, kreuzer
+		 schiffsEinstellung.add(3);//1,Uboot
+		 schiffsEinstellung.add(2);//2,schlachtschiff
+		 schiffsEinstellung.add(1);//3,Zerstörer
 		// Touch Events
 		controller = new CameraController(camera, layerX, layerY, layerZoom,
-				player,state);
+				player,state,schiffsEinstellung);
 		gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, controller);
 
 		// Ambiente

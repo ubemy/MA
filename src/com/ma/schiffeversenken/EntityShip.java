@@ -232,9 +232,9 @@ import com.badlogic.gdx.math.Vector2;
 		// aktualisiert
 		update(Gdx.graphics.getDeltaTime());
 		if(!attacked){
-			batch.draw(shipTextureRegion,position.x, position.y, size.x, size.y);
+			batch.draw(this.shipTextureRegion,position.x, position.y, size.x, size.y);
 		}else{
-			batch.draw(shipTextureRegionAttacked,position.x, position.y, size.x, size.y);
+			batch.draw(this.shipTextureRegionAttacked,position.x, position.y, size.x, size.y);
 		}
 //		batch.draw(new Sprite(texture.getTextureRegion().getTexture()), x, y, texture.getTextureRegion().getTexture().getWidth(), texture.getTextureRegion().getTexture().getHeight());	
 	
@@ -250,8 +250,9 @@ import com.badlogic.gdx.math.Vector2;
 		return shipTextureRegion;
 	}
 
-	public void setShipTextureRegion(TextureRegion shipTextureRegion) {
+	public void setShipTextureRegion(TextureRegion shipTextureRegion,TextureRegion shipTextureRegionAttacked) {
 		this.shipTextureRegion = shipTextureRegion;
+		this.shipTextureRegionAttacked=shipTextureRegionAttacked;
 	}
 	
 	

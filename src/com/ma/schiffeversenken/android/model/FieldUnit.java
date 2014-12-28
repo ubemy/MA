@@ -288,4 +288,24 @@ public class FieldUnit{
 	public void setAnimationtimer(int animationtimer) {
 		this.animationtimer = animationtimer;
 	}
+
+	public FieldUnit get_lNeighbor() {
+		return lNeighbor;
+	}
+
+	public FieldUnit get_rNeighbor() {
+		return rNeighbor;
+	}
+
+
+	public FieldUnit get_oNeighbor() {
+		return oNeighbor;
+	}
+
+	public FieldUnit get_uNeighbor() {
+		return uNeighbor;
+	}
+
+	
+	
 }

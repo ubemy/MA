@@ -28,61 +28,97 @@ class CameraController implements GestureListener {
 	private float faktorX;
 	private float faktorZoom;
 	private float faktorY;
-	private boolean panStart=false;
-	 // 0=Intro, 1=FullView 2=FullView smooth, 3=GameFieldZoom, 4=PlayerShips, 5=EnemyShips
+	private boolean panStart = false;
+	 // 0=Intro, 1=FullView, 2=GameFieldZoom, 3=PlayerShips, 4=EnemyShips,
+	 // 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid
 	ArrayList<Boolean> state;
+	// Wenn true wird gerade ein Schiff plaziert.
+	private boolean aktivatorSchiffSetzen;
+	private TextureRegion shipBack;
+	private TextureRegion shipMiddle;
+	private TextureRegion shipFront;
+	private FieldUnit[] unitLocation;
+	private Vector3 touchOld;
+	private boolean leftShift;
+	private boolean rightShift;
+	private boolean upShift;
+	private boolean downShift;
+	private boolean firstShift;
+	private TextureRegion shipBackA;
+	private TextureRegion shipMiddleA;
+	private TextureRegion shipFrontA;
+	private ArrayList<Integer> shipPlaceHelper;
 
 	public CameraController(OrthographicCamera c, float mx, float my,
-			float mzoom, Player player,ArrayList<Boolean> state) {
-		this.state=state;
+			float mzoom, Player player, ArrayList<Boolean> state, ArrayList<Integer> aktiveSchiffsListe) {
+		this.state = state;
 		this.camera = c;
 		this.layerX = mx;
 		this.layerY = my;
 		this.layerZoom = mzoom;
 		this.game = player.getGame();
+		this.aktivatorSchiffSetzen = false;
+		this.firstShift=true;
+		this.shipPlaceHelper=aktiveSchiffsListe;
 	}
 
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
+		// Gdx.app.log("GestureDetectorTest", "tochDown at " + x + ", " + y);
 		flinging = false;
 		initialScale = camera.zoom;
+
 		return false;
 	}
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
-//		Gdx.app.log("GestureDetectorTest", "tap at " + x + ", " + y
-//				+ ", count: " + count);
-		
-		//Bildschirmkoordinaten transformieren zu Weldkoordinaten
-		// touch.x und  touch.y mit count für anzahl der tap
-		Vector3 touch = new Vector3(x, y, 0);
-	    camera.unproject(touch);
-	    
-	    if(state.get(3)||state.get(3)&&!game.isEnd()){
-//	    	game.touchEvent(touch.x, touch.y);
-	    }
-	    
-	    FieldUnit unit = game.getFirstFieldPlayer().getElementByXPosYPos(touch.x, touch.y);
-	    if(unit!=null){
-	    	Gdx.app.log("GestureDetectorTest", "tap at " + touch.x + ", " + touch.y
-	    			+ ", count: " + count);
-	    	Gdx.app.log("tap", "unit Gefunden!");
-	    	// Hinzufügen von Schiffsteil
-			EntityShip tmpShip = new EntityShip(
-					game.getFirstFieldPlayer().getShipTextures().get("rhk"),game.getFirstFieldPlayer().getShipTextures().get("rhka"), new Vector2(
-							unit.getXpos(), unit.getYpos()),
-					new Vector2(GameFieldScreen.size, GameFieldScreen.size), game.getFirstFieldPlayer().getMapTileLayer());
-			unit.setEntityShipDrawUnit(tmpShip);
-			unit.setOccupied(true);
+		// Gdx.app.log("GestureDetectorTest", "tap at " + x + ", " + y
+		// + ", count: " + count);
 
-	    	
-	    }else{
-	    	Gdx.app.log("GestureDetectorTest", "tap at " + touch.x + ", " + touch.y
-	    			+ ", count: " + count);
-	    	Gdx.app.log("tap", "unit nicht Gefunden!");   	
-	    }
-	    
+		// Bildschirmkoordinaten transformieren zu Weldkoordinaten
+		// touch.x und touch.y mit count für anzahl der tap
+		Vector3 touch = new Vector3(x, y, 0);
+		camera.unproject(touch);
+
+		// Spielverlauf
+		if (state.get(3) || state.get(3) && !game.isEnd()) {
+			// game.touchEvent(touch.x, touch.y);
+		}
+
+		 //Spieler Spielfeld Schiffe platzieren
+//		 if(state.get(3)){
+//			 //TODO TESTZWECK entwecher erweitern oder löschen.
+//		 FieldUnit unit =
+//		 game.getFirstFieldPlayer().getElementByXPosYPos(touch.x, touch.y);
+//		 if(unit!=null){
+//		 Gdx.app.log("GestureDetectorTest", "tap at " + touch.x + ", " +
+//		 touch.y
+//		 + ", count: " + count);
+//		 Gdx.app.log("tap", "unit Gefunden!");
+//		 }
+//		 }
+		 
+		
+		// // Hinzufügen von Schiffsteil
+		// EntityShip tmpShip = new EntityShip(
+		// game.getFirstFieldPlayer().getShipTextures().get("rhk"),game.getFirstFieldPlayer().getShipTextures().get("rhka"),
+		// new Vector2(
+		// unit.getXpos(), unit.getYpos()),
+		// new Vector2(GameFieldScreen.size, GameFieldScreen.size),
+		// game.getFirstFieldPlayer().getMapTileLayer());
+		// unit.setEntityShipDrawUnit(tmpShip);
+		// unit.setOccupied(true);
+		//
+		//
+		// }else{
+		// Gdx.app.log("GestureDetectorTest", "tap at " + touch.x + ", " +
+		// touch.y
+		// + ", count: " + count);
+		// Gdx.app.log("tap", "unit nicht Gefunden!");
+		// }
+		// }
+
 		return false;
 	}
 
@@ -100,61 +136,205 @@ class CameraController implements GestureListener {
 		return false;
 	}
 
+	public boolean panStart(float x, float y, float deltaX, float deltaY) {
+		panStart = true;
+		// Gdx.app.log("GestureDetectorTest", "pan Start at " + x + ", " + y);
+		// Bildschirmkoordinaten transformieren zu Weldkoordinaten
+		Vector3 touch = new Vector3(x, y, 0);
+		camera.unproject(touch);
+		touchOld = new Vector3(touch.x, touch.y, 0);
+		System.out.println("Start Bildschirm zu Weltkoordinaten: " + "X: "
+				+ touch.x + " Y: " + touch.y);
+
+		// Spieler Spielfeld Schiffe platzieren
+		if (state.get(3)) {
+			FieldUnit unit = game.getFirstFieldPlayer().getElementByXPosYPos(
+					touch.x, touch.y);
+			if (unit != null) {
+				System.out.println("unit Start");
+				aktivatorSchiffSetzen = true;
+				// Initialisieren der Schiffstexturen
+				shipBack = game.getFirstFieldPlayer()
+						.getShipTextures().get("uvk");
+				shipBackA = game.getFirstFieldPlayer()
+						.getShipTextures().get("uvka");
+				// Hinzufügen von Schiffsteil
+				EntityShip tmpShip = new EntityShip(
+						shipBack,
+						shipBackA,
+						new Vector2(unit.getXpos(), unit.getYpos()),
+						new Vector2(GameFieldScreen.size, GameFieldScreen.size),
+						game.getFirstFieldPlayer().getMapTileLayer());
+				unit.setEntityShipDrawUnit(tmpShip);
+				unit.setOccupied(true);
+				
+				// Schiffslänge hinzufügen
+				unitLocation = new FieldUnit[1];
+				unitLocation[0] = unit;
+			}
+			
+		}
+
+		return false;
+	}
+
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
-//		Gdx.app.log("GestureDetectorTest", "pan at " + x + ", " + y);
-		if(!panStart){
-			panStart=true;
+		// Gdx.app.log("GestureDetectorTest", "pan at " + x + ", " + y);
+		Vector3 touch = new Vector3(x, y, 0);
+		camera.unproject(touch);
+		// System.out.println("pan Bildschirm zu Weltkoordinaten: " + "X: "
+		// + touch.x + " Y: " + touch.y);
+
+		if (!panStart) {
 			panStart(x, y, deltaX, deltaY);
+		} else {
+			// Spieler Spielfeld Schiffe platzieren
+			if (aktivatorSchiffSetzen) {
+				FieldUnit unit = game.getFirstFieldPlayer()
+						.getElementByXPosYPos(touch.x, touch.y);
+				if (unit != null && !unit.equals(unitLocation[0]) && firstShift) {
+					//Beim ersten shift werden Texturen festgelegt werden.
+					firstShift=false;
+					System.out.println("Unit Gefunden firstShift");
+
+					if (unit.equals(unitLocation[0].get_lNeighbor())) {
+						leftShift = true;
+						Gdx.app.log("FirstShift", "leftShift");
+						//Texturen setzen
+						shipBack = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("lhb"));
+						shipBackA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("lhba"));
+						shipMiddle = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("lhm"));
+						shipMiddleA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("lhma"));
+						shipFront = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("lhf"));
+						shipFrontA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("lhfa"));
+					}
+					if (unit.equals(unitLocation[0].get_rNeighbor())) {
+						rightShift = true;
+						Gdx.app.log("FirstShift", "rightShift");
+						shipBack = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("rhb"));
+						shipBackA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("rhba"));
+						shipMiddle = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("rhm"));
+						shipMiddleA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("rhma"));
+						shipFront = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("rhf"));
+						shipFrontA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("rhfa"));
+					}
+					if (unit.equals(unitLocation[0].get_uNeighbor())) {
+						upShift = true;
+						Gdx.app.log("FirstShift", "upShift");
+						shipBack = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvb"));
+						shipBackA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvba"));
+						shipMiddle = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvm"));
+						shipMiddleA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvma"));
+						shipFront = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvf"));
+						shipFrontA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvfa"));
+					}
+
+					if (unit.equals(unitLocation[0].get_oNeighbor())) {
+						downShift = true;
+						Gdx.app.log("FirstShift", "downShift");
+						// TODO Texturen nach unten hinzufügen
+						shipBack = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvf"));
+						shipBackA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvfa"));
+						shipMiddle = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvm"));
+						shipMiddleA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvma"));
+						shipFront = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvb"));
+						shipFrontA = new TextureRegion(game.getFirstFieldPlayer()
+								.getShipTextures().get("uvba"));
+					}
+					
+
+					// Hinzufügen von Schiffsteil
+					EntityShip tmpShip = new EntityShip(
+							shipFront,
+							shipFrontA,
+								new Vector2(unit.getXpos(), unit.getYpos()),
+								new Vector2(GameFieldScreen.size, GameFieldScreen.size),
+								game.getFirstFieldPlayer().getMapTileLayer());
+						unit.setEntityShipDrawUnit(tmpShip);
+						unit.setOccupied(true);
+					
+					
+					
+					
+					//Setzen der richtigen Schiffstextur für Hinten
+					unitLocation[0].getEntityShipDrawUnit().setShipTextureRegion(shipBack,shipBackA);
+					
+					// Schiffslänge hinzufügen
+					FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length+1];
+					tmpUnitLocation[0]=unitLocation[0];
+					tmpUnitLocation[1]=unit;
+					unitLocation = tmpUnitLocation;
+				}
+				if (unit != null && !unit.equals(unitLocation[0])&&!firstShift) {
+					System.out.println("Unit Gefunden secondShift");
+//					// Initialisieren der Schiffstexturen
+//					shipMiddle = new TextureRegion(game.getFirstFieldPlayer()
+//							.getShipTextures().get("rhk"));
+//					shipFront = new TextureRegion(game.getFirstFieldPlayer()
+//							.getShipTextures().get("rhk"));
+//					// Hinzufügen von Schiffsteil
+//					EntityShip tmpShip = new EntityShip(shipBack, shipBack,
+//							new Vector2(unit.getXpos(), unit.getYpos()),
+//							new Vector2(GameFieldScreen.size,
+//									GameFieldScreen.size), game
+//									.getFirstFieldPlayer().getMapTileLayer());
+//					unit.setEntityShipDrawUnit(tmpShip);
+//					unit.setOccupied(true);
+//					// Schiffslänge hinzufügen
+//					unitLocation[0] = unit;
+				} 
+				
+				
+			}
 		}
-//		camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0);
+		// camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0);
 		return false;
 	}
 
 	@Override
 	public boolean panStop(float x, float y, int pointer, int button) {
-//		Gdx.app.log("GestureDetectorTest", "pan stop at " + x + ", " + y);
-		panStart=false;
-		
-		//Bildschirmkoordinaten transformieren zu Weldkoordinaten
+		// Gdx.app.log("GestureDetectorTest", "pan stop at " + x + ", " + y);
+		panStart = false;
+		// Bildschirmkoordinaten transformieren zu Weldkoordinaten
 		Vector3 touch = new Vector3(x, y, 0);
-	    camera.unproject(touch);
-	    System.out.println("Stop Bildschirm zu Weltkoordinaten: "
-	        + "X: " + touch.x + " Y: " + touch.y);
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	public boolean panStart(float x, float y, float deltaX, float deltaY) {
-//		Gdx.app.log("GestureDetectorTest", "pan Start at " + x + ", " + y);
-		if(state.get(3)){
-			
-		//TODO Auf Spielfeld Übersetzen die kamerakoordinaten.
-//		game.getFirstFieldPlayer().getMapTileLayer().getCell((int) x,(int) y).setTile(game.getFirstFieldPlayer().getShipTiles().get("rhk"));
-			
-			//Bildschirmkoordinaten transformieren zu Weldkoordinaten
-			Vector3 touch = new Vector3(x, y, 0);
-		    camera.unproject(touch);
-		    System.out.println("Start Bildschirm zu Weltkoordinaten: "
-		        + "X: " + touch.x + " Y: " + touch.y);
+		camera.unproject(touch);
+		System.out.println("Stop Bildschirm zu Weltkoordinaten: " + "X: "
+				+ touch.x + " Y: " + touch.y);
 
-			
-			
-		// Hinzufügen von Schiffsteil
-		FieldUnit unit = game.getFirstFieldPlayer().getElementByXPosYPos(x, y);
-		if(unit!=null){
-			
-		
-			
-		EntityShip tmpShip = new EntityShip(
-				game.getFirstFieldPlayer().getShipTextures().get("rhk"),game.getFirstFieldPlayer().getShipTextures().get("rhk"+"a"), new Vector2(
-						unit.getXpos(), unit.getYpos()),
-				new Vector2(GameFieldScreen.size, GameFieldScreen.size), game.getFirstFieldPlayer().getMapTileLayer());
-		unit.setEntityShipDrawUnit(tmpShip);
-		}else{
-			Gdx.app.log("GameField", "Kein GamefieldGefunden bei pan Start");
-			Gdx.app.log("ID 1 Unit", "Koordinaten: x"+game.getFirstFieldPlayer().getElementByID(1).getXpos()+" y"+game.getFirstFieldPlayer().getElementByID(1).getYpos());
-		}	
+		if (aktivatorSchiffSetzen) {
+			//boolean zurücksetzen 
+			aktivatorSchiffSetzen = false;
+			firstShift=true;
+			leftShift=false;
+			rightShift=false;
+			upShift=false;
+			downShift=false;
+
+			// TODO ende des schiffes.
 		}
 		return false;
 	}
@@ -194,21 +374,19 @@ class CameraController implements GestureListener {
 	}
 
 	/**
-	 * Methode setzt die Kamera auf gewünschte position je nach Status. 
-	 * 0=Intro, 1=FullView 2=FullView smooth, 3=GameFieldZoom, 4=PlayerShips,
-	 * 5=EnemyShips
+	 * Methode setzt die Kamera auf gewünschte position je nach Status.
+	 * 0=Intro, 1=FullView, 2=GameFieldZoom, 3=PlayerShips, 4=EnemyShips,
+	 * 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid
 	 * 
 	 * @param layerY
 	 * @param layerX
 	 * @param layerZoom
 	 */
 	private void setNewCameraStatePosition() {
-		if(!state.get(0)){
-//			game.
+		if (!state.get(0)) {
+			// game.
 		}
-		
-		
-		
+
 		// Intro
 		if (state.get(0) && (camera.position.x < layerX)) {
 			camera.position.y = layerY;
@@ -305,7 +483,7 @@ class CameraController implements GestureListener {
 
 		}
 
-		//PlayerGrid
+		// PlayerGrid
 		if (state.get(3)) {
 			faktorX = 0.75f;
 			faktorY = 0.7f;
@@ -346,8 +524,8 @@ class CameraController implements GestureListener {
 					camera.zoom = layerZoom * faktorZoom;
 			}
 		}
-		
-		//EnemyGrid
+
+		// EnemyGrid
 		if (state.get(4)) {
 			faktorX = 0.75f;
 			faktorY = 1.3f;
@@ -396,9 +574,13 @@ class CameraController implements GestureListener {
 	 * 0=Intro, 1=FullView, 2=GameFieldZoom, 3=PlayerShips, 4=EnemyShips,
 	 * 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid
 	 * 
-	 * @param state ArrayList<Boolean> mit den jeweiligen Zuständen
-	 * @param toStateNumber Der ausgewählte Zustand
-	 * @param grid Boolean der im jeweiligen Zustand den Grid Zustand mit aktiviert.
+	 * @param state
+	 *            ArrayList<Boolean> mit den jeweiligen Zuständen
+	 * @param toStateNumber
+	 *            Der ausgewählte Zustand
+	 * @param grid
+	 *            Boolean der im jeweiligen Zustand den Grid Zustand mit
+	 *            aktiviert.
 	 */
 	public static void changeStateTo(ArrayList<Boolean> state,
 			int toStateNumber, boolean grid) {
@@ -423,7 +605,7 @@ class CameraController implements GestureListener {
 					}
 				}
 			} else {
-				if(grid&&(i==5||i==6||i==7))
+				if (grid && (i == 5 || i == 6 || i == 7))
 					continue;
 				state.set(i, false);
 			}

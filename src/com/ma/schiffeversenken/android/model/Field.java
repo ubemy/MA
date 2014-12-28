@@ -399,14 +399,14 @@ public class Field {
 	public FieldUnit getElementByXPosYPos(float xPos, float yPos) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				Gdx.app.log("getElementByXPosYPos", " x:"+xPos+" y:"+yPos);
+//				Gdx.app.log("getElementByXPosYPos", " x:"+xPos+" y:"+yPos);
 				if ((units[i][j].getXpos() <= xPos && xPos < units[i][j].getXpos()+size)
 						&& (units[i][j].getYpos() <= yPos && yPos < units[i][j].getYpos()+size)){
 					
-					Gdx.app.log("getElementByXPosYPos", "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
+//					Gdx.app.log("getElementByXPosYPos", "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
 					return units[i][j];
-				}else{
-					Gdx.app.log("nichtGefunden", "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
+//				}else{
+//					Gdx.app.log("nichtGefunden", "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
 				}
 			}
 		}

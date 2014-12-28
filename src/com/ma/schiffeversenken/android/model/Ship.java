@@ -1,11 +1,5 @@
 package com.ma.schiffeversenken.android.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.badlogic.gdx.utils.Json.Serializable;
-import com.ma.schiffeversenken.EntityShip;
-
 /**
  * Fuer alle Schiffe
  * 

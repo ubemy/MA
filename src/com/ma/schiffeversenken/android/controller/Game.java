@@ -56,6 +56,7 @@ public class Game implements Runnable {
 	
 	//Nur zu Testzwecken - Maik
 	public boolean getroffen = false;
+	private boolean end;
 	
 	/**
 	 * Erstellt ein neues Game Objekt
@@ -71,6 +72,7 @@ public class Game implements Runnable {
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
 		this.gamersTurn = 0;
+		this.end=true;
 		
 		resetActionVariables();
 		
@@ -150,7 +152,7 @@ public class Game implements Runnable {
 	 * @throws InterruptedException
 	 */
 	public void start() throws InterruptedException{
-		boolean end = false;
+		end = false;
 		boolean hitShip = false;
 		
 		do{
@@ -358,6 +360,10 @@ public class Game implements Runnable {
 
 	public Field getSecondFieldEnemy() {
 		return secondFieldEnemy;
+	}
+	
+	public boolean isEnd(){
+		return end;
 	}
 	
 }

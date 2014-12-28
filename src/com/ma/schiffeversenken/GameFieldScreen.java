@@ -8,6 +8,7 @@ import java.util.Iterator;
 import android.content.Context;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -115,6 +116,8 @@ public class GameFieldScreen implements Screen {
 
 	GamePreferences mGamePreferences;
 
+	private InputMultiplexer inputMultiplexer;
+
 	@Override
 	public void show() {
 		// Tiled Maps,Layer und tileSet laden um diese zu nutzen
@@ -145,12 +148,6 @@ public class GameFieldScreen implements Screen {
 		// TODO LADEN ERWEITERN
 		loadPlayerData();
 
-		// Touch Events
-		controller = new CameraController(camera, layerX, layerY, layerZoom,
-				player);
-		gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, controller);
-		Gdx.input.setInputProcessor(gestureDetector);
-
 		// State initialisieren
 		state = new ArrayList<Boolean>();
 		for (int i = 0; i < 8; i++) {
@@ -158,6 +155,11 @@ public class GameFieldScreen implements Screen {
 		}
 		// Intro
 		state.set(0, true);
+		
+		// Touch Events
+		controller = new CameraController(camera, layerX, layerY, layerZoom,
+				player,state);
+		gestureDetector = new GestureDetector(20, 0.5f, 2, 0.15f, controller);
 
 		// Ambiente
 		environment = new Environment();
@@ -185,18 +187,14 @@ public class GameFieldScreen implements Screen {
 		randTextureRegionUpRight.flip(true, true);
 
 		// Schrift und Buttons laden
-		 stage = new Stage();
-
-//		 Gdx.input.setInputProcessor(stage);
+		stage = new Stage();
 
 		atlas = new TextureAtlas("ui/button.pack");
 		skin = new Skin(atlas);
 
 		table = new Table(skin);
-		table2 = new Table(skin);
 		// Set table to whole Screen
 		table.setBounds(layerX*0.1f, layerY*0.6f, layerX*0.9f, layerY*0.7f);// Container für Label und Buttons
-		table2.setBounds(layerX*0.1f, layerY*0.5f, layerX*0.9f, layerY*0.7f);// Container für Label und Buttons
 
 		//Fonts erstellen
 		white = new BitmapFont(Gdx.files.internal("font/Latin_white.fnt"),
@@ -237,16 +235,21 @@ public class GameFieldScreen implements Screen {
 				}
 				CameraController.changeStateTo(state, 3, true);
 				table.clear();
-//				table.center();
+//				table.moveBy(0, -layerY*0.1f);
 				table.add(buttonGenerateShips);
+				table.add().minWidth(10);
 				table.add(buttonStart);
+				table.add().minWidth(10);
 				table.add(buttonClearShips);
-				table2.center();
-				table2.add(new Label("Drücke auf ein Feld",headingStyle)).colspan(3);
+				
+				table2 = new Table(skin);
+				table2.setBounds(layerX*0.1f, layerY*0.5f, layerX*0.9f, layerY*0.7f);
+				table2.add(new Label("Drücke auf ein Feld",headingStyle)).colspan(5);
 				table2.row();
-				table2.add(new Label("um ein Schiff zu platzieren",headingStyle)).colspan(3);
+				table2.add(new Label("um ein Schiff zu platzieren",headingStyle)).colspan(5);
 				table2.row();
-				table2.add(new Label("und ziehe es in die gewünschte Richtung",headingStyle)).colspan(3);
+				table2.add(new Label("und ziehe es in die gewünschte Richtung",headingStyle)).colspan(5);
+				stage.addActor(table2);
 			}
 		});
 		
@@ -283,18 +286,24 @@ public class GameFieldScreen implements Screen {
 		// Hinzufügen vom Elementen zur Tabelle Start
 //		table.debug();
 //		table.center();
-		table.add(heading).colspan(3);
+		table.add(heading).colspan(5);
 		table.row();
 		table.add(buttonGenerateShips);
+		table.add().minWidth(10);
 		table.add(buttonStart);
+		table.add().minWidth(10);
 		table.add(buttonSelfPlaceShips);
-		table.row();
+//		table.row();
 	
 
 		// table.debug();//Rote lienien zum Debuggen
 		stage.addActor(table);
-		stage.addActor(table2);
-
+		
+		//Setzen von InputListenern
+		inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(gestureDetector);
+		inputMultiplexer.addProcessor(stage);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	/**
@@ -334,7 +343,7 @@ public class GameFieldScreen implements Screen {
 
 		// Gdx.app.log(TITLE, "render(...)");
 		player.update(camera);
-		controller.update(state);
+		controller.update();
 		camera.update();
 		// Render the things after show()
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -427,11 +436,11 @@ public class GameFieldScreen implements Screen {
 		
 		//InputProzessor
 		if(state.get(1)||state.get(3)){
-			Gdx.input.setInputProcessor(stage);
+//			Gdx.input.setInputProcessor(stage);
 			stage.act(delta);
 			stage.draw();
 		}else{
-		Gdx.input.setInputProcessor(gestureDetector);
+//		Gdx.input.setInputProcessor(gestureDetector);
 		}
 
 	}

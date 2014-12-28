@@ -70,6 +70,7 @@ public class Field {
 	private ArrayList<EntityShip> drawShips;
 	private Iterator<EntityShip> tileIterator;
 	private TreeMap<String, TextureRegion> shipTextures;
+	private TreeMap<String, TiledMapTile> shipTiles;
 	private int animationtimerMax=10;
 
 
@@ -160,6 +161,18 @@ public class Field {
 						tile.getTextureRegion());
 			}
 		}
+		
+		this.shipTiles = new TreeMap<String, TiledMapTile>();
+		iter = st.iterator();
+		while (iter.hasNext()) {
+			tile = iter.next();
+			// Wenn wir ein Tile mit propertie name haben
+			if (tile.getProperties().get("name") != null) {
+				shipTiles.put(tile.getProperties().get("name").toString(),
+						tile);
+			}
+		}
+		
 	}
 
 	
@@ -377,15 +390,27 @@ public class Field {
 		return null;
 	}
 
+	/**
+	 * Methode Findet anhand der Weltkoordinaten das entsprechende FeldElement
+	 * @param xPos X Weltkoordinate
+	 * @param yPos Y Weltkoordinate
+	 * @return FieldUnit Das gefundene Feldelement oder null
+	 */
 	public FieldUnit getElementByXPosYPos(float xPos, float yPos) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				if ((units[i][j].getXpos() == xPos)
-						&& (units[i][j].getYpos() == yPos))
+				Gdx.app.log("getElementByXPosYPos", " x:"+xPos+" y:"+yPos);
+				if ((units[i][j].getXpos() <= xPos && xPos < units[i][j].getXpos()+size)
+						&& (units[i][j].getYpos() <= yPos && yPos < units[i][j].getYpos()+size)){
+					
+					Gdx.app.log("getElementByXPosYPos", "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
 					return units[i][j];
+				}else{
+					Gdx.app.log("nichtGefunden", "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
+				}
 			}
 		}
-
+		
 		return null;
 	}
 
@@ -396,7 +421,7 @@ public class Field {
 	private void create() {
 		int cellPosX = 1;
 		int cellPosY = 5;
-		if (this.typ == 1) {
+		if (this.typ == 1) {//Weltkoordinaten sind umgekehrt PlayerFeld unten
 			cellPosY += 10;
 		}
 		int id = 0;
@@ -619,4 +644,17 @@ public class Field {
 			ex.printStackTrace();
 		}
 	}
+
+	public TreeMap<String, TextureRegion> getShipTextures() {
+		return shipTextures;
+	}
+	public TreeMap<String, TiledMapTile> getShipTiles() {
+		return shipTiles;
+	}
+	
+
+	public TiledMapTileLayer getMapTileLayer() {
+		return mapTileLayer;
+	}
+	
 }

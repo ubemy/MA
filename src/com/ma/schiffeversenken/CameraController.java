@@ -6,10 +6,16 @@ import android.media.CameraProfile;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTile.BlendMode;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ma.schiffeversenken.android.controller.Game;
+import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
 
 class CameraController implements GestureListener {
@@ -22,9 +28,13 @@ class CameraController implements GestureListener {
 	private float faktorX;
 	private float faktorZoom;
 	private float faktorY;
+	private boolean panStart=false;
+	 // 0=Intro, 1=FullView 2=FullView smooth, 3=GameFieldZoom, 4=PlayerShips, 5=EnemyShips
+	ArrayList<Boolean> state;
 
 	public CameraController(OrthographicCamera c, float mx, float my,
-			float mzoom, Player player) {
+			float mzoom, Player player,ArrayList<Boolean> state) {
+		this.state=state;
 		this.camera = c;
 		this.layerX = mx;
 		this.layerY = my;
@@ -41,10 +51,38 @@ class CameraController implements GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
-		Gdx.app.log("GestureDetectorTest", "tap at " + x + ", " + y
-				+ ", count: " + count);
-		// game.touchEvent(x, y);
+//		Gdx.app.log("GestureDetectorTest", "tap at " + x + ", " + y
+//				+ ", count: " + count);
+		
+		//Bildschirmkoordinaten transformieren zu Weldkoordinaten
+		// touch.x und  touch.y mit count für anzahl der tap
+		Vector3 touch = new Vector3(x, y, 0);
+	    camera.unproject(touch);
+	    
+	    if(state.get(3)||state.get(3)&&!game.isEnd()){
+//	    	game.touchEvent(touch.x, touch.y);
+	    }
+	    
+	    FieldUnit unit = game.getFirstFieldPlayer().getElementByXPosYPos(touch.x, touch.y);
+	    if(unit!=null){
+	    	Gdx.app.log("GestureDetectorTest", "tap at " + touch.x + ", " + touch.y
+	    			+ ", count: " + count);
+	    	Gdx.app.log("tap", "unit Gefunden!");
+	    	// Hinzufügen von Schiffsteil
+			EntityShip tmpShip = new EntityShip(
+					game.getFirstFieldPlayer().getShipTextures().get("rhk"),game.getFirstFieldPlayer().getShipTextures().get("rhka"), new Vector2(
+							unit.getXpos(), unit.getYpos()),
+					new Vector2(GameFieldScreen.size, GameFieldScreen.size), game.getFirstFieldPlayer().getMapTileLayer());
+			unit.setEntityShipDrawUnit(tmpShip);
+			unit.setOccupied(true);
 
+	    	
+	    }else{
+	    	Gdx.app.log("GestureDetectorTest", "tap at " + touch.x + ", " + touch.y
+	    			+ ", count: " + count);
+	    	Gdx.app.log("tap", "unit nicht Gefunden!");   	
+	    }
+	    
 		return false;
 	}
 
@@ -64,13 +102,60 @@ class CameraController implements GestureListener {
 
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0);
+//		Gdx.app.log("GestureDetectorTest", "pan at " + x + ", " + y);
+		if(!panStart){
+			panStart=true;
+			panStart(x, y, deltaX, deltaY);
+		}
+//		camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0);
 		return false;
 	}
 
 	@Override
 	public boolean panStop(float x, float y, int pointer, int button) {
+//		Gdx.app.log("GestureDetectorTest", "pan stop at " + x + ", " + y);
+		panStart=false;
+		
+		//Bildschirmkoordinaten transformieren zu Weldkoordinaten
+		Vector3 touch = new Vector3(x, y, 0);
+	    camera.unproject(touch);
+	    System.out.println("Stop Bildschirm zu Weltkoordinaten: "
+	        + "X: " + touch.x + " Y: " + touch.y);
 		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public boolean panStart(float x, float y, float deltaX, float deltaY) {
+//		Gdx.app.log("GestureDetectorTest", "pan Start at " + x + ", " + y);
+		if(state.get(3)){
+			
+		//TODO Auf Spielfeld Übersetzen die kamerakoordinaten.
+//		game.getFirstFieldPlayer().getMapTileLayer().getCell((int) x,(int) y).setTile(game.getFirstFieldPlayer().getShipTiles().get("rhk"));
+			
+			//Bildschirmkoordinaten transformieren zu Weldkoordinaten
+			Vector3 touch = new Vector3(x, y, 0);
+		    camera.unproject(touch);
+		    System.out.println("Start Bildschirm zu Weltkoordinaten: "
+		        + "X: " + touch.x + " Y: " + touch.y);
+
+			
+			
+		// Hinzufügen von Schiffsteil
+		FieldUnit unit = game.getFirstFieldPlayer().getElementByXPosYPos(x, y);
+		if(unit!=null){
+			
+		
+			
+		EntityShip tmpShip = new EntityShip(
+				game.getFirstFieldPlayer().getShipTextures().get("rhk"),game.getFirstFieldPlayer().getShipTextures().get("rhk"+"a"), new Vector2(
+						unit.getXpos(), unit.getYpos()),
+				new Vector2(GameFieldScreen.size, GameFieldScreen.size), game.getFirstFieldPlayer().getMapTileLayer());
+		unit.setEntityShipDrawUnit(tmpShip);
+		}else{
+			Gdx.app.log("GameField", "Kein GamefieldGefunden bei pan Start");
+			Gdx.app.log("ID 1 Unit", "Koordinaten: x"+game.getFirstFieldPlayer().getElementByID(1).getXpos()+" y"+game.getFirstFieldPlayer().getElementByID(1).getYpos());
+		}	
+		}
 		return false;
 	}
 
@@ -93,7 +178,7 @@ class CameraController implements GestureListener {
 		return false;
 	}
 
-	public void update(ArrayList<Boolean> state) {
+	public void update() {
 		if (flinging) {
 			velX *= 0.98f;
 			velY *= 0.98f;
@@ -104,20 +189,20 @@ class CameraController implements GestureListener {
 			if (Math.abs(velY) < 0.01f)
 				velY = 0;
 		}
-		setNewCameraStatePosition(state);
+		setNewCameraStatePosition();
 
 	}
 
 	/**
-	 * Methode setzt die Kamera auf gewünschte position je nach Status. 0=Intro,
-	 * 1=FullView 2=FullView smooth, 3=GameFieldZoom, 4=PlayerShips,
+	 * Methode setzt die Kamera auf gewünschte position je nach Status. 
+	 * 0=Intro, 1=FullView 2=FullView smooth, 3=GameFieldZoom, 4=PlayerShips,
 	 * 5=EnemyShips
 	 * 
 	 * @param layerY
 	 * @param layerX
 	 * @param layerZoom
 	 */
-	private void setNewCameraStatePosition(ArrayList<Boolean> state) {
+	private void setNewCameraStatePosition() {
 		if(!state.get(0)){
 //			game.
 		}

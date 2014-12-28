@@ -190,7 +190,7 @@ public class Field {
 		
 		//Die neuen Schiffe platzieren
 		sp = new ShipPlacement();
-		sp.placeShips(this, KI.createShips(), false);
+		sp.placeShips(this, KI.createShips(3, 4, 2, 1), false);
 		
 		
 		

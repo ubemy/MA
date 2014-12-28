@@ -66,7 +66,7 @@ public class KI {
 		this.enemiesField = enemiesField;
 		this.kiStrategy = new NormalStrategy(this);
 		if(!loadedGame){//myField hat schon Schiffe
-			setShips(createShips(), test);
+			setShips(createShips(3, 4, 2, 1), test);
 		}
 		initHistory();
 	}
@@ -105,8 +105,29 @@ public class KI {
 	 * Benoetigte Schiffe erstellen
 	 * @return Erstellt Schiffe
 	 */
-	public static Ship[] createShips(){
-		Ship[] ships = new Ship[]{new Ship("Uboot", SUBMARINE_SIZE),
+	public static Ship[] createShips(int numberOfSubmarines, int numberOfCruiser,
+			int numberOfDestroyer, int numberOfBattleShips){
+		Ship[] ships = new Ship[numberOfSubmarines + numberOfCruiser + numberOfDestroyer + numberOfBattleShips];
+		
+		int i,j,k,l;
+		
+		for(i=0; i<numberOfSubmarines; i++){
+			ships[i] = new Ship("Uboot", SUBMARINE_SIZE);
+		}
+		
+		for(j=0; j<numberOfCruiser; j++){
+			ships[j+numberOfSubmarines] = new Ship("Kreuzer", SUBMARINE_SIZE);
+		}
+		
+		for(k=0; k<numberOfDestroyer; k++){
+			ships[k+numberOfSubmarines+numberOfCruiser] = new Ship("Zerstoerer", DESTROYER_SIZE);
+		}	
+	
+		for(l=0; l<numberOfBattleShips; l++){
+			ships[l+numberOfSubmarines+numberOfCruiser+numberOfDestroyer] = new Ship("Schlachtschiff", BATTLESHIP_SIZE);
+		}
+		
+		/*Ship[] ships = new Ship[]{new Ship("Uboot", SUBMARINE_SIZE),
 				new Ship("Uboot", SUBMARINE_SIZE),
 				new Ship("Uboot", SUBMARINE_SIZE),
 				new Ship("Kreuzer", CRUISER_SIZE),
@@ -116,7 +137,7 @@ public class KI {
 				new Ship("Zerstoerer", DESTROYER_SIZE),
 				new Ship("Zerstoerer", DESTROYER_SIZE),
 				new Ship("Schlachtschiff", BATTLESHIP_SIZE)
-				};
+				};*/
 		
 		return ships;
 	}

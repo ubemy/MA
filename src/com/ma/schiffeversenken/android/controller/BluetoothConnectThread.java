@@ -2,10 +2,14 @@ package com.ma.schiffeversenken.android.controller;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.res.Resources;
 
 /**
  * Verbindet sich mit einem offenem Server Port (Client)
@@ -42,7 +46,7 @@ public class BluetoothConnectThread extends Thread {
         }
         bluetoothSocket = tmp;
     }
- 
+    
     public void run() {
         //Suche stoppen
     	bluetoothAdapter.cancelDiscovery();
@@ -57,6 +61,7 @@ public class BluetoothConnectThread extends Thread {
         } catch (IOException connectException) {
             //Fehler beim Connect
             try {
+            	vmgClass.showToast(vmgClass.getString(R.string.connection_error));
             	bluetoothSocket.close();
             } catch (IOException closeException) { }
             return;

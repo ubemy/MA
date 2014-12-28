@@ -51,7 +51,7 @@ public class VisitMultiplayerGame extends Activity {
 		public void onItemClick(final AdapterView<?> pAdapterView, final View pView, final int pPosition, final long pID) {
 			// Suche abbrechen, weil bereits ein Geraet ausgewaehlt wurde
 			bt.stopDiscoverDevices();
-
+			
 			// Die MAC-Adresse des Geraets herausfiltern
 			final String info = ((TextView) pView).getText().toString();
 			final String address = info.substring(info.length() - 17);

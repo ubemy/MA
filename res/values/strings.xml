@@ -38,5 +38,6 @@
     <string name="zurueck">Zurück</string>
     <string name="start">Start</string>
     <string name="title_activity_ship_configuration">ShipConfigurationActivity</string>
+    <string name="connection_error">Keine Verbindung möglich</string>
 
 </resources>

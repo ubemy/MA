@@ -89,6 +89,7 @@ public class BluetoothConnectedThread extends Thread implements Serializable {
 	                String attackString = "_ATTACK_";
 	                String welcomeString = "_HELLO_";
 	                String returnString = "_RETURN_";
+	                
 	                if(readMsg.startsWith(attackString)){
 	                	game.secondGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length() + 1))); 
 	                }

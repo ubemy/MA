@@ -242,11 +242,11 @@ public class GameFieldScreen implements Screen {
 				table.add(buttonStart);
 				table.add(buttonClearShips);
 				table2.center();
-				table2.add(new Label("Drücke auf ein Feld",headingStyle));
+				table2.add(new Label("Drücke auf ein Feld",headingStyle)).colspan(3);
 				table2.row();
-				table2.add(new Label("um ein Schiff zu platzieren",headingStyle));
+				table2.add(new Label("um ein Schiff zu platzieren",headingStyle)).colspan(3);
 				table2.row();
-				table2.add(new Label("und ziehe es in die gewünschte Richtung",headingStyle));
+				table2.add(new Label("und ziehe es in die gewünschte Richtung",headingStyle)).colspan(3);
 			}
 		});
 		
@@ -283,9 +283,7 @@ public class GameFieldScreen implements Screen {
 		// Hinzufügen vom Elementen zur Tabelle Start
 //		table.debug();
 //		table.center();
-		table.add();
-		table.add(heading);
-		table.add();
+		table.add(heading).colspan(3);
 		table.row();
 		table.add(buttonGenerateShips);
 		table.add(buttonStart);
@@ -490,6 +488,8 @@ public class GameFieldScreen implements Screen {
 		batch.dispose();
 		map.dispose();
 		introTexture.dispose();
+		stage.dispose();
+		skin.dispose();
 		// ship.getTexture().dispose();// Wichtig texturen dispose()
 
 	}

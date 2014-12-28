@@ -64,6 +64,7 @@ public class BluetoothConnectThread extends Thread {
  
         //Verbindung in separatem Thread verwalten
         manageConnectedSocket(bluetoothSocket);
+        vmgClass.startGame();
     }
  
     /**

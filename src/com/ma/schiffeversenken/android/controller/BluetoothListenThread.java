@@ -58,6 +58,7 @@ public class BluetoothListenThread extends Thread{
             if (socket != null) {
                 //Verbindung in separatem Thread verwalten
                 manageConnectedSocket(socket);
+                cmgClass.startGame();
                 try {
 					serverSocket.close();
 				} catch (IOException e) {

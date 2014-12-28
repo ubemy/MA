@@ -60,6 +60,13 @@ public class CreateMultiplayerGame extends Activity {
 		}
 	}
 
+	public void startGame(){
+			Intent intent = new Intent(getApplicationContext(), GamePreferencesActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+			intent.putExtra("bluetoothGame", "true");
+			startActivity(intent);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

@@ -5,10 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
+import com.ma.schiffeversenken.android.view.GamePreferencesActivity;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 
 /**
  * Verwaltet die Bluetooth Verbindung
@@ -37,7 +39,6 @@ public class Bluetooth extends Activity {
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		allDevices = new ArrayList<BluetoothDevice>();
 	}
-
 	
 	/**Sucht verfuegbare Geraete*/
 	public boolean discoverDevices(){

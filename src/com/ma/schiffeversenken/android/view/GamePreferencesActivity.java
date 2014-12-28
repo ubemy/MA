@@ -21,11 +21,21 @@ public class GamePreferencesActivity extends Activity implements
 
 	private GamePreferences mGamePreferences;
 	private Bundle savedInstanceState;
+	private boolean bluetoothGame;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.savedInstanceState = savedInstanceState;
+
+		Bundle extras = getIntent().getExtras();
+		if(extras != null){
+			bluetoothGame = Boolean.parseBoolean(extras.get("bluetoothGame").toString());
+		}
+		else{
+			bluetoothGame = false;
+		}
+		
 		setContentView(R.layout.activity_game_preferences);
 
 		// If activity is being recreated due to a configuration change, restore
@@ -50,13 +60,19 @@ public class GamePreferencesActivity extends Activity implements
 		((Button) findViewById(R.id.uboot_plus)).setOnClickListener(this);
 		((Button) findViewById(R.id.kreuzer_minus)).setOnClickListener(this);
 		((Button) findViewById(R.id.kreuzer_plus)).setOnClickListener(this);
-		((Button) findViewById(R.id.schwierigkeitstufe_minus))
-				.setOnClickListener(this);
-		((Button) findViewById(R.id.schwierigkeitstufe_plus))
-				.setOnClickListener(this);
 		((Button) findViewById(R.id.start_button_pref))
 				.setOnClickListener(this);
 
+		if(bluetoothGame){
+			disableRessources();
+		}
+		else{
+			((Button) findViewById(R.id.schwierigkeitstufe_minus))
+			.setOnClickListener(this);
+			((Button) findViewById(R.id.schwierigkeitstufe_plus))
+			.setOnClickListener(this);
+		}
+		
 		drawGamePreferences();
 	}
 
@@ -73,8 +89,18 @@ public class GamePreferencesActivity extends Activity implements
 				.toString(mGamePreferences.getUbootNumber()));
 		((TextView) findViewById(R.id.kreuzer_size)).setText(Integer
 				.toString(mGamePreferences.getKreuzerNumber()));
-		((TextView) findViewById(R.id.schwierigkeitstufe_size)).setText(Integer
+		
+		if(!bluetoothGame) {
+			((TextView) findViewById(R.id.schwierigkeitstufe_size)).setText(Integer
 				.toString(mGamePreferences.getSchwierigkeitStufe()));
+		}
+	}
+	
+	private void disableRessources(){
+		((TextView) findViewById(R.id.schwierigkeitstufe_size)).setVisibility(View.GONE);
+		((TextView) findViewById(R.id.TextView04)).setVisibility(View.GONE);
+		((Button) findViewById(R.id.schwierigkeitstufe_minus)).setVisibility(View.GONE);
+		((Button) findViewById(R.id.schwierigkeitstufe_plus)).setVisibility(View.GONE);
 	}
 
 	// Saves game preferences for activity recreation

@@ -68,6 +68,13 @@ public class VisitMultiplayerGame extends Activity {
 		}
 	};
 	
+	public void startGame(){
+		Intent intent = new Intent(getApplicationContext(), GamePreferencesActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		intent.putExtra("bluetoothGame", "true");
+		startActivity(intent);
+	}
+	
 	/**
 	 * Erstellt eine VisitMultiplayerGame Activity
 	 */

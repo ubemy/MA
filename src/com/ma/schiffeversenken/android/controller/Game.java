@@ -14,7 +14,7 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Maik Steinborn
  * @author Klaus Schlender
  */
-public class Game implements Runnable {
+public class Game extends Thread {
 
 	/**Einzelspielermodus*/
 	private final static int GAME_MODE_SINGLE_PLAYER = 0;
@@ -149,9 +149,9 @@ public class Game implements Runnable {
 	
 	/**
 	 * Startet das Game. Wird aufgerufen, wenn das Game Thread gestartet wird
-	 * @throws InterruptedException
 	 */
-	public void start() throws InterruptedException{
+	/*
+	public void start(){
 		end = false;
 		boolean hitShip = false;
 		
@@ -160,7 +160,12 @@ public class Game implements Runnable {
 				//Auf Eingabe von Benutzer warten
 				do{
 					while(!firstGamerAction){
-						Thread.sleep(FIVEHUNDRED_MS);
+						try {
+							Thread.sleep(FIVEHUNDRED_MS);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 					hitShip = gamerAction(firstGamerAttackID, gamersTurn);
 				}while(hitShip);
@@ -173,8 +178,13 @@ public class Game implements Runnable {
 						/*
 						 * Die Schleife wird solange durchlaufen,
 						 * bis der Spieler ins Leere trifft
-						 */
-						Thread.sleep(THOUSAND_MS);
+						 *//*
+						try {
+							Thread.sleep(THOUSAND_MS);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						hitShip = gamerAction(ki.attack(), gamersTurn);
 					}while(hitShip);
 				}
@@ -184,9 +194,14 @@ public class Game implements Runnable {
 						/*
 						 * Die Schleife wird solange durchlaufen,
 						 * bis der Spieler ins Leere trifft
-						 */
+						 *//*
 						while(!secondGamerAction){
-							Thread.sleep(FIVEHUNDRED_MS);
+							try {
+								Thread.sleep(FIVEHUNDRED_MS);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 						hitShip = gamerAction(secondGamerAttackID, gamersTurn);
 					}while(hitShip);
@@ -198,7 +213,7 @@ public class Game implements Runnable {
 				end = true;
 			}
 		}while(!end);
-	}
+	}*/
 	
 	public void setReturnValues(boolean returnAttackHit, boolean returnShipDestroyed){
 		this.returnAttackHit = returnAttackHit;
@@ -333,13 +348,67 @@ public class Game implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		try {
-			start();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		end = false;
+		boolean hitShip = false;
+		
+		do{
+			if(gamersTurn==0){
+				//Auf Eingabe von Benutzer warten
+				do{
+					while(!firstGamerAction){
+						try {
+							Thread.sleep(FIVEHUNDRED_MS);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					hitShip = gamerAction(firstGamerAttackID, gamersTurn);
+				}while(hitShip);
+				gamersTurn++;
+			}
+			else{
+				if(gameMode == GAME_MODE_SINGLE_PLAYER){
+					//Wenn GameMode == 0 == Einzelspieler, dann KI attackieren lassen
+					do{
+						/*
+						 * Die Schleife wird solange durchlaufen,
+						 * bis der Spieler ins Leere trifft
+						 */
+						try {
+							Thread.sleep(THOUSAND_MS);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						hitShip = gamerAction(ki.attack(), gamersTurn);
+					}while(hitShip);
+				}
+				else{
+					//Auf Eingabe von Benutzer warten
+					do{
+						/*
+						 * Die Schleife wird solange durchlaufen,
+						 * bis der Spieler ins Leere trifft
+						 */
+						while(!secondGamerAction){
+							try {
+								Thread.sleep(FIVEHUNDRED_MS);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						hitShip = gamerAction(secondGamerAttackID, gamersTurn);
+					}while(hitShip);
+				}
+				gamersTurn = 0;
+			}
+			
+			if(hasSomebodyWon() != 0){
+				end = true;
+			}
+		}while(!end);
 	}
 
 	/**

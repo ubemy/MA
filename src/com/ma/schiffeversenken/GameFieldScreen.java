@@ -303,13 +303,8 @@ public class GameFieldScreen implements Screen {
 							Gdx.app.log("Schiff Manuell Plaziert: ", s.getName()+" Back at y:"+s.getLocation()[0].getYpos());
 						}
 						
-						try {
-							//TODO Optimieren für BLuetooth
-							player.getGame().start();
-						} catch (InterruptedException e) {
-							Gdx.app.log("player.getGame().start();", "InterruptedException, cant Start Thread");
-							e.printStackTrace();
-						}
+						//TODO Optimieren für BLuetooth
+						player.getGame().start();
 					}else{
 						//Setzen der Schiffe und Starten.
 						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
@@ -321,13 +316,8 @@ public class GameFieldScreen implements Screen {
 						controller.setShipPlaceHelper(tmpEmptyShipList);
 						CameraController.changeStateTo(state, 2, false);
 						
-						try {
-							//TODO Optimieren für BLuetooth
-							player.getGame().start();
-						} catch (InterruptedException e) {
-							Gdx.app.log("player.getGame().start();", "InterruptedException, cant Start Thread");
-							e.printStackTrace();
-						}
+						//TODO Optimieren für BLuetooth
+						player.getGame().start();
 					}
 				}
 

@@ -98,12 +98,16 @@ public class Game extends Thread {
 		FieldUnit fieldUnit = null;
 		
 		if(gamersTurn==0){//Wenn Spieler am Zug greife Gegnerfeld an
-			fieldUnit = secondFieldEnemy.getElementByXPosYPos(xPos, yPos);
-			if(fieldUnit != null) firstGamerAttack(fieldUnit.getID());
+			if(!secondaryBTGame){
+				fieldUnit = secondFieldEnemy.getElementByXPosYPos(xPos, yPos);
+				if(fieldUnit != null) firstGamerAttack(fieldUnit.getID());
+			}
 		}
 		else{
-			fieldUnit = firstFieldPlayer.getElementByXPosYPos(xPos, yPos);
-			if(fieldUnit != null) secondGamerAttack(fieldUnit.getID());
+			if(!primaryBTGame){
+				fieldUnit = firstFieldPlayer.getElementByXPosYPos(xPos, yPos);
+				if(fieldUnit != null) secondGamerAttack(fieldUnit.getID());
+			}
 		}
 	}
 	
@@ -283,7 +287,8 @@ public class Game extends Thread {
 	public void run() {
 		end = false;
 		boolean hitShip = false;
-		gamersTurn = (new Random()).nextInt(1);
+		//gamersTurn = (new Random()).nextInt(2);
+		gamersTurn = 0;
 		
 		do{
 			if(gamersTurn==0){

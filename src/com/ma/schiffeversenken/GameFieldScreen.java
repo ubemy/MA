@@ -289,8 +289,8 @@ public class GameFieldScreen implements Screen {
 		buttonStart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(player.getGame().getSecondFieldEnemy().isAllShipsSet()){
-					if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || bluetoothGame){
+					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || bluetoothGame){
 						//Setzen der Schiffe und Starten.
 						//player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);

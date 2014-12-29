@@ -36,7 +36,7 @@ public class ShipPlacement {
 	/** Ausrichtung des Schiffs nach unten */
 	public static final int SHIP_ORIENTATION_BELOW = 3;
 	/** Anzahl der moeglichen Ausrichtungen eines Schiffs */
-	public static final int NUMBER_OF_ORIENTATIOS = 4;
+	public static final int NUMBER_OF_ORIENTATIOS_MINUS_ONE = 3;
 	/** Anzahl der Bloecke */
 	public static final int NUMBER_OF_BLOCKS = 25;
 	/**

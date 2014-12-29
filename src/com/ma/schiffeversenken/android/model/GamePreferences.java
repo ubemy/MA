@@ -20,6 +20,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.OpenableColumns;
 
+@Deprecated
 public class GamePreferences implements Parcelable{
 	
 	private static final long serialVersionUID = 1L;

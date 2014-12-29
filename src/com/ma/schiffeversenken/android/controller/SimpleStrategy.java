@@ -32,7 +32,7 @@ public class SimpleStrategy implements KIStrategy{
 		//Angriff auf eine neue zufaellige FeldID starten
 		do{
 			//Zufaellige Zahl erstellen
-			nextAttackID = random.nextInt(FIELD_SIZE) + 1;
+			nextAttackID = random.nextInt(FIELD_SIZE_MINUS_ONE) + 1;
 		}while(ki.getEnemiesField().getElementByID(nextAttackID).getAttacked());
 		
 		//Ausgewaehltes FeldElement attackieren

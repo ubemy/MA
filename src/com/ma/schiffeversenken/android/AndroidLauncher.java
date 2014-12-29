@@ -18,6 +18,6 @@ public class AndroidLauncher extends AndroidApplication {
 		cfg.useCompass=false;
 		cfg.useImmersiveMode=false;
 		cfg.useWakelock=false;
-		initialize(new MyGdxGameField(Boolean.parseBoolean(getIntent().getExtras().get("bluetoothGame").toString())), cfg);
+		initialize(new MyGdxGameField(), cfg);
 	}
 }

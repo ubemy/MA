@@ -11,7 +11,7 @@ import com.ma.schiffeversenken.android.model.Ship;
  */
 public class DifficultStrategy implements KIStrategy{
 	/**Anzahl der Feldelemente auf dem Spielfeld - 1*/
-	public static final int FIELD_SIZE = 100;
+	public static final int FIELD_SIZE_MINUS_ONE = 99;
 	/**Das initialisierte KI Objekt*/
 	KI ki;
 	

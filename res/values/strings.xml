@@ -39,5 +39,8 @@
     <string name="start">Start</string>
     <string name="title_activity_ship_configuration">ShipConfigurationActivity</string>
     <string name="connection_error">Keine Verbindung möglich</string>
+    <string name="button_ki_einfach">Einfach</string>
+    <string name="button_ki_normal">Normal</string>
+    <string name="button_ki_schwer">Schwer</string>
 
 </resources>

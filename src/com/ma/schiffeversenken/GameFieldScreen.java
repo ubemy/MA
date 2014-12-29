@@ -124,11 +124,6 @@ public class GameFieldScreen implements Screen {
 	//Einstellung wie viele Schiffe zu setzensind.
 	private ArrayList<Integer> schiffsEinstellung;
 
-	private boolean bluetoothGame;
-	public GameFieldScreen(boolean bluetoothGame){
-		this.bluetoothGame = bluetoothGame;
-	}
-	
 	@Override
 	public void show() {
 		Gdx.app.log(LOG, "Hello World");
@@ -289,8 +284,8 @@ public class GameFieldScreen implements Screen {
 		buttonStart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || bluetoothGame){
-					if(player.getGame().getFirstFieldPlayer().isAllShipsSet()  || bluetoothGame){
+				if(player.getGame().getSecondFieldEnemy().isAllShipsSet()){
+					if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
 						//Setzen der Schiffe und Starten.
 						//player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
@@ -375,7 +370,7 @@ public class GameFieldScreen implements Screen {
 			System.out
 					.println("Player does not exist. Creating new player ...");
 			try {
-				player = new Player(tileSetShips, map, bluetoothGame);
+				player = new Player(tileSetShips, map);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

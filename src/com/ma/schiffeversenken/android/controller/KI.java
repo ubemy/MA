@@ -41,7 +41,7 @@ public class KI {
 	public static final int BATTLESHIP_SIZE = 4;
 	/**Anzahl der Feldelemente auf dem Spielfeld*/
 	public static final int FIELD_SIZE = 100;
-	/**Anzahl der moeglichen Ausrichtungen eines Schiffs*/
+	/**Anzahl der moeglichen Ausrichtungen eines Schiffs */
 	public static final int NUMBER_OF_ORIENTATIOS = 4;
 	/**Das Spielfeld der KI*/
 	private Field myField;

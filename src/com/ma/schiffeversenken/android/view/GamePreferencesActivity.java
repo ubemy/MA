@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.ma.schiffeversenken.android.model.GamePreferences;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
-
+@Deprecated
 public class GamePreferencesActivity extends Activity implements
 		OnClickListener {
 

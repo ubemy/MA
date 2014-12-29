@@ -303,9 +303,9 @@ public class GameFieldScreen implements Screen {
 
 						
 						//TODO DEBUGGEN
-						for(Ship s: player.getFirstField().getShips()){
-							Gdx.app.log("Schiff Manuell Plaziert: ", s.getName()+" Back at y:"+s.getLocation()[0].getYpos());
-						}
+//						for(Ship s: player.getFirstField().getShips()){
+//							Gdx.app.log("Schiff Manuell Plaziert: ", s.getName()+" Back at y:"+s.getLocation()[0].getYpos());
+//						}
 						
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();

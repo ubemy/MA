@@ -27,7 +27,8 @@ public class Spielermodus extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(), GamePreferencesActivity.class);
+//				Intent intent = new Intent(getApplicationContext(), GamePreferencesActivity.class);
+				Intent intent = new Intent(getApplicationContext(), SpielStarten.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				
 				startActivity(intent);

@@ -53,6 +53,7 @@ public class KI {
 	private boolean[] hitHistory = new boolean[NUMBER_OF_HISTORY];
 	/**True oder False ob bei den letzten 4 Angriffen ein Schiff zerstoert wurde*/
 	private boolean[] shipDestroyedHistory = new boolean[NUMBER_OF_HISTORY];
+	/**Strategie bzw. Schwierigkeitsstufe der KI*/
 	KIStrategy kiStrategy;
 	
 	/**
@@ -61,10 +62,21 @@ public class KI {
 	 * @param enemiesField Spielfeld des Gegners
 	 * @param loadedGame Boolean ob das Spiel geladen wurde
 	 */
-	public KI(Field myField, Field enemiesField, boolean test,boolean loadedGame){
+	public KI(Field myField, Field enemiesField, boolean test, boolean loadedGame, int difficultyLevel){
 		this.myField = myField;
 		this.enemiesField = enemiesField;
 		this.kiStrategy = new NormalStrategy(this);
+		
+		if(difficultyLevel == 1){
+			this.kiStrategy = new SimpleStrategy(this);
+		}
+		else if(difficultyLevel == 2){
+			this.kiStrategy = new NormalStrategy(this);
+		}
+		else if(difficultyLevel == 3){
+			this.kiStrategy = new DifficultStrategy(this);
+		}
+		
 		if(!loadedGame){//myField hat schon Schiffe
 			setShips(createShips(3, 4, 2, 1), test);
 		}
@@ -127,18 +139,6 @@ public class KI {
 			ships[l+numberOfSubmarines+numberOfCruiser+numberOfDestroyer] = new Ship("Schlachtschiff", BATTLESHIP_SIZE);
 		}
 		
-		/*Ship[] ships = new Ship[]{new Ship("Uboot", SUBMARINE_SIZE),
-				new Ship("Uboot", SUBMARINE_SIZE),
-				new Ship("Uboot", SUBMARINE_SIZE),
-				new Ship("Kreuzer", CRUISER_SIZE),
-				new Ship("Kreuzer", CRUISER_SIZE),
-				new Ship("Kreuzer", CRUISER_SIZE),
-				new Ship("Kreuzer", CRUISER_SIZE),
-				new Ship("Zerstoerer", DESTROYER_SIZE),
-				new Ship("Zerstoerer", DESTROYER_SIZE),
-				new Ship("Schlachtschiff", BATTLESHIP_SIZE)
-				};*/
-		
 		return ships;
 	}
 	
@@ -158,8 +158,8 @@ public class KI {
 	 * @return ID des Feldes, das attackiert werden soll
 	 */
 	public int attack(){
-		//return kiStrategy.attack();
-		
+		return kiStrategy.attack();
+		/*
 		Random random = new Random();
 		int nextAttackID = 0;
 		int idForContinueLastAttack = getIDForContinueLastAttack();
@@ -178,6 +178,7 @@ public class KI {
 		
 		//Ausgewaehltes FeldElement attackieren
 		return nextAttackID;
+		*/
 	}
 	
 	private boolean idHistoryContains(int id){

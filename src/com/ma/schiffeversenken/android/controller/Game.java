@@ -67,7 +67,7 @@ public class Game extends Thread {
 	 * @param secondField Spieldfeld des 2. Spielers
 	 * @param loadedGame Boolean ob das Spiel geladen wurde
 	 */
-	public Game(int gameMode, Field firstFieldPlayer, Field secondField, boolean primaryBTGame, boolean secondaryBTGame,boolean loadedGame){
+	public Game(int gameMode, Field firstFieldPlayer, Field secondField, boolean primaryBTGame, boolean secondaryBTGame, boolean loadedGame, int difficultyLevel){
 		this.gameMode = gameMode;
 		this.firstFieldPlayer = firstFieldPlayer;
 		this.secondFieldEnemy = secondField;
@@ -80,7 +80,7 @@ public class Game extends Thread {
 		if(gameMode == GAME_MODE_SINGLE_PLAYER){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
 			//Field kiField = new Field(1);
-			ki = new KI(secondField, firstFieldPlayer, false,loadedGame);
+			ki = new KI(secondField, firstFieldPlayer, false, loadedGame, difficultyLevel);
 		}
 	}
 	

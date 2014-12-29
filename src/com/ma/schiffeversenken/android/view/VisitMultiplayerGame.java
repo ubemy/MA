@@ -62,7 +62,7 @@ public class VisitMultiplayerGame extends Activity {
 			Field enemiesField = new Field(0);
 			Field myField = new Field(1);*/
 			
-			Game game = new Game(1, null, null, false, true,false);
+			Game game = new Game(1, null, null, false, true, false, 0);
 			
 			bt.connectToServer(address, VisitMultiplayerGame.this, game);
 		}

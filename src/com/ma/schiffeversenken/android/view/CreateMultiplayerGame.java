@@ -54,7 +54,7 @@ public class CreateMultiplayerGame extends Activity {
 			 * Field Klasse gibt aktuell noch Fehler
 			Field firstField = new Field(0);
 			Field secondField = new Field(1);*/
-			Game game = new Game(1, null, null, true, false,false);
+			Game game = new Game(1, null, null, true, false, false, 0);
 			
 			bt.startServer(this, game);
 		}

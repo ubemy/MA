@@ -56,7 +56,7 @@ public class Player implements Serializable {
 		secondField = new Field(1, tileSet, (TiledMapTileLayer) map.getLayers()
 				.get("0"));
 		// TODO Support moere gameModes...
-		this.game = new Game(0, firstField, secondField, false, false,false);
+		this.game = new Game(0, firstField, secondField, false, false, false, 1);
 
 		if (Gdx.files.isLocalStorageAvailable()
 				&& Gdx.files.local("preferences.bin").exists()) {
@@ -238,7 +238,7 @@ public class Player implements Serializable {
 			file = Gdx.files.local("player_gameSettings.bin");
 			tmpgameSettings = (ArrayList<Integer>) deserialize(file.readBytes());
 
-			player = new Player(tileSet, m, new Game(0, tmpfirstField, tmpsecondField,false,false,true), tmpfirstField,
+			player = new Player(tileSet, m, new Game(0, tmpfirstField, tmpsecondField, false, false, true, 1), tmpfirstField,
 					tmpsecondField, tmpgameSettings);
 		}
 		return player;

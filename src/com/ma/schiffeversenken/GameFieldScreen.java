@@ -47,7 +47,8 @@ import com.ma.schiffeversenken.android.model.Ship;
 
 public class GameFieldScreen implements Screen {
 
-	public static final String TITLE = "Schiffeversenken 1.0: ";
+	public static final String TITLE = "Schiffeversenken";
+	public static final String LOG = "gdxlog";
 
 	private TiledMap map;
 	private TiledMapTileLayer mapTileLayer;
@@ -130,6 +131,7 @@ public class GameFieldScreen implements Screen {
 	
 	@Override
 	public void show() {
+		Gdx.app.log(LOG, "Hello World");
 		// Tiled Maps,Layer und tileSet laden um diese zu nutzen
 		map = new TmxMapLoader().load("maps/map.tmx");
 		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");

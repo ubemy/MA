@@ -11,11 +11,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.ma.schiffeversenken.android.model.Player;
 
 public class MyGdxGameField extends Game {
-	private boolean bluetoothGame;
-	public MyGdxGameField(boolean bluetoothGame){
-		this.bluetoothGame = bluetoothGame;
-	}
-	
+
 	/**
 	 * create initialisiert das Grundgerüst für das Zeichnen mit OpenGL ES 2.0
 	 * es wird nur einmal ausgeführt

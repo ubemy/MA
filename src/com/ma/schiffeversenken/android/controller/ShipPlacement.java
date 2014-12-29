@@ -26,7 +26,7 @@ public class ShipPlacement {
 	/** Hinteres Schiff Segment */
 	public static final int SHIP_SEGMENT_BACK = 2;
 	/** Anzahl der Feldelement - 1 */
-	public static final int FIELD_SIZE = 100;
+	public static final int FIELD_SIZE_MINUS_ONE = 99;
 	/** Ausrichtung des Schiffs nach rechts */
 	public static final int SHIP_ORIENTATION_RIGHT = 0;
 	/** Ausrichtung des Schiffs nach oben */

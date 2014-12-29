@@ -156,7 +156,7 @@ class CameraController implements GestureListener {
 					&& (shipPlaceHelper.get(3) > 0
 							|| shipPlaceHelper.get(2) > 0
 							|| shipPlaceHelper.get(1) > 0 || shipPlaceHelper
-							.get(0) > 0)) {
+							.get(0) > 0)&&!overlayingOtherShips(unit)) {
 				System.out.println("unit Start");
 				aktivatorSchiffSetzen = true;
 				// Initialisieren der Schiffstexturen
@@ -185,6 +185,8 @@ class CameraController implements GestureListener {
 		return false;
 	}
 
+
+
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
 		// Gdx.app.log("GestureDetectorTest", "pan at " + x + ", " + y);
@@ -206,15 +208,11 @@ class CameraController implements GestureListener {
 						&& (shipPlaceHelper.get(3) > 0
 								|| shipPlaceHelper.get(2) > 0 || shipPlaceHelper
 								.get(1) > 0)
+						&&!overlayingOtherShips(unit)
 						&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
 					// Beim ersten shift werden Texturen festgelegt werden.
 					firstShift = false;
 					System.out.println("Unit Gefunden firstShift");
-
-					if(unitLocation[0].get_lNeighbor()!=null){
-						System.out.println("LEBT");
-					}else
-						System.out.println("Stirbt");
 					if (unit.equals(unitLocation[0].get_lNeighbor())) {
 						shiftDirection = 0;
 						Gdx.app.log("FirstShift", "leftShift");
@@ -338,6 +336,7 @@ class CameraController implements GestureListener {
 				if (unit != null && !firstShift
 						&& !unit.equals(unitLocation[unitLocation.length - 1])
 						&& unit.equals(shipNextUnit)
+						&& !overlayingOtherShips(unit)
 						&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
 					System.out.println("Unit Gefunden secondShift");
 					// Hinzufügen von Schiffsteil
@@ -390,30 +389,7 @@ class CameraController implements GestureListener {
 		return false;
 	}
 
-	private boolean isNextUnitinsideCorner(FieldUnit lastUnit, FieldUnit unit) {
-		
-		if (lastUnit.get_lNeighbor()!=null&&lastUnit.get_lNeighbor().get_oNeighbor() != null) {
-			if (unit.equals(lastUnit.get_lNeighbor().get_oNeighbor()))
-				return true;
-		}
-		if (lastUnit.get_lNeighbor()!=null&&lastUnit.get_lNeighbor().get_uNeighbor() != null) {
 
-			if (unit.equals(lastUnit.get_lNeighbor().get_uNeighbor()))
-				return true;
-		}
-		if (lastUnit.get_rNeighbor()!=null&&lastUnit.get_rNeighbor().get_oNeighbor() != null) {
-
-			if (unit.equals(lastUnit.get_rNeighbor().get_oNeighbor()))
-				return true;
-		}
-		if (lastUnit.get_rNeighbor()!=null&&lastUnit.get_rNeighbor().get_uNeighbor() != null) {
-
-			if (unit.equals(lastUnit.get_rNeighbor().get_uNeighbor()))
-				return true;
-		}
-		
-		return false;
-	}
 
 	@Override
 	public boolean panStop(float x, float y, int pointer, int button) {
@@ -440,6 +416,56 @@ class CameraController implements GestureListener {
 			System.out.println("Anzahl Schiffe auf Feld: "
 					+ placedShipUnits.size());
 			// TODO ende des schiffes.
+		}
+		return false;
+	}
+	
+	/**
+	 * Methode prüft ob die aktuelle Unit im Touch nicht in einer der
+	 * Ecken von der letzen Unit liegt.
+	 * @param lastUnit Die letze Unit
+	 * @param unit Die aktuelle Unit im Touch
+	 * @return boolean true oder false
+	 */
+	private boolean isNextUnitinsideCorner(FieldUnit lastUnit, FieldUnit unit) {
+		
+		if (lastUnit.get_lNeighbor()!=null&&lastUnit.get_lNeighbor().get_oNeighbor() != null) {
+			if (unit.equals(lastUnit.get_lNeighbor().get_oNeighbor()))
+				return true;
+		}
+		if (lastUnit.get_lNeighbor()!=null&&lastUnit.get_lNeighbor().get_uNeighbor() != null) {
+
+			if (unit.equals(lastUnit.get_lNeighbor().get_uNeighbor()))
+				return true;
+		}
+		if (lastUnit.get_rNeighbor()!=null&&lastUnit.get_rNeighbor().get_oNeighbor() != null) {
+
+			if (unit.equals(lastUnit.get_rNeighbor().get_oNeighbor()))
+				return true;
+		}
+		if (lastUnit.get_rNeighbor()!=null&&lastUnit.get_rNeighbor().get_uNeighbor() != null) {
+
+			if (unit.equals(lastUnit.get_rNeighbor().get_uNeighbor()))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Methode prüft ob die aktuelle Unit im Touch ein bereits
+	 * plaziertes Schiff überdeckt.
+	 * @param unit Das Aktuelle Unit im Touch
+	 * @return boolean true oder false
+	 */
+	private boolean overlayingOtherShips(FieldUnit unit) {
+		for (FieldUnit[] fieldUnits : placedShipUnits) {
+			for (FieldUnit fieldUnit : fieldUnits) {
+				if(fieldUnit.equals(unit)){
+					return true;
+				}
+			}
+			
 		}
 		return false;
 	}

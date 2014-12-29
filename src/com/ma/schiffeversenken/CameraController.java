@@ -83,10 +83,10 @@ class CameraController implements GestureListener {
 		// touch.x und touch.y mit count für anzahl der tap
 		Vector3 touch = new Vector3(x, y, 0);
 		camera.unproject(touch);
-
+		
 		// Spielverlauf
-		if (state.get(3) || state.get(3) && !game.isEnd()) {
-			// game.touchEvent(touch.x, touch.y);
+		if (state.get(2) && !game.isEnd()&&game.getGamersTurn()==0) {
+			game.touchEvent(touch.x, touch.y);
 		}
 
 		// Spieler Spielfeld Schiffe platzieren

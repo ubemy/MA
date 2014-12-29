@@ -507,18 +507,18 @@ public class Field {
 			for (int j = 0; j < 10; j++) {
 				FieldUnit lNeighbor = null, rNeighbor = null, oNeighbor = null, uNeighbor = null;
 
-				if (i > 1 && i < 10) {
+				if (i > 0 && i < 10) {
 					oNeighbor = units[i - 1][j];
 				}
-				if (i > 0 && i < 9) {
+				if (i >= 0 && i < 9) {
 					uNeighbor = units[i + 1][j];
 				}
 
-				if (j > 1 && j < 10) {
+				if (j > 0 && j < 10) {
 					lNeighbor = units[i][j - 1];
 				}
 
-				if (j > 0 && j < 9) {
+				if (j >= 0 && j < 9) {
 					rNeighbor = units[i][j + 1];
 				}
 

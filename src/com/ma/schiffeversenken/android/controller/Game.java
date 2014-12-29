@@ -283,7 +283,7 @@ public class Game extends Thread {
 	public void run() {
 		end = false;
 		boolean hitShip = false;
-		gamersTurn = (new Random()).nextInt(1);
+		gamersTurn = (new Random()).nextInt(2);
 		
 		do{
 			if(gamersTurn==0){

@@ -228,8 +228,13 @@ public class GamePreferencesActivity extends Activity implements
 				if (checkMinimumShips()) {
 					Intent intent = new Intent(GamePreferencesActivity.this,
 							AndroidLauncher.class);
-					// intent.putExtra(GamePreferences.GAME_PREFERENCES_TAG,
-					// mGamePreferences);
+					
+					if(this.bluetoothGame){
+						intent.putExtra("bluetoothGame", "true");
+					}
+					else{
+						intent.putExtra("bluetoothGame", "false");
+					}
 					startActivity(intent);
 
 				} else {

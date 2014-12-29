@@ -42,7 +42,7 @@ public class KI {
 	/**Anzahl der Feldelemente auf dem Spielfeld*/
 	public static final int FIELD_SIZE = 100;
 	/**Anzahl der moeglichen Ausrichtungen eines Schiffs*/
-	public static final int NUMBER_OF_ORIENTATIOS_MINUS_ONE = 3;
+	public static final int NUMBER_OF_ORIENTATIOS = 4;
 	/**Das Spielfeld der KI*/
 	private Field myField;
 	/**Das gegnerische Spielfeld*/
@@ -267,7 +267,7 @@ public class KI {
 			Random random = new Random();
 			int counter = 0;
 			do{
-				int randomInt = random.nextInt(NUMBER_OF_ORIENTATIOS_MINUS_ONE);
+				int randomInt = random.nextInt(NUMBER_OF_ORIENTATIOS);
 				
 				if(getEnemiesField().getElementByID(idHistory[0]).getEdge(1) != randomInt && getEnemiesField().getElementByID(idHistory[0]).getEdge(2) != randomInt){
 					if(randomInt == SHIP_ORIENTATION_ABOVE){

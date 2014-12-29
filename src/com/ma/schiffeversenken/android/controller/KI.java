@@ -105,7 +105,7 @@ public class KI {
 	 * Benoetigte Schiffe erstellen
 	 * @return Erstellt Schiffe
 	 */
-	public static Ship[] createShips(int numberOfSubmarines, int numberOfCruiser,
+	public static Ship[] createShips( int numberOfCruiser,int numberOfSubmarines,
 			int numberOfDestroyer, int numberOfBattleShips){
 		Ship[] ships = new Ship[numberOfSubmarines + numberOfCruiser + numberOfDestroyer + numberOfBattleShips];
 		
@@ -116,7 +116,7 @@ public class KI {
 		}
 		
 		for(j=0; j<numberOfCruiser; j++){
-			ships[j+numberOfSubmarines] = new Ship("Kreuzer", SUBMARINE_SIZE);
+			ships[j+numberOfSubmarines] = new Ship("Kreuzer", CRUISER_SIZE);
 		}
 		
 		for(k=0; k<numberOfDestroyer; k++){

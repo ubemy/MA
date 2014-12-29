@@ -118,6 +118,9 @@ public class GameFieldScreen implements Screen {
 
 	private InputMultiplexer inputMultiplexer;
 
+	//Einstellung wie viele Schiffe zu setzensind.
+	private ArrayList<Integer> schiffsEinstellung;
+
 	@Override
 	public void show() {
 		// Tiled Maps,Layer und tileSet laden um diese zu nutzen
@@ -157,7 +160,7 @@ public class GameFieldScreen implements Screen {
 		state.set(0, true);
 		
 		//TODO CameraController übergeben wie viele Schiffe zu setzen.
-		 ArrayList<Integer> schiffsEinstellung = new ArrayList<Integer>(4);
+		schiffsEinstellung = new ArrayList<Integer>(4);
 		 schiffsEinstellung.add(4);//0, kreuzer
 		 schiffsEinstellung.add(3);//1,Uboot
 		 schiffsEinstellung.add(2);//2,schlachtschiff
@@ -227,7 +230,10 @@ public class GameFieldScreen implements Screen {
 		buttonGenerateShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				player.getGame().getFirstFieldPlayer().generateNewShipplacement();
+				player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
+				for (int i : schiffsEinstellung) {
+					i=0;
+				}
 			}
 		});
 		
@@ -274,11 +280,24 @@ public class GameFieldScreen implements Screen {
 		buttonStart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+				if(player.getGame().getSecondFieldEnemy().isAllShipsSet()){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
+						for (int i : tmpEmptyShipList) {
+							i=0;
+						}
+						controller.setShipPlaceHelper(tmpEmptyShipList);
+						CameraController.changeStateTo(state, 2, false);
 						//TODO State wechseln und spiel starten.
 					}else{
-						player.getGame().getFirstFieldPlayer().generateNewShipplacement();
+						//Setzen der Schiffe und Starten.
+						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
+						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
+						for (int i : tmpEmptyShipList) {
+							i=0;
+						}
+						controller.setShipPlaceHelper(tmpEmptyShipList);
+						CameraController.changeStateTo(state, 2, false);
 						//TODO State wechseln und spiel starten.
 					}
 					//TODO Starte Spiel

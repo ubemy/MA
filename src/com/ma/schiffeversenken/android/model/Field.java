@@ -178,9 +178,10 @@ public class Field {
 	
 	/**
 	* Schiffe auf diesem Spielfeld neu plaziert werden.
+	 * @param schiffsEinstellung 
 	* @param ships Die Schiffe, die platziert werden
 	 */
-	public void generateNewShipplacement(){
+	public void generateNewShipplacement(ArrayList<Integer> schiffsEinstellung){
 
 		//Die Alten Schiffe von dem Feld bereinigen
 		units = new FieldUnit[10][10];
@@ -190,7 +191,7 @@ public class Field {
 		
 		//Die neuen Schiffe platzieren
 		sp = new ShipPlacement();
-		sp.placeShips(this, KI.createShips(3, 4, 2, 1), false);
+		sp.placeShips(this, KI.createShips(schiffsEinstellung.get(0), schiffsEinstellung.get(1), schiffsEinstellung.get(2), schiffsEinstellung.get(3)), false);
 		
 		
 		

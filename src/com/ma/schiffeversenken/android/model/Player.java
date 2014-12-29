@@ -71,9 +71,13 @@ public class Player implements Serializable {
 			ki=3;
 		}
 		// TODO Support moere gameModes...
+<<<<<<< HEAD
 		int gameMode = 0;
 		if(bluetoothGame) gameMode = 1;
 		this.game = new Game(gameMode, firstField, secondField, false, false, false, 1);
+=======
+		this.game = new Game(0, firstField, secondField, false, false, false, ki);
+>>>>>>> branch 'master' of https://github.com/ubemy/MA.git
 
 		if (Gdx.files.isLocalStorageAvailable()
 				&& Gdx.files.local("preferences.bin").exists()) {

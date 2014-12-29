@@ -49,7 +49,7 @@ public class Player implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public Player(TiledMapTileSet tileSet, TiledMap m, boolean bluetoothGame)
+	public Player(TiledMapTileSet tileSet, TiledMap m)
 			throws ClassNotFoundException, IOException {
 		super();
 		map = m;
@@ -57,6 +57,19 @@ public class Player implements Serializable {
 				.get("0"));
 		secondField = new Field(1, tileSet, (TiledMapTileLayer) map.getLayers()
 				.get("0"));
+		
+		//Load Preferences on Ki Difficulty
+		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
+		String kiLevel = pref.getString("Ki");
+		Gdx.app.log(GameFieldScreen.LOG, "Kilevel: "+kiLevel);
+		int ki=-1;
+		if (kiLevel.equals("Einfach")){
+			ki=1;
+		}else if (kiLevel.equals("Mittel")){
+			ki=2;
+		}else if (kiLevel.equals("Schwer")){
+			ki=3;
+		}
 		// TODO Support moere gameModes...
 		int gameMode = 0;
 		if(bluetoothGame) gameMode = 1;

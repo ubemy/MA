@@ -38,6 +38,7 @@ class CameraController implements GestureListener {
 	private TextureRegion shipMiddle;
 	private TextureRegion shipFront;
 	private FieldUnit[] unitLocation;
+	private ArrayList<FieldUnit[]> placedShipUnits;
 	private Vector3 touchOld;
 	private int shiftDirection;
 	private boolean firstShift;
@@ -59,7 +60,8 @@ class CameraController implements GestureListener {
 		this.aktivatorSchiffSetzen = false;
 		this.shiftDirection = -1;
 		this.firstShift = true;
-		this.shipPlaceHelper = aktiveSchiffsListe;
+		this.shipPlaceHelper = new ArrayList<Integer>(aktiveSchiffsListe);
+		placedShipUnits=new ArrayList<FieldUnit[]>();
 	}
 
 	@Override
@@ -384,9 +386,13 @@ class CameraController implements GestureListener {
 			aktivatorSchiffSetzen = false;
 			firstShift = true;
 			shiftDirection = -1;
-			System.out.println("DAS SCHIFF IST GESCHICHTE"+shipPlaceHelper.get(unitLocation.length-1));
 			shipPlaceHelper.set(unitLocation.length-1,shipPlaceHelper.get(unitLocation.length-1)-1);
+			unitLocation[0].get_myField().setAllShipsSet(true);
+			
+			//Hinzufügen der fertigen unitLocation
+			placedShipUnits.add(unitLocation);
 
+			System.out.println("Anzahl Schiffe auf Feld: "+placedShipUnits.size());
 			// TODO ende des schiffes.
 		}
 		return false;
@@ -667,7 +673,7 @@ class CameraController implements GestureListener {
 	}
 
 	public void setShipPlaceHelper(ArrayList<Integer> shipPlaceHelper) {
-		this.shipPlaceHelper = shipPlaceHelper;
+		this.shipPlaceHelper = new ArrayList<Integer>(shipPlaceHelper);;
 	}
 	
 	

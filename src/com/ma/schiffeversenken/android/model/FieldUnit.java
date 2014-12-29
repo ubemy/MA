@@ -42,6 +42,7 @@ public class FieldUnit{
 	private String textureName;
 	private float xpos;
 	private float ypos;
+	private Field myField;
 	private int animationtimer=0;
 	/** Dient zum Zeichnen des Schiffs*/
 	private EntityShip entityShip;
@@ -69,13 +70,14 @@ public class FieldUnit{
 	 * @param ypos
 	 *            Y-Koordinate
 	 */
-	public FieldUnit(int id, float xpos, float ypos) {
+	public FieldUnit(int id, float xpos, float ypos, Field myField) {
 		this.id = id;
 		this.occupied = false;
 		this.attacked = false;
 		this.placedShip = null;
 		this.xpos = xpos;
 		this.ypos = ypos;
+		this.myField = myField;
 	}
 
 	/**
@@ -304,6 +306,10 @@ public class FieldUnit{
 
 	public FieldUnit get_uNeighbor() {
 		return uNeighbor;
+	}
+	
+	public Field get_myField(){
+		return myField;
 	}
 
 	

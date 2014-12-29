@@ -231,9 +231,12 @@ public class GameFieldScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
-				for (int i : schiffsEinstellung) {
-					i=0;
-				}
+				ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
+				tmpEmptyShipList.add(0);
+				tmpEmptyShipList.add(0);
+				tmpEmptyShipList.add(0);
+				tmpEmptyShipList.add(0);
+				controller.setShipPlaceHelper(tmpEmptyShipList);
 			}
 		});
 		
@@ -270,8 +273,8 @@ public class GameFieldScreen implements Screen {
 		buttonClearShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-
 					player.getGame().getFirstFieldPlayer().resetField();//Spielfeld zurücksetzen
+					controller.setShipPlaceHelper(schiffsEinstellung);
 			}
 		});
 		
@@ -283,19 +286,21 @@ public class GameFieldScreen implements Screen {
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet()){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
-						for (int i : tmpEmptyShipList) {
-							i=0;
-						}
+						tmpEmptyShipList.add(0);
+						tmpEmptyShipList.add(0);
+						tmpEmptyShipList.add(0);
+						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
 						CameraController.changeStateTo(state, 2, false);
-						//TODO State wechseln und spiel starten.
+						//TODO State wechseln und spiel starten.TODO Translate
 					}else{
 						//Setzen der Schiffe und Starten.
 						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
-						for (int i : tmpEmptyShipList) {
-							i=0;
-						}
+						tmpEmptyShipList.add(0);
+						tmpEmptyShipList.add(0);
+						tmpEmptyShipList.add(0);
+						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
 						CameraController.changeStateTo(state, 2, false);
 						//TODO State wechseln und spiel starten.

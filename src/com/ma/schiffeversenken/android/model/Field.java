@@ -431,7 +431,7 @@ public class Field {
 				id++;
 				units[i][j] = new FieldUnit(id, (j + cellPosX)
 						* mapTileLayer.getTileWidth(), (i + cellPosY)
-						* mapTileLayer.getTileHeight());
+						* mapTileLayer.getTileHeight(),this);
 			}
 		}
 	}
@@ -632,6 +632,14 @@ public class Field {
 	 */
 	public boolean isAllShipsSet(){
 		return allShipsSet;
+	}
+	
+	/**
+	 * Methode setzt den Status ob Schiffe auf Feld Plaziert sind.
+	 * @param setTo true oder false
+	 */
+	public void setAllShipsSet(boolean setTo){
+		allShipsSet=setTo;
 	}
 
 	public void resetField() {

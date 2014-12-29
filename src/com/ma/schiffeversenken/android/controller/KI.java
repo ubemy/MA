@@ -58,25 +58,28 @@ KIStrategy kiStrategy;
 * @param loadedGame Boolean ob das Spiel geladen wurde
 */
 public KI(Field myField, Field enemiesField, boolean test, boolean loadedGame, int difficultyLevel){
-this.myField = myField;
-this.enemiesField = enemiesField;
-this.kiStrategy = new NormalStrategy(this);
-if(difficultyLevel == 1){
-this.kiStrategy = new SimpleStrategy(this);
-}
-else if(difficultyLevel == 2){
-this.kiStrategy = new NormalStrategy(this);
-}
-else if(difficultyLevel == 3){
-this.kiStrategy = new DifficultStrategy(this);
-//TODO Remove -1, its only to run Test on Desktop
-}else if(difficultyLevel == -1){
-this.kiStrategy = new SimpleStrategy(this);
-}
-if(!loadedGame){//myField hat schon Schiffe
-setShips(createShips(3, 4, 2, 1), test);
-}
-initHistory();
+	this.myField = myField;
+	this.enemiesField = enemiesField;
+	this.kiStrategy = new NormalStrategy(this);
+	
+	if(difficultyLevel == 1){
+		this.kiStrategy = new SimpleStrategy(this);
+	}
+	else if(difficultyLevel == 2){
+		this.kiStrategy = new NormalStrategy(this);
+	}
+	else if(difficultyLevel == 3){
+		this.kiStrategy = new DifficultStrategy(this);
+	//TODO Remove -1, its only to run Test on Desktop
+	}else if(difficultyLevel == -1){
+		this.kiStrategy = new SimpleStrategy(this);
+	}
+	
+	if(!loadedGame){//myField hat schon Schiffe
+		setShips(createShips(3, 4, 2, 1), test);
+	}
+		
+	initHistory();
 }
 /**
 * History updaten

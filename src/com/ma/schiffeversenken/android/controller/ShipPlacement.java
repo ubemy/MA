@@ -26,7 +26,7 @@ public class ShipPlacement {
 	/** Hinteres Schiff Segment */
 	public static final int SHIP_SEGMENT_BACK = 2;
 	/** Anzahl der Feldelement - 1 */
-	public static final int FIELD_SIZE_MINUS_ONE = 99;
+	public static final int FIELD_SIZE = 100;
 	/** Ausrichtung des Schiffs nach rechts */
 	public static final int SHIP_ORIENTATION_RIGHT = 0;
 	/** Ausrichtung des Schiffs nach oben */
@@ -36,7 +36,7 @@ public class ShipPlacement {
 	/** Ausrichtung des Schiffs nach unten */
 	public static final int SHIP_ORIENTATION_BELOW = 3;
 	/** Anzahl der moeglichen Ausrichtungen eines Schiffs */
-	public static final int NUMBER_OF_ORIENTATIOS_MINUS_ONE = 3;
+	public static final int NUMBER_OF_ORIENTATIOS = 4;
 	/** Anzahl der Bloecke */
 	public static final int NUMBER_OF_BLOCKS = 25;
 	/**
@@ -77,13 +77,13 @@ public class ShipPlacement {
 				do {
 					// Pruefen ob der Block schon belegt ist.
 					// Zufaellige Zahl erstellen
-					randomID = random.nextInt(FIELD_SIZE_MINUS_ONE) + 1;
+					randomID = random.nextInt(FIELD_SIZE) + 1;
 				} while (!checkBlock(randomID, ship));
 
 				do {
 					// Pruefen ob das FeldElement schon belegt ist
 					orientation = random
-							.nextInt(NUMBER_OF_ORIENTATIOS_MINUS_ONE);
+							.nextInt(NUMBER_OF_ORIENTATIOS);
 					run++;
 					ok = checkEinheit(orientation, ship, randomID, field);
 				} while (!ok && run < 4);

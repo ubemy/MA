@@ -62,8 +62,16 @@ public class Player implements Serializable {
 		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
 		String kiLevel = pref.getString("Ki");
 		Gdx.app.log(GameFieldScreen.LOG, "Kilevel: "+kiLevel);
+		int ki=-1;
+		if (kiLevel.equals("Einfach")){
+			ki=1;
+		}else if (kiLevel.equals("Mittel")){
+			ki=2;
+		}else if (kiLevel.equals("Schwer")){
+			ki=3;
+		}
 		// TODO Support moere gameModes...
-		this.game = new Game(0, firstField, secondField, false, false, false, 1);
+		this.game = new Game(0, firstField, secondField, false, false, false, ki);
 
 		if (Gdx.files.isLocalStorageAvailable()
 				&& Gdx.files.local("preferences.bin").exists()) {

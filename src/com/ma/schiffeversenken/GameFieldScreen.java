@@ -126,6 +126,7 @@ public class GameFieldScreen implements Screen {
 
 	@Override
 	public void show() {
+		Gdx.app.log(LOG, "Hello World");
 		// Tiled Maps,Layer und tileSet laden um diese zu nutzen
 		map = new TmxMapLoader().load("maps/map.tmx");
 		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");

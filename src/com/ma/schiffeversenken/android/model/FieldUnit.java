@@ -46,6 +46,8 @@ public class FieldUnit{
 	private int animationtimer=0;
 	/** Dient zum Zeichnen des Schiffs*/
 	private EntityShip entityShip;
+	/** Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten */
+	private int orientation;
 
 	/**
 	 * Erstellt ein neues FieldUnit Objekt
@@ -310,6 +312,18 @@ public class FieldUnit{
 	
 	public Field get_myField(){
 		return myField;
+	}
+
+	/**
+	 * Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten 
+	 * @param orientation Integerwert beschreibt Ausrichtung
+	 */
+	public void setShipOrientation(int orientation) {
+		 this.orientation=orientation;
+	}
+	
+	public int getShipOrientation(){
+		return orientation;
 	}
 
 	

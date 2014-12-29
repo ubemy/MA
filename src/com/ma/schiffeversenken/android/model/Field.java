@@ -5,24 +5,13 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.Json.Serializable;
-import com.badlogic.gdx.utils.JsonValue;
 import com.ma.schiffeversenken.EntityShip;
-import com.ma.schiffeversenken.GameFieldScreen;
-import com.ma.schiffeversenken.MyGdxGameField;
 import com.ma.schiffeversenken.android.controller.KI;
 import com.ma.schiffeversenken.android.controller.ShipPlacement;
 
@@ -71,8 +60,8 @@ public class Field {
 	private Iterator<EntityShip> tileIterator;
 	private TreeMap<String, TextureRegion> shipTextures;
 	private TreeMap<String, TiledMapTile> shipTiles;
-	private int animationtimerMax=10;
-
+	private int animationtimerMax = 10;
+	private boolean allShipsSetManual;
 
 	/**
 	 * Erstellt ein Field Objekt
@@ -110,6 +99,8 @@ public class Field {
 			this.typ = typ;
 			this.mapTileLayer = mtl;
 			this.size = mtl.getTileHeight();
+			this.allShipsSetManual = false;
+			this.allShipsSet = false;
 			drawShips = new ArrayList<EntityShip>();
 			getShipTileSetTextures(shipTextures);
 			create();
@@ -161,43 +152,60 @@ public class Field {
 						tile.getTextureRegion());
 			}
 		}
-		
+
 		this.shipTiles = new TreeMap<String, TiledMapTile>();
 		iter = st.iterator();
 		while (iter.hasNext()) {
 			tile = iter.next();
 			// Wenn wir ein Tile mit propertie name haben
 			if (tile.getProperties().get("name") != null) {
-				shipTiles.put(tile.getProperties().get("name").toString(),
-						tile);
+				shipTiles
+						.put(tile.getProperties().get("name").toString(), tile);
 			}
 		}
-		
+
 	}
 
-	
 	/**
-	* Schiffe auf diesem Spielfeld neu plaziert werden.
-	 * @param schiffsEinstellung 
-	* @param ships Die Schiffe, die platziert werden
+	 * Methode generiert Schiffe und plaziert diese auf dem SpielFeld.
+	 * 
+	 * @param schiffsEinstellung
+	 * @param ships
+	 *            Die Schiffe, die platziert werden
 	 */
-	public void generateNewShipplacement(ArrayList<Integer> schiffsEinstellung){
+	public void generateNewShipplacement(ArrayList<Integer> schiffsEinstellung) {
 
-		//Die Alten Schiffe von dem Feld bereinigen
+		// Die Alten Schiffe von dem Feld bereinigen
 		units = new FieldUnit[10][10];
 		create();
 		createNeighbors();
 		createKante();
-		
-		//Die neuen Schiffe platzieren
+
+		// Die neuen Schiffe platzieren
 		sp = new ShipPlacement();
-		sp.placeShips(this, KI.createShips(schiffsEinstellung.get(0), schiffsEinstellung.get(1), schiffsEinstellung.get(2), schiffsEinstellung.get(3)), false);
-		
-		
-		
+		sp.placeShips(this, KI.createShips(schiffsEinstellung.get(0),
+				schiffsEinstellung.get(1), schiffsEinstellung.get(2),
+				schiffsEinstellung.get(3)), false);
+		allShipsSetManual = false;
+
 	}
-	
-	
+
+	/**
+	 * Methode setzt die Schiffe Manuell und plaziert diese auf dem SpielFeld.
+	 * 
+	 * @param placedShipUnits
+	 *            Manuell gesetzen Schiffe aus dem CameraController
+	 */
+	public void setManualNewShipplacement(ArrayList<FieldUnit[]> placedShipUnits) {
+
+		
+		// Die neuen Schiffe platzieren
+		sp = new ShipPlacement();
+		sp.placeShipsManual(this,placedShipUnits);
+		allShipsSetManual = true;
+
+	}
+
 	/**
 	 * Setzt die platzierten Schiffe nach Erstellung.
 	 * 
@@ -302,12 +310,13 @@ public class Field {
 					}
 					// Hinzufügen von Schiffsteil
 					EntityShip tmpShip = new EntityShip(
-							shipTextures.get(textureName),shipTextures.get(textureName+"a"), new Vector2(
+							shipTextures.get(textureName),
+							shipTextures.get(textureName + "a"), new Vector2(
 									unit.getXpos(), unit.getYpos()),
 							new Vector2(size, size), mapTileLayer);
 					unit.setEntityShipDrawUnit(tmpShip);
-					
-					//TODO Deprecated
+
+					// TODO Deprecated
 					drawShips.add(tmpShip);
 				}
 			} else {// Kleines Schiff
@@ -342,18 +351,44 @@ public class Field {
 				}
 				// Hinzufügen von Schiffsteil
 				EntityShip tmpShip = new EntityShip(
-						shipTextures.get(textureName),shipTextures.get(textureName+"a"), new Vector2(
+						shipTextures.get(textureName),
+						shipTextures.get(textureName + "a"), new Vector2(
 								unit.getXpos(), unit.getYpos()), new Vector2(
 								size, size), mapTileLayer);
 				unit.setEntityShipDrawUnit(tmpShip);
-				
-				//TODO Deprecated
+
+				// TODO Deprecated
 				drawShips.add(tmpShip);
 			}
 		}
 
 		allShipsSet = true;
-		System.out.println("Schiffe Plaziert!");
+	}
+	
+	/**
+	 * Setzt die platzierten Schiffe nach manueller Erstellung.
+	 * 
+	 * @param ships
+	 *            Schiffe, die zu diesem Spielfeld zugeordnet werden sollen
+	 */
+	public void setShipsManual(Ship[] ships) {
+		this.placedShips = ships;
+		allShipsSet = true;
+
+		//TODO Ab hier Deprecated
+		for (Ship ship : ships) {
+			if (ship.getSize() > 1) {
+				for (FieldUnit unit : ship.location) {		
+					// TODO Deprecated
+					// Hinzufügen von Schiffsteil
+					drawShips.add(unit.getEntityShipDrawUnit());
+				}
+			} else {// Kleines Schiff
+				// TODO Deprecated
+				FieldUnit unit = ship.location[0];
+				drawShips.add(unit.getEntityShipDrawUnit());
+			}
+		}
 	}
 
 	/**
@@ -393,25 +428,32 @@ public class Field {
 
 	/**
 	 * Methode Findet anhand der Weltkoordinaten das entsprechende FeldElement
-	 * @param xPos X Weltkoordinate
-	 * @param yPos Y Weltkoordinate
+	 * 
+	 * @param xPos
+	 *            X Weltkoordinate
+	 * @param yPos
+	 *            Y Weltkoordinate
 	 * @return FieldUnit Das gefundene Feldelement oder null
 	 */
 	public FieldUnit getElementByXPosYPos(float xPos, float yPos) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-//				Gdx.app.log("getElementByXPosYPos", " x:"+xPos+" y:"+yPos);
-				if ((units[i][j].getXpos() <= xPos && xPos < units[i][j].getXpos()+size)
-						&& (units[i][j].getYpos() <= yPos && yPos < units[i][j].getYpos()+size)){
-					
-//					Gdx.app.log("getElementByXPosYPos", "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
+				// Gdx.app.log("getElementByXPosYPos", " x:"+xPos+" y:"+yPos);
+				if ((units[i][j].getXpos() <= xPos && xPos < units[i][j]
+						.getXpos() + size)
+						&& (units[i][j].getYpos() <= yPos && yPos < units[i][j]
+								.getYpos() + size)) {
+
+					// Gdx.app.log("getElementByXPosYPos",
+					// "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
 					return units[i][j];
-//				}else{
-//					Gdx.app.log("nichtGefunden", "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
+					// }else{
+					// Gdx.app.log("nichtGefunden",
+					// "Feldtyp:"+typ+" Unit ID:"+units[i][j].getID()+" x:"+units[i][j].getXpos()+" y:"+units[i][j].getYpos());
 				}
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -422,7 +464,7 @@ public class Field {
 	private void create() {
 		int cellPosX = 1;
 		int cellPosY = 5;
-		if (this.typ == 1) {//Weltkoordinaten sind umgekehrt PlayerFeld unten
+		if (this.typ == 1) {// Weltkoordinaten sind umgekehrt PlayerFeld unten
 			cellPosY += 10;
 		}
 		int id = 0;
@@ -431,7 +473,7 @@ public class Field {
 				id++;
 				units[i][j] = new FieldUnit(id, (j + cellPosX)
 						* mapTileLayer.getTileWidth(), (i + cellPosY)
-						* mapTileLayer.getTileHeight(),this);
+						* mapTileLayer.getTileHeight(), this);
 			}
 		}
 	}
@@ -448,7 +490,6 @@ public class Field {
 		// }
 		// }
 	}
-	
 
 	/**
 	 * Markiert, dass dieses FeldElement an einer Kante platziert ist und in
@@ -533,58 +574,85 @@ public class Field {
 	 * 
 	 * @param batch
 	 *            SpriteBatch fürs Zeichnen
-	 * @param typ Spielfeld Typ 0=Spieler, 1=Gegner
+	 * @param typ
+	 *            Spielfeld Typ 0=Spieler, 1=Gegner
 	 */
 	// @Deprecated
 	public void draw(Batch batch) {
-		//Rendern vom Spielfeld
-		if(this.typ==0){//Eigenes Spielfeld
+		// Rendern vom Spielfeld
+		if (this.typ == 0) {// Eigenes Spielfeld
 			for (int i = 0; i < 10; i++) {
 				for (int j = 0; j < 10; j++) {
-						if (units[i][j].getAttacked()){//Wenn Feld angegriffen wurde
-							if(!units[i][j].getOccupied()){//Nicht belegt, Wasserplatscher
-								if(units[i][j].getAnimationtimer()<animationtimerMax){
-									batch.draw(shipTextures.get("gunattack"),units[i][j].getXpos(), units[i][j].getYpos(), size, size);
-									units[i][j].setAnimationtimer(units[i][j].getAnimationtimer()+1);
-								}else if(units[i][j].getAnimationtimer()<animationtimerMax+animationtimerMax){//Nach animation Wasserattacke anzeigen
-									batch.draw(shipTextures.get("waterattack"),units[i][j].getXpos(), units[i][j].getYpos(), size, size);
-									units[i][j].setAnimationtimer(units[i][j].getAnimationtimer()+1);
-								}
-							}else{
-								//Schiffsteil beschädigt
-									units[i][j].getEntityShipDrawUnit().render(batch,true);
-								//Bombenanimation
-									if(units[i][j].getAnimationtimer()<animationtimerMax){
-									batch.draw(shipTextures.get("gunattack"),units[i][j].getXpos(), units[i][j].getYpos(), size, size);
-									units[i][j].setAnimationtimer(units[i][j].getAnimationtimer()+1);
-									}
-								}
-							}else{//Wenn Feld nicht angegriffen
-								//Schiffsteil vorhanden auf dem Feld
-								if(units[i][j].getOccupied()){
-									units[i][j].getEntityShipDrawUnit().render(batch, false);
-								}
+					if (units[i][j].getAttacked()) {// Wenn Feld angegriffen
+													// wurde
+						if (!units[i][j].getOccupied()) {// Nicht belegt,
+															// Wasserplatscher
+							if (units[i][j].getAnimationtimer() < animationtimerMax) {
+								batch.draw(shipTextures.get("gunattack"),
+										units[i][j].getXpos(),
+										units[i][j].getYpos(), size, size);
+								units[i][j].setAnimationtimer(units[i][j]
+										.getAnimationtimer() + 1);
+							} else if (units[i][j].getAnimationtimer() < animationtimerMax
+									+ animationtimerMax) {// Nach animation
+															// Wasserattacke
+															// anzeigen
+								batch.draw(shipTextures.get("waterattack"),
+										units[i][j].getXpos(),
+										units[i][j].getYpos(), size, size);
+								units[i][j].setAnimationtimer(units[i][j]
+										.getAnimationtimer() + 1);
 							}
-						
+						} else {
+							// Schiffsteil beschädigt
+							units[i][j].getEntityShipDrawUnit().render(batch,
+									true);
+							// Bombenanimation
+							if (units[i][j].getAnimationtimer() < animationtimerMax) {
+								batch.draw(shipTextures.get("gunattack"),
+										units[i][j].getXpos(),
+										units[i][j].getYpos(), size, size);
+								units[i][j].setAnimationtimer(units[i][j]
+										.getAnimationtimer() + 1);
+							}
+						}
+					} else {// Wenn Feld nicht angegriffen
+							// Schiffsteil vorhanden auf dem Feld
+						if (units[i][j].getOccupied()) {
+							units[i][j].getEntityShipDrawUnit().render(batch,
+									false);
 						}
 					}
-		}else{//Gegnerisches Feld
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-					if (units[i][j].getAttacked()){//Wenn Feld attakiert wurde
-						if(!units[i][j].getOccupied()){//Nicht belegt, Wasserplatscher
-							batch.draw(shipTextures.get("waterattack"),units[i][j].getXpos(), units[i][j].getYpos(), size, size);
-						}else{
-							//Komplettes Schiff ist zerstört und wird angezeigt
-							if(units[i][j].getPlacedShip().isDestroyed()){
-								units[i][j].getEntityShipDrawUnit().render(batch,true);
-							//Schiff nicht komplett zerstört
-							}else if(!units[i][j].getPlacedShip().isDestroyed()){
-								if(units[i][j].getAnimationtimer()<animationtimerMax){
-									batch.draw(shipTextures.get("gunattack"),units[i][j].getXpos(), units[i][j].getYpos(), size, size);
-									units[i][j].setAnimationtimer(units[i][j].getAnimationtimer()+1);
-								}else{//Nach animation Wasserattacke anzeigen
-									batch.draw(shipTextures.get("waterattack"),units[i][j].getXpos(), units[i][j].getYpos(), size, size);
+
+				}
+			}
+		} else {// Gegnerisches Feld
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
+					if (units[i][j].getAttacked()) {// Wenn Feld attakiert wurde
+						if (!units[i][j].getOccupied()) {// Nicht belegt,
+															// Wasserplatscher
+							batch.draw(shipTextures.get("waterattack"),
+									units[i][j].getXpos(),
+									units[i][j].getYpos(), size, size);
+						} else {
+							// Komplettes Schiff ist zerstört und wird angezeigt
+							if (units[i][j].getPlacedShip().isDestroyed()) {
+								units[i][j].getEntityShipDrawUnit().render(
+										batch, true);
+								// Schiff nicht komplett zerstört
+							} else if (!units[i][j].getPlacedShip()
+									.isDestroyed()) {
+								if (units[i][j].getAnimationtimer() < animationtimerMax) {
+									batch.draw(shipTextures.get("gunattack"),
+											units[i][j].getXpos(),
+											units[i][j].getYpos(), size, size);
+									units[i][j].setAnimationtimer(units[i][j]
+											.getAnimationtimer() + 1);
+								} else {// Nach animation Wasserattacke anzeigen
+									batch.draw(shipTextures.get("waterattack"),
+											units[i][j].getXpos(),
+											units[i][j].getYpos(), size, size);
 								}
 							}
 						}
@@ -592,15 +660,15 @@ public class Field {
 				}
 			}
 		}
-	
-//		// Rendern aller Schiffe
-//		tileIterator = drawShips.iterator();
-//		EntityShip curShip;
-//		while (tileIterator.hasNext()) {
-//			curShip = tileIterator.next();
-//			curShip.render(batch);
-//
-//		}
+
+		// // Rendern aller Schiffe
+		// tileIterator = drawShips.iterator();
+		// EntityShip curShip;
+		// while (tileIterator.hasNext()) {
+		// curShip = tileIterator.next();
+		// curShip.render(batch);
+		//
+		// }
 
 	}
 
@@ -628,24 +696,27 @@ public class Field {
 
 	/**
 	 * Methode gibt den Status zurück ob Schiffe auf Feld Plaziert sind.
+	 * 
 	 * @return boolean true oder false
 	 */
-	public boolean isAllShipsSet(){
+	public boolean isAllShipsSet() {
 		return allShipsSet;
 	}
-	
+
 	/**
 	 * Methode setzt den Status ob Schiffe auf Feld Plaziert sind.
-	 * @param setTo true oder false
+	 * 
+	 * @param setTo
+	 *            true oder false
 	 */
-	public void setAllShipsSet(boolean setTo){
-		allShipsSet=setTo;
+	public void setAllShipsSet(boolean setTo) {
+		allShipsSet = setTo;
 	}
 
 	public void resetField() {
 		try {
 			drawShips = new ArrayList<EntityShip>();
-			allShipsSet=false;
+			allShipsSet = false;
 			create();
 			createNeighbors();
 			createKante();
@@ -657,13 +728,23 @@ public class Field {
 	public TreeMap<String, TextureRegion> getShipTextures() {
 		return shipTextures;
 	}
+
 	public TreeMap<String, TiledMapTile> getShipTiles() {
 		return shipTiles;
 	}
-	
 
 	public TiledMapTileLayer getMapTileLayer() {
 		return mapTileLayer;
 	}
-	
+
+	public boolean getAllShipsSetManual() {
+		return allShipsSetManual;
+
+	}
+
+	public void setAllShipsSetManual(boolean b) {
+		allShipsSetManual = b;
+
+	}
+
 }

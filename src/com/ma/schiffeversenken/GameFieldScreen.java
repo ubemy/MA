@@ -40,8 +40,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.model.GamePreferences;
 import com.ma.schiffeversenken.android.model.Player;
+import com.ma.schiffeversenken.android.model.Ship;
 
 public class GameFieldScreen implements Screen {
 
@@ -285,14 +287,29 @@ public class GameFieldScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet()){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+						//Setzen der Schiffe und Starten.
+						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
+						
 						CameraController.changeStateTo(state, 2, false);
-						//TODO State wechseln und spiel starten.TODO Translate
+						
+						//TODO DEBUGGEN
+						for(Ship s: player.getFirstField().getShips()){
+							Gdx.app.log("Schiff Manuell Plaziert: ", s.getName()+" Back at y:"+s.getLocation()[0].getYpos());
+						}
+						
+//						try {
+//							//TODO Optimieren für BLuetooth
+//							player.getGame().start();
+//						} catch (InterruptedException e) {
+//							Gdx.app.log("player.getGame().start();", "InterruptedException, cant Start Thread");
+//							e.printStackTrace();
+//						}
 					}else{
 						//Setzen der Schiffe und Starten.
 						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
@@ -303,9 +320,15 @@ public class GameFieldScreen implements Screen {
 						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
 						CameraController.changeStateTo(state, 2, false);
-						//TODO State wechseln und spiel starten.
+						
+						try {
+							//TODO Optimieren für BLuetooth
+							player.getGame().start();
+						} catch (InterruptedException e) {
+							Gdx.app.log("player.getGame().start();", "InterruptedException, cant Start Thread");
+							e.printStackTrace();
+						}
 					}
-					//TODO Starte Spiel
 				}
 
 			}

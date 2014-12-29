@@ -35,6 +35,24 @@ public class Ship{
 	}
 	
 	/**
+	 * Erstellt ein Ship Objekt mit Location
+	 * 
+	 * @param name
+	 *            Name des Schiffs
+	 * @param size
+	 *            Groesse des Schiffs
+	 * @param location
+	 *            Gebiet der Schiffsteile
+	 */
+	public Ship(String name, int size, FieldUnit[] location) {
+		this.name = name;
+		this.size = size;
+		this.destroyed = false;
+		this.location = location;
+
+	}
+	
+	/**
 	 * Gibt die Orientierung des Schiffs zurueck Ausrichtung des Schiffs:
 	 * 0=rechts, 1=oben, 2=links, 3=unten
 	 * 
@@ -81,6 +99,20 @@ public class Ship{
 		return name;
 	}
 
+	/**
+	 * Setzt den Standort des Schiffs
+	 * 
+	 * @param location
+	 *            Das FeldElement[] Gebiet
+	 * @param orientation
+	 *            Die Orientierung des Schiffs (nach oben/unten/rechts/links
+	 *            gerichtet)
+	 */
+	public void setStandortManual(FieldUnit[] location, int orientation) {
+		this.location = location;
+		this.orientation = orientation;
+	}
+	
 	/**
 	 * Setzt den Standort des Schiffs
 	 * 

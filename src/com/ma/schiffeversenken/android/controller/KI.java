@@ -107,7 +107,7 @@ public class KI {
 	 */
 	public static Ship[] createShips( int numberOfCruiser,int numberOfSubmarines,
 			int numberOfDestroyer, int numberOfBattleShips){
-		Ship[] ships = new Ship[numberOfSubmarines + numberOfCruiser + numberOfDestroyer + numberOfBattleShips];
+		Ship[] ships = new Ship[numberOfCruiser + numberOfSubmarines + numberOfDestroyer + numberOfBattleShips];
 		
 		int i,j,k,l;
 		

@@ -145,8 +145,8 @@ class CameraController implements GestureListener {
 		Vector3 touch = new Vector3(x, y, 0);
 		camera.unproject(touch);
 		touchOld = new Vector3(touch.x, touch.y, 0);
-		System.out.println("Start Bildschirm zu Weltkoordinaten: " + "X: "
-				+ touch.x + " Y: " + touch.y);
+//		System.out.println("Start Bildschirm zu Weltkoordinaten: " + "X: "
+//				+ touch.x + " Y: " + touch.y);
 
 		// Spieler Spielfeld Schiffe platzieren
 		if (state.get(3)) {
@@ -157,7 +157,7 @@ class CameraController implements GestureListener {
 							|| shipPlaceHelper.get(2) > 0
 							|| shipPlaceHelper.get(1) > 0 || shipPlaceHelper
 							.get(0) > 0)&&!overlayingOtherShips(unit)) {
-				System.out.println("unit Start");
+//				System.out.println("unit Start");
 				aktivatorSchiffSetzen = true;
 				// Initialisieren der Schiffstexturen
 				shipBack = game.getFirstFieldPlayer().getShipTextures()
@@ -212,10 +212,10 @@ class CameraController implements GestureListener {
 						&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
 					// Beim ersten shift werden Texturen festgelegt werden.
 					firstShift = false;
-					System.out.println("Unit Gefunden firstShift");
+//					System.out.println("Unit Gefunden firstShift");
 					if (unit.equals(unitLocation[0].get_lNeighbor())) {
 						shiftDirection = 0;
-						Gdx.app.log("FirstShift", "leftShift");
+//						Gdx.app.log("FirstShift", "leftShift");
 						// Texturen setzen
 						shipBack = game.getFirstFieldPlayer()
 								.getShipTextures().get("lhb");
@@ -238,7 +238,7 @@ class CameraController implements GestureListener {
 					}
 					if (unit.equals(unitLocation[0].get_rNeighbor())) {
 						shiftDirection = 1;
-						Gdx.app.log("FirstShift", "rightShift");
+//						Gdx.app.log("FirstShift", "rightShift");
 						shipBack = game.getFirstFieldPlayer()
 								.getShipTextures().get("rhb");
 						shipBackA = game
@@ -260,7 +260,7 @@ class CameraController implements GestureListener {
 					}
 					if (unit.equals(unitLocation[0].get_uNeighbor())) {
 						shiftDirection = 2;
-						Gdx.app.log("FirstShift", "upShift");
+//						Gdx.app.log("FirstShift", "upShift");
 						shipBack = game.getFirstFieldPlayer()
 								.getShipTextures().get("uvb");
 						shipBackA = game
@@ -283,7 +283,7 @@ class CameraController implements GestureListener {
 
 					if (unit.equals(shipLastUnit.get_oNeighbor())) {
 						shiftDirection = 3;
-						Gdx.app.log("FirstShift", "downShift");
+//						Gdx.app.log("FirstShift", "downShift");
 						// TODO Texturen nach unten hinzufügen
 						shipBack = game.getFirstFieldPlayer()
 								.getShipTextures().get("uvf");
@@ -338,7 +338,7 @@ class CameraController implements GestureListener {
 						&& unit.equals(shipNextUnit)
 						&& !overlayingOtherShips(unit)
 						&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
-					System.out.println("Unit Gefunden secondShift");
+//					System.out.println("Unit Gefunden secondShift");
 					// Hinzufügen von Schiffsteil
 					EntityShip tmpShip = new EntityShip(shipFront, shipFrontA,
 							new Vector2(unit.getXpos(), unit.getYpos()),
@@ -398,8 +398,8 @@ class CameraController implements GestureListener {
 		// Bildschirmkoordinaten transformieren zu Weldkoordinaten
 		Vector3 touch = new Vector3(x, y, 0);
 		camera.unproject(touch);
-		System.out.println("Stop Bildschirm zu Weltkoordinaten: " + "X: "
-				+ touch.x + " Y: " + touch.y);
+//		System.out.println("Stop Bildschirm zu Weltkoordinaten: " + "X: "
+//				+ touch.x + " Y: " + touch.y);
 
 		if (aktivatorSchiffSetzen) {
 			// boolean zurücksetzen
@@ -409,12 +409,34 @@ class CameraController implements GestureListener {
 			shipPlaceHelper.set(unitLocation.length - 1,
 					shipPlaceHelper.get(unitLocation.length - 1) - 1);
 			unitLocation[0].get_myField().setAllShipsSet(true);
-
+			unitLocation[0].get_myField().setAllShipsSetManual(true);
+			/* Klasse Ship: Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten */
+			/* Hilfsfunktion ShipDirection 0=links 1=recht 2=oben 3=unten*/
+			int orientation=1;
+			switch (shiftDirection) {
+			case 0:// links
+				orientation=2;
+				break;
+			case 1:// rechts
+				orientation=0;
+				break;
+			case 2:// oben
+				orientation=1;
+				break;
+			case 3:// unten
+				orientation=3;
+				break;
+			default:
+				break;
+			}
+			
+			unitLocation[0].setShipOrientation(orientation);
+			
 			// Hinzufügen der fertigen unitLocation
 			placedShipUnits.add(unitLocation);
 
-			System.out.println("Anzahl Schiffe auf Feld: "
-					+ placedShipUnits.size());
+//			System.out.println("Anzahl Schiffe auf Feld: "
+//					+ placedShipUnits.size());
 			// TODO ende des schiffes.
 		}
 		return false;
@@ -528,8 +550,6 @@ class CameraController implements GestureListener {
 			camera.position.x = layerX;
 			// State Wechsel
 			changeStateTo(state, 1, false);
-			Gdx.app.log("Schiffeversenken 1.0: ",
-					"Wechsel zu FullView Ausführen");
 		}
 		// 1=FullView
 		if (state.get(1)) {
@@ -747,6 +767,10 @@ class CameraController implements GestureListener {
 	public void setShipPlaceHelper(ArrayList<Integer> shipPlaceHelper) {
 		this.shipPlaceHelper = new ArrayList<Integer>(shipPlaceHelper);
 		;
+	}
+
+	public ArrayList<FieldUnit[]> getPlacedShipUnits() {
+		return placedShipUnits;
 	}
 
 }

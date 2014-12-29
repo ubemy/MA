@@ -297,6 +297,7 @@ public class GameFieldScreen implements Screen {
 						controller.setShipPlaceHelper(tmpEmptyShipList);
 						
 						CameraController.changeStateTo(state, 2, false);
+
 						
 						//TODO DEBUGGEN
 						for(Ship s: player.getFirstField().getShips()){
@@ -315,6 +316,7 @@ public class GameFieldScreen implements Screen {
 						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
 						CameraController.changeStateTo(state, 2, false);
+	
 						
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();
@@ -445,24 +447,26 @@ public class GameFieldScreen implements Screen {
 		// TODO Animate Fireing some canons and ships getting into position.
 		player.animatedTiles();
 
-		if (state.get(5) || state.get(6) || state.get(7)) {
+		if (state.get(2)||state.get(5) || state.get(6) || state.get(7)) {
 			// render Objects
 			// Wie renderer.setView(camera.combined) Transformieren der Shapes
 			// auf
 			// die cam position/koordinaten.
 			sr.setProjectionMatrix(camera.combined);
 			sr.setColor(Color.GRAY);
-			String objektebene = "GameField";
+			String objektebene = "";
 			if (state.get(5)) {
 				objektebene = "GameField";
 			}
 			if (state.get(6)) {
 				objektebene = "GameFieldPlayer";
 			}
-			if (state.get(7)) {
+			if (state.get(7)||state.get(2)&&player.getGame().getGamersTurn()==0) {
 				objektebene = "GameFieldEnemy";
 			}
 
+			if(!objektebene.equals("")){
+				
 			// RectangleMapObject, CircleMapObject,
 			// PolylineMapObject, EllipseMapObject, PolygonMapObject.
 			for (MapObject object : map.getLayers().get(objektebene)
@@ -472,6 +476,7 @@ public class GameFieldScreen implements Screen {
 					sr.begin(ShapeType.Line);
 					sr.rect(rt.x, rt.y, rt.width, rt.height);
 					sr.end();
+				}
 				}
 			}
 		}

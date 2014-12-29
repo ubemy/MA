@@ -8,9 +8,11 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -55,6 +57,11 @@ public class Player implements Serializable {
 				.get("0"));
 		secondField = new Field(1, tileSet, (TiledMapTileLayer) map.getLayers()
 				.get("0"));
+		
+		//Load Preferences on Ki Difficulty
+		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
+		String kiLevel = pref.getString("Ki");
+		Gdx.app.log(GameFieldScreen.LOG, "Kilevel: "+kiLevel);
 		// TODO Support moere gameModes...
 		this.game = new Game(0, firstField, secondField, false, false, false, 1);
 

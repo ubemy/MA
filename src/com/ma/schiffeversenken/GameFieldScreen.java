@@ -47,7 +47,8 @@ import com.ma.schiffeversenken.android.model.Ship;
 
 public class GameFieldScreen implements Screen {
 
-	public static final String TITLE = "Schiffeversenken 1.0: ";
+	public static final String TITLE = "Schiffeversenken";
+	public static final String LOG = "gdxlog";
 
 	private TiledMap map;
 	private TiledMapTileLayer mapTileLayer;
@@ -298,9 +299,9 @@ public class GameFieldScreen implements Screen {
 
 						
 						//TODO DEBUGGEN
-						for(Ship s: player.getFirstField().getShips()){
-							Gdx.app.log("Schiff Manuell Plaziert: ", s.getName()+" Back at y:"+s.getLocation()[0].getYpos());
-						}
+//						for(Ship s: player.getFirstField().getShips()){
+//							Gdx.app.log("Schiff Manuell Plaziert: ", s.getName()+" Back at y:"+s.getLocation()[0].getYpos());
+//						}
 						
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();

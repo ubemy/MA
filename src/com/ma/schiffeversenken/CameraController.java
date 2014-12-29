@@ -164,6 +164,18 @@ class CameraController implements GestureListener {
 						.get("uvk");
 				shipBackA = game.getFirstFieldPlayer().getShipTextures()
 						.get("uvka");
+				shipMiddle =game
+						.getFirstFieldPlayer().getShipTextures()
+						.get("uvk");
+				shipMiddleA = game
+						.getFirstFieldPlayer().getShipTextures()
+						.get("uvka");
+				shipFront =game
+						.getFirstFieldPlayer().getShipTextures()
+						.get("uvk");
+				shipFrontA = game
+						.getFirstFieldPlayer().getShipTextures()
+						.get("uvka");
 				// Hinzufügen von Schiffsteil
 				EntityShip tmpShip = new EntityShip(
 						shipBack,

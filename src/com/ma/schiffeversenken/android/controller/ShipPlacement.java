@@ -174,22 +174,21 @@ public class ShipPlacement {
 			int schiffSize = u.length;
 			
 			//TODO Prüfen ob es so passt mit Maik absprechen wie es geplant wurde
-			//Rausgenommen markElements unnötig wegen Manuellem Platzieren.
-//			if (schiffSize > 1) {
-//				if (ships[i].getOrientation() == SHIP_ORIENTATION_RIGHT) {
-//					markElements(1, schiffSize, u[0].getID(), field, ships[i],
-//							ships[i].getOrientation());
-//				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_ABOVE) {
-//					markElements(-10, schiffSize, u[0].getID(), field, ships[i],
-//							ships[i].getOrientation());
-//				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_LEFT) {
-//					markElements(-1, schiffSize, u[0].getID(), field, ships[i],
-//							ships[i].getOrientation());
-//				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_BELOW) {
-//					markElements(10, schiffSize, u[0].getID(), field, ships[i],
-//							ships[i].getOrientation());
-//				}
-//			}
+			if (schiffSize > 1) {
+				if (ships[i].getOrientation() == SHIP_ORIENTATION_RIGHT) {
+					markElements(1, schiffSize, u[0].getID(), field, ships[i],
+							ships[i].getOrientation());
+				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_ABOVE) {
+					markElements(-10, schiffSize, u[0].getID(), field, ships[i],
+							ships[i].getOrientation());
+				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_LEFT) {
+					markElements(-1, schiffSize, u[0].getID(), field, ships[i],
+							ships[i].getOrientation());
+				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_BELOW) {
+					markElements(10, schiffSize, u[0].getID(), field, ships[i],
+							ships[i].getOrientation());
+				}
+			}
 			
 			
 		}

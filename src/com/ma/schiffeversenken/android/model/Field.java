@@ -619,6 +619,7 @@ public class Field {
 					} else {// Wenn Feld nicht angegriffen
 							// Schiffsteil vorhanden auf dem Feld
 						if (units[i][j].getOccupied()) {
+							//TODO Fix Nullpointer when drawing
 							units[i][j].getEntityShipDrawUnit().render(batch,
 									false);
 						}

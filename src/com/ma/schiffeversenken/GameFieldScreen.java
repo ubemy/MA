@@ -130,9 +130,6 @@ public class GameFieldScreen implements Screen {
 		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");
 		tileSetShips = map.getTileSets().getTileSet("ships");
 
-		// Get Texture Pack TODO Texturen aus TiledMap holen.
-		atlas = new TextureAtlas(Gdx.files.internal("graphics//textures.atlas"));
-
 		// graphics High and width
 		h = Gdx.graphics.getHeight();
 		w = Gdx.graphics.getWidth();
@@ -297,6 +294,7 @@ public class GameFieldScreen implements Screen {
 						controller.setShipPlaceHelper(tmpEmptyShipList);
 						
 						CameraController.changeStateTo(state, 2, false);
+						Gdx.input.setInputProcessor(gestureDetector);
 
 						
 						//TODO DEBUGGEN
@@ -344,7 +342,7 @@ public class GameFieldScreen implements Screen {
 		// table.debug();//Rote lienien zum Debuggen
 		stage.addActor(table);
 		
-		//Setzen von InputListenern
+		//Setzen von mehreren InputListenern
 		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(gestureDetector);
 		inputMultiplexer.addProcessor(stage);
@@ -400,7 +398,7 @@ public class GameFieldScreen implements Screen {
 		renderer.render();
 
 		// Animation bg
-		renderer.render(ships);
+//		renderer.render(ships);
 
 		// Draw Stuff
 		// Randgebiete
@@ -441,11 +439,11 @@ public class GameFieldScreen implements Screen {
 		player.draw(batch);
 		batch.end();
 
-		// Animation bg
-		renderer.render(attack);
+		// Animation bg Attack layer
+//		renderer.render(attack);
 
 		// TODO Animate Fireing some canons and ships getting into position.
-		player.animatedTiles();
+//		player.animatedTiles();
 
 		if (state.get(2)||state.get(5) || state.get(6) || state.get(7)) {
 			// render Objects

@@ -41,7 +41,7 @@ public class Player implements Serializable {
 	private static ArrayList<Integer> gameSettings;
 
 	/**
-	 * TODO
+	 * TODO Make Animation
 	 * @param tileSet
 	 * @param m
 	 * @throws ClassNotFoundException

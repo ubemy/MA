@@ -77,7 +77,7 @@ public class ShipPlacement {
 				do {
 					// Pruefen ob der Block schon belegt ist.
 					// Zufaellige Zahl erstellen
-					randomID = random.nextInt(FIELD_SIZE) + 1;
+					randomID = random.nextInt(FIELD_SIZE_MINUS_ONE) + 1;
 				} while (!checkBlock(randomID, ship));
 
 				do {

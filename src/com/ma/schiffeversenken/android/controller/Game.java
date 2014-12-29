@@ -1,5 +1,7 @@
 package com.ma.schiffeversenken.android.controller;
 
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Json;
@@ -71,7 +73,6 @@ public class Game extends Thread {
 		this.secondFieldEnemy = secondField;
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
-		this.gamersTurn = 0;
 		this.end=true;
 		
 		resetActionVariables();
@@ -146,74 +147,6 @@ public class Game extends Thread {
 		
 		fe.getPlacedShip().setDestroyed(destroyed);
 	}
-	
-	/**
-	 * Startet das Game. Wird aufgerufen, wenn das Game Thread gestartet wird
-	 */
-	/*
-	public void start(){
-		end = false;
-		boolean hitShip = false;
-		
-		do{
-			if(gamersTurn==0){
-				//Auf Eingabe von Benutzer warten
-				do{
-					while(!firstGamerAction){
-						try {
-							Thread.sleep(FIVEHUNDRED_MS);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					hitShip = gamerAction(firstGamerAttackID, gamersTurn);
-				}while(hitShip);
-				gamersTurn++;
-			}
-			else{
-				if(gameMode == GAME_MODE_SINGLE_PLAYER){
-					//Wenn GameMode == 0 == Einzelspieler, dann KI attackieren lassen
-					do{
-						/*
-						 * Die Schleife wird solange durchlaufen,
-						 * bis der Spieler ins Leere trifft
-						 *//*
-						try {
-							Thread.sleep(THOUSAND_MS);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						hitShip = gamerAction(ki.attack(), gamersTurn);
-					}while(hitShip);
-				}
-				else{
-					//Auf Eingabe von Benutzer warten
-					do{
-						/*
-						 * Die Schleife wird solange durchlaufen,
-						 * bis der Spieler ins Leere trifft
-						 *//*
-						while(!secondGamerAction){
-							try {
-								Thread.sleep(FIVEHUNDRED_MS);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						hitShip = gamerAction(secondGamerAttackID, gamersTurn);
-					}while(hitShip);
-				}
-				gamersTurn = 0;
-			}
-			
-			if(hasSomebodyWon() != 0){
-				end = true;
-			}
-		}while(!end);
-	}*/
 	
 	public void setReturnValues(boolean returnAttackHit, boolean returnShipDestroyed){
 		this.returnAttackHit = returnAttackHit;
@@ -344,12 +277,13 @@ public class Game extends Thread {
 	}
 
 	/**
-	 * Startet das Game Thread
+	 * Startet das Game. Wird aufgerufen, wenn das Game Thread gestartet wird
 	 */
 	@Override
 	public void run() {
 		end = false;
 		boolean hitShip = false;
+		gamersTurn = (new Random()).nextInt(1);
 		
 		do{
 			if(gamersTurn==0){

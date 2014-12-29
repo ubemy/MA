@@ -435,4 +435,13 @@ public class Game extends Thread {
 		return end;
 	}
 	
+	/**
+	 * Methode gibt zurück ob Spieler am Zug ist
+	 * 
+	 * @return int 0 wenn Spieler Am Zug
+	 */
+	public int getGamersTurn(){
+		return gamersTurn;
+	}
+	
 }

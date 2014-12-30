@@ -20,6 +20,9 @@ public class AndroidLauncher extends AndroidApplication {
 		cfg.useImmersiveMode=false;
 		cfg.useWakelock=false;
 		
-		initialize(new MyGdxGameField(Boolean.parseBoolean(getIntent().getExtras().get("bluetoothGame").toString())), cfg);
+		boolean primaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("primaryBTGame").toString());
+		boolean secondaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("secondaryBTGame").toString());
+		
+		initialize(new MyGdxGameField(primaryBTGame, secondaryBTGame), cfg);
 	}
 }

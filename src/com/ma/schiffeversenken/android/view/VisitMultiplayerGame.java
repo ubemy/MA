@@ -72,7 +72,8 @@ public class VisitMultiplayerGame extends Activity {
 	public void startGame(){
 		Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.putExtra("bluetoothGame", "true");
+		intent.putExtra("primaryBTGame", "false");
+		intent.putExtra("secondaryBTGame", "true");
 		startActivity(intent);
 	}
 	

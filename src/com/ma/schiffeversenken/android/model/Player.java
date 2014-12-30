@@ -49,7 +49,7 @@ public class Player implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public Player(TiledMapTileSet tileSet, TiledMap m, boolean bluetoothGame)
+	public Player(TiledMapTileSet tileSet, TiledMap m, boolean primaryBTGame, boolean secondaryBTGame)
 			throws ClassNotFoundException, IOException {
 		super();
 		map = m;
@@ -72,8 +72,8 @@ public class Player implements Serializable {
 		}
 
 		int gameMode = 0;
-		if(bluetoothGame) gameMode = 1;
-		this.game = new Game(gameMode, firstField, secondField, false, false, false, 1);
+		if(primaryBTGame || secondaryBTGame) gameMode = 1;
+		this.game = new Game(gameMode, firstField, secondField, primaryBTGame, secondaryBTGame, false, 1);
 
 		if (Gdx.files.isLocalStorageAvailable()
 				&& Gdx.files.local("preferences.bin").exists()) {

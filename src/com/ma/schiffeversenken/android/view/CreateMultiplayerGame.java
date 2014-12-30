@@ -67,7 +67,8 @@ public class CreateMultiplayerGame extends Activity {
 	public void startGame(BluetoothConnectedThread btcThread){
 			Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-			intent.putExtra("bluetoothGame", "true");
+			intent.putExtra("primaryBTGame", "true");
+			intent.putExtra("secondaryBTGame", "false");
 			startActivity(intent);
 	}
 	

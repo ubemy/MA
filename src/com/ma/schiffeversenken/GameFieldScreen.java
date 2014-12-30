@@ -124,9 +124,10 @@ public class GameFieldScreen implements Screen {
 	//Einstellung wie viele Schiffe zu setzensind.
 	private ArrayList<Integer> schiffsEinstellung;
 
-	private boolean bluetoothGame;
-	public GameFieldScreen(boolean bluetoothGame){
-		this.bluetoothGame = bluetoothGame;
+	private boolean primaryBTGame, secondaryBTGame;
+	public GameFieldScreen(boolean primaryBTGame, boolean secondaryBTGame){
+		this.primaryBTGame = primaryBTGame;
+		this.secondaryBTGame = secondaryBTGame;
 	}
 	
 	@Override
@@ -289,8 +290,8 @@ public class GameFieldScreen implements Screen {
 		buttonStart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || bluetoothGame){
-					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || bluetoothGame){
+				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
+					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 						//Setzen der Schiffe und Starten.
 						//player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
@@ -375,7 +376,7 @@ public class GameFieldScreen implements Screen {
 			System.out
 					.println("Player does not exist. Creating new player ...");
 			try {
-				player = new Player(tileSetShips, map, bluetoothGame);
+				player = new Player(tileSetShips, map, primaryBTGame, secondaryBTGame);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

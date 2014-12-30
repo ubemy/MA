@@ -12,9 +12,10 @@ import com.ma.schiffeversenken.android.model.Player;
 
 public class MyGdxGameField extends Game {
 
-	private boolean bluetoothGame;
-	public MyGdxGameField(boolean bluetoothGame){
-		this.bluetoothGame = bluetoothGame;
+	private boolean primaryBTGame, secondaryBTGame;
+	public MyGdxGameField(boolean primaryBTGame, boolean secondaryBTGame){
+		this.primaryBTGame = primaryBTGame;
+		this.secondaryBTGame = secondaryBTGame;
 	}
 	
 	/**
@@ -24,7 +25,7 @@ public class MyGdxGameField extends Game {
 	@Override
 	public void create() {
 		//Wenn spiel erstellt wird wollen wir den Screen setzen
-		setScreen(new GameFieldScreen(bluetoothGame));
+		setScreen(new GameFieldScreen(primaryBTGame, secondaryBTGame));
 	}
 
 	@Override

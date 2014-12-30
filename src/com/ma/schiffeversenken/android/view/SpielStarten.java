@@ -71,7 +71,8 @@ public class SpielStarten extends Activity {
 					editor.apply();
 					
 					Intent intent = new Intent(SpielStarten.this, c);
-					intent.putExtra("bluetoothGame", "false");
+					intent.putExtra("primaryBTGame", "false");
+					intent.putExtra("secondaryBTGame", "false");
 					startActivity(intent);
 				}
 				catch(Exception ex){

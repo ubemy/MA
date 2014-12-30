@@ -299,7 +299,26 @@ public class GameFieldScreen implements Screen {
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 						//Setzen der Schiffe und Starten.
-						//player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
+						//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
+						if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
+						//TODO delete startMethode Überprüfen
+//						if(controller.getPlacedShipUnits()!=null){
+//							System.out.println("Ships there");
+//							for(int i=0;i<controller.getPlacedShipUnits().size();i++){
+//								
+//								for(int j=0;j<controller.getPlacedShipUnits().get(i).length;j++){
+//									System.out.println(controller.getPlacedShipUnits().get(i)[j].getEntityShipDrawUnit().toString());
+//									if(controller.getPlacedShipUnits().get(i)[j].getEntityShipDrawUnit().getShipTextureRegion()!=null)
+//										System.out.println("Textur");
+//									
+//								}
+//							}
+//						}else{
+//							System.out.println("Where are the ships gone?");
+//						}
+						//TODO ende  Methode Überprüfen
+						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
+						}
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);

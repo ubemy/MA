@@ -25,14 +25,16 @@ import com.badlogic.gdx.math.Vector2;
 	private float speed = 60 * 2, gravity = 60 * 1.8f;
 
 	TiledMapTileLayer collisionLayer;
+	private String textureName;
 
 	
-	public EntityShip(TextureRegion t,TextureRegion ta,Vector2 pos, Vector2 size, TiledMapTileLayer c) {
+	public EntityShip(String textureName,TextureRegion t,TextureRegion ta,Vector2 pos, Vector2 size, TiledMapTileLayer c) {
 		// Übergabe des Sprite, wie das Schiff aussehen soll.
 		// Übergabe des ColissionLayer
 		collisionLayer = c;
 		this.position = pos;
 		this.size = size;
+		this.textureName=textureName;
 		this.shipTextureRegion = t;
 		this.shipTextureRegionAttacked = ta;
 		this.bounds = new Rectangle(position.x, position.y, size.x, size.y);
@@ -250,12 +252,16 @@ import com.badlogic.gdx.math.Vector2;
 		return shipTextureRegion;
 	}
 
-	public void setShipTextureRegion(TextureRegion shipTextureRegion,TextureRegion shipTextureRegionAttacked) {
+	public void setShipTextureRegion(String textureName, TextureRegion shipTextureRegion,TextureRegion shipTextureRegionAttacked) {
+		this.textureName=textureName;
 		this.shipTextureRegion = shipTextureRegion;
 		this.shipTextureRegionAttacked=shipTextureRegionAttacked;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return textureName;
+	}
 	
 	
 }

@@ -197,13 +197,10 @@ public class Field {
 	 *            Manuell gesetzen Schiffe aus dem CameraController
 	 */
 	public void setManualNewShipplacement(ArrayList<FieldUnit[]> placedShipUnits) {
-
-		
 		// Die neuen Schiffe platzieren
+		allShipsSetManual = true;
 		sp = new ShipPlacement();
 		sp.placeShipsManual(this,placedShipUnits);
-		allShipsSetManual = true;
-
 	}
 
 	/**
@@ -329,7 +326,7 @@ public class Field {
 						break;
 					}
 					// Hinzufügen von Schiffsteil
-					EntityShip tmpShip = new EntityShip(
+					EntityShip tmpShip = new EntityShip(textureName,
 							shipTextures.get(textureName),
 							shipTextures.get(textureName + "a"), new Vector2(
 									unit.getXpos(), unit.getYpos()),
@@ -370,7 +367,7 @@ public class Field {
 					}
 				}
 				// Hinzufügen von Schiffsteil
-				EntityShip tmpShip = new EntityShip(
+				EntityShip tmpShip = new EntityShip(textureName,
 						shipTextures.get(textureName),
 						shipTextures.get(textureName + "a"), new Vector2(
 								unit.getXpos(), unit.getYpos()), new Vector2(
@@ -396,19 +393,19 @@ public class Field {
 		allShipsSet = true;
 
 		//TODO Ab hier Deprecated
-		for (Ship ship : ships) {
-			if (ship.getSize() > 1) {
-				for (FieldUnit unit : ship.location) {		
-					// TODO Deprecated
-					// Hinzufügen von Schiffsteil
-					drawShips.add(unit.getEntityShipDrawUnit());
-				}
-			} else {// Kleines Schiff
-				// TODO Deprecated
-				FieldUnit unit = ship.location[0];
-				drawShips.add(unit.getEntityShipDrawUnit());
-			}
-		}
+//		for (Ship ship : ships) {
+//			if (ship.getSize() > 1) {
+//				for (FieldUnit unit : ship.location) {		
+//					// TODO Deprecated
+//					// Hinzufügen von Schiffsteil
+//					drawShips.add(unit.getEntityShipDrawUnit());
+//				}
+//			} else {// Kleines Schiff
+//				// TODO Deprecated
+//				FieldUnit unit = ship.location[0];
+//				drawShips.add(unit.getEntityShipDrawUnit());
+//			}
+//		}
 	}
 
 	/**
@@ -639,9 +636,11 @@ public class Field {
 					} else {// Wenn Feld nicht angegriffen
 							// Schiffsteil vorhanden auf dem Feld
 						if (units[i][j].getOccupied()) {
-							//TODO Fix Nullpointer when drawing
+							//DrawUnit is null when there is no ship placed draw when not null.
+							if(units[i][j].getEntityShipDrawUnit()!=null){
 							units[i][j].getEntityShipDrawUnit().render(batch,
 									false);
+							}
 						}
 					}
 

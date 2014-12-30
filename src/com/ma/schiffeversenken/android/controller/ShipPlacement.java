@@ -164,7 +164,6 @@ public class ShipPlacement {
 					unit.setOccupied(true);
 				}
 				break;
-
 			default:
 				break;
 			}

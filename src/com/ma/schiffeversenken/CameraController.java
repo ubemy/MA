@@ -572,7 +572,7 @@ class CameraController implements GestureListener {
 			shipFrontA = game.getFirstFieldPlayer().getShipTextures()
 					.get("uvka");
 			// Hinzufügen von Schiffsteil
-			EntityShip tmpShip = new EntityShip(shipBack, shipBackA,
+			EntityShip tmpShip = new EntityShip("back",shipBack, shipBackA,
 					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 							GameFieldScreen.size, GameFieldScreen.size), game
 							.getFirstFieldPlayer().getMapTileLayer());
@@ -677,7 +677,7 @@ class CameraController implements GestureListener {
 			}
 
 			// Hinzufügen von Schiffsteil
-			EntityShip tmpShip = new EntityShip(shipFront, shipFrontA,
+			EntityShip tmpShip = new EntityShip("front",shipFront, shipFrontA,
 					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 							GameFieldScreen.size, GameFieldScreen.size), game
 							.getFirstFieldPlayer().getMapTileLayer());
@@ -691,7 +691,7 @@ class CameraController implements GestureListener {
 			unitLocation = tmpUnitLocation;
 
 			// Setzen der richtigen Schiffstextur für Hinten
-			unitLocation[0].getEntityShipDrawUnit().setShipTextureRegion(
+			unitLocation[0].getEntityShipDrawUnit().setShipTextureRegion("back",
 					shipBack, shipBackA);
 			shipLastUnit = unit;
 
@@ -706,7 +706,7 @@ class CameraController implements GestureListener {
 				&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
 			// System.out.println("Unit Gefunden secondShift");
 			// Hinzufügen von Schiffsteil
-			EntityShip tmpShip = new EntityShip(shipFront, shipFrontA,
+			EntityShip tmpShip = new EntityShip("front",shipFront, shipFrontA,
 					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 							GameFieldScreen.size, GameFieldScreen.size), game
 							.getFirstFieldPlayer().getMapTileLayer());
@@ -735,7 +735,7 @@ class CameraController implements GestureListener {
 
 			// Setzen der richtigen Schiffstextur für letzen
 			unitLocation[unitLocation.length - 1].getEntityShipDrawUnit()
-					.setShipTextureRegion(shipMiddle, shipMiddleA);
+					.setShipTextureRegion("Middle",shipMiddle, shipMiddleA);
 
 			// Schiffslänge hinzufügen
 			FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];

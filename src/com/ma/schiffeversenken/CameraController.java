@@ -8,6 +8,7 @@ import android.provider.SyncStateContract.Helpers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -87,7 +88,8 @@ class CameraController implements GestureListener {
 		camera.unproject(touch);
 
 		// Kleines schiff setzen
-		if (state.get(3)&&shipPlaceHelper.get(0)>0) {
+		if (state.get(3)&&shipPlaceHelper.get(0)>0&&game.getFirstFieldPlayer().getElementByXPosYPos(
+				touch.x, touch.y)!=null) {
 			handleShipBeginConstructor(touch);
 			handleShipEndConstructor(touch);
 		}

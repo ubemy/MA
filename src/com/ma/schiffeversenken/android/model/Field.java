@@ -224,7 +224,7 @@ public class Field {
 			if (ship.getSize() > 1) {
 				for (FieldUnit unit : ship.location) {
 					switch (unit.getShipSegment()) {
-					case 2:// 0=Vorderteil
+					case 2:// 2=Hinterteil
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
 							if (unit.getPlacedShip().getOrientation() == 0) {// Rechts
@@ -241,6 +241,8 @@ public class Field {
 								}
 							}
 						} else {// Vertikal
+							if (unit.getPlacedShip().getOrientation() == 1) {// oben
+								
 							if (!unit.getPlacedShip().isDestroyed()) {
 								// textureName = "dvb";//TODO Add upstairs
 								// texture
@@ -248,6 +250,14 @@ public class Field {
 							} else {
 								// textureName = "dvba";
 								textureName = "uvfa";
+							}
+							}else{//unten
+								if (!unit.getPlacedShip().isDestroyed()) {
+									// texture
+									textureName = "uvb";
+								} else {
+									textureName = "uvba";
+								}
 							}
 						}
 						break;
@@ -279,7 +289,7 @@ public class Field {
 							}
 						}
 						break;
-					case 0:// 2=Hinterteil
+					case 0:// 1=Front
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
 							if (unit.getPlacedShip().getOrientation() == 0) {// rechts
@@ -297,13 +307,23 @@ public class Field {
 								}
 							}
 						} else {// Vertikal
+							if (unit.getPlacedShip().getOrientation() == 1) {// oben
+								
 							if (!unit.getPlacedShip().isDestroyed()) {
-								// textureName = "dvf";// TODO Add downstairs
+								// textureName = "dvb";//TODO Add upstairs
 								// texture
 								textureName = "uvb";
 							} else {
-								// textureName = "dvfa";
+								// textureName = "dvba";
 								textureName = "uvba";
+							}
+							}else{//unten
+								if (!unit.getPlacedShip().isDestroyed()) {
+									// texture
+									textureName = "uvf";
+								} else {
+									textureName = "uvfa";
+								}
 							}
 						}
 						break;

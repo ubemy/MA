@@ -19,18 +19,18 @@ public class BluetoothListenThread extends Thread{
 	/**BluetoothAdapter Objekt, das spaeter an den BluetoothConnectedThread-Thread weitergegeben wird*/
 	private BluetoothAdapter bluetoothAdapter;
 	/**Initialisiertes Game Objekt, das spaeter an den BluetoothConnectedThread-Thread weitergegeben wird*/
-	private Game game;
+	//private Game game;
 	
 	/**
 	 * Erstellt ein BluetoothListenThread Objekt
 	 * @param bluetoothAdapter Der Bluetooth Adapter des Gereats
 	 */
-	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter, CreateMultiplayerGame cmgClass, Game game, String uuid){
+	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter, CreateMultiplayerGame cmgClass, String uuid){
         //Temporaeres Objekt benutze, da serverSocket final ist
         BluetoothServerSocket tmp = null;
         this.bluetoothAdapter = bluetoothAdapter;
         this.cmgClass = cmgClass;
-        this.game = game;
+        //this.game = game;
         
         try {
         	tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("Schiffeversenken", UUID.fromString(uuid));
@@ -58,7 +58,7 @@ public class BluetoothListenThread extends Thread{
             if (socket != null) {
                 //Verbindung in separatem Thread verwalten
                 manageConnectedSocket(socket);
-                cmgClass.startGame();
+                
                 try {
 					serverSocket.close();
 				} catch (IOException e) {
@@ -75,7 +75,8 @@ public class BluetoothListenThread extends Thread{
      * @param socket Aufgebaute Bluetooth Socket Verbindung zum Server
      */
 	private void manageConnectedSocket(BluetoothSocket mmSocket) {
-    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter, this.game);
+    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter);
+    	cmgClass.startGame(btConnectedThread);
     	btConnectedThread.start();
 	}
 }

@@ -1,7 +1,9 @@
 package com.ma.schiffeversenken.android.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 import com.badlogic.gdx.utils.Json;
@@ -12,13 +14,15 @@ import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Wird aufgerufen, wenn eine Verbindung hergestellt wurde.
  * Wird auf Server- und Clientseite verwendet
  * @author Maik Steinborn
  */
-public class BluetoothConnectedThread extends Thread implements Serializable {
+public class BluetoothConnectedThread extends Thread {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -37,7 +41,8 @@ public class BluetoothConnectedThread extends Thread implements Serializable {
     private CreateMultiplayerGame cmgClass;
     /**Bluetooth Adapter Objekt*/
     private BluetoothAdapter bluetoothAdapter;
-
+    private static BluetoothConnectedThread instance;
+    
     /**
      * Erstellt ein BluetoothConnectedThread Objekt
      * @param socket Erstellte Bluetooth Socket Verbindung
@@ -46,16 +51,16 @@ public class BluetoothConnectedThread extends Thread implements Serializable {
      * @param bluetoothAdapter Bluetooth Adapter Objekt
      * @param game Initialisiertes Game Objekt
      */
-    public BluetoothConnectedThread(BluetoothSocket socket, VisitMultiplayerGame vmgClass, CreateMultiplayerGame cmgClass, BluetoothAdapter bluetoothAdapter, Game game) {
+    public BluetoothConnectedThread(BluetoothSocket socket, VisitMultiplayerGame vmgClass, CreateMultiplayerGame cmgClass, BluetoothAdapter bluetoothAdapter) {
     	bluetoothSocket = socket;
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
         this.vmgClass = vmgClass;
         this.cmgClass = cmgClass;
         this.bluetoothAdapter = bluetoothAdapter;
-        this.game = game;
+        //this.game = game;
  
-        this.game.setConnectedThread(this);
+        //this.game.setConnectedThread(this);
         
         //Temporaeres Objekt benutze, da Streams final sind
         try {
@@ -66,8 +71,17 @@ public class BluetoothConnectedThread extends Thread implements Serializable {
         inStream = tmpIn;
         outStream = tmpOut;
     	sendHello();
+    	instance = this;
     }
  
+    public static BluetoothConnectedThread getInstance(){
+    	return instance;
+    }
+    
+    public void setGame(Game game){
+    	this.game = game;
+    }
+    
     /**
      * Thread starten
      */
@@ -137,16 +151,4 @@ public class BluetoothConnectedThread extends Thread implements Serializable {
         	e.printStackTrace();
         }
     }
-
-	@Override
-	public void write(Json json) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void read(Json json, JsonValue jsonData) {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -1,7 +1,11 @@
 package com.ma.schiffeversenken.android.view;
 
+import java.io.IOException;
+
+import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.controller.Bluetooth;
+import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.controller.Game;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -54,14 +58,14 @@ public class CreateMultiplayerGame extends Activity {
 			 * Field Klasse gibt aktuell noch Fehler
 			Field firstField = new Field(0);
 			Field secondField = new Field(1);*/
-			Game game = new Game(1, null, null, true, false, false, 0);
+			//Game game = new Game(1, null, null, true, false, false, 0);
 			
-			bt.startServer(this, game);
+			bt.startServer(this);
 		}
 	}
 
-	public void startGame(){
-			Intent intent = new Intent(getApplicationContext(), GamePreferencesActivity.class);
+	public void startGame(BluetoothConnectedThread btcThread){
+			Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 			intent.putExtra("bluetoothGame", "true");
 			startActivity(intent);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.ma.schiffeversenken.MyGdxGameField;
+import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -18,6 +19,7 @@ public class AndroidLauncher extends AndroidApplication {
 		cfg.useCompass=false;
 		cfg.useImmersiveMode=false;
 		cfg.useWakelock=false;
+		
 		initialize(new MyGdxGameField(Boolean.parseBoolean(getIntent().getExtras().get("bluetoothGame").toString())), cfg);
 	}
 }

@@ -2,6 +2,7 @@ package com.ma.schiffeversenken.android.view;
 
 import java.util.Set;
 
+import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.controller.Bluetooth;
 import com.ma.schiffeversenken.android.controller.Game;
@@ -62,14 +63,14 @@ public class VisitMultiplayerGame extends Activity {
 			Field enemiesField = new Field(0);
 			Field myField = new Field(1);*/
 			
-			Game game = new Game(1, null, null, false, true, false, 0);
+			//Game game = new Game(1, null, null, false, true, false, 0);
 			
-			bt.connectToServer(address, VisitMultiplayerGame.this, game);
+			bt.connectToServer(address, VisitMultiplayerGame.this);
 		}
 	};
 	
 	public void startGame(){
-		Intent intent = new Intent(getApplicationContext(), GamePreferencesActivity.class);
+		Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		intent.putExtra("bluetoothGame", "true");
 		startActivity(intent);

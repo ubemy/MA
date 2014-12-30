@@ -20,14 +20,11 @@ public class GamePreferencesActivity extends Activity implements
 		OnClickListener {
 
 	private GamePreferences mGamePreferences;
-	private Bundle savedInstanceState;
 	private boolean bluetoothGame;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.savedInstanceState = savedInstanceState;
-
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
 			bluetoothGame = Boolean.parseBoolean(extras.get("bluetoothGame").toString());

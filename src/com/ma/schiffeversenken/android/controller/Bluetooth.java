@@ -77,8 +77,8 @@ public class Bluetooth extends Activity {
 	 * @param cmgClass Das initialisierte CreateMultiplayerGame Objekt
 	 * @param game Das initialisierte Game Objekt
 	 */
-	public void startServer(CreateMultiplayerGame cmgClass, Game game){
-		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter, cmgClass, game, appUUID);
+	public void startServer(CreateMultiplayerGame cmgClass){
+		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter, cmgClass, appUUID);
 		btListenThread.start();
 	}
 	
@@ -88,7 +88,7 @@ public class Bluetooth extends Activity {
 	 * @param vmgClass Das initialisierte VisitMultiplayerGame Objekt
 	 * @param game Das initialisierte Game Objekt
 	 */
-	public void connectToServer(String mac, VisitMultiplayerGame vmgClass, Game game){
+	public void connectToServer(String mac, VisitMultiplayerGame vmgClass){
 		BluetoothDevice device = null;
 		
 		for(BluetoothDevice dev : allDevices){
@@ -99,7 +99,7 @@ public class Bluetooth extends Activity {
 		}
 		
 		if(device != null){
-			BluetoothConnectThread btConnectThread = new BluetoothConnectThread(device, bluetoothAdapter, vmgClass, game, appUUID);
+			BluetoothConnectThread btConnectThread = new BluetoothConnectThread(device, bluetoothAdapter, vmgClass, appUUID);
 			btConnectThread.start();
 		}
 	}

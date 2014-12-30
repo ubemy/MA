@@ -82,11 +82,15 @@ public class Game extends Thread {
 			//Field kiField = new Field(1);
 			ki = new KI(secondField, firstFieldPlayer, false, loadedGame, difficultyLevel);
 		}
+		else{
+			btConnectedThread = BluetoothConnectedThread.getInstance();
+			btConnectedThread.setGame(this);
+		}
 	}
 	
-	public void setConnectedThread(BluetoothConnectedThread btConnectedThread){
+	/*public void setConnectedThread(BluetoothConnectedThread btConnectedThread){
 		this.btConnectedThread = btConnectedThread;
-	}
+	}*/
 	
 	/**
 	 * Wird aufgerufen, wenn ein Touch Event auftritt
@@ -279,6 +283,28 @@ public class Game extends Thread {
 		
 		return ret;
 	}
+	
+	private boolean hasEnemyWon(){
+		boolean ret = true;
+		
+		if(primaryBTGame){
+			for(Ship ship : firstFieldPlayer.getShips()){
+				if(!ship.isDestroyed()){
+					ret = false;
+				}
+			}
+		}
+		
+		else if(secondaryBTGame){
+			for(Ship ship : secondFieldEnemy.getShips()){
+				if(!ship.isDestroyed()){
+					ret = false;
+				}
+			}
+		}
+		
+		return ret;
+	}
 
 	/**
 	 * Startet das Game. Wird aufgerufen, wenn das Game Thread gestartet wird
@@ -382,5 +408,4 @@ public class Game extends Thread {
 	public int getGamersTurn(){
 		return gamersTurn;
 	}
-	
 }

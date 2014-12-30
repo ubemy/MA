@@ -299,7 +299,7 @@ public class GameFieldScreen implements Screen {
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 						//Setzen der Schiffe und Starten.
-						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
+						//player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);

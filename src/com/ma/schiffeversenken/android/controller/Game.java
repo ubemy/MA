@@ -155,16 +155,19 @@ public class Game extends Thread {
 	private void destroyShip(FieldUnit fe){
 		boolean destroyed = true;
 		
-		for(FieldUnit f : fe.getPlacedShip().getLocation()){
-			if(!f.getAttacked()){
-				destroyed = false;
+		if(fe.getPlacedShip() != null){
+			for(FieldUnit f : fe.getPlacedShip().getLocation()){
+				if(!f.getAttacked()){
+					destroyed = false;
+				}
 			}
+			
+			fe.getPlacedShip().setDestroyed(destroyed);
 		}
-		
-		fe.getPlacedShip().setDestroyed(destroyed);
 	}
 	
 	public void setReturnValues(boolean returnAttackHit, boolean returnShipDestroyed){
+		this.returnValuesAvailable = true;
 		this.returnAttackHit = returnAttackHit;
 		this.returnShipDestroyed = returnShipDestroyed;
 	}
@@ -177,22 +180,27 @@ public class Game extends Thread {
 	 */
 	private boolean gamerAction(int id, int gamer){
 		boolean ret = false;
-		FieldUnit fe;
+		FieldUnit fe = null;
 		boolean attackHit = false;
 		boolean shipDestroyed = false;
 		boolean done = false;
 		
-		if(gamer == 0){
-			fe = secondFieldEnemy.getElementByID(id);
-		}
-		else{
-			fe = firstFieldPlayer.getElementByID(id);
-		}
-		
-		fe.setAttacked(true); //FeldElement als attackiert markieren
-		//TODO Event das Angriff zeichnet
 		
 		if(primaryBTGame || secondaryBTGame){
+			
+			if(gamer == 0 && primaryBTGame){
+				fe = secondFieldEnemy.getElementByID(id);
+			}
+			else if(gamer == 0 && secondaryBTGame){
+				fe = firstFieldPlayer.getElementByID(id);
+			}
+			else if(gamer == 1 && primaryBTGame){
+				fe = firstFieldPlayer.getElementByID(id);
+			}
+			else if(gamer == 1 && secondaryBTGame){
+				fe = secondFieldEnemy.getElementByID(id);
+			}
+			
 			byte[] attackString = (new String("_ATTACK_" + Integer.toString(id))).getBytes();
 			
 			if(primaryBTGame && gamer == FIRST_GAMER){
@@ -202,11 +210,13 @@ public class Game extends Thread {
 				btConnectedThread.write(attackString);
 			}
 			
-			while(!returnValuesAvailable){
-				try {
-					Thread.sleep(FIFTY_MS);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+			if((gamer == 0 && primaryBTGame) || (gamer == 1 && secondaryBTGame)){
+				while(!returnValuesAvailable){
+					try {
+						Thread.sleep(FIFTY_MS);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			
@@ -215,8 +225,27 @@ public class Game extends Thread {
 			shipDestroyed = returnShipDestroyed;
 			attackHit = returnAttackHit;
 			
+			byte[] returnString = (new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes();
+			
+			if(secondaryBTGame && gamer == 0){
+				btConnectedThread.write(returnString);
+			}
+			else if(primaryBTGame && gamer == 1){
+				btConnectedThread.write(returnString);
+			}
+			
 			done = true;
 		}
+		else{
+			if(gamer == 0){
+				fe = secondFieldEnemy.getElementByID(id);
+			}
+			else{
+				fe = firstFieldPlayer.getElementByID(id);
+			}
+		}
+		
+		fe.setAttacked(true); //FeldElement als attackiert markieren
 		
 		if(!done){
 			if(fe.getOccupied()){
@@ -225,15 +254,6 @@ public class Game extends Thread {
 				destroyShip(fe);
 				shipDestroyed = fe.getPlacedShip().isDestroyed();
 				attackHit = true;
-			}
-			
-			byte[] returnString = (new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes();
-			
-			if(secondaryBTGame && gamer == 0){
-				btConnectedThread.write(returnString);
-			}
-			else if(primaryBTGame && gamer == 1){
-				btConnectedThread.write(returnString);
 			}
 		}
 		
@@ -295,19 +315,9 @@ public class Game extends Thread {
 	private boolean hasEnemyWon(){
 		boolean ret = true;
 		
-		if(primaryBTGame){
-			for(Ship ship : firstFieldPlayer.getShips()){
-				if(!ship.isDestroyed()){
-					ret = false;
-				}
-			}
-		}
-		
-		else if(secondaryBTGame){
-			for(Ship ship : secondFieldEnemy.getShips()){
-				if(!ship.isDestroyed()){
-					ret = false;
-				}
+		for(Ship ship : firstFieldPlayer.getShips()){
+			if(!ship.isDestroyed()){
+				ret = false;
 			}
 		}
 		
@@ -378,7 +388,12 @@ public class Game extends Thread {
 				gamersTurn = 0;
 			}
 			
-			if(hasSomebodyWon() != 0){
+			if(primaryBTGame || secondaryBTGame){
+				if(hasEnemyWon()){
+					end = true;
+				}
+			}
+			else if(hasSomebodyWon() != 0){
 				end = true;
 			}
 		}while(!end);

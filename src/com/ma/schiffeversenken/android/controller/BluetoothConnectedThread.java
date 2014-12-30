@@ -122,8 +122,13 @@ public class BluetoothConnectedThread extends Thread {
 	                	}
 	                }
 	                else if(readMsg.startsWith(returnString)){
-	                	boolean returnAttackHit = Boolean.parseBoolean(readMsg.substring(readMsg.indexOf(returnString) + returnString.length() + 1, returnString.indexOf("_", returnString.indexOf("_" + 1))));                	
-	                	boolean returnShipDestroyed = Boolean.parseBoolean(readMsg.substring(readMsg.indexOf(returnString) + returnString.length() + 1, returnString.indexOf("_", returnString.indexOf("_" + 1))));;
+	                	String returnAttackHitString = readMsg.substring(readMsg.indexOf(returnString) + returnString.length(), readMsg.indexOf("_", readMsg.indexOf(returnString) + returnString.length()));
+	                	boolean returnAttackHit = Boolean.parseBoolean(returnAttackHitString);                	
+	                	
+	                	int start = readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1;
+	                	int ende = readMsg.indexOf("_", readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1);
+	                	String returnShipDestroyedString = readMsg.substring(readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1);
+	                	boolean returnShipDestroyed = Boolean.parseBoolean(returnShipDestroyedString);
 	                	
 	                	game.setReturnValues(returnAttackHit, returnShipDestroyed);
 	                }

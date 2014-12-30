@@ -80,9 +80,5 @@ public class BluetoothConnectThread extends Thread {
     private void manageConnectedSocket(BluetoothSocket socket) {
     	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(socket, vmgClass, null, this.bluetoothAdapter);
     	btConnectedThread.start();
-    	
-    	boolean attackHit = true;
-    	boolean shipDestroyed = false;
-    	btConnectedThread.write((new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes());
 	}
 }

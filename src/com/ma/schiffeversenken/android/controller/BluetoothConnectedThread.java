@@ -105,7 +105,12 @@ public class BluetoothConnectedThread extends Thread {
 	                String returnString = "_RETURN_";
 	                
 	                if(readMsg.startsWith(attackString)){
-	                	game.secondGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length() + 1))); 
+	                	if(game.getPrimaryBTGame()){
+	                		game.secondGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length() + 1)));
+	                	}
+	                	else if(game.getSecondaryBTGame()){
+	                		game.firstGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length() + 1)));
+	                	}
 	                }
 	                else if(readMsg.startsWith(welcomeString)){
 	                	String helloString = "Erfolgreich verbunden mit " + readMsg.substring(welcomeString.length());

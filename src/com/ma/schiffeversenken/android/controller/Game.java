@@ -92,6 +92,14 @@ public class Game extends Thread {
 		this.btConnectedThread = btConnectedThread;
 	}*/
 	
+	public boolean getPrimaryBTGame(){
+		return primaryBTGame;
+	}
+	
+	public boolean getSecondaryBTGame(){
+		return secondaryBTGame;
+	}
+	
 	/**
 	 * Wird aufgerufen, wenn ein Touch Event auftritt
 	 * Holt die ID, des angegriffenen Feldelements und greift dies an

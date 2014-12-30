@@ -1,5 +1,7 @@
 package com.ma.schiffeversenken.android.view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
 
@@ -24,9 +26,9 @@ public class SpielStarten extends Activity {
 		
 		try{
 			
-			createButtons(einfach, R.id.button_ki_einfach, "Einfach", AndroidLauncher.class);
-			createButtons(mittel, R.id.button_ki_normal, "Mittel", AndroidLauncher.class);
-			createButtons(schwer, R.id.button_ki_schwer, "Schwer", AndroidLauncher.class);
+			createButtons(einfach, R.id.button_ki_einfach, getString(R.string.ki_simple), AndroidLauncher.class);
+			createButtons(mittel, R.id.button_ki_normal, getString(R.string.ki_normal), AndroidLauncher.class);
+			createButtons(schwer, R.id.button_ki_schwer, getString(R.string.ki_difficult), AndroidLauncher.class);
 			//testButton();
 
 		}
@@ -69,7 +71,7 @@ public class SpielStarten extends Activity {
 					Editor editor = sp.edit();
 					editor.putString("ki", text);
 					editor.apply();
-					
+				
 					Intent intent = new Intent(SpielStarten.this, c);
 					intent.putExtra("primaryBTGame", "false");
 					intent.putExtra("secondaryBTGame", "false");

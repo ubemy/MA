@@ -106,10 +106,10 @@ public class BluetoothConnectedThread extends Thread {
 	                
 	                if(readMsg.startsWith(attackString)){
 	                	if(game.getPrimaryBTGame()){
-	                		game.secondGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length() + 1)));
+	                		game.secondGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length())));
 	                	}
 	                	else if(game.getSecondaryBTGame()){
-	                		game.firstGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length() + 1)));
+	                		game.firstGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length())));
 	                	}
 	                }
 	                else if(readMsg.startsWith(welcomeString)){

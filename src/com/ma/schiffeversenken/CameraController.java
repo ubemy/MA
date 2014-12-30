@@ -95,7 +95,7 @@ class CameraController implements GestureListener {
 		}
 
 		// Spielverlauf
-		if (state.get(2) && !game.isEnd() && game.getGamersTurn() == 0) {
+		if (state.get(2) && !game.isEnd()/* && game.getGamersTurn() == 0*/) {
 			game.touchEvent(touch.x, touch.y);
 		}
 

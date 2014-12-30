@@ -54,6 +54,7 @@ public class Game extends Thread {
 	private boolean returnAttackHit;
 	private boolean returnShipDestroyed;
 	private boolean returnValuesAvailable;
+	private boolean feWasAlreadyAttacked;
 	int gamersTurn;
 	
 	//Nur zu Testzwecken - Maik
@@ -73,7 +74,8 @@ public class Game extends Thread {
 		this.secondFieldEnemy = secondField;
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
-		this.end=true;
+		this.end = true;
+		feWasAlreadyAttacked = false;
 		
 		resetActionVariables();
 		
@@ -110,13 +112,17 @@ public class Game extends Thread {
 		FieldUnit fieldUnit = null;
 		
 		if(gamersTurn==0){//Wenn Spieler am Zug greife Gegnerfeld an
-			if(!secondaryBTGame){
+			if(primaryBTGame || (!primaryBTGame && !secondaryBTGame)){
 				fieldUnit = secondFieldEnemy.getElementByXPosYPos(xPos, yPos);
 				if(fieldUnit != null) firstGamerAttack(fieldUnit.getID());
 			}
 		}
 		else{
-			if(!primaryBTGame){
+			if(secondaryBTGame){
+				fieldUnit = secondFieldEnemy.getElementByXPosYPos(xPos, yPos);
+				if(fieldUnit != null) secondGamerAttack(fieldUnit.getID());
+			}
+			else if(!primaryBTGame && !secondaryBTGame){
 				fieldUnit = firstFieldPlayer.getElementByXPosYPos(xPos, yPos);
 				if(fieldUnit != null) secondGamerAttack(fieldUnit.getID());
 			}
@@ -201,40 +207,54 @@ public class Game extends Thread {
 				fe = secondFieldEnemy.getElementByID(id);
 			}
 			
-			byte[] attackString = (new String("_ATTACK_" + Integer.toString(id))).getBytes();
-			
-			if(primaryBTGame && gamer == FIRST_GAMER){
-				btConnectedThread.write(attackString);	
+			if(fe.getAttacked()){
+				feWasAlreadyAttacked = true;
 			}
-			else if(secondaryBTGame && gamer == SECOND_GAMER){
-				btConnectedThread.write(attackString);
-			}
-			
-			if((gamer == 0 && primaryBTGame) || (gamer == 1 && secondaryBTGame)){
-				while(!returnValuesAvailable){
-					try {
-						Thread.sleep(FIFTY_MS);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+			else{
+				byte[] attackString = (new String("_ATTACK_" + Integer.toString(id))).getBytes();
+				
+				if(primaryBTGame && gamer == FIRST_GAMER){
+					btConnectedThread.write(attackString);	
+				}
+				else if(secondaryBTGame && gamer == SECOND_GAMER){
+					btConnectedThread.write(attackString);
+				}
+				
+				if((gamer == 0 && primaryBTGame) || (gamer == 1 && secondaryBTGame)){
+					while(!returnValuesAvailable){
+						try {
+							Thread.sleep(FIFTY_MS);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					ret = returnAttackHit;
+					destroyShip(fe);//Ob Schiff komplett zerstört
+					shipDestroyed = returnShipDestroyed;
+					attackHit = returnAttackHit;
+				}
+				else{
+					if(fe.getOccupied()){
+						//Wenn das Feld belegt war
+						ret = true;
+						destroyShip(fe);
+						shipDestroyed = fe.getPlacedShip().isDestroyed();
+						attackHit = true;
 					}
 				}
+				
+				byte[] returnString = (new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes();
+				
+				if(secondaryBTGame && gamer == 0){
+					btConnectedThread.write(returnString);
+				}
+				else if(primaryBTGame && gamer == 1){
+					btConnectedThread.write(returnString);
+				}
+				
+				done = true;
 			}
-			
-			ret = returnAttackHit;
-			destroyShip(fe);//Ob Schiff komplett zerstört
-			shipDestroyed = returnShipDestroyed;
-			attackHit = returnAttackHit;
-			
-			byte[] returnString = (new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes();
-			
-			if(secondaryBTGame && gamer == 0){
-				btConnectedThread.write(returnString);
-			}
-			else if(primaryBTGame && gamer == 1){
-				btConnectedThread.write(returnString);
-			}
-			
-			done = true;
 		}
 		else{
 			if(gamer == 0){
@@ -245,29 +265,29 @@ public class Game extends Thread {
 			}
 		}
 		
-		fe.setAttacked(true); //FeldElement als attackiert markieren
-		
-		if(!done){
-			if(fe.getOccupied()){
-				//Wenn das Feld belegt war
-				ret = true;
-				destroyShip(fe);
-				shipDestroyed = fe.getPlacedShip().isDestroyed();
-				attackHit = true;
+		if(!feWasAlreadyAttacked){
+			fe.setAttacked(true); //FeldElement als attackiert markieren
+			
+			if(!done){
+				if(fe.getOccupied()){
+					//Wenn das Feld belegt war
+					ret = true;
+					destroyShip(fe);
+					shipDestroyed = fe.getPlacedShip().isDestroyed();
+					attackHit = true;
+				}
 			}
+			
+			if(gamer == SECOND_GAMER && gameMode == GAME_MODE_SINGLE_PLAYER){
+				/*
+				 * Wenn die KI attackiert hat werden zwei Variablen gesetzt,
+				 * damit die KI weiss ob ein Schiff getroffen und/oder zerstoert wurden
+				 */
+				ki.updateHistory(id, attackHit, shipDestroyed);
+			}
+			
+			resetActionVariables();
 		}
-		
-		if(gamer == SECOND_GAMER && gameMode == GAME_MODE_SINGLE_PLAYER){
-			/*
-			 * Wenn die KI attackiert hat werden zwei Variablen gesetzt,
-			 * damit die KI weiss ob ein Schiff getroffen und/oder zerstoert wurden
-			 */
-			ki.updateHistory(id, attackHit, shipDestroyed);
-		}
-		
-		resetActionVariables();
-		
-		getroffen = ret; //Nur zu Testzwecken - Maik
 		
 		return ret;
 	}
@@ -323,7 +343,7 @@ public class Game extends Thread {
 		
 		return ret;
 	}
-
+	
 	/**
 	 * Startet das Game. Wird aufgerufen, wenn das Game Thread gestartet wird
 	 */
@@ -354,6 +374,7 @@ public class Game extends Thread {
 				if(gameMode == GAME_MODE_SINGLE_PLAYER){
 					//Wenn GameMode == 0 == Einzelspieler, dann KI attackieren lassen
 					do{
+						feWasAlreadyAttacked = false;
 						/*
 						 * Die Schleife wird solange durchlaufen,
 						 * bis der Spieler ins Leere trifft
@@ -365,11 +386,12 @@ public class Game extends Thread {
 							e.printStackTrace();
 						}
 						hitShip = gamerAction(ki.attack(), gamersTurn);
-					}while(hitShip);
+					}while(hitShip || feWasAlreadyAttacked);
 				}
 				else{
 					//Auf Eingabe von Benutzer warten
 					do{
+						feWasAlreadyAttacked = false;
 						/*
 						 * Die Schleife wird solange durchlaufen,
 						 * bis der Spieler ins Leere trifft
@@ -383,7 +405,7 @@ public class Game extends Thread {
 							}
 						}
 						hitShip = gamerAction(secondGamerAttackID, gamersTurn);
-					}while(hitShip);
+					}while(hitShip || feWasAlreadyAttacked);
 				}
 				gamersTurn = 0;
 			}

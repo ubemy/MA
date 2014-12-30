@@ -210,13 +210,16 @@ public class GameFieldScreen implements Screen {
 
 		table = new Table(skin);
 		// Set table to whole Screen
-		table.setBounds(layerX*0.1f, layerY*0.6f, layerX*0.9f, layerY*0.7f);// Container für Label und Buttons
+//		table.setBounds(w*0.1f, h*0.6f, w*0.9f, h*0.7f);// Container für Label und Buttons
+		table.setBounds(0, 0, w, h*1.9f);// Container für Label und Buttons
 
 		//Fonts erstellen
 		white = new BitmapFont(Gdx.files.internal("font/Latin_white.fnt"),
 				false);
+		white.setScale(w*0.002f);
 		black = new BitmapFont(Gdx.files.internal("font/Latin_black.fnt"),
 				false);
+		black.setScale(w*0.002f);
 		
 		//Erstellen des Headers
 		final LabelStyle headingStyle = new LabelStyle(white,Color.WHITE);
@@ -229,11 +232,12 @@ public class GameFieldScreen implements Screen {
 		textButtonStyle.pressedOffsetX = 1; // 1 nach x bewegen
 		textButtonStyle.pressedOffsetY = -1;// -1 auf y achse bewegen
 		textButtonStyle.font = black;
+		
 
 		// Button erstellen mit dem Style
 		buttonGenerateShips = new TextButton("generieren",
 				textButtonStyle);
-		buttonGenerateShips.pad(5);
+		buttonGenerateShips.pad(w*0.02f);
 		buttonGenerateShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -248,7 +252,7 @@ public class GameFieldScreen implements Screen {
 		});
 		
 		buttonSelfPlaceShips = new TextButton("platzieren",textButtonStyle);
-		buttonSelfPlaceShips.pad(5);
+		buttonSelfPlaceShips.pad(w*0.02f);
 		buttonSelfPlaceShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -257,15 +261,17 @@ public class GameFieldScreen implements Screen {
 				}
 				CameraController.changeStateTo(state, 3, true);
 				table.clear();
-//				table.moveBy(0, -layerY*0.1f);
-				table.add(buttonGenerateShips);
-				table.add().minWidth(10);
-				table.add(buttonStart);
-				table.add().minWidth(10);
-				table.add(buttonClearShips);
+				table.add(heading).colspan(5);
+				table.row();
+				table.add(buttonGenerateShips).minWidth(w*0.2f).minHeight(w*0.1f);
+				table.add().minWidth(w*0.01f);
+				table.add(buttonStart).minWidth(w*0.2f).minHeight(w*0.1f);
+				table.add().minWidth(w*0.01f);
+				table.add(buttonClearShips).minWidth(w*0.2f).minHeight(w*0.1f);
 				
 				table2 = new Table(skin);
-				table2.setBounds(layerX*0.1f, layerY*0.5f, layerX*0.9f, layerY*0.7f);
+//				table2.setBounds(w*0.1f, h*0.5f, w*0.9f, h*0.7f);
+				table2.setBounds(0, 0, w, h*1.68f);
 				table2.add(new Label("Drücke auf ein Feld",headingStyle)).colspan(5);
 				table2.row();
 				table2.add(new Label("um ein Schiff zu platzieren",headingStyle)).colspan(5);
@@ -276,7 +282,7 @@ public class GameFieldScreen implements Screen {
 		});
 		
 		buttonClearShips = new TextButton("löschen",textButtonStyle);
-		buttonClearShips.pad(5);
+		buttonClearShips.pad(w*0.02f);
 		buttonClearShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -286,14 +292,14 @@ public class GameFieldScreen implements Screen {
 		});
 		
 		buttonStart = new TextButton("Start",textButtonStyle);
-		buttonStart.pad(5);
+		buttonStart.pad(w*0.02f);
 		buttonStart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 						//Setzen der Schiffe und Starten.
-						//player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
+						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
@@ -335,15 +341,15 @@ public class GameFieldScreen implements Screen {
 
 		
 		// Hinzufügen vom Elementen zur Tabelle Start
-//		table.debug();
 //		table.center();
+		table.debug();
 		table.add(heading).colspan(5);
 		table.row();
-		table.add(buttonGenerateShips);
-		table.add().minWidth(10);
-		table.add(buttonStart);
-		table.add().minWidth(10);
-		table.add(buttonSelfPlaceShips);
+		table.add(buttonGenerateShips).minWidth(w*0.2f).minHeight(w*0.1f);
+		table.add().minWidth(w*0.01f);
+		table.add(buttonStart).minWidth(w*0.2f).minHeight(w*0.1f);
+		table.add().minWidth(w*0.01f);
+		table.add(buttonSelfPlaceShips).minWidth(w*0.2f).minHeight(w*0.1f);
 //		table.row();
 	
 

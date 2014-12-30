@@ -173,7 +173,6 @@ public class ShipPlacement {
 			ships[i].setStandortManual(u,u[0].getShipOrientation());
 			int schiffSize = u.length;
 			
-			//TODO Prüfen ob es so passt mit Maik absprechen wie es geplant wurde
 			if (schiffSize > 1) {
 				if (ships[i].getOrientation() == SHIP_ORIENTATION_RIGHT) {
 					markElements(1, schiffSize, u[0].getID(), field, ships[i],

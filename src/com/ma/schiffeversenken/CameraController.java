@@ -3,6 +3,7 @@ package com.ma.schiffeversenken;
 import java.util.ArrayList;
 
 import android.media.CameraProfile;
+import android.provider.SyncStateContract.Helpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
+import com.ma.schiffeversenken.android.view.Hilfe;
 
 class CameraController implements GestureListener {
 	float velX, velY;
@@ -83,10 +85,16 @@ class CameraController implements GestureListener {
 		// touch.x und touch.y mit count für anzahl der tap
 		Vector3 touch = new Vector3(x, y, 0);
 		camera.unproject(touch);
-		
+
+		// Kleines schiff setzen
+		if (state.get(3)&&shipPlaceHelper.get(0)>0) {
+			handleShipBeginConstructor(touch);
+			handleShipEndConstructor(touch);
+		}
+
 		// Spielverlauf
-		if (state.get(2) && !game.isEnd()&&game.getGamersTurn()==0) {
-			 game.touchEvent(touch.x, touch.y);
+		if (state.get(2) && !game.isEnd() && game.getGamersTurn() == 0) {
+			game.touchEvent(touch.x, touch.y);
 		}
 
 		// Spieler Spielfeld Schiffe platzieren
@@ -145,59 +153,17 @@ class CameraController implements GestureListener {
 		Vector3 touch = new Vector3(x, y, 0);
 		camera.unproject(touch);
 		touchOld = new Vector3(touch.x, touch.y, 0);
-//		System.out.println("Start Bildschirm zu Weltkoordinaten: " + "X: "
-//				+ touch.x + " Y: " + touch.y);
+		// System.out.println("Start Bildschirm zu Weltkoordinaten: " + "X: "
+		// + touch.x + " Y: " + touch.y);
 
 		// Spieler Spielfeld Schiffe platzieren
 		if (state.get(3)) {
-			FieldUnit unit = game.getFirstFieldPlayer().getElementByXPosYPos(
-					touch.x, touch.y);
-			if (unit != null
-					&& (shipPlaceHelper.get(3) > 0
-							|| shipPlaceHelper.get(2) > 0
-							|| shipPlaceHelper.get(1) > 0 || shipPlaceHelper
-							.get(0) > 0)&&!overlayingOtherShips(unit)) {
-//				System.out.println("unit Start");
-				aktivatorSchiffSetzen = true;
-				// Initialisieren der Schiffstexturen
-				shipBack = game.getFirstFieldPlayer().getShipTextures()
-						.get("uvk");
-				shipBackA = game.getFirstFieldPlayer().getShipTextures()
-						.get("uvka");
-				shipMiddle =game
-						.getFirstFieldPlayer().getShipTextures()
-						.get("uvk");
-				shipMiddleA = game
-						.getFirstFieldPlayer().getShipTextures()
-						.get("uvka");
-				shipFront =game
-						.getFirstFieldPlayer().getShipTextures()
-						.get("uvk");
-				shipFrontA = game
-						.getFirstFieldPlayer().getShipTextures()
-						.get("uvka");
-				// Hinzufügen von Schiffsteil
-				EntityShip tmpShip = new EntityShip(
-						shipBack,
-						shipBackA,
-						new Vector2(unit.getXpos(), unit.getYpos()),
-						new Vector2(GameFieldScreen.size, GameFieldScreen.size),
-						game.getFirstFieldPlayer().getMapTileLayer());
-				unit.setEntityShipDrawUnit(tmpShip);
-				unit.setOccupied(true);
 
-				// Schiffslänge hinzufügen
-				unitLocation = new FieldUnit[1];
-				unitLocation[0] = unit;
-				shipLastUnit = unit;
-			}
-
+			handleShipBeginConstructor(touch);
 		}
 
 		return false;
 	}
-
-
 
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
@@ -210,198 +176,15 @@ class CameraController implements GestureListener {
 		if (!panStart) {
 			panStart(x, y, deltaX, deltaY);
 		} else {
+
 			// Spieler Spielfeld Schiffe platzieren
 			if (aktivatorSchiffSetzen) {
-				FieldUnit unit = game.getFirstFieldPlayer()
-						.getElementByXPosYPos(touch.x, touch.y);
-				if (unit != null
-						&& !unit.equals(unitLocation[0])
-						&& firstShift
-						&& (shipPlaceHelper.get(3) > 0
-								|| shipPlaceHelper.get(2) > 0 || shipPlaceHelper
-								.get(1) > 0)
-						&&!overlayingOtherShips(unit)
-						&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
-					// Beim ersten shift werden Texturen festgelegt werden.
-					firstShift = false;
-//					System.out.println("Unit Gefunden firstShift");
-					if (unit.equals(unitLocation[0].get_lNeighbor())) {
-						shiftDirection = 0;
-//						Gdx.app.log("FirstShift", "leftShift");
-						// Texturen setzen
-						shipBack = game.getFirstFieldPlayer()
-								.getShipTextures().get("lhb");
-						shipBackA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("lhba");
-						shipMiddle =game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("lhm");
-						shipMiddleA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("lhma");
-						shipFront =game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("lhf");
-						shipFrontA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("lhfa");
-							shipNextUnit = unit.get_lNeighbor();
-					}
-					if (unit.equals(unitLocation[0].get_rNeighbor())) {
-						shiftDirection = 1;
-//						Gdx.app.log("FirstShift", "rightShift");
-						shipBack = game.getFirstFieldPlayer()
-								.getShipTextures().get("rhb");
-						shipBackA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("rhba");
-						shipMiddle = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("rhm");
-						shipMiddleA =game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("rhma");
-						shipFront = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("rhf");
-						shipFrontA =game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("rhfa");
-						shipNextUnit = unit.get_rNeighbor();
-					}
-					if (unit.equals(unitLocation[0].get_uNeighbor())) {
-						shiftDirection = 2;
-//						Gdx.app.log("FirstShift", "upShift");
-						shipBack = game.getFirstFieldPlayer()
-								.getShipTextures().get("uvb");
-						shipBackA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvba");
-						shipMiddle = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvm");
-						shipMiddleA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvma");
-						shipFront = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvf");
-						shipFrontA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvfa");
-						shipNextUnit = unit.get_uNeighbor();
-					}
-
-					if (unit.equals(shipLastUnit.get_oNeighbor())) {
-						shiftDirection = 3;
-//						Gdx.app.log("FirstShift", "downShift");
-						// TODO Texturen nach unten hinzufügen
-						shipBack = game.getFirstFieldPlayer()
-								.getShipTextures().get("uvf");
-						shipBackA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvfa");
-						shipMiddle = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvm");
-						shipMiddleA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvma");
-						shipFront = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvb");
-						shipFrontA = game
-								.getFirstFieldPlayer().getShipTextures()
-								.get("uvba");
-						shipNextUnit = unit.get_oNeighbor();
-					}
-
-					// Hinzufügen von Schiffsteil
-					EntityShip tmpShip = new EntityShip(shipFront, shipFrontA,
-							new Vector2(unit.getXpos(), unit.getYpos()),
-							new Vector2(GameFieldScreen.size,
-									GameFieldScreen.size), game
-									.getFirstFieldPlayer().getMapTileLayer());
-					unit.setEntityShipDrawUnit(tmpShip);
-					unit.setOccupied(true);
-
-
-
-					// Schiffslänge hinzufügen
-					FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
-					tmpUnitLocation[0] = unitLocation[0];
-					tmpUnitLocation[1] = unit;
-					unitLocation = tmpUnitLocation;
-					
-					// Setzen der richtigen Schiffstextur für Hinten
-					unitLocation[0].getEntityShipDrawUnit()
-							.setShipTextureRegion(shipBack, shipBackA);
-					shipLastUnit = unit;
-
-					// Wenn keine Zerstörer und Schlachtschiffe da sind.
-					if (shipPlaceHelper.get(3) == 0
-							&& shipPlaceHelper.get(2) == 0) {
-						shipNextUnit = null;
-					}
-				}
-				if (unit != null && !firstShift
-						&& !unit.equals(unitLocation[unitLocation.length - 1])
-						&& unit.equals(shipNextUnit)
-						&& !overlayingOtherShips(unit)
-						&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
-//					System.out.println("Unit Gefunden secondShift");
-					// Hinzufügen von Schiffsteil
-					EntityShip tmpShip = new EntityShip(shipFront, shipFrontA,
-							new Vector2(unit.getXpos(), unit.getYpos()),
-							new Vector2(GameFieldScreen.size,
-									GameFieldScreen.size), game
-									.getFirstFieldPlayer().getMapTileLayer());
-					unit.setEntityShipDrawUnit(tmpShip);
-					unit.setOccupied(true);
-
-					// shipNextUnit festlegen
-					if (shipPlaceHelper.get(3) > 0 && unitLocation.length <= 2) {
-						switch (shiftDirection) {
-						case 0:// links
-							shipNextUnit = unit.get_lNeighbor();
-							break;
-						case 1:// rechts
-							shipNextUnit = unit.get_rNeighbor();
-							break;
-						case 2:// oben
-							shipNextUnit = unit.get_uNeighbor();
-							break;
-						case 3:// unten
-							shipNextUnit = unit.get_oNeighbor();
-							break;
-						default:
-							break;
-						}
-					}
-
-					// Setzen der richtigen Schiffstextur für letzen
-					unitLocation[unitLocation.length - 1]
-							.getEntityShipDrawUnit().setShipTextureRegion(
-									shipMiddle, shipMiddleA);
-
-					// Schiffslänge hinzufügen
-					FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
-					for (int i = 0; i < unitLocation.length; i++) {
-						tmpUnitLocation[i] = unitLocation[i];
-					}
-					tmpUnitLocation[tmpUnitLocation.length - 1] = unit;
-					unitLocation = tmpUnitLocation;
-					shipLastUnit = unit;
-				}
-
+				handleShipMiddleConstructor(touch);
 			}
 		}
 		// camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0);
 		return false;
 	}
-
-
 
 	@Override
 	public boolean panStop(float x, float y, int pointer, int button) {
@@ -410,96 +193,70 @@ class CameraController implements GestureListener {
 		// Bildschirmkoordinaten transformieren zu Weldkoordinaten
 		Vector3 touch = new Vector3(x, y, 0);
 		camera.unproject(touch);
-//		System.out.println("Stop Bildschirm zu Weltkoordinaten: " + "X: "
-//				+ touch.x + " Y: " + touch.y);
+		// System.out.println("Stop Bildschirm zu Weltkoordinaten: " + "X: "
+		// + touch.x + " Y: " + touch.y);
 
 		if (aktivatorSchiffSetzen) {
-			// boolean zurücksetzen
-			aktivatorSchiffSetzen = false;
-			firstShift = true;
-			shiftDirection = -1;
-			shipPlaceHelper.set(unitLocation.length - 1,
-					shipPlaceHelper.get(unitLocation.length - 1) - 1);
-			unitLocation[0].get_myField().setAllShipsSet(true);
-			unitLocation[0].get_myField().setAllShipsSetManual(true);
-			/* Klasse Ship: Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten */
-			/* Hilfsfunktion ShipDirection 0=links 1=recht 2=oben 3=unten*/
-			int orientation=1;
-			switch (shiftDirection) {
-			case 0:// links
-				orientation=2;
-				break;
-			case 1:// rechts
-				orientation=0;
-				break;
-			case 2:// oben
-				orientation=1;
-				break;
-			case 3:// unten
-				orientation=3;
-				break;
-			default:
-				break;
-			}
-			
-			unitLocation[0].setShipOrientation(orientation);
-			
-			// Hinzufügen der fertigen unitLocation
-			placedShipUnits.add(unitLocation);
-
-//			System.out.println("Anzahl Schiffe auf Feld: "
-//					+ placedShipUnits.size());
-			// TODO ende des schiffes.
+			handleShipEndConstructor(touch);
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Methode prüft ob die aktuelle Unit im Touch nicht in einer der
-	 * Ecken von der letzen Unit liegt.
-	 * @param lastUnit Die letze Unit
-	 * @param unit Die aktuelle Unit im Touch
+	 * Methode prüft ob die aktuelle Unit im Touch nicht in einer der Ecken von
+	 * der letzen Unit liegt.
+	 * 
+	 * @param lastUnit
+	 *            Die letze Unit
+	 * @param unit
+	 *            Die aktuelle Unit im Touch
 	 * @return boolean true oder false
 	 */
 	private boolean isNextUnitinsideCorner(FieldUnit lastUnit, FieldUnit unit) {
-		
-		if (lastUnit.get_lNeighbor()!=null&&lastUnit.get_lNeighbor().get_oNeighbor() != null) {
+
+		if (lastUnit.get_lNeighbor() != null
+				&& lastUnit.get_lNeighbor().get_oNeighbor() != null) {
 			if (unit.equals(lastUnit.get_lNeighbor().get_oNeighbor()))
 				return true;
 		}
-		if (lastUnit.get_lNeighbor()!=null&&lastUnit.get_lNeighbor().get_uNeighbor() != null) {
+		if (lastUnit.get_lNeighbor() != null
+				&& lastUnit.get_lNeighbor().get_uNeighbor() != null) {
 
 			if (unit.equals(lastUnit.get_lNeighbor().get_uNeighbor()))
 				return true;
 		}
-		if (lastUnit.get_rNeighbor()!=null&&lastUnit.get_rNeighbor().get_oNeighbor() != null) {
+		if (lastUnit.get_rNeighbor() != null
+				&& lastUnit.get_rNeighbor().get_oNeighbor() != null) {
 
 			if (unit.equals(lastUnit.get_rNeighbor().get_oNeighbor()))
 				return true;
 		}
-		if (lastUnit.get_rNeighbor()!=null&&lastUnit.get_rNeighbor().get_uNeighbor() != null) {
+		if (lastUnit.get_rNeighbor() != null
+				&& lastUnit.get_rNeighbor().get_uNeighbor() != null) {
 
 			if (unit.equals(lastUnit.get_rNeighbor().get_uNeighbor()))
 				return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
-	 * Methode prüft ob die aktuelle Unit im Touch ein bereits
-	 * plaziertes Schiff überdeckt.
-	 * @param unit Das Aktuelle Unit im Touch
+	 * Methode prüft ob die aktuelle Unit im Touch ein bereits plaziertes Schiff
+	 * überdeckt.
+	 * 
+	 * @param unit
+	 *            Das Aktuelle Unit im Touch
 	 * @return boolean true oder false
 	 */
 	private boolean overlayingOtherShips(FieldUnit unit) {
 		for (FieldUnit[] fieldUnits : placedShipUnits) {
 			for (FieldUnit fieldUnit : fieldUnits) {
-				if(fieldUnit.equals(unit)){
+				if (fieldUnit.equals(unit)) {
 					return true;
 				}
 			}
-			
+
 		}
 		return false;
 	}
@@ -783,6 +540,259 @@ class CameraController implements GestureListener {
 
 	public ArrayList<FieldUnit[]> getPlacedShipUnits() {
 		return placedShipUnits;
+	}
+
+	/**
+	 * Hilfsmethode handelt den Anfang des Schiffsteils
+	 * 
+	 * @param touch
+	 *            Vector3 mit Weltkoordinaten
+	 */
+	private void handleShipBeginConstructor(Vector3 touch) {
+
+		FieldUnit unit = game.getFirstFieldPlayer().getElementByXPosYPos(
+				touch.x, touch.y);
+		if (unit != null
+				&& (shipPlaceHelper.get(3) > 0 || shipPlaceHelper.get(2) > 0
+						|| shipPlaceHelper.get(1) > 0 || shipPlaceHelper.get(0) > 0)
+				&& !overlayingOtherShips(unit)) {
+			// System.out.println("unit Start");
+			aktivatorSchiffSetzen = true;
+			// Initialisieren der Schiffstexturen
+			shipBack = game.getFirstFieldPlayer().getShipTextures().get("uvk");
+			shipBackA = game.getFirstFieldPlayer().getShipTextures()
+					.get("uvka");
+			shipMiddle = game.getFirstFieldPlayer().getShipTextures()
+					.get("uvk");
+			shipMiddleA = game.getFirstFieldPlayer().getShipTextures()
+					.get("uvka");
+			shipFront = game.getFirstFieldPlayer().getShipTextures().get("uvk");
+			shipFrontA = game.getFirstFieldPlayer().getShipTextures()
+					.get("uvka");
+			// Hinzufügen von Schiffsteil
+			EntityShip tmpShip = new EntityShip(shipBack, shipBackA,
+					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
+							GameFieldScreen.size, GameFieldScreen.size), game
+							.getFirstFieldPlayer().getMapTileLayer());
+			unit.setEntityShipDrawUnit(tmpShip);
+			unit.setOccupied(true);
+
+			// Schiffslänge hinzufügen
+			unitLocation = new FieldUnit[1];
+			unitLocation[0] = unit;
+			shipLastUnit = unit;
+		}
+	}
+
+	/**
+	 * Hilfsmethode handelt die Mitte und Ende des Schiffsteils
+	 * 
+	 * @param touch
+	 *            Vector3 mit Weltkoordinaten
+	 */
+	private void handleShipMiddleConstructor(Vector3 touch) {
+		FieldUnit unit = game.getFirstFieldPlayer().getElementByXPosYPos(
+				touch.x, touch.y);
+		if (unit != null
+				&& !unit.equals(unitLocation[0])
+				&& firstShift
+				&& (shipPlaceHelper.get(3) > 0 || shipPlaceHelper.get(2) > 0 || shipPlaceHelper
+						.get(1) > 0) && !overlayingOtherShips(unit)
+				&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
+			// Beim ersten shift werden Texturen festgelegt werden.
+			firstShift = false;
+			// System.out.println("Unit Gefunden firstShift");
+			if (unit.equals(unitLocation[0].get_lNeighbor())) {
+				shiftDirection = 0;
+				// Gdx.app.log("FirstShift", "leftShift");
+				// Texturen setzen
+				shipBack = game.getFirstFieldPlayer().getShipTextures()
+						.get("lhb");
+				shipBackA = game.getFirstFieldPlayer().getShipTextures()
+						.get("lhba");
+				shipMiddle = game.getFirstFieldPlayer().getShipTextures()
+						.get("lhm");
+				shipMiddleA = game.getFirstFieldPlayer().getShipTextures()
+						.get("lhma");
+				shipFront = game.getFirstFieldPlayer().getShipTextures()
+						.get("lhf");
+				shipFrontA = game.getFirstFieldPlayer().getShipTextures()
+						.get("lhfa");
+				shipNextUnit = unit.get_lNeighbor();
+			}
+			if (unit.equals(unitLocation[0].get_rNeighbor())) {
+				shiftDirection = 1;
+				// Gdx.app.log("FirstShift", "rightShift");
+				shipBack = game.getFirstFieldPlayer().getShipTextures()
+						.get("rhb");
+				shipBackA = game.getFirstFieldPlayer().getShipTextures()
+						.get("rhba");
+				shipMiddle = game.getFirstFieldPlayer().getShipTextures()
+						.get("rhm");
+				shipMiddleA = game.getFirstFieldPlayer().getShipTextures()
+						.get("rhma");
+				shipFront = game.getFirstFieldPlayer().getShipTextures()
+						.get("rhf");
+				shipFrontA = game.getFirstFieldPlayer().getShipTextures()
+						.get("rhfa");
+				shipNextUnit = unit.get_rNeighbor();
+			}
+			if (unit.equals(unitLocation[0].get_uNeighbor())) {
+				shiftDirection = 2;
+				// Gdx.app.log("FirstShift", "upShift");
+				shipBack = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvb");
+				shipBackA = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvba");
+				shipMiddle = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvm");
+				shipMiddleA = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvma");
+				shipFront = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvf");
+				shipFrontA = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvfa");
+				shipNextUnit = unit.get_uNeighbor();
+			}
+
+			if (unit.equals(shipLastUnit.get_oNeighbor())) {
+				shiftDirection = 3;
+				// Gdx.app.log("FirstShift", "downShift");
+				// TODO Texturen nach unten hinzufügen
+				shipBack = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvf");
+				shipBackA = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvfa");
+				shipMiddle = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvm");
+				shipMiddleA = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvma");
+				shipFront = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvb");
+				shipFrontA = game.getFirstFieldPlayer().getShipTextures()
+						.get("uvba");
+				shipNextUnit = unit.get_oNeighbor();
+			}
+
+			// Hinzufügen von Schiffsteil
+			EntityShip tmpShip = new EntityShip(shipFront, shipFrontA,
+					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
+							GameFieldScreen.size, GameFieldScreen.size), game
+							.getFirstFieldPlayer().getMapTileLayer());
+			unit.setEntityShipDrawUnit(tmpShip);
+			unit.setOccupied(true);
+
+			// Schiffslänge hinzufügen
+			FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
+			tmpUnitLocation[0] = unitLocation[0];
+			tmpUnitLocation[1] = unit;
+			unitLocation = tmpUnitLocation;
+
+			// Setzen der richtigen Schiffstextur für Hinten
+			unitLocation[0].getEntityShipDrawUnit().setShipTextureRegion(
+					shipBack, shipBackA);
+			shipLastUnit = unit;
+
+			// Wenn keine Zerstörer und Schlachtschiffe da sind.
+			if (shipPlaceHelper.get(3) == 0 && shipPlaceHelper.get(2) == 0) {
+				shipNextUnit = null;
+			}
+		}
+		if (unit != null && !firstShift
+				&& !unit.equals(unitLocation[unitLocation.length - 1])
+				&& unit.equals(shipNextUnit) && !overlayingOtherShips(unit)
+				&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
+			// System.out.println("Unit Gefunden secondShift");
+			// Hinzufügen von Schiffsteil
+			EntityShip tmpShip = new EntityShip(shipFront, shipFrontA,
+					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
+							GameFieldScreen.size, GameFieldScreen.size), game
+							.getFirstFieldPlayer().getMapTileLayer());
+			unit.setEntityShipDrawUnit(tmpShip);
+			unit.setOccupied(true);
+
+			// shipNextUnit festlegen
+			if (shipPlaceHelper.get(3) > 0 && unitLocation.length <= 2) {
+				switch (shiftDirection) {
+				case 0:// links
+					shipNextUnit = unit.get_lNeighbor();
+					break;
+				case 1:// rechts
+					shipNextUnit = unit.get_rNeighbor();
+					break;
+				case 2:// oben
+					shipNextUnit = unit.get_uNeighbor();
+					break;
+				case 3:// unten
+					shipNextUnit = unit.get_oNeighbor();
+					break;
+				default:
+					break;
+				}
+			}
+
+			// Setzen der richtigen Schiffstextur für letzen
+			unitLocation[unitLocation.length - 1].getEntityShipDrawUnit()
+					.setShipTextureRegion(shipMiddle, shipMiddleA);
+
+			// Schiffslänge hinzufügen
+			FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
+			for (int i = 0; i < unitLocation.length; i++) {
+				tmpUnitLocation[i] = unitLocation[i];
+			}
+			tmpUnitLocation[tmpUnitLocation.length - 1] = unit;
+			unitLocation = tmpUnitLocation;
+			shipLastUnit = unit;
+		}
+	}
+
+	/**
+	 * Hilfsmethode handelt das Ende des Schiffsteils, fügt das Schiff der
+	 * globalen Schiffsliste placedShipUnits hinzu und setzt boolean Variablen
+	 * zurück.
+	 * 
+	 * @param touch
+	 *            Vector3 mit Weltkoordinaten
+	 */
+	private void handleShipEndConstructor(Vector3 touch) {
+		// boolean zurücksetzen
+		aktivatorSchiffSetzen = false;
+		firstShift = true;
+		shiftDirection = -1;
+		shipPlaceHelper.set(unitLocation.length - 1,
+				shipPlaceHelper.get(unitLocation.length - 1) - 1);
+		unitLocation[0].get_myField().setAllShipsSet(true);
+		unitLocation[0].get_myField().setAllShipsSetManual(true);
+		/*
+		 * Klasse Ship: Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links,
+		 * 3=unten
+		 */
+		/* Hilfsfunktion ShipDirection 0=links 1=recht 2=oben 3=unten */
+		int orientation = 1;
+		switch (shiftDirection) {
+		case 0:// links
+			orientation = 2;
+			break;
+		case 1:// rechts
+			orientation = 0;
+			break;
+		case 2:// oben
+			orientation = 1;
+			break;
+		case 3:// unten
+			orientation = 3;
+			break;
+		default:
+			break;
+		}
+
+		unitLocation[0].setShipOrientation(orientation);
+
+		// Hinzufügen der fertigen unitLocation
+		placedShipUnits.add(unitLocation);
+
+		Gdx.app.log(GameFieldScreen.LOG, "Anzahl Schiffe auf Feld: "
+				+ placedShipUnits.size());
 	}
 
 }

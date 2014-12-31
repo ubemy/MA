@@ -53,13 +53,7 @@ public class CreateMultiplayerGame extends Activity {
 			progress.setMessage(getString(R.string.WaitForTakers));
 			progress.setIndeterminate(true);
 			progress.show();
-			
-			/*
-			 * Field Klasse gibt aktuell noch Fehler
-			Field firstField = new Field(0);
-			Field secondField = new Field(1);*/
-			//Game game = new Game(1, null, null, true, false, false, 0);
-			
+					
 			bt.startServer(this);
 		}
 	}

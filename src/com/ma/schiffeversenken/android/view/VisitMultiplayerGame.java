@@ -43,6 +43,7 @@ public class VisitMultiplayerGame extends Activity {
 	/**Wird aufgerufen, wenn ein neues Bluetooth Geraet gefunden wurde oder
 	 * die Suche beendet wurde*/
 	private BroadcastReceiver mReceiver;
+	private boolean waitForIntent;
 	
 	/**
 	 * Wird aufgerufen, wenn ein Geraet ausgewaehlt wurde
@@ -77,16 +78,19 @@ public class VisitMultiplayerGame extends Activity {
 		startActivity(intent);
 	}
 	
-	/**
-	 * Erstellt eine VisitMultiplayerGame Activity
-	 */
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_visit_multiplayer_game);
-		bt = new Bluetooth();
-		status = (TextView) findViewById(R.id.visit_game_status);
-		
+	public void onActivityResult(int RequestCode, int ResultCode, Intent Data) {
+		super.onActivityResult(RequestCode, ResultCode, Data); 
+		if(RequestCode == Bluetooth.REQUEST_ENABLE_BT){
+			if(ResultCode == -1){
+				createAct();
+			}
+			else{
+				finish();
+			}
+		}
+	} 
+	
+	private void createAct(){
 		try{
 			this.mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 			this.mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -142,10 +146,32 @@ public class VisitMultiplayerGame extends Activity {
 			} else {
 				this.mPairedDevicesArrayAdapter.add(getString(R.string.NoPairedDevices));
 			}
-			}
-			catch(Exception ex){
-				ex.printStackTrace();
-			}
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		
+		
+		bt.getPairedDevices();
+		bt.discoverDevices();
+		
+		progress = new ProgressDialog(this);
+		progress.setMessage(getString(R.string.SearchingForNewDevices));
+		progress.setIndeterminate(true);
+		progress.show();
+	}
+	
+	/**
+	 * Erstellt eine VisitMultiplayerGame Activity
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_visit_multiplayer_game);
+		bt = new Bluetooth();
+		status = (TextView) findViewById(R.id.visit_game_status);
+		waitForIntent = true;
 		
 		int btState = bt.blutoothOK();
 		
@@ -163,6 +189,100 @@ public class VisitMultiplayerGame extends Activity {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		    startActivityForResult(enableBtIntent, Bluetooth.REQUEST_ENABLE_BT);
 		}
+		/*
+		try{
+			this.mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+			this.mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+			final ListView pairedListView = (ListView) this.findViewById(R.id.pairedDevicesLV);
+			pairedListView.setAdapter(this.mPairedDevicesArrayAdapter);
+			pairedListView.setOnItemClickListener(this.mDeviceClickListener);
+
+			final ListView newDevicesListView = (ListView) this.findViewById(R.id.detectedDevicesLV);
+			newDevicesListView.setAdapter(this.mNewDevicesArrayAdapter);
+			newDevicesListView.setOnItemClickListener(this.mDeviceClickListener);
+
+			mReceiver = new BroadcastReceiver() {
+			    public void onReceive(Context context, Intent intent) {
+			        String action = intent.getAction();
+			        
+			        if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+			        	//Wenn ein neues Bluetooth Geraet gefunden wurde
+						final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+						if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+							bt.addPairedDevice(device);
+						}
+					} else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+						//Wenn die Suche nach neuen Geraeten abgeschlossen wurde
+						VisitMultiplayerGame.this.setProgressBarIndeterminateVisibility(false);
+						if (VisitMultiplayerGame.this.mNewDevicesArrayAdapter.getCount() == 0) {
+							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add(getString(R.string.NoDevicesFound));
+						}
+						else{
+							status.setText(getString(R.string.PleaseSelectADevice));
+						}
+						
+						progress.dismiss();
+					}
+			    }
+			};
+			
+			//Event Handler registrieren, wenn Geraet gefunden wurde
+			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+			this.registerReceiver(this.mReceiver, filter);
+
+			//Event Handler registrieren, wenn Suche beendet wurde gefunden wurde
+			filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+			this.registerReceiver(this.mReceiver, filter);
+			
+			// Get a set of currently paired devices
+			final Set<BluetoothDevice> pairedDevices = bt.getPairedDevices();
+			if (pairedDevices.size() > 0) {
+				this.findViewById(R.id.pairedDevicesLV).setVisibility(View.VISIBLE);
+				for (final BluetoothDevice device : pairedDevices) {
+					this.mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+				}
+			} else {
+				this.mPairedDevicesArrayAdapter.add(getString(R.string.NoPairedDevices));
+			}
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		
+		
+		bt.getPairedDevices();
+		bt.discoverDevices();
+		
+		progress = new ProgressDialog(this);
+		progress.setMessage(getString(R.string.SearchingForNewDevices));
+		progress.setIndeterminate(true);
+		progress.show();
+		
+		/*
+		if(btState == 1){
+			/*
+			 * Geraet unterstuetzt kein Bluetooth
+			 * Meldung ausgeben und zum vorheriger Activity wechseln
+			 *
+			Toast t = Toast.makeText(getApplicationContext(), getString(R.string.BluetoothNotAvailable), Toast.LENGTH_LONG);
+			t.show();
+			finish();
+		}
+		else if(btState == 2){
+			//Bluetooth ist nicht enabled
+			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+		    startActivityForResult(enableBtIntent, Bluetooth.REQUEST_ENABLE_BT);
+		    
+		    bt.getPairedDevices();
+			bt.discoverDevices();
+			
+			progress = new ProgressDialog(this);
+			progress.setMessage(getString(R.string.SearchingForNewDevices));
+			progress.setIndeterminate(true);
+			progress.show();
+		}
 		else if(btState == 0){
 			bt.getPairedDevices();
 			bt.discoverDevices();
@@ -171,7 +291,7 @@ public class VisitMultiplayerGame extends Activity {
 			progress.setMessage(getString(R.string.SearchingForNewDevices));
 			progress.setIndeterminate(true);
 			progress.show();
-		}
+		}*/
 	}
 	
 	@Override

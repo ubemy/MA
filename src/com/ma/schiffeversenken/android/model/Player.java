@@ -60,7 +60,7 @@ public class Player implements Serializable {
 		
 		//Load Preferences on Ki Difficulty
 		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
-		String kiLevel = pref.getString("Ki");
+		String kiLevel = pref.getString("ki");
 		Gdx.app.log(GameFieldScreen.LOG, "Kilevel: "+kiLevel);
 		int ki=-1;
 		if (kiLevel.equals("Einfach")){
@@ -73,7 +73,7 @@ public class Player implements Serializable {
 
 		int gameMode = 0;
 		if(primaryBTGame || secondaryBTGame) gameMode = 1;
-		this.game = new Game(gameMode, firstField, secondField, primaryBTGame, secondaryBTGame, false, 1);
+		this.game = new Game(gameMode, firstField, secondField, primaryBTGame, secondaryBTGame, false, ki);
 
 		if (Gdx.files.isLocalStorageAvailable()
 				&& Gdx.files.local("preferences.bin").exists()) {

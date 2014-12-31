@@ -265,6 +265,10 @@ public class Game extends Thread {
 			}
 		}
 		
+		if(fe.getAttacked()){
+			feWasAlreadyAttacked = true;
+		}
+		
 		if(!feWasAlreadyAttacked){
 			fe.setAttacked(true); //FeldElement als attackiert markieren
 			
@@ -284,10 +288,10 @@ public class Game extends Thread {
 				 * damit die KI weiss ob ein Schiff getroffen und/oder zerstoert wurden
 				 */
 				ki.updateHistory(id, attackHit, shipDestroyed);
-			}
-			
-			resetActionVariables();
+			}	
 		}
+		
+		resetActionVariables();
 		
 		return ret;
 	}
@@ -358,6 +362,8 @@ public class Game extends Thread {
 			if(gamersTurn==0){
 				//Auf Eingabe von Benutzer warten
 				do{
+					feWasAlreadyAttacked = false;
+					
 					while(!firstGamerAction){
 						try {
 							Thread.sleep(FIVEHUNDRED_MS);
@@ -367,7 +373,7 @@ public class Game extends Thread {
 						}
 					}
 					hitShip = gamerAction(firstGamerAttackID, gamersTurn);
-				}while(hitShip);
+				}while(hitShip || feWasAlreadyAttacked);
 				gamersTurn++;
 			}
 			else{

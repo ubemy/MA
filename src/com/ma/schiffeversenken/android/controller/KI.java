@@ -9,36 +9,8 @@ import com.ma.schiffeversenken.android.model.*;
 * @author Maik Steinborn
 */
 public class KI {
-	/**Rechte Kante*/
-	public static final int EDGE_RIGHT = 0;
-	/**Obere Kante*/
-	public static final int EDGE_ABOVE = 1;
-	/**Linke Kante*/
-	public static final int EDGE_LEFT = 2;
-	/**Untere Kante*/
-	public static final int EDGE_BELOW = 3;
-	/**Ausrichtung des Schiffs nach rechts*/
-	public static final int SHIP_ORIENTATION_RIGHT = 0;
-	/**Ausrichtung des Schiffs nach oben*/
-	public static final int SHIP_ORIENTATION_ABOVE = 1;
-	/**Ausrichtung des Schiffs nach links*/
-	public static final int SHIP_ORIENTATION_LEFT = 2;
-	/**Ausrichtung des Schiffs nach unten*/
-	public static final int SHIP_ORIENTATION_BELOW = 3;
 	/**Anzahl der Angriffe, die in der History gespeichert werden*/
 	public static final int NUMBER_OF_HISTORY = 4;
-	/**Groesse des Kreuzer*/
-	public static final int CRUISER_SIZE = 1;
-	/**Groesse des Uboot*/
-	public static final int SUBMARINE_SIZE = 2;
-	/**Groesse des Zerstoerer*/
-	public static final int DESTROYER_SIZE = 3;
-	/**Groesse des Schlachtschiff*/
-	public static final int BATTLESHIP_SIZE = 4;
-	/**Anzahl der Feldelemente auf dem Spielfeld*/
-	public static final int FIELD_SIZE = 100;
-	/**Anzahl der moeglichen Ausrichtungen eines Schiffs*/
-	public static final int NUMBER_OF_ORIENTATIOS = 4;
 	/**Das Spielfeld der KI*/
 	private Field myField;
 	/**Das gegnerische Spielfeld*/
@@ -51,6 +23,7 @@ public class KI {
 	private boolean[] shipDestroyedHistory = new boolean[NUMBER_OF_HISTORY];
 	/**Strategie bzw. Schwierigkeitsstufe der KI*/
 	KIStrategy kiStrategy;
+	
 	/**
 	* Erstellt ein neues KI Objekt
 	* @param myField Spielfeld der KI
@@ -122,19 +95,19 @@ public class KI {
 		int i,j,k,l;
 		
 		for(i=0; i<numberOfSubmarines; i++){
-			ships[i] = new Ship("Uboot", SUBMARINE_SIZE);
+			ships[i] = new Ship("Uboot", Ship.SUBMARINE_SIZE);
 		}
 		
 		for(j=0; j<numberOfCruiser; j++){
-			ships[j+numberOfSubmarines] = new Ship("Kreuzer", CRUISER_SIZE);
+			ships[j+numberOfSubmarines] = new Ship("Kreuzer", Ship.CRUISER_SIZE);
 		}
 		
 		for(k=0; k<numberOfDestroyer; k++){
-			ships[k+numberOfSubmarines+numberOfCruiser] = new Ship("Zerstoerer", DESTROYER_SIZE);
+			ships[k+numberOfSubmarines+numberOfCruiser] = new Ship("Zerstoerer", Ship.DESTROYER_SIZE);
 		}
 		
 		for(l=0; l<numberOfBattleShips; l++){
-			ships[l+numberOfSubmarines+numberOfCruiser+numberOfDestroyer] = new Ship("Schlachtschiff", BATTLESHIP_SIZE);
+			ships[l+numberOfSubmarines+numberOfCruiser+numberOfDestroyer] = new Ship("Schlachtschiff", Ship.BATTLESHIP_SIZE);
 		}
 		
 		return ships;
@@ -177,7 +150,7 @@ public class KI {
 	int getIDForContinueLastAttack(){
 		int ret = 0;
 		boolean jump = false;
-		//int lastHistory = 1;
+		
 		for(int i=0; i<4; i++){
 			if(!jump && ret == 0){
 				if(hitHistory[i]){
@@ -185,39 +158,30 @@ public class KI {
 						jump = true;
 					}
 					else{
-						//if(i == 3) lastHistory = -1;
-						if((idHistory[i] + 1) <= FIELD_SIZE){
-							//if(getEnemiesField().getElementByID(idHistory[i] + 1).getAttacked()){
-							//if((idHistory[i] + 1) == idHistory[i+lastHistory]){
+						if((idHistory[i] - 1) > 0 && (idHistory[i] + 1) <= Field.FIELD_SIZE){
 							if(idHistoryContains(idHistory[i] + 1)){
-								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_LEFT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_LEFT && !getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
+								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != FieldUnit.EDGE_LEFT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != FieldUnit.EDGE_LEFT && !getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
 									ret = idHistory[i] - 1;
 								}
 							}
 						}
-						if((idHistory[i] - 1) > 0){
-							//if(getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
-							//if((idHistory[i] - 1) == idHistory[i+lastHistory]){
+						if((idHistory[i] - 1) > 0 && (idHistory[i] + 1) <= Field.FIELD_SIZE){
 							if(idHistoryContains(idHistory[i] - 1)){
-								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_RIGHT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_RIGHT && !getEnemiesField().getElementByID(idHistory[i] + 1).getAttacked()){
+								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != FieldUnit.EDGE_RIGHT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != FieldUnit.EDGE_RIGHT && !getEnemiesField().getElementByID(idHistory[i] + 1).getAttacked()){
 									ret = idHistory[i] + 1;
 								}
 							}
 						}
-						if((idHistory[i] + 10) <= FIELD_SIZE){
-							//if(getEnemiesField().getElementByID(idHistory[i] + 10).getAttacked()){
-							//if((idHistory[i] + 10) == idHistory[i+lastHistory]){
+						if((idHistory[i] - 10) > 0 && (idHistory[i] + 10) <= Field.FIELD_SIZE){
 							if(idHistoryContains(idHistory[i] + 10)){
-								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_ABOVE && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_ABOVE && !getEnemiesField().getElementByID(idHistory[i] - 10).getAttacked()){
+								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != FieldUnit.EDGE_ABOVE && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != FieldUnit.EDGE_ABOVE && !getEnemiesField().getElementByID(idHistory[i] - 10).getAttacked()){
 									ret = idHistory[i] - 10;
 								}
 							}
 						}
-						if((idHistory[i] - 10) > 0){
-							//if(getEnemiesField().getElementByID(idHistory[i] - 10).getAttacked()){
-							//if((idHistory[i] - 10) == idHistory[i+lastHistory]){
+						if((idHistory[i] - 10) > 0 && (idHistory[i] + 10) <= Field.FIELD_SIZE){
 							if(idHistoryContains(idHistory[i] - 10)){
-								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != EDGE_BELOW && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != EDGE_BELOW && !getEnemiesField().getElementByID(idHistory[i] + 10).getAttacked()){
+								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != FieldUnit.EDGE_BELOW && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != FieldUnit.EDGE_BELOW && !getEnemiesField().getElementByID(idHistory[i] + 10).getAttacked()){
 									ret = idHistory[i] + 10;
 								}
 							}
@@ -243,24 +207,24 @@ public class KI {
 			Random random = new Random();
 			int counter = 0;
 			do{
-				int randomInt = random.nextInt(NUMBER_OF_ORIENTATIOS);
+				int randomInt = random.nextInt(Ship.NUMBER_OF_ORIENTATIOS);
 				if(getEnemiesField().getElementByID(idHistory[0]).getEdge(1) != randomInt && getEnemiesField().getElementByID(idHistory[0]).getEdge(2) != randomInt){
-					if(randomInt == SHIP_ORIENTATION_ABOVE){
+					if(randomInt == Ship.SHIP_ORIENTATION_ABOVE){
 						if(!getEnemiesField().getElementByID(idHistory[0] - 10).getAttacked()){
 							ret = idHistory[0] - 10;
 						}
 					}
-					if(randomInt == SHIP_ORIENTATION_BELOW){
+					if(randomInt == Ship.SHIP_ORIENTATION_BELOW){
 						if(!getEnemiesField().getElementByID(idHistory[0] + 10).getAttacked()){
 							ret = idHistory[0] + 10;
 						}
 					}
-					if(randomInt == SHIP_ORIENTATION_RIGHT){
+					if(randomInt == Ship.SHIP_ORIENTATION_RIGHT){
 						if(!getEnemiesField().getElementByID(idHistory[0] + 1).getAttacked()){
 							ret = idHistory[0] + 1;
 						}
 					}
-					if(randomInt == SHIP_ORIENTATION_LEFT){
+					if(randomInt == Ship.SHIP_ORIENTATION_LEFT){
 						if(!getEnemiesField().getElementByID(idHistory[0] - 1).getAttacked()){
 							ret = idHistory[0] - 1;
 						}

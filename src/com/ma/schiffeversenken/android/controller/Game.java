@@ -17,7 +17,6 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Klaus Schlender
  */
 public class Game extends Thread {
-
 	/**Einzelspielermodus*/
 	private final static int GAME_MODE_SINGLE_PLAYER = 0;
 	/**Mehrspielermodus*/

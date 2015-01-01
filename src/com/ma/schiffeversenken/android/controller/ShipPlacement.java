@@ -11,34 +11,9 @@ import com.ma.schiffeversenken.android.model.*;
  * @author Maik Steinborn
  */
 public class ShipPlacement {
-	/** Rechte Kante */
-	public static final int EDGE_RIGHT = 0;
-	/** Obere Kante */
-	public static final int EDGE_ABOVE = 1;
-	/** Linke Kante */
-	public static final int EDGE_LEFT = 2;
-	/** Untere Kante */
-	public static final int EDGE_BELOW = 3;
-	/** Vorderes Schiff Segment */
-	public static final int SHIP_SEGMENT_FRONT = 0;
-	/** Mittleres Schiff Segment */
-	public static final int SHIP_SEGMENT_MIDDLE = 1;
-	/** Hinteres Schiff Segment */
-	public static final int SHIP_SEGMENT_BACK = 2;
-	/** Anzahl der Feldelement - 1 */
-	public static final int FIELD_SIZE = 100;
-	/** Ausrichtung des Schiffs nach rechts */
-	public static final int SHIP_ORIENTATION_RIGHT = 0;
-	/** Ausrichtung des Schiffs nach oben */
-	public static final int SHIP_ORIENTATION_ABOVE = 1;
-	/** Ausrichtung des Schiffs nach links */
-	public static final int SHIP_ORIENTATION_LEFT = 2;
-	/** Ausrichtung des Schiffs nach unten */
-	public static final int SHIP_ORIENTATION_BELOW = 3;
-	/** Anzahl der moeglichen Ausrichtungen eines Schiffs */
-	public static final int NUMBER_OF_ORIENTATIOS = 4;
 	/** Anzahl der Bloecke */
 	public static final int NUMBER_OF_BLOCKS = 25;
+	
 	/**
 	 * Das Spielfeld wird in 25 Bloecke aufgeteilt. Die Bloecke werden in dieser
 	 * Variable gespeichert
@@ -77,13 +52,13 @@ public class ShipPlacement {
 				do {
 					// Pruefen ob der Block schon belegt ist.
 					// Zufaellige Zahl erstellen
-					randomID = random.nextInt(FIELD_SIZE) + 1;
+					randomID = random.nextInt(Field.FIELD_SIZE) + 1;
 				} while (!checkBlock(randomID, ship));
 
 				do {
 					// Pruefen ob das FeldElement schon belegt ist
 					orientation = random
-							.nextInt(NUMBER_OF_ORIENTATIOS);
+							.nextInt(Ship.NUMBER_OF_ORIENTATIOS);
 					run++;
 					ok = checkEinheit(orientation, ship, randomID, field);
 				} while (!ok && run < 4);
@@ -95,21 +70,21 @@ public class ShipPlacement {
 			FieldUnit tempElement = field.getElementByID(randomID);
 			tempElement.setOccupied(true);
 			// TODO: X\Y Koordinate an Schiff uebergeben, wenn belegt
-			tempElement.placeShip(ship, SHIP_SEGMENT_BACK);
+			tempElement.placeShip(ship, Ship.SHIP_SEGMENT_BACK);
 			ship.setStandort(tempElement, 0, orientation);
 			int schiffSize = ship.getSize();
 
 			if (schiffSize > 1) {
-				if (orientation == SHIP_ORIENTATION_RIGHT) {
+				if (orientation == Ship.SHIP_ORIENTATION_RIGHT) {
 					markElements(1, schiffSize, randomID, field, ship,
 							orientation);
-				} else if (orientation == SHIP_ORIENTATION_ABOVE) {
+				} else if (orientation == Ship.SHIP_ORIENTATION_ABOVE) {
 					markElements(-10, schiffSize, randomID, field, ship,
 							orientation);
-				} else if (orientation == SHIP_ORIENTATION_LEFT) {
+				} else if (orientation == Ship.SHIP_ORIENTATION_LEFT) {
 					markElements(-1, schiffSize, randomID, field, ship,
 							orientation);
-				} else if (orientation == SHIP_ORIENTATION_BELOW) {
+				} else if (orientation == Ship.SHIP_ORIENTATION_BELOW) {
 					markElements(10, schiffSize, randomID, field, ship,
 							orientation);
 				}
@@ -141,25 +116,25 @@ public class ShipPlacement {
 			
 			switch (u.length - 1) {
 			case 0:
-				ships[i]= new Ship("Kreuzer", KI.CRUISER_SIZE,u);
+				ships[i]= new Ship("Kreuzer", Ship.CRUISER_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
 				}
 				break;
 			case 1:
-				ships[i] = new Ship("Uboot", KI.SUBMARINE_SIZE,u);
+				ships[i] = new Ship("Uboot", Ship.SUBMARINE_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
 				}
 				break;
 			case 2:
-				ships[i] = new Ship("Zerstoerer", KI.DESTROYER_SIZE,u);
+				ships[i] = new Ship("Zerstoerer", Ship.DESTROYER_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
 				}
 				break;
 			case 3:
-				ships[i] = new Ship("Schlachtschiff", KI.BATTLESHIP_SIZE,u);
+				ships[i] = new Ship("Schlachtschiff", Ship.BATTLESHIP_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
 				}
@@ -168,21 +143,21 @@ public class ShipPlacement {
 				break;
 			}
 			
-			u[0].placeShip(ships[i], SHIP_SEGMENT_BACK);
+			u[0].placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 			ships[i].setStandortManual(u,u[0].getShipOrientation());
 			int schiffSize = u.length;
 			
 			if (schiffSize > 1) {
-				if (ships[i].getOrientation() == SHIP_ORIENTATION_RIGHT) {
+				if (ships[i].getOrientation() == Ship.SHIP_ORIENTATION_RIGHT) {
 					markElements(1, schiffSize, u[0].getID(), field, ships[i],
 							ships[i].getOrientation());
-				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_ABOVE) {
+				} else if (ships[i].getOrientation() == Ship.SHIP_ORIENTATION_ABOVE) {
 					markElements(-10, schiffSize, u[0].getID(), field, ships[i],
 							ships[i].getOrientation());
-				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_LEFT) {
+				} else if (ships[i].getOrientation() == Ship.SHIP_ORIENTATION_LEFT) {
 					markElements(-1, schiffSize, u[0].getID(), field, ships[i],
 							ships[i].getOrientation());
-				} else if (ships[i].getOrientation() == SHIP_ORIENTATION_BELOW) {
+				} else if (ships[i].getOrientation() == Ship.SHIP_ORIENTATION_BELOW) {
 					markElements(10, schiffSize, u[0].getID(), field, ships[i],
 							ships[i].getOrientation());
 				}
@@ -217,7 +192,7 @@ public class ShipPlacement {
 	private void markElements(int counter, int size, int id, Field field,
 			Ship ship, int orientation) {
 		int temp = 0;
-		int shipSegment = SHIP_SEGMENT_MIDDLE;
+		int shipSegment = Ship.SHIP_SEGMENT_MIDDLE;
 		int finalCounter = 0;
 		for (int i = 1; i < size; i++) {
 			finalCounter = counter * i;
@@ -225,7 +200,7 @@ public class ShipPlacement {
 			if (temp > 0 && temp < 101) {
 				FieldUnit tempElement = field.getElementByID(temp);
 				if (i == (size - 1))
-					shipSegment = SHIP_SEGMENT_FRONT;
+					shipSegment = Ship.SHIP_SEGMENT_FRONT;
 				tempElement.setOccupied(true);
 				tempElement.placeShip(ship, shipSegment);
 				ship.setStandort(tempElement, i, orientation);
@@ -306,16 +281,16 @@ public class ShipPlacement {
 		if (feld.getElementByID(id).getOccupied()) {
 			ret = false;
 		} else {
-			if (orientation == SHIP_ORIENTATION_RIGHT) {
+			if (orientation == Ship.SHIP_ORIENTATION_RIGHT) {
 				// Nach rechts gerichtetes Schiff
 				ret = checkID(1, size, id, feld);
-			} else if (orientation == SHIP_ORIENTATION_ABOVE) {
+			} else if (orientation == Ship.SHIP_ORIENTATION_ABOVE) {
 				// Nach oben gerichtetes Schiff
 				ret = checkID(-10, size, id, feld);
-			} else if (orientation == SHIP_ORIENTATION_LEFT) {
+			} else if (orientation == Ship.SHIP_ORIENTATION_LEFT) {
 				// Nach links gerichtetes Schiff
 				ret = checkID(-1, size, id, feld);
-			} else if (orientation == SHIP_ORIENTATION_BELOW) {
+			} else if (orientation == Ship.SHIP_ORIENTATION_BELOW) {
 				// Nach unten gerichtetes Schiff
 				ret = checkID(10, size, id, feld);
 			}
@@ -380,13 +355,13 @@ public class ShipPlacement {
 		}
 
 		if (counter == 1)
-			kRichtung = EDGE_RIGHT;
+			kRichtung = FieldUnit.EDGE_RIGHT;
 		else if (counter == -1)
-			kRichtung = EDGE_LEFT;
+			kRichtung = FieldUnit.EDGE_LEFT;
 		else if (counter == 10)
-			kRichtung = EDGE_BELOW;
+			kRichtung = FieldUnit.EDGE_BELOW;
 		else if (counter == -10)
-			kRichtung = EDGE_ABOVE;
+			kRichtung = FieldUnit.EDGE_ABOVE;
 
 		if (element.getEdge(1) == kRichtung || element.getEdge(2) == kRichtung)
 			ret = true;

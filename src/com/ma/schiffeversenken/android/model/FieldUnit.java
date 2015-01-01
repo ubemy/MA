@@ -17,6 +17,14 @@ import com.ma.schiffeversenken.EntityShip;
  * @author Klaus Schlender
  */
 public class FieldUnit{
+	/**Rechte Kante*/
+	public static final int EDGE_RIGHT = 0;
+	/**Obere Kante*/
+	public static final int EDGE_ABOVE = 1;
+	/**Linke Kante*/
+	public static final int EDGE_LEFT = 2;
+	/**Untere Kante*/
+	public static final int EDGE_BELOW = 3;
 	/** Direkte Nachbarn dieses Feldes */
 	FieldUnit lNeighbor, rNeighbor, oNeighbor, uNeighbor;
 	/** Schiff, das auf diesem FeldElement steht */

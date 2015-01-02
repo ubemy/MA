@@ -27,9 +27,8 @@ import android.os.Parcelable;
  * @author Maik Steinborn
  */
 public class BluetoothConnectedThread extends Thread {
-
 	private static final long serialVersionUID = 1L;
-	
+	/**Buffer Groesse fuer den Bluetooth Stream Reader*/
 	private static final int BUFFER_SIZE = 1024;
 	/**Bluetooth Socket Objekt*/
 	private final BluetoothSocket bluetoothSocket;
@@ -47,9 +46,14 @@ public class BluetoothConnectedThread extends Thread {
     private BluetoothAdapter bluetoothAdapter;
     /**Statische Instanz dieser Klasse*/
     private static BluetoothConnectedThread instance;
-    private BluetoothServerSocket serverSocket;
+    /**String, der bei der Bluetooth Kommunikation genutzt wird.
+     * HELLO bedeutet Bluetooth Verbindung erfolgreich aufgebaut*/
     private static final String BLUETOOTH_HELLO = "_HELLO_";
+    /**String, der bei der Bluetooth Kommunikation genutzt wird.
+     * ATTACK bedeutet Attacke auf eine ID*/
     private static final String BLUETOOTH_ATTACK = "_ATTACK_";
+    /**String, der bei der Bluetooth Kommunikation genutzt wird.
+     * RETURN bedeutet Ergebnis einer Attacke an den Gegner zurueck senden*/
     private static final String BLUETOOTH_RETURN = "_RETURN_";
     
     /**
@@ -60,14 +64,13 @@ public class BluetoothConnectedThread extends Thread {
      * @param bluetoothAdapter Bluetooth Adapter Objekt
      * @param game Initialisiertes Game Objekt
      */
-    public BluetoothConnectedThread(BluetoothSocket socket, VisitMultiplayerGame vmgClass, CreateMultiplayerGame cmgClass, BluetoothAdapter bluetoothAdapter, BluetoothServerSocket serverSocket) {
+    public BluetoothConnectedThread(BluetoothSocket socket, VisitMultiplayerGame vmgClass, CreateMultiplayerGame cmgClass, BluetoothAdapter bluetoothAdapter) {
     	bluetoothSocket = socket;
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
         this.vmgClass = vmgClass;
         this.cmgClass = cmgClass;
         this.bluetoothAdapter = bluetoothAdapter;
-        this.serverSocket = serverSocket;
         
         //Temporaeres Objekt benutze, da Streams final sind
         try {
@@ -89,6 +92,10 @@ public class BluetoothConnectedThread extends Thread {
     	return instance;
     }
     
+    /**
+     * Game Instanz setzen
+     * @param game Game Instanz
+     */
     public void setGame(Game game){
     	this.game = game;
     }
@@ -147,6 +154,9 @@ public class BluetoothConnectedThread extends Thread {
         }
     }
     
+    /**
+     * Bei Bluetooth Verbindungsabbruch neu verbinden
+     */
     public void reconnect(){
     	try{
 	    	if(vmgClass != null){

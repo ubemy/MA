@@ -17,7 +17,11 @@ import android.content.Intent;
  * @author Maik Steinborn
  */
 public class Bluetooth extends Activity {
+	/**Konstante, die zurueckgegeben wird, wenn Bluetooth auf diesem Geraet
+	 * nicht unterstuetzt wird*/
 	private static final int BLUETOOTH_NOT_SUPPORTED = 1;
+	/**Konstante, die zurueckgegeben wird, wenn Bluetooth auf diesem Geraet
+	 * deaktiviert ist*/
 	private static final int BLUETOOTH_DISABLED = 2;
 	/**Eine Konstante, die an die Methode startActivityForResult() uebergeben wird,
 	 * wenn das Bluetooth nicht eingeschaltet*/

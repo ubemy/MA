@@ -38,6 +38,9 @@ public class BluetoothListenThread extends Thread{
         serverSocket = tmp;
 	}
 	
+	/**
+	 * BluetoothListenThread-Thread starten
+	 */
 	public void run() {
         BluetoothSocket socket = null;
         
@@ -75,7 +78,7 @@ public class BluetoothListenThread extends Thread{
      * @param socket Aufgebaute Bluetooth Socket Verbindung zum Server
      */
 	private void manageConnectedSocket(BluetoothSocket mmSocket) {
-    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter, serverSocket);
+    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter);
     	if(!reconnect) cmgClass.startGame(btConnectedThread);
     	btConnectedThread.start();
 	}

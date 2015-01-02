@@ -47,6 +47,9 @@ public class BluetoothConnectThread extends Thread {
         bluetoothSocket = tmp;
     }
     
+    /**
+     * BluetoothConnectThread-Thread starten
+     */
     public void run() {
         //Suche stoppen
     	bluetoothAdapter.cancelDiscovery();
@@ -78,7 +81,7 @@ public class BluetoothConnectThread extends Thread {
      * @param socket Aufgebaute Bluetooth Socket Verbindung zum Server
      */
     private void manageConnectedSocket(BluetoothSocket socket) {
-    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(socket, vmgClass, null, this.bluetoothAdapter, null);
+    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(socket, vmgClass, null, this.bluetoothAdapter);
     	btConnectedThread.start();
 	}
 }

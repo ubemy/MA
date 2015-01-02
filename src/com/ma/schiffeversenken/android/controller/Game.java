@@ -47,25 +47,39 @@ public class Game extends Thread {
 	private int secondGamerAttackID;
 	/**Kuenstlicher Computer Gegner*/
 	private KI ki;
+	/**BluetoothConnectedThread Instanz zum Senden der Ereignisse an den
+	 * Bluetooth Gegner*/
 	private BluetoothConnectedThread btConnectedThread;
+	/**Gibt an, ob es sich bei diesem Geraet um den Bluetooth Server handelt*/
 	private boolean primaryBTGame;
+	/**Gibt an, ob es sich bei diesem Geraet um den Bluetooth Client handelt*/
 	private boolean secondaryBTGame;
+	/**Variable wird auf True gesetzt, wenn ein Angriff bei dem Bluetooth Gegner
+	 * ein Schiff getroffen hat*/
 	private boolean returnAttackHit;
+	/**Variable wird auf True gesetzt, wenn ein Angriff bei dem Bluetooth Gegner
+	 * ein Schiff zerstoert hat*/
 	private boolean returnShipDestroyed;
+	/**Variable wird auf True gesetzt, wenn nach einem Angriff die Ergebnisse
+	 * des Angriffs vom Bluetooth Gegner zurueckgegeben wurden*/
 	private boolean returnValuesAvailable;
+	/**Variable wird auf True gesetzt, wenn das Feldelement, das attackiert werden soll
+	 * bereits zuvor attackiert wurde*/
 	private boolean feWasAlreadyAttacked;
+	/**Gibt an, welcher Spieler am Zug ist. 0=Spieler 1; 1=Spieler 2*/
 	int gamersTurn;
-	
-	//Nur zu Testzwecken - Maik
-	public boolean getroffen = false;
+	/**Wird auf True gesetzt, wenn das Spiel zuende ist*/
 	private boolean end;
-	
+		
 	/**
 	 * Erstellt ein neues Game Objekt
 	 * @param gameMode 0=Einzelspieler; 1=Mehrspieler
-	 * @param firstField Spielfeld des 1. Spielers
+	 * @param firstFieldPlayer Spielfeld des 1. Spielers
 	 * @param secondField Spieldfeld des 2. Spielers
+	 * @param primaryBTGame Gibt an, ob es sich bei diesem Geraet um den Bluetooth Server handelt
+	 * @param secondaryBTGame Gibt an, ob es sich bei diesem Geraet um den Bluetooth Client handelt
 	 * @param loadedGame Boolean ob das Spiel geladen wurde
+	 * @param difficultyLevel Schwierigkeitsstufe der KI
 	 */
 	public Game(int gameMode, Field firstFieldPlayer, Field secondField, boolean primaryBTGame, boolean secondaryBTGame, boolean loadedGame, int difficultyLevel){
 		this.gameMode = gameMode;
@@ -89,14 +103,18 @@ public class Game extends Thread {
 		}
 	}
 	
-	/*public void setConnectedThread(BluetoothConnectedThread btConnectedThread){
-		this.btConnectedThread = btConnectedThread;
-	}*/
-	
+	/**
+	 * Zurueckgeben ob es sich bei diesem Geraet um den Bluetooth Server handelt
+	 * @return True, wenn dieses Geraet der Bluetooth Server ist
+	 */
 	public boolean getPrimaryBTGame(){
 		return primaryBTGame;
 	}
 	
+	/**
+	 * Zurueckgeben ob es sich bei diesem Geraet um den Bluetooth Client handelt
+	 * @return True, wenn dieses Geraet der Bluetooth Client ist
+	 */
 	public boolean getSecondaryBTGame(){
 		return secondaryBTGame;
 	}
@@ -171,6 +189,12 @@ public class Game extends Thread {
 		}
 	}
 	
+	/**
+	 * Variablen werden durch BluetoothConnectedtThread gesetzt, wenn diese
+	 * Variablen vom Bluetooth Gegner gesendet werden
+	 * @param returnAttackHit
+	 * @param returnShipDestroyed
+	 */
 	public void setReturnValues(boolean returnAttackHit, boolean returnShipDestroyed){
 		this.returnValuesAvailable = true;
 		this.returnAttackHit = returnAttackHit;
@@ -178,7 +202,7 @@ public class Game extends Thread {
 	}
 	
 	/**
-	 * 
+	 * Behandelt die Ausführung einer Attacke
 	 * @param id ID des Feldes, das angegriffen wird
 	 * @param gamer 0= Erster Spieler; 1= zweiter Spieler
 	 * @return Boolean ob ein gegnerisches Schiff getroffen wurde
@@ -335,6 +359,10 @@ public class Game extends Thread {
 		return ret;
 	}
 	
+	/**
+	 * Gibt zurueck ob der Bluetooth Gegner gewonnen hat
+	 * @return True, wenn Bluetooth Gegner gewonnen hat
+	 */
 	private boolean hasEnemyWon(){
 		boolean ret = true;
 		
@@ -429,7 +457,6 @@ public class Game extends Thread {
 	/**
 	 * Zeichnet die beiden Spielfelder mit den jeweiligen Zuständen
 	 * @param batch SpriteBatch worauf gezeichnet wird.
-	 * @param atlas Textures
 	 */
 //	@Deprecated
 	public void draw(Batch batch) {

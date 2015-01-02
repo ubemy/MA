@@ -25,11 +25,13 @@ public class KI {
 	KIStrategy kiStrategy;
 	
 	/**
-	* Erstellt ein neues KI Objekt
-	* @param myField Spielfeld der KI
-	* @param enemiesField Spielfeld des Gegners
-	* @param loadedGame Boolean ob das Spiel geladen wurde
-	*/
+	 * Erstellt ein neues KI Objekt
+	 * @param myField Spielfeld der KI
+	 * @param enemiesField Spielfeld des Gegners
+	 * @param test Wird bei einem JUnit Test auf True gesetzt
+	 * @param loadedGame Boolean ob das Spiel geladen wurde
+	 * @param difficultyLevel Schwierigkeitsstufe der KI
+	 */
 	public KI(Field myField, Field enemiesField, boolean test, boolean loadedGame, int difficultyLevel){
 		this.myField = myField;
 		this.enemiesField = enemiesField;
@@ -54,6 +56,7 @@ public class KI {
 			
 		initHistory();
 	}
+	
 	/**
 	* History updaten
 	* Die History speichert die letzten 4 Angriffe
@@ -132,6 +135,11 @@ public class KI {
 		return kiStrategy.attack();
 	}
 	
+	/**
+	 * Prueft ob eine ID in der History vorhanden ist
+	 * @param id ID, die ueberprueft werden soll
+	 * @return True, wenn die gesuchte ID in der History vorhanden ist
+	 */
 	private boolean idHistoryContains(int id){
 		boolean ret = false;
 		

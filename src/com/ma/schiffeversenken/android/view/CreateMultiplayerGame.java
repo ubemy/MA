@@ -49,15 +49,30 @@ public class CreateMultiplayerGame extends Activity {
 		else{
 			Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 			startActivityForResult(getVisible, 0);
-			progress = new ProgressDialog(this);
-			progress.setMessage(getString(R.string.WaitForTakers));
-			progress.setIndeterminate(true);
-			progress.show();
-					
-			bt.startServer(this);
 		}
 	}
 
+	public void startServer(boolean reconnect){
+		progress = new ProgressDialog(this);
+		progress.setMessage(getString(R.string.WaitForTakers));
+		progress.setIndeterminate(true);
+		progress.show();
+				
+		bt.startServer(this, reconnect);
+	}
+	
+	public void onActivityResult(int RequestCode, int ResultCode, Intent Data) {
+		super.onActivityResult(RequestCode, ResultCode, Data); 
+		if(RequestCode == 0){
+			if(ResultCode == 120){
+				startServer(false);
+			}
+			else{
+				finish();
+			}
+		}
+	} 
+	
 	public void startGame(BluetoothConnectedThread btcThread){
 			Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

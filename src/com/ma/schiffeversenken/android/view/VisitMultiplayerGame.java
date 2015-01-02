@@ -43,7 +43,7 @@ public class VisitMultiplayerGame extends Activity {
 	/**Wird aufgerufen, wenn ein neues Bluetooth Geraet gefunden wurde oder
 	 * die Suche beendet wurde*/
 	private BroadcastReceiver mReceiver;
-	private boolean waitForIntent;
+	private String serverAddress;
 	
 	/**
 	 * Wird aufgerufen, wenn ein Geraet ausgewaehlt wurde
@@ -56,19 +56,15 @@ public class VisitMultiplayerGame extends Activity {
 			
 			// Die MAC-Adresse des Geraets herausfiltern
 			final String info = ((TextView) pView).getText().toString();
-			final String address = info.substring(info.length() - 17);
-
-			/*
-			 *Field Klasse gibt aktuell noch Fehler 
-			 *
-			Field enemiesField = new Field(0);
-			Field myField = new Field(1);*/
+			serverAddress = info.substring(info.length() - 17);
 			
-			//Game game = new Game(1, null, null, false, true, false, 0);
-			
-			bt.connectToServer(address, VisitMultiplayerGame.this);
+			connectToServer(false);
 		}
 	};
+	
+	public void connectToServer(boolean reconnect){
+		bt.connectToServer(serverAddress, VisitMultiplayerGame.this, reconnect);
+	}
 	
 	public void startGame(){
 		Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
@@ -171,7 +167,6 @@ public class VisitMultiplayerGame extends Activity {
 		setContentView(R.layout.activity_visit_multiplayer_game);
 		bt = new Bluetooth();
 		status = (TextView) findViewById(R.id.visit_game_status);
-		waitForIntent = true;
 		
 		int btState = bt.blutoothOK();
 		
@@ -189,109 +184,9 @@ public class VisitMultiplayerGame extends Activity {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		    startActivityForResult(enableBtIntent, Bluetooth.REQUEST_ENABLE_BT);
 		}
-		/*
-		try{
-			this.mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-			this.mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-			final ListView pairedListView = (ListView) this.findViewById(R.id.pairedDevicesLV);
-			pairedListView.setAdapter(this.mPairedDevicesArrayAdapter);
-			pairedListView.setOnItemClickListener(this.mDeviceClickListener);
-
-			final ListView newDevicesListView = (ListView) this.findViewById(R.id.detectedDevicesLV);
-			newDevicesListView.setAdapter(this.mNewDevicesArrayAdapter);
-			newDevicesListView.setOnItemClickListener(this.mDeviceClickListener);
-
-			mReceiver = new BroadcastReceiver() {
-			    public void onReceive(Context context, Intent intent) {
-			        String action = intent.getAction();
-			        
-			        if (action.equals(BluetoothDevice.ACTION_FOUND)) {
-			        	//Wenn ein neues Bluetooth Geraet gefunden wurde
-						final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-						if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-							bt.addPairedDevice(device);
-						}
-					} else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
-						//Wenn die Suche nach neuen Geraeten abgeschlossen wurde
-						VisitMultiplayerGame.this.setProgressBarIndeterminateVisibility(false);
-						if (VisitMultiplayerGame.this.mNewDevicesArrayAdapter.getCount() == 0) {
-							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add(getString(R.string.NoDevicesFound));
-						}
-						else{
-							status.setText(getString(R.string.PleaseSelectADevice));
-						}
-						
-						progress.dismiss();
-					}
-			    }
-			};
-			
-			//Event Handler registrieren, wenn Geraet gefunden wurde
-			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-			this.registerReceiver(this.mReceiver, filter);
-
-			//Event Handler registrieren, wenn Suche beendet wurde gefunden wurde
-			filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-			this.registerReceiver(this.mReceiver, filter);
-			
-			// Get a set of currently paired devices
-			final Set<BluetoothDevice> pairedDevices = bt.getPairedDevices();
-			if (pairedDevices.size() > 0) {
-				this.findViewById(R.id.pairedDevicesLV).setVisibility(View.VISIBLE);
-				for (final BluetoothDevice device : pairedDevices) {
-					this.mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-				}
-			} else {
-				this.mPairedDevicesArrayAdapter.add(getString(R.string.NoPairedDevices));
-			}
+		else{
+			createAct();
 		}
-		catch(Exception ex){
-			ex.printStackTrace();
-		}
-		
-		
-		
-		bt.getPairedDevices();
-		bt.discoverDevices();
-		
-		progress = new ProgressDialog(this);
-		progress.setMessage(getString(R.string.SearchingForNewDevices));
-		progress.setIndeterminate(true);
-		progress.show();
-		
-		/*
-		if(btState == 1){
-			/*
-			 * Geraet unterstuetzt kein Bluetooth
-			 * Meldung ausgeben und zum vorheriger Activity wechseln
-			 *
-			Toast t = Toast.makeText(getApplicationContext(), getString(R.string.BluetoothNotAvailable), Toast.LENGTH_LONG);
-			t.show();
-			finish();
-		}
-		else if(btState == 2){
-			//Bluetooth ist nicht enabled
-			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		    startActivityForResult(enableBtIntent, Bluetooth.REQUEST_ENABLE_BT);
-		    
-		    bt.getPairedDevices();
-			bt.discoverDevices();
-			
-			progress = new ProgressDialog(this);
-			progress.setMessage(getString(R.string.SearchingForNewDevices));
-			progress.setIndeterminate(true);
-			progress.show();
-		}
-		else if(btState == 0){
-			bt.getPairedDevices();
-			bt.discoverDevices();
-			
-			progress = new ProgressDialog(this);
-			progress.setMessage(getString(R.string.SearchingForNewDevices));
-			progress.setIndeterminate(true);
-			progress.show();
-		}*/
 	}
 	
 	@Override

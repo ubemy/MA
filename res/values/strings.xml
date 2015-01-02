@@ -45,5 +45,9 @@
     <string name="ki_simple">Einfach</string>
     <string name="ki_normal">Mittel</string>
     <string name="ki_difficult">Schwer</string>
+    <string name="successfully_connected_with">Erfolgreich verbunden mit </string>
+    <string name="bluetooth_reconnect_question">Die Verbindung wurde unterbrochen, möchten Sie versuchen die Verbindung wiederherzustellen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 
 </resources>

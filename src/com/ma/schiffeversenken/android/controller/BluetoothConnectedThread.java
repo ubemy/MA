@@ -9,11 +9,15 @@ import java.io.OutputStream;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
+import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -41,7 +45,12 @@ public class BluetoothConnectedThread extends Thread {
     private CreateMultiplayerGame cmgClass;
     /**Bluetooth Adapter Objekt*/
     private BluetoothAdapter bluetoothAdapter;
+    /**Statische Instanz dieser Klasse*/
     private static BluetoothConnectedThread instance;
+    private BluetoothServerSocket serverSocket;
+    private static final String BLUETOOTH_HELLO = "_HELLO_";
+    private static final String BLUETOOTH_ATTACK = "_ATTACK_";
+    private static final String BLUETOOTH_RETURN = "_RETURN_";
     
     /**
      * Erstellt ein BluetoothConnectedThread Objekt
@@ -51,16 +60,14 @@ public class BluetoothConnectedThread extends Thread {
      * @param bluetoothAdapter Bluetooth Adapter Objekt
      * @param game Initialisiertes Game Objekt
      */
-    public BluetoothConnectedThread(BluetoothSocket socket, VisitMultiplayerGame vmgClass, CreateMultiplayerGame cmgClass, BluetoothAdapter bluetoothAdapter) {
+    public BluetoothConnectedThread(BluetoothSocket socket, VisitMultiplayerGame vmgClass, CreateMultiplayerGame cmgClass, BluetoothAdapter bluetoothAdapter, BluetoothServerSocket serverSocket) {
     	bluetoothSocket = socket;
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
         this.vmgClass = vmgClass;
         this.cmgClass = cmgClass;
         this.bluetoothAdapter = bluetoothAdapter;
-        //this.game = game;
- 
-        //this.game.setConnectedThread(this);
+        this.serverSocket = serverSocket;
         
         //Temporaeres Objekt benutze, da Streams final sind
         try {
@@ -74,6 +81,10 @@ public class BluetoothConnectedThread extends Thread {
     	instance = this;
     }
  
+    /**
+     * Gibt die statische Instanz dieser Klasse zurueck
+     * @return Statische Instanz dieser Klasse
+     */
     public static BluetoothConnectedThread getInstance(){
     	return instance;
     }
@@ -100,54 +111,62 @@ public class BluetoothConnectedThread extends Thread {
 	                bytes = inStream.read(buffer);
 	                
 	                String readMsg = new String(buffer, 0, bytes);
-	                String attackString = "_ATTACK_";
-	                String welcomeString = "_HELLO_";
-	                String returnString = "_RETURN_";
 	                
-	                if(readMsg.startsWith(attackString)){
+	                if(readMsg.startsWith(BLUETOOTH_ATTACK)){
 	                	if(game.getPrimaryBTGame()){
-	                		game.secondGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length())));
+	                		game.secondGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(BLUETOOTH_ATTACK) + BLUETOOTH_ATTACK.length())));
 	                	}
 	                	else if(game.getSecondaryBTGame()){
-	                		game.firstGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(attackString) + attackString.length())));
+	                		game.firstGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(BLUETOOTH_ATTACK) + BLUETOOTH_ATTACK.length())));
 	                	}
 	                }
-	                else if(readMsg.startsWith(welcomeString)){
-	                	String helloString = "Erfolgreich verbunden mit " + readMsg.substring(welcomeString.length());
+	                else if(readMsg.startsWith(BLUETOOTH_HELLO)){
+	                	String helloString;
 	                	if(vmgClass != null){
+	                		helloString = vmgClass.getString(R.string.successfully_connected_with) + readMsg.substring(BLUETOOTH_HELLO.length());
 	                		this.vmgClass.showToast(helloString);
 	                	}
 	                	else{
+	                		helloString = cmgClass.getString(R.string.successfully_connected_with) + readMsg.substring(BLUETOOTH_HELLO.length());
 	                		this.cmgClass.showToast(helloString);
 	                	}
 	                }
-	                else if(readMsg.startsWith(returnString)){
-	                	String returnAttackHitString = readMsg.substring(readMsg.indexOf(returnString) + returnString.length(), readMsg.indexOf("_", readMsg.indexOf(returnString) + returnString.length()));
+	                else if(readMsg.startsWith(BLUETOOTH_RETURN)){
+	                	String returnAttackHitString = readMsg.substring(readMsg.indexOf(BLUETOOTH_RETURN) + BLUETOOTH_RETURN.length(), readMsg.indexOf("_", readMsg.indexOf(BLUETOOTH_RETURN) + BLUETOOTH_RETURN.length()));
 	                	boolean returnAttackHit = Boolean.parseBoolean(returnAttackHitString);                	
 	                	
-	                	int start = readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1;
-	                	int ende = readMsg.indexOf("_", readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1);
 	                	String returnShipDestroyedString = readMsg.substring(readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1);
 	                	boolean returnShipDestroyed = Boolean.parseBoolean(returnShipDestroyedString);
 	                	
 	                	game.setReturnValues(returnAttackHit, returnShipDestroyed);
 	                }
             	}
-            	else{
-            		//Wenn die Bluetooth Verbindung unterbrochen ist
-            	}
-            } catch (IOException e) {
+            } catch (IOException e){
                 break;
             }
         }
     }
- 
+    
+    public void reconnect(){
+    	try{
+	    	if(vmgClass != null){
+	    		vmgClass.connectToServer(true);
+			}
+			else{
+				cmgClass.startServer(true);
+			}
+    	}
+    	catch(Exception ex){
+    		ex.printStackTrace();
+    	}
+    }
+    
     /**
-     * Bei erfolgreich aufgebauter Verbindung wird der Namen dieses Geraetes an
+     * Bei erfolgreich aufgebauter Verbindung wird der Name dieses Geraets an
      * das Remote Geraet gesendet. Dieser erscheint dort dann als Toast
      */
     private void sendHello(){
-    	String sendString = new String("_HELLO_" + bluetoothAdapter.getName());
+    	String sendString = new String(BLUETOOTH_HELLO + " " + bluetoothAdapter.getName());
     	write(sendString.getBytes());
     }
     

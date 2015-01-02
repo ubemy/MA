@@ -1,5 +1,13 @@
 package com.ma.schiffeversenken.android;
 
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -24,5 +32,41 @@ public class AndroidLauncher extends AndroidApplication {
 		boolean secondaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("secondaryBTGame").toString());
 		
 		initialize(new MyGdxGameField(primaryBTGame, secondaryBTGame), cfg);
+		
+		
+		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+		BroadcastReceiver mReceiver;
+		
+		
+		mReceiver = new BroadcastReceiver() {
+	        @Override
+	        public void onReceive(Context context, Intent intent) {
+	            String action = intent.getAction();
+
+	            if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+	            	AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AndroidLauncher.this);
+	            		dialogBuilder.setMessage(getString(R.string.bluetooth_reconnect_question))
+	            		.setPositiveButton(getString(R.string.yes), dialogClickListener)
+	            		.setNegativeButton(getString(R.string.no), dialogClickListener)
+	            		.show();
+	               
+	            }    
+	        }
+	    };
+	    
+		this.registerReceiver(mReceiver, filter);
 	}
+
+	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+	    @Override
+	    public void onClick(DialogInterface dialog, int which) {
+	    	if(which == DialogInterface.BUTTON_POSITIVE){
+	    		BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
+                btcThread.reconnect();
+	    	}
+	    	else if(which == DialogInterface.BUTTON_NEGATIVE){
+	    		finish();
+	    	}
+	    }
+	};
 }

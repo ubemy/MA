@@ -29,7 +29,7 @@ public class Bluetooth extends Activity {
 	/**Alle Geraete mit denen eine Verbindung aufgebaut werden kann*/
 	private List<BluetoothDevice> allDevices;
 	/**Eindeutige UUID, die auf Server- und Clientseite beim Aufbau der Bluetooth Verbindung genutzt wird*/
-	private final String appUUID = "00001101-0000-1000-8000-00805f9b34fb";
+	public static final String appUUID = "00001101-0000-1000-8000-00805f9b34fb";
 	
 	
 	/**
@@ -77,8 +77,8 @@ public class Bluetooth extends Activity {
 	 * @param cmgClass Das initialisierte CreateMultiplayerGame Objekt
 	 * @param game Das initialisierte Game Objekt
 	 */
-	public void startServer(CreateMultiplayerGame cmgClass){
-		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter, cmgClass, appUUID);
+	public void startServer(CreateMultiplayerGame cmgClass, boolean reconnect){
+		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter, cmgClass, appUUID, reconnect);
 		btListenThread.start();
 	}
 	
@@ -88,7 +88,7 @@ public class Bluetooth extends Activity {
 	 * @param vmgClass Das initialisierte VisitMultiplayerGame Objekt
 	 * @param game Das initialisierte Game Objekt
 	 */
-	public void connectToServer(String mac, VisitMultiplayerGame vmgClass){
+	public void connectToServer(String mac, VisitMultiplayerGame vmgClass, boolean reconnect){
 		BluetoothDevice device = null;
 		
 		for(BluetoothDevice dev : allDevices){
@@ -99,7 +99,7 @@ public class Bluetooth extends Activity {
 		}
 		
 		if(device != null){
-			BluetoothConnectThread btConnectThread = new BluetoothConnectThread(device, bluetoothAdapter, vmgClass, appUUID);
+			BluetoothConnectThread btConnectThread = new BluetoothConnectThread(device, bluetoothAdapter, vmgClass, appUUID, reconnect);
 			btConnectThread.start();
 		}
 	}

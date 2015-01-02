@@ -157,15 +157,11 @@ public class KI {
 	*/
 	int getIDForContinueLastAttack(){
 		int ret = 0;
-		boolean jump = false;
 		
-		for(int i=0; i<4; i++){
-			if(!jump && ret == 0){
+		for(int i=0; i<NUMBER_OF_HISTORY; i++){
+			if(ret == 0){
 				if(hitHistory[i]){
-					if(shipDestroyedHistory[i]){
-						jump = true;
-					}
-					else{
+					if(!shipDestroyedHistory[i]){
 						if((idHistory[i] - 1) > 0 && (idHistory[i] + 1) <= Field.FIELD_SIZE){
 							if(idHistoryContains(idHistory[i] + 1)){
 								if(getEnemiesField().getElementByID(idHistory[i]).getEdge(1) != FieldUnit.EDGE_LEFT && getEnemiesField().getElementByID(idHistory[i]).getEdge(2) != FieldUnit.EDGE_LEFT && !getEnemiesField().getElementByID(idHistory[i] - 1).getAttacked()){
@@ -211,35 +207,46 @@ public class KI {
 	* @return Die neue ID, die angegriffen werden soll
 	*/
 	private int getIDAfterOneAttackToShip(int ret) {
-		if((ret == 0) && hitHistory[0]){
-			Random random = new Random();
-			int counter = 0;
-			do{
-				int randomInt = random.nextInt(Ship.NUMBER_OF_ORIENTATIOS);
-				if(getEnemiesField().getElementByID(idHistory[0]).getEdge(1) != randomInt && getEnemiesField().getElementByID(idHistory[0]).getEdge(2) != randomInt){
-					if(randomInt == Ship.SHIP_ORIENTATION_ABOVE){
-						if(!getEnemiesField().getElementByID(idHistory[0] - 10).getAttacked()){
-							ret = idHistory[0] - 10;
-						}
-					}
-					if(randomInt == Ship.SHIP_ORIENTATION_BELOW){
-						if(!getEnemiesField().getElementByID(idHistory[0] + 10).getAttacked()){
-							ret = idHistory[0] + 10;
-						}
-					}
-					if(randomInt == Ship.SHIP_ORIENTATION_RIGHT){
-						if(!getEnemiesField().getElementByID(idHistory[0] + 1).getAttacked()){
-							ret = idHistory[0] + 1;
-						}
-					}
-					if(randomInt == Ship.SHIP_ORIENTATION_LEFT){
-						if(!getEnemiesField().getElementByID(idHistory[0] - 1).getAttacked()){
-							ret = idHistory[0] - 1;
-						}
-					}
+		int historyIndex = 0;
+		
+		if(ret == 0){
+			for(int i=0; i<NUMBER_OF_HISTORY; i++){
+				if(hitHistory[i] && !shipDestroyedHistory[i]){
+					historyIndex = i;
+					break;
 				}
-				counter++;
-			}while(ret == 0 && counter < 4);
+			}
+			
+			if(hitHistory[historyIndex]){
+				Random random = new Random();
+				int counter = 0;
+				do{
+					int randomInt = random.nextInt(Ship.NUMBER_OF_ORIENTATIOS);
+					if(getEnemiesField().getElementByID(idHistory[historyIndex]).getEdge(1) != randomInt && getEnemiesField().getElementByID(idHistory[historyIndex]).getEdge(2) != randomInt){
+						if(randomInt == Ship.SHIP_ORIENTATION_ABOVE){
+							if(!getEnemiesField().getElementByID(idHistory[historyIndex] - 10).getAttacked()){
+								ret = idHistory[historyIndex] - 10;
+							}
+						}
+						if(randomInt == Ship.SHIP_ORIENTATION_BELOW){
+							if(!getEnemiesField().getElementByID(idHistory[historyIndex] + 10).getAttacked()){
+								ret = idHistory[historyIndex] + 10;
+							}
+						}
+						if(randomInt == Ship.SHIP_ORIENTATION_RIGHT){
+							if(!getEnemiesField().getElementByID(idHistory[historyIndex] + 1).getAttacked()){
+								ret = idHistory[historyIndex] + 1;
+							}
+						}
+						if(randomInt == Ship.SHIP_ORIENTATION_LEFT){
+							if(!getEnemiesField().getElementByID(idHistory[historyIndex] - 1).getAttacked()){
+								ret = idHistory[historyIndex] - 1;
+							}
+						}
+					}
+					counter++;
+				}while(ret == 0 && counter < NUMBER_OF_HISTORY);
+			}
 		}
 		
 		return ret;

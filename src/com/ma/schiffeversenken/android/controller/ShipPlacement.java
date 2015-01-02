@@ -222,25 +222,26 @@ public class ShipPlacement {
 	 *            Spielfeld
 	 * @return Gibt zurueck ob die Felder frei oder belegt sind
 	 */
-	private boolean checkEinheit(int orientation, Ship ship, int id, Field feld) {
+	private boolean checkEinheit(int orientation, Ship ship, int id, Field field) {
 		int size = ship.getSize();
 		boolean ret = true;
-
-		if (feld.getElementByID(id).getOccupied()) {
+		FieldUnit fu = field.getElementByID(id);
+		
+		if (fu.getOccupied()) {
 			ret = false;
 		} else {
 			if (orientation == Ship.SHIP_ORIENTATION_RIGHT) {
 				// Nach rechts gerichtetes Schiff
-				ret = checkID(1, size, id, feld);
+				ret = checkID(1, size, id, field);
 			} else if (orientation == Ship.SHIP_ORIENTATION_ABOVE) {
 				// Nach oben gerichtetes Schiff
-				ret = checkID(-10, size, id, feld);
+				ret = checkID(-10, size, id, field);
 			} else if (orientation == Ship.SHIP_ORIENTATION_LEFT) {
 				// Nach links gerichtetes Schiff
-				ret = checkID(-1, size, id, feld);
+				ret = checkID(-1, size, id, field);
 			} else if (orientation == Ship.SHIP_ORIENTATION_BELOW) {
 				// Nach unten gerichtetes Schiff
-				ret = checkID(10, size, id, feld);
+				ret = checkID(10, size, id, field);
 			}
 		}
 
@@ -261,7 +262,7 @@ public class ShipPlacement {
 	 *            Spielfeld
 	 * @return Gibt zurueck ob die Felder frei oder belegt sind
 	 */
-	private boolean checkID(int counter, int size, int id, Field feld) {
+	private boolean checkID(int counter, int size, int id, Field field) {
 		boolean ret = true;
 		int temp = 0;
 		int finalCounter = 0;
@@ -269,7 +270,7 @@ public class ShipPlacement {
 			finalCounter = counter * i;
 			temp = id + finalCounter;
 			if (temp > 0 && temp < 101) {
-				FieldUnit tempElement = feld.getElementByID(temp);
+				FieldUnit tempElement = field.getElementByID(temp);
 				if (tempElement.getOccupied())
 					ret = false;
 				else if ((size - i) > 0) {

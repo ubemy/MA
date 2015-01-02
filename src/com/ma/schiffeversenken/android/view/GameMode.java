@@ -14,7 +14,7 @@ import android.widget.Button;
  * Android Activity zur Auswahl des Spielermodus
  * @author Maik Steinborn
  */
-public class Spielermodus extends Activity {
+public class GameMode extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,7 +28,7 @@ public class Spielermodus extends Activity {
 			@Override
 			public void onClick(View v) {
 //				Intent intent = new Intent(getApplicationContext(), GamePreferencesActivity.class);
-				Intent intent = new Intent(getApplicationContext(), SpielStarten.class);
+				Intent intent = new Intent(getApplicationContext(), StartGame.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				
 				startActivity(intent);
@@ -59,7 +59,7 @@ public class Spielermodus extends Activity {
 			@Override
 			public void onClick(View v) {
 				try{
-					Intent intent = new Intent(Spielermodus.this, c);
+					Intent intent = new Intent(GameMode.this, c);
 					startActivity(intent);
 				}
 				catch(Exception ex){
@@ -72,7 +72,7 @@ public class Spielermodus extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.spielermodus, menu);
+		getMenuInflater().inflate(R.menu.gamemode, menu);
 		return true;
 	}
 

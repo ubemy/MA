@@ -11,11 +11,9 @@
 \nDie Schiffe dürfen waagerecht oder senkrecht aufgebaut werden.\nVor dem ersten Angriff wird durch ein Los entschieden, welcher Spieler den ersten Zug macht. 
 \nDer Angreifende gibt das Feld an, dass er angreift.\nEin Schiff gilt als versenkt, wenn alle Felder des Schiffes getroffen wurden.
 \nEin Spieler darf solange angreifen, bis er ins Wasser trifft.\nAnschließend ist der Gegenspieler am Zug.</string>
-    <string name="title_activity_einstellungen">Einstellungen</string>
-    <string name="title_activity_schwierigkeitsstufe">Schwierigkeitsstufe</string>
-    <string name="title_activity_hilfe">Hilfe</string>
-    <string name="title_activity_spielermodus">Spielermodus</string>
-    <string name="title_activity_test_ausgabe">TestAusgabe</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="title_activity_help">Hilfe</string>
+    <string name="title_activity_gamemode">Spielermodus</string>
     <string name="title_activity_multiplayer">Multiplayer</string>
     <string name="title_activity_create_multiplayer_game">CreateMultiplayerGame</string>
     <string name="title_activity_visit_multiplayer_game">VisitMultiplayerGame</string>

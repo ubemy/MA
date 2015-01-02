@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:theme="@style/GdxTheme" >
         <activity
-            android:name=".view.Startseite"
+            android:name=".view.StartScreen"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.SpielStarten"
+            android:name=".view.StartGame"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_spiel_starten"
             android:screenOrientation="portrait" >
@@ -52,33 +52,21 @@
 <!--             </intent-filter> -->
         </activity>
         <activity
-            android:name=".view.Einstellungen"
+            android:name=".view.Settings"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_einstellungen"
+            android:label="@string/title_activity_settings"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".view.Schwierigkeitsstufe"
+            android:name=".view.Help"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_schwierigkeitsstufe"
+            android:label="@string/title_activity_help"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".view.Hilfe"
+            android:name=".view.GameMode"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_hilfe"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".view.Spielermodus"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_spielermodus"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".controller.TestAusgabe"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_test_ausgabe"
+            android:label="@string/title_activity_gamemode"
             android:screenOrientation="portrait" >
         </activity>
         <activity

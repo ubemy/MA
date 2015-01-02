@@ -17,18 +17,18 @@ import android.widget.Button;
  * Spiel starten, Einstellungen, Hilfe
  * @author Maik Steinborn
  */
-public class Startseite extends Activity {
+public class StartScreen extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_startseite);
+		setContentView(R.layout.activity_startscreen);
 		
 		Button startSpielButton=null, einstellungenButton=null, hilfeButton=null;
 		try{
 			
-			createButtons(startSpielButton, R.id.Start_Spiel_Button, "Spiel starten", Spielermodus.class);
-			createButtons(einstellungenButton, R.id.Einstellungen_Button, "Einstellungen", Einstellungen.class);
-			createButtons(hilfeButton, R.id.Hilfe_Button, "Hilfe", Hilfe.class);
+			createButtons(startSpielButton, R.id.Start_Spiel_Button, "Spiel starten", GameMode.class);
+			createButtons(einstellungenButton, R.id.Einstellungen_Button, "Einstellungen", Settings.class);
+			createButtons(hilfeButton, R.id.Hilfe_Button, "Hilfe", Help.class);
 			//testButton();
 			SharedPreferences sp = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);
 			Editor editor = sp.edit();
@@ -41,44 +41,6 @@ public class Startseite extends Activity {
 		}
 	}
 	
-//	private void testButton(){
-//		Button startSpielButton = (Button) findViewById(R.id.Test_Button);
-//		startSpielButton.setText("Test");
-//		startSpielButton.setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				try{
-//					Destroyer z = new Destroyer("Zerstoerer");
-//					Submarine u = new Submarine("Uboot");
-//					
-//					Ship[] ships = new Ship[]{new Submarine("Uboot"),
-//							new Submarine("Uboot"),
-//							new Submarine("Uboot"),
-//							new Cruiser("Kreuzer"),
-//							new Cruiser("Kreuzer"),
-//							new Cruiser("Kreuzer"),
-//							new Cruiser("Kreuzer"),
-//							new Destroyer("Zerstoerer"),
-//							new Destroyer("Zerstoerer"),
-//							new Battleship("Schlachtschiff")
-//							};
-//					Field field = new Field(0);
-//					
-//					ShipPlacement sp = new ShipPlacement();
-//					sp.placeShips(field, ships);
-//					
-//					Intent inte = new Intent(Startseite.this, TestAusgabe.class);
-//					inte.putExtra("Test", sp.print());
-//					startActivity(inte);
-//				}
-//				catch(Exception ex){
-//					ex.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-	
 	private <E> void createButtons(Button button, int id, String text, final Class<E> c){
 		/*
 		 * Buttons erstellen
@@ -90,7 +52,7 @@ public class Startseite extends Activity {
 			@Override
 			public void onClick(View v) {
 				try{
-					Intent intent = new Intent(Startseite.this, c);
+					Intent intent = new Intent(StartScreen.this, c);
 					startActivity(intent);
 				}
 				catch(Exception ex){
@@ -103,7 +65,7 @@ public class Startseite extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.startseite, menu);
+		getMenuInflater().inflate(R.menu.startscreen, menu);
 		return true;
 	}
 

@@ -15,12 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class SpielStarten extends Activity {
+public class StartGame extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_spiel_starten);
+		setContentView(R.layout.activity_start_game);
 		
 		Button einfach=null, mittel=null, schwer=null;
 		
@@ -40,7 +40,7 @@ public class SpielStarten extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.spiel_starten, menu);
+		getMenuInflater().inflate(R.menu.start_game, menu);
 		return true;
 	}
 
@@ -72,7 +72,7 @@ public class SpielStarten extends Activity {
 					editor.putString("ki", text);
 					editor.apply();
 				
-					Intent intent = new Intent(SpielStarten.this, c);
+					Intent intent = new Intent(StartGame.this, c);
 					intent.putExtra("primaryBTGame", "false");
 					intent.putExtra("secondaryBTGame", "false");
 					startActivity(intent);

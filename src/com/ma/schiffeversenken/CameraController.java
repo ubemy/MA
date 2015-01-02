@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
-import com.ma.schiffeversenken.android.view.Hilfe;
+import com.ma.schiffeversenken.android.view.Help;
 
 class CameraController implements GestureListener {
 	float velX, velY;

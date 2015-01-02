@@ -62,6 +62,10 @@ public class VisitMultiplayerGame extends Activity {
 		}
 	};
 	
+	/**
+	 * Mit Server verbinden
+	 * @param reconnect Gibt an, ob es sich um einen Reconnect handelt
+	 */
 	public void connectToServer(boolean reconnect){
 		bt.connectToServer(serverAddress, VisitMultiplayerGame.this, reconnect);
 	}
@@ -228,6 +232,7 @@ public class VisitMultiplayerGame extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(mReceiver);
+		
+		if(mReceiver != null) unregisterReceiver(mReceiver);
 	}
 }

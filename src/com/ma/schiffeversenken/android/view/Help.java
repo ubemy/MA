@@ -10,21 +10,21 @@ import com.ma.schiffeversenken.android.R;
  * Android Activity zum Anzeigen des Hilfe Textes
  * @author Maik Steinborn
  */
-public class Hilfe extends Activity {
+public class Help extends Activity {
 	/**
 	 * Erstellt eine Hilfe Activity
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hilfe);
+		setContentView(R.layout.activity_help);
 		
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.hilfe, menu);
+		getMenuInflater().inflate(R.menu.help, menu);
 		return true;
 	}
 

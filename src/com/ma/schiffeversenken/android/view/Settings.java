@@ -15,14 +15,14 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  * Android Activity zum Ändern der Spieleinstellungen
  * @author Maik Steinborn
  */
-public class Einstellungen extends Activity {
+public class Settings extends Activity {
 	/**
 	 * Erstellt eine Einstellungen Activity
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_einstellungen);
+		setContentView(R.layout.activity_settings);
 		
 		
 	}
@@ -83,7 +83,7 @@ public class Einstellungen extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.einstellungen, menu);
+		getMenuInflater().inflate(R.menu.settings, menu);
 		return true;
 	}
 

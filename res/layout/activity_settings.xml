@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ma.schiffeversenken.android.view.Einstellungen" >
+    tools:context="com.ma.schiffeversenken.android.view.Settings" >
 
     <CheckBox
         android:id="@+id/Lautlos_Checkbox"

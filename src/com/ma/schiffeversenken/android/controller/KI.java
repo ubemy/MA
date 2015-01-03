@@ -10,7 +10,7 @@ import com.ma.schiffeversenken.android.model.*;
 */
 public class KI {
 	/**Anzahl der Angriffe, die in der History gespeichert werden*/
-	public static final int NUMBER_OF_HISTORY = 4;
+	public static final int NUMBER_OF_HISTORY = 6;
 	/**Das Spielfeld der KI*/
 	private Field myField;
 	/**Das gegnerische Spielfeld*/

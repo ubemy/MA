@@ -67,7 +67,8 @@ public class Field {
 	private boolean allShipsSetManual;
 
 	/**
-	 * Erstellt ein Field Objekt
+	 * Erstellt ein Field Objekt.
+	 * Wird nur zu Testzwecken ausgefuehrt
 	 * 
 	 * @param typ
 	 *            Typ des Spielfelds (0=Eigenes Spielfeld, 1=Gegnerisches
@@ -77,8 +78,7 @@ public class Field {
 		try {
 			this.typ = typ;
 			create(true);
-			// createNeighbors();
-			createKante();
+			createEdges();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -108,7 +108,7 @@ public class Field {
 			getShipTileSetTextures(shipTextures);
 			create();
 			createNeighbors();
-			createKante();
+			createEdges();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -182,7 +182,7 @@ public class Field {
 		units = new FieldUnit[10][10];
 		create();
 		createNeighbors();
-		createKante();
+		createEdges();
 
 		// Die neuen Schiffe platzieren
 		sp = new ShipPlacement();
@@ -498,24 +498,26 @@ public class Field {
 		}
 	}
 
+	/**
+	 * Wird nur zu Testzwecken verwendet, da das Junit 
+	 * keine Gradle Funktionen unterstuetzt
+	 * @param test True, wenn ein Testlauf
+	 */
 	private void create(boolean test) {
-		create();// Wir brauchen die positionen aus create();
-		// int id = 0;
-		// for (int i = 0; i < 10; i++) {
-		// for (int j = 0; j < 10; j++) {
-		// id++;
-		//
-		// // TODO Testen auf funktion beim Zeichen
-		// units[i][j] = new FieldUnit(id);
-		// }
-		// }
+		int id = 0;
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				id++;
+				units[i][j] = new FieldUnit(id);
+			}
+		}
 	}
 
 	/**
 	 * Markiert, dass dieses FeldElement an einer Kante platziert ist und in
 	 * welcher Richtung die Kante liegt
 	 */
-	private void createKante() {
+	private void createEdges() {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				FieldUnit e = units[i][j];
@@ -523,37 +525,29 @@ public class Field {
 				if (id < 11) {
 					// Obere Kante
 					if (e.getEdge(1) == -1)
-						// e.setEdge(1, 1);
 						e.setEdge(1, EDGE_ABOVE);
 					else
-						// e.setEdge(2, 1);
 						e.setEdge(2, EDGE_ABOVE);
 				}
 				if (id > 89) {
 					// Untere Kante
 					if (e.getEdge(1) == -1)
-						// e.setEdge(1, 2);
 						e.setEdge(1, EDGE_BELOW);
 					else
-						// e.setEdge(2, 2);
 						e.setEdge(2, EDGE_BELOW);
 				}
 				if ((id - (10 * (i + 1))) == 0) {
 					// Rechte Kante
 					if (e.getEdge(1) == -1)
-						// e.setEdge(1, 3);
 						e.setEdge(1, EDGE_RIGHT);
 					else
-						// e.setEdge(2, 3);
 						e.setEdge(2, EDGE_RIGHT);
 				}
 				if ((id - (10 * i)) == 1) {
 					// Linke Kante
 					if (e.getEdge(1) == -1)
-						// e.setEdge(1, 4);
 						e.setEdge(1, EDGE_LEFT);
 					else
-						// e.setEdge(2, 4);
 						e.setEdge(2, EDGE_LEFT);
 				}
 			}
@@ -742,7 +736,7 @@ public class Field {
 			allShipsSet = false;
 			create();
 			createNeighbors();
-			createKante();
+			createEdges();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -70,6 +70,10 @@ public class FieldUnit{
 		this.placedShip = null;
 	}
 
+	public void setPlacedShip(Ship ship){
+		this.placedShip = ship;
+	}
+	
 	/**
 	 * Überladener Konstruktor
 	 * 

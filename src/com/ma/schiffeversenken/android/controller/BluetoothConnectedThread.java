@@ -48,13 +48,13 @@ public class BluetoothConnectedThread extends Thread {
     private static BluetoothConnectedThread instance;
     /**String, der bei der Bluetooth Kommunikation genutzt wird.
      * HELLO bedeutet Bluetooth Verbindung erfolgreich aufgebaut*/
-    private static final String BLUETOOTH_HELLO = "_HELLO_";
+    public static final String BLUETOOTH_HELLO = "_HELLO_";
     /**String, der bei der Bluetooth Kommunikation genutzt wird.
      * ATTACK bedeutet Attacke auf eine ID*/
-    private static final String BLUETOOTH_ATTACK = "_ATTACK_";
+    public static final String BLUETOOTH_ATTACK = "_ATTACK_";
     /**String, der bei der Bluetooth Kommunikation genutzt wird.
      * RETURN bedeutet Ergebnis einer Attacke an den Gegner zurueck senden*/
-    private static final String BLUETOOTH_RETURN = "_RETURN_";
+    public static final String BLUETOOTH_RETURN = "_RETURN_";
     
     /**
      * Erstellt ein BluetoothConnectedThread Objekt
@@ -142,10 +142,13 @@ public class BluetoothConnectedThread extends Thread {
 	                	String returnAttackHitString = readMsg.substring(readMsg.indexOf(BLUETOOTH_RETURN) + BLUETOOTH_RETURN.length(), readMsg.indexOf("_", readMsg.indexOf(BLUETOOTH_RETURN) + BLUETOOTH_RETURN.length()));
 	                	boolean returnAttackHit = Boolean.parseBoolean(returnAttackHitString);                	
 	                	
-	                	String returnShipDestroyedString = readMsg.substring(readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1);
+	                	String returnShipDestroyedString = readMsg.substring(readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1, readMsg.indexOf("_", readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1));
 	                	boolean returnShipDestroyed = Boolean.parseBoolean(returnShipDestroyedString);
 	                	
-	                	game.setReturnValues(returnAttackHit, returnShipDestroyed);
+	                	int ind = readMsg.indexOf(returnAttackHitString) + returnAttackHitString.length() + 1 + returnShipDestroyedString.length() + 1;
+	                	String returnShipDestroyedIDs = readMsg.substring(ind);
+	                	
+	                	game.setReturnValues(returnAttackHit, returnShipDestroyed, returnShipDestroyedIDs);
 	                }
             	}
             } catch (IOException e){

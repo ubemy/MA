@@ -1,5 +1,6 @@
 package com.ma.schiffeversenken.android.controller;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -70,6 +71,7 @@ public class Game extends Thread {
 	int gamersTurn;
 	/**Wird auf True gesetzt, wenn das Spiel zuende ist*/
 	private boolean end;
+	private String returnDestroyedIDs;
 		
 	/**
 	 * Erstellt ein neues Game Objekt
@@ -195,10 +197,72 @@ public class Game extends Thread {
 	 * @param returnAttackHit
 	 * @param returnShipDestroyed
 	 */
-	public void setReturnValues(boolean returnAttackHit, boolean returnShipDestroyed){
+	public void setReturnValues(boolean returnAttackHit, boolean returnShipDestroyed, String returnDestroyedIDs){
 		this.returnValuesAvailable = true;
 		this.returnAttackHit = returnAttackHit;
 		this.returnShipDestroyed = returnShipDestroyed;
+		this.returnDestroyedIDs = returnDestroyedIDs;
+	}
+	
+	public void destroyBluetoothShip(){
+		
+		ArrayList<String> idList = new ArrayList<String>();
+		
+		int end = returnDestroyedIDs.indexOf("_");
+		String retID = returnDestroyedIDs.substring(0, end);
+		int i = 1;
+		idList.add(retID);
+		
+		while(end < returnDestroyedIDs.length() - 1){
+			end = returnDestroyedIDs.indexOf("_", returnDestroyedIDs.indexOf(retID) + 1);
+			
+			idList.add(returnDestroyedIDs.substring(returnDestroyedIDs.indexOf(retID) + retID.length() + 1, end));
+					
+			i++;
+		}
+		
+		FieldUnit[] fieldUnits = new FieldUnit[i];
+		
+		i = 0;
+		
+		for(String s : idList){
+			fieldUnits[i] = secondFieldEnemy.getElementByID(Integer.parseInt(s));
+			i++;
+		}
+		
+		String shipName = null;
+		int shipSize = 0;
+		
+		if(i == 1){
+			shipName = "Kreuzer";
+			shipSize = Ship.CRUISER_SIZE;
+		}
+		else if(i == 2){
+			shipName = "Uboot";
+			shipSize = Ship.SUBMARINE_SIZE;
+		}
+		else if(i == 3){
+			shipName = "Zerstoerer";
+			shipSize = Ship.DESTROYER_SIZE;
+		}
+		else if(i == 4){
+			shipName = "Schlachtschiff";
+			shipSize = Ship.BATTLESHIP_SIZE;
+		}
+		
+		Ship ship = new Ship(shipName, shipSize, fieldUnits);
+		ship.setDestroyed(true);
+		ship.setOrientation(0);
+
+		
+		Ship[] ships = new Ship[1];
+		ships[0] = ship;
+
+		fieldUnits[0].setPlacedShip(ship);
+		fieldUnits[0].setOccupied(true);
+		fieldUnits[0].setAttacked(true);
+		secondFieldEnemy.setShips(ships);
+		
 	}
 	
 	/**
@@ -212,6 +276,7 @@ public class Game extends Thread {
 		FieldUnit fe = null;
 		boolean attackHit = false;
 		boolean shipDestroyed = false;
+		String destroyedShipIDs = "0";
 		boolean done = false;
 		
 		
@@ -234,7 +299,9 @@ public class Game extends Thread {
 				feWasAlreadyAttacked = true;
 			}
 			else{
-				byte[] attackString = (new String("_ATTACK_" + Integer.toString(id))).getBytes();
+				fe.setAttacked(true); //FeldElement als attackiert markieren
+				
+				byte[] attackString = (new String(btConnectedThread.BLUETOOTH_ATTACK + Integer.toString(id))).getBytes();
 				
 				if(primaryBTGame && gamer == FIRST_GAMER){
 					btConnectedThread.write(attackString);	
@@ -256,6 +323,7 @@ public class Game extends Thread {
 					destroyShip(fe);//Ob Schiff komplett zerstört
 					shipDestroyed = returnShipDestroyed;
 					attackHit = returnAttackHit;
+					//if(shipDestroyed) destroyBluetoothShip();
 				}
 				else{
 					if(fe.getOccupied()){
@@ -263,16 +331,26 @@ public class Game extends Thread {
 						ret = true;
 						destroyShip(fe);
 						shipDestroyed = fe.getPlacedShip().isDestroyed();
+						
+						if(shipDestroyed){
+							for(FieldUnit fu : fe.getPlacedShip().getLocation()){
+								String fuID = String.valueOf(fu.getID());
+								
+								if(destroyedShipIDs == "0"){
+									destroyedShipIDs = fuID.concat("_");
+								}
+								else{
+									destroyedShipIDs.concat(fuID.concat("_"));
+								}
+							}
+						}
+						
 						attackHit = true;
 					}
 				}
 				
-				byte[] returnString = (new String("_RETURN_" + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed))).getBytes();
-				
-				if(secondaryBTGame && gamer == 0){
-					btConnectedThread.write(returnString);
-				}
-				else if(primaryBTGame && gamer == 1){
+				if((secondaryBTGame && gamer == 0) || (primaryBTGame && gamer == 1)){
+					byte[] returnString = (new String(btConnectedThread.BLUETOOTH_RETURN + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed) + "_" + destroyedShipIDs)).getBytes();
 					btConnectedThread.write(returnString);
 				}
 				
@@ -286,16 +364,15 @@ public class Game extends Thread {
 			else{
 				fe = firstFieldPlayer.getElementByID(id);
 			}
-		}
-		
-		if(fe.getAttacked()){
-			feWasAlreadyAttacked = true;
+			
+			if(fe.getAttacked()){
+				feWasAlreadyAttacked = true;
+			}
 		}
 		
 		if(!feWasAlreadyAttacked){
-			fe.setAttacked(true); //FeldElement als attackiert markieren
-			
 			if(!done){
+				fe.setAttacked(true); //FeldElement als attackiert markieren
 				if(fe.getOccupied()){
 					//Wenn das Feld belegt war
 					ret = true;
@@ -331,6 +408,7 @@ public class Game extends Thread {
 		returnAttackHit = false;
 		returnShipDestroyed = false;
 		returnValuesAvailable = false;
+		returnDestroyedIDs = null;
 	}
 	
 	/**

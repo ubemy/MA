@@ -76,6 +76,10 @@ public class Ship{
 
 	}
 	
+	public void setOrientation(int orientation){
+		this.orientation = orientation;
+	}
+	
 	/**
 	 * Gibt die Orientierung des Schiffs zurueck Ausrichtung des Schiffs:
 	 * 0=rechts, 1=oben, 2=links, 3=unten

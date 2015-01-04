@@ -33,7 +33,7 @@ public class Ship{
 	/** Laenge des Schiffs */
 	int size;
 	/** Boolean ob das Schiff zerstoert ist */
-	boolean destroyed;
+	boolean destroyed=false;
 	/** Name des Schiffs */
 	String name;
 	/** Felder auf denen das Schiff platziert ist */

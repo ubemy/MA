@@ -107,7 +107,7 @@ public class ShipPlacement {
 	 */
 	public void placeShipsManual(Field field,
 			ArrayList<FieldUnit[]> placedShipUnits) {
-		createBlocks(field);
+//		createBlocks(field);
 		// Erstellen der Schiffe
 		Ship[] ships = new Ship[placedShipUnits.size()];
 
@@ -118,31 +118,37 @@ public class ShipPlacement {
 			case 0:
 				ships[i]= new Ship("Kreuzer", Ship.CRUISER_SIZE,u);
 				for(FieldUnit unit:u){
-					unit.setOccupied(true);
+					unit.setOccupied(true); 
+					unit.placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 				}
 				break;
 			case 1:
 				ships[i] = new Ship("Uboot", Ship.SUBMARINE_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
+					unit.placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 				}
 				break;
 			case 2:
 				ships[i] = new Ship("Zerstoerer", Ship.DESTROYER_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
+					unit.placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 				}
 				break;
 			case 3:
 				ships[i] = new Ship("Schlachtschiff", Ship.BATTLESHIP_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
+					unit.placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 				}
 				break;
 			default:
 				break;
 			}
 			
+			//Fals ein Kreuzer mit einem Feld
+			u[0].setOccupied(true);
 			u[0].placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 			ships[i].setStandortManual(u,u[0].getShipOrientation());
 			int schiffSize = u.length;

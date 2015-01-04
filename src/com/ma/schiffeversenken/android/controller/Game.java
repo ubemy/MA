@@ -300,6 +300,7 @@ public class Game extends Thread {
 					//Wenn das Feld belegt war
 					ret = true;
 					destroyShip(fe);
+					System.out.println("NULL?"+((fe.getPlacedShip()!=null)?"No":"Yes"));
 					shipDestroyed = fe.getPlacedShip().isDestroyed();
 					attackHit = true;
 				}

@@ -618,7 +618,8 @@ public class Field {
 										.getAnimationtimer() + 1);
 							}
 						} else {
-							// Schiffsteil beschädigt
+							// Schiffsteil beschädigt, malen wenn Vorhanden.
+							if(units[i][j].getEntityShipDrawUnit()!=null)
 							units[i][j].getEntityShipDrawUnit().render(batch,
 									true);
 							// Bombenanimation

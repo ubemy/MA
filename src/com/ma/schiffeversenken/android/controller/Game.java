@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
@@ -214,7 +215,7 @@ public class Game extends Thread {
 		idList.add(retID);
 		
 		while(end < returnDestroyedIDs.length() - 1){
-			end = returnDestroyedIDs.indexOf("_", returnDestroyedIDs.indexOf(retID) + 1);
+			end = returnDestroyedIDs.indexOf("_", returnDestroyedIDs.indexOf(retID) + retID.length() + 1);
 			
 			idList.add(returnDestroyedIDs.substring(returnDestroyedIDs.indexOf(retID) + retID.length() + 1, end));
 					
@@ -253,16 +254,25 @@ public class Game extends Thread {
 		Ship ship = new Ship(shipName, shipSize, fieldUnits);
 		ship.setDestroyed(true);
 		ship.setOrientation(0);
-
-		
 		Ship[] ships = new Ship[1];
 		ships[0] = ship;
-
-		fieldUnits[0].setPlacedShip(ship);
-		fieldUnits[0].setOccupied(true);
-		fieldUnits[0].setAttacked(true);
+		
+		for(FieldUnit fu : fieldUnits){
+			fu.setPlacedShip(ship);
+			fu.setOccupied(true);
+			fu.setAttacked(true);
+		}
+		
 		secondFieldEnemy.setShips(ships);
 		
+		TextureRegion shipBack = getFirstFieldPlayer().getShipTextures().get("uvk");
+		TextureRegion shipBackA = getFirstFieldPlayer().getShipTextures()
+				.get("uvka");
+		
+		for(FieldUnit fu : fieldUnits){
+			fu.getEntityShipDrawUnit().setShipTextureRegion("back",
+					shipBack, shipBackA);
+		}
 	}
 	
 	/**
@@ -340,7 +350,7 @@ public class Game extends Thread {
 									destroyedShipIDs = fuID.concat("_");
 								}
 								else{
-									destroyedShipIDs.concat(fuID.concat("_"));
+									destroyedShipIDs += fuID.concat("_");
 								}
 							}
 						}

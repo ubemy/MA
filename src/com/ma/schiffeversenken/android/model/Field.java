@@ -593,6 +593,7 @@ public class Field {
 	 */
 	// @Deprecated
 	public void draw(Batch batch) {
+		try{
 		// Rendern vom Spielfeld
 		if (this.typ == 0) {// Eigenes Spielfeld
 			for (int i = 0; i < 10; i++) {
@@ -677,8 +678,12 @@ public class Field {
 					}
 				}
 			}
+		
 		}
-
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
 		// // Rendern aller Schiffe
 		// tileIterator = drawShips.iterator();
 		// EntityShip curShip;

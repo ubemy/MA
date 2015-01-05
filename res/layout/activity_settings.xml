@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="183dp"
-        android:text="Lautlos" />
+        android:text="@string/button_text_mute" />
 
     <CheckBox
         android:id="@+id/Vibration_aus_Checkbox"
@@ -26,7 +26,7 @@
         android:layout_alignLeft="@+id/Lautlos_Checkbox"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/Lautlos_Checkbox"
-        android:text="Vibration aus" />
+        android:text="@string/button_text_vibration_off" />
 
     <SeekBar
         android:id="@+id/volumeSeekBar"

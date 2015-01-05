@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="170dp"
-        android:text="Spiel erstellen" />
+        android:text="@string/button_text_create_game" />
 
     <Button
         android:id="@+id/Visit_Game_Button"
@@ -25,6 +25,6 @@
         android:layout_below="@+id/Create_Game_Button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:text="An Spiel teilnehmen" />
+        android:text="@string/button_text_visit_game" />
 
 </RelativeLayout>

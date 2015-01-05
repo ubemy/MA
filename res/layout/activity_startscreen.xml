@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="78dp"
-        android:text="Spiel starten" />
+        android:text="@string/button_text_start_game" />
 
     <Button
         android:id="@+id/Einstellungen_Button"
@@ -25,7 +25,7 @@
         android:layout_below="@+id/Start_Spiel_Button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
-        android:text="Einstellungen" />
+        android:text="@string/button_text_settings" />
 
     <Button
         android:id="@+id/Hilfe_Button"
@@ -34,15 +34,6 @@
         android:layout_below="@+id/Einstellungen_Button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
-        android:text="Hilfe" />
-
-    <Button
-        android:id="@+id/Test_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Hilfe_Button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Test" />
+        android:text="@string/button_text_help" />
 
 </RelativeLayout>

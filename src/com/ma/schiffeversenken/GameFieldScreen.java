@@ -161,7 +161,7 @@ public class GameFieldScreen implements Screen {
 		// State initialisieren
 		state = new ArrayList<Boolean>();
 		for (int i = 0; i < 8; i++) {
-			state.add(new Boolean(false));
+			state.add(Boolean.valueOf(false));
 		}
 		// Intro
 		state.set(0, true);

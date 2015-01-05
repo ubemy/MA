@@ -99,10 +99,6 @@
             android:name=".view.GamePreferencesActivity"
             android:label="@string/title_activity_spiel_einstellungen" >
         </activity>
-        <activity
-            android:name="com.ma.schiffeversenken.android.view.ShipConfigurationActivity"
-            android:label="@string/title_activity_ship_configuration" >
-        </activity>
     </application>
 
 </manifest>

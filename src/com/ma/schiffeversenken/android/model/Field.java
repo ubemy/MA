@@ -598,10 +598,9 @@ public class Field {
 		if (this.typ == 0) {// Eigenes Spielfeld
 			for (int i = 0; i < 10; i++) {
 				for (int j = 0; j < 10; j++) {
-					if (units[i][j].getAttacked()) {// Wenn Feld angegriffen
-													// wurde
+					if (units[i][j].getAttacked()) {// Wenn Feld angegriffen wurde
 						if (!units[i][j].getOccupied()) {// Nicht belegt,
-															// Wasserplatscher
+							// Wasserplatscher
 							if (units[i][j].getAnimationtimer() < animationtimerMax) {
 								batch.draw(shipTextures.get("gunattack"),
 										units[i][j].getXpos(),
@@ -650,10 +649,20 @@ public class Field {
 				for (int j = 0; j < 10; j++) {
 					if (units[i][j].getAttacked()) {// Wenn Feld attakiert wurde
 						if (!units[i][j].getOccupied()) {// Nicht belegt,
-															// Wasserplatscher
-							batch.draw(shipTextures.get("waterattack"),
-									units[i][j].getXpos(),
-									units[i][j].getYpos(), size, size);
+							//Feueranimation nach Beschuss
+							if (units[i][j].getAnimationtimer() < animationtimerMax) {
+								batch.draw(shipTextures.get("gunattack"),
+										units[i][j].getXpos(),
+										units[i][j].getYpos(), size, size);
+								units[i][j].setAnimationtimer(units[i][j]
+										.getAnimationtimer() + 1);
+							} else {
+								// Wasserplatscher
+								batch.draw(shipTextures.get("waterattack"),
+										units[i][j].getXpos(),
+										units[i][j].getYpos(), size, size);
+							}
+							
 						} else {
 							// Komplettes Schiff ist zerstört und wird angezeigt
 							if (units[i][j].getPlacedShip().isDestroyed()) {
@@ -668,8 +677,9 @@ public class Field {
 											units[i][j].getYpos(), size, size);
 									units[i][j].setAnimationtimer(units[i][j]
 											.getAnimationtimer() + 1);
-								} else {// Nach animation Wasserattacke anzeigen
-									batch.draw(shipTextures.get("waterattack"),
+								} else {
+									// Nach animation Feueratakke anzeigen wenn schiff beschädigt
+									batch.draw(shipTextures.get("gunattack"),
 											units[i][j].getXpos(),
 											units[i][j].getYpos(), size, size);
 								}

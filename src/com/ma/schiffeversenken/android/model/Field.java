@@ -63,7 +63,7 @@ public class Field {
 	private Iterator<EntityShip> tileIterator;
 	private TreeMap<String, TextureRegion> shipTextures;
 	private TreeMap<String, TiledMapTile> shipTiles;
-	private int animationtimerMax = 10;
+	private int animationtimerMax = 20;
 	private boolean allShipsSetManual;
 
 	/**

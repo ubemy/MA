@@ -329,11 +329,9 @@ public class Field {
 						break;
 					}
 					// Hinzufügen von Schiffsteil
-					EntityShip tmpShip = new EntityShip(textureName,
-							shipTextures.get(textureName),
-							shipTextures.get(textureName + "a"), new Vector2(
+					EntityShip tmpShip = new EntityShip(textureName, new Vector2(
 									unit.getXpos(), unit.getYpos()),
-							new Vector2(size, size), mapTileLayer);
+							new Vector2(size, size));
 					unit.setEntityShipDrawUnit(tmpShip);
 
 					// TODO Deprecated
@@ -370,11 +368,9 @@ public class Field {
 					}
 				}
 				// Hinzufügen von Schiffsteil
-				EntityShip tmpShip = new EntityShip(textureName,
-						shipTextures.get(textureName),
-						shipTextures.get(textureName + "a"), new Vector2(
+				EntityShip tmpShip = new EntityShip(textureName, new Vector2(
 								unit.getXpos(), unit.getYpos()), new Vector2(
-								size, size), mapTileLayer);
+								size, size));
 				unit.setEntityShipDrawUnit(tmpShip);
 
 				// TODO Deprecated
@@ -493,7 +489,7 @@ public class Field {
 				id++;
 				units[i][j] = new FieldUnit(id, (j + cellPosX)
 						* mapTileLayer.getTileWidth(), (i + cellPosY)
-						* mapTileLayer.getTileHeight(), this);
+						* mapTileLayer.getTileHeight());
 			}
 		}
 	}
@@ -621,7 +617,7 @@ public class Field {
 							// Schiffsteil beschädigt, malen wenn Vorhanden.
 							if(units[i][j].getEntityShipDrawUnit()!=null)
 							units[i][j].getEntityShipDrawUnit().render(batch,
-									true);
+									true,shipTextures);
 							// Bombenanimation
 							if (units[i][j].getAnimationtimer() < animationtimerMax) {
 								batch.draw(shipTextures.get("gunattack"),
@@ -637,7 +633,7 @@ public class Field {
 							//DrawUnit is null when there is no ship placed draw when not null.
 							if(units[i][j].getEntityShipDrawUnit()!=null){
 							units[i][j].getEntityShipDrawUnit().render(batch,
-									false);
+									false,shipTextures);
 							}
 						}
 					}
@@ -667,7 +663,7 @@ public class Field {
 							// Komplettes Schiff ist zerstört und wird angezeigt
 							if (units[i][j].getPlacedShip().isDestroyed()) {
 								units[i][j].getEntityShipDrawUnit().render(
-										batch, true);
+										batch, true,shipTextures);
 								// Schiff nicht komplett zerstört
 							} else if (!units[i][j].getPlacedShip()
 									.isDestroyed()) {

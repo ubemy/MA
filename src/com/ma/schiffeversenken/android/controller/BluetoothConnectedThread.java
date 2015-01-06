@@ -6,10 +6,14 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.ma.schiffeversenken.android.R;
+import com.ma.schiffeversenken.android.model.Field;
+import com.ma.schiffeversenken.android.model.Player;
+import com.ma.schiffeversenken.android.model.Ship;
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 
@@ -55,6 +59,8 @@ public class BluetoothConnectedThread extends Thread {
     /**String, der bei der Bluetooth Kommunikation genutzt wird.
      * RETURN bedeutet Ergebnis einer Attacke an den Gegner zurueck senden*/
     public static final String BLUETOOTH_RETURN = "_RETURN_";
+    public static final String BLUETOOTH_ENEMY_FIELD = "_FIELD_";
+    public static final String BLUETOOTH_ENEMY_SHIPS = "_SHIPS_";
     
     /**
      * Erstellt ein BluetoothConnectedThread Objekt
@@ -126,6 +132,30 @@ public class BluetoothConnectedThread extends Thread {
 	                	else if(game.getSecondaryBTGame()){
 	                		game.firstGamerAttack(Integer.parseInt(readMsg.substring(readMsg.indexOf(BLUETOOTH_ATTACK) + BLUETOOTH_ATTACK.length())));
 	                	}
+	                }
+	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD)){
+	                	String msgSubstring = readMsg.substring(BLUETOOTH_ENEMY_FIELD.length());
+	                	Field tmpField = null;
+	                	
+	                	try {
+							tmpField = (Field) Player.deserialize(msgSubstring.getBytes());
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+	                	
+	                	game.setEnemyField(tmpField);
+	                }
+	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_SHIPS)){
+	                	String msgSubstring = readMsg.substring(BLUETOOTH_ENEMY_SHIPS.length());
+	                	Ship[] ships = null;
+	                	
+	                	try{
+	                		ships = (Ship[]) Player.deserialize(msgSubstring.getBytes());
+	                	} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+	                	
+	                	
 	                }
 	                else if(readMsg.startsWith(BLUETOOTH_HELLO)){
 	                	String helloString;

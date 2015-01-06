@@ -1,22 +1,20 @@
 package com.ma.schiffeversenken;
 
+import java.io.Serializable;
+import java.util.TreeMap;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 //public class EntityShip extends Sprite {
-	public class EntityShip {
+	public class EntityShip implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	//Texturkoordinaten
 	private Vector2 position,size;
-	TextureRegion shipTextureRegion;
-	TextureRegion shipTextureRegionAttacked;
 	Rectangle bounds;
 
 	/** Bewegung */
@@ -24,19 +22,17 @@ import com.badlogic.gdx.math.Vector2;
 
 	private float speed = 60 * 2, gravity = 60 * 1.8f;
 
-	TiledMapTileLayer collisionLayer;
+//	TiledMapTileLayer collisionLayer;
 	private String textureName;
 
 	
-	public EntityShip(String textureName,TextureRegion t,TextureRegion ta,Vector2 pos, Vector2 size, TiledMapTileLayer c) {
+	public EntityShip(String textureName,Vector2 pos, Vector2 size) {
 		// Übergabe des Sprite, wie das Schiff aussehen soll.
 		// Übergabe des ColissionLayer
-		collisionLayer = c;
+//		collisionLayer = c;
 		this.position = pos;
 		this.size = size;
 		this.textureName=textureName;
-		this.shipTextureRegion = t;
-		this.shipTextureRegionAttacked = ta;
 		this.bounds = new Rectangle(position.x, position.y, size.x, size.y);
 	}
 
@@ -202,13 +198,13 @@ import com.badlogic.gdx.math.Vector2;
 		this.gravity = gravity;
 	}
 
-	public TiledMapTileLayer getCollisionLayer() {
-		return collisionLayer;
-	}
-
-	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
-		this.collisionLayer = collisionLayer;
-	}
+//	public TiledMapTileLayer getCollisionLayer() {
+//		return collisionLayer;
+//	}
+//
+//	public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
+//		this.collisionLayer = collisionLayer;
+//	}
 	
 
 	public float getX() {
@@ -229,14 +225,14 @@ import com.badlogic.gdx.math.Vector2;
 		this.position.y=y;
 	}
 
-	public void render(Batch batch,boolean attacked) {
+	public void render(Batch batch,boolean attacked,TreeMap<String, TextureRegion> shipTextures) {
 		// Beim Zeichnen wird update vorher aufgerufen mit xpos und ypos
 		// aktualisiert
 		update(Gdx.graphics.getDeltaTime());
 		if(!attacked){
-			batch.draw(this.shipTextureRegion,position.x, position.y, size.x, size.y);
+			batch.draw(shipTextures.get(textureName),position.x, position.y, size.x, size.y);
 		}else{
-			batch.draw(this.shipTextureRegionAttacked,position.x, position.y, size.x, size.y);
+			batch.draw(shipTextures.get(textureName+"a"),position.x, position.y, size.x, size.y);
 		}
 //		batch.draw(new Sprite(texture.getTextureRegion().getTexture()), x, y, texture.getTextureRegion().getTexture().getWidth(), texture.getTextureRegion().getTexture().getHeight());	
 	
@@ -248,14 +244,8 @@ import com.badlogic.gdx.math.Vector2;
 		
 	}
 
-	public TextureRegion getShipTextureRegion() {
-		return shipTextureRegion;
-	}
-
-	public void setShipTextureRegion(String textureName, TextureRegion shipTextureRegion,TextureRegion shipTextureRegionAttacked) {
+	public void setShipTextureRegion(String textureName) {
 		this.textureName=textureName;
-		this.shipTextureRegion = shipTextureRegion;
-		this.shipTextureRegionAttacked=shipTextureRegionAttacked;
 	}
 	
 	@Override

@@ -94,7 +94,7 @@ public class Game extends Thread {
 		if(gameMode == GAME_MODE_SINGLE_PLAYER){
 			//Wenn GameMode == 0 == Einzelspieler, dann KI erstellen
 			//Field kiField = new Field(1);
-			ki = new KI(secondField, firstFieldPlayer, false, loadedGame, difficultyLevel);
+			ki = new KI(secondField, firstFieldPlayer, loadedGame, difficultyLevel);
 		}
 		else{
 			btConnectedThread = BluetoothConnectedThread.getInstance();
@@ -201,6 +201,14 @@ public class Game extends Thread {
 		this.returnDestroyedIDs = returnDestroyedIDs;
 	}
 	
+	public void setEnemyField(Field field){
+		this.secondFieldEnemy = field;
+	}
+	
+	public void setEnemyShips(Ship[] ships){
+		this.secondFieldEnemy.setShipsManual(ships);
+	}
+	
 	public void destroyBluetoothShip(){
 		
 		ArrayList<String> idList = new ArrayList<String>();
@@ -247,6 +255,12 @@ public class Game extends Thread {
 			shipSize = Ship.BATTLESHIP_SIZE;
 		}
 		
+		ArrayList<FieldUnit[]> units = new ArrayList<FieldUnit[]>(1);
+		units.add(fieldUnits);
+		
+		ShipPlacement sp = new ShipPlacement();
+		sp.placeShipsManual(secondFieldEnemy, units);
+		/*
 		Ship ship = new Ship(shipName, shipSize, fieldUnits);
 		ship.setDestroyed(true);
 		ship.setOrientation(0);
@@ -268,7 +282,7 @@ public class Game extends Thread {
 		for(FieldUnit fu : fieldUnits){
 			fu.getEntityShipDrawUnit().setShipTextureRegion("back",
 					shipBack, shipBackA);
-		}
+		}*/
 	}
 	
 	/**
@@ -329,7 +343,7 @@ public class Game extends Thread {
 					destroyShip(fe);//Ob Schiff komplett zerstört
 					shipDestroyed = returnShipDestroyed;
 					attackHit = returnAttackHit;
-					//if(shipDestroyed) destroyBluetoothShip();
+					if(shipDestroyed) destroyBluetoothShip();
 				}
 				else{
 					if(fe.getOccupied()){
@@ -427,18 +441,26 @@ public class Game extends Thread {
 	public int hasSomebodyWon(){
 		int ret = 1;
 		
-		for(Ship ship : secondFieldEnemy.getShips()){
-			if(!ship.isDestroyed()){
-				ret = 2;
-			}
-		}
+		Ship[] firstFieldShips = firstFieldPlayer.getShips();
+		Ship[] secondFieldShips = secondFieldEnemy.getShips();
 		
-		if(ret == 2){
-			for(Ship ship : firstFieldPlayer.getShips()){
+		if(firstFieldShips != null && secondFieldShips != null){
+			for(Ship ship : secondFieldEnemy.getShips()){
 				if(!ship.isDestroyed()){
-					ret = 0;
+					ret = 2;
 				}
 			}
+			
+			if(ret == 2){
+				for(Ship ship : firstFieldPlayer.getShips()){
+					if(!ship.isDestroyed()){
+						ret = 0;
+					}
+				}
+			}
+		}
+		else{
+			return 0;
 		}
 		
 		return ret;

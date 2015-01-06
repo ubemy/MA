@@ -41,7 +41,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
+import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
+import com.ma.schiffeversenken.android.model.Ship;
 
 public class GameFieldScreen implements Screen {
 
@@ -300,9 +303,31 @@ public class GameFieldScreen implements Screen {
 		buttonStart.pad(w*0.02f);
 		buttonStart.addListener(new ClickListener(){
 			@Override
-			public void clicked(InputEvent event, float x, float y) {			
+			public void clicked(InputEvent event, float x, float y) {					
+				Gdx.input.setInputProcessor(gestureDetector);
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
+						if(primaryBTGame || secondaryBTGame){
+							BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
+							
+							String fieldString = null;
+							String shipsString = null;
+							FieldUnit[][] fieldunits = player.getGame().getFirstFieldPlayer().getFieldUnits();
+							Ship[] ships = player.getGame().getFirstFieldPlayer().getShips();
+
+							try {								
+								fieldString = BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD + 
+										Player.serialize(fieldunits);
+								
+								shipsString = BluetoothConnectedThread.BLUETOOTH_ENEMY_SHIPS + 
+										Player.serialize(ships);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							
+							btcThread.write(fieldString.getBytes());
+							btcThread.write(shipsString.getBytes());
+						}
 						//Setzen der Schiffe und Starten.
 						//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
 						if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
@@ -344,24 +369,7 @@ public class GameFieldScreen implements Screen {
 		buttonRestart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				
-				
-//				player.setNewGame(new Game(player.getGameMode(),
-//						new Field(0, tileSetShips, (TiledMapTileLayer) map.getLayers().get("0")), 
-//						new Field(1, tileSetShips, (TiledMapTileLayer) map.getLayers().get("0")), 
-//						primaryBTGame, secondaryBTGame, false, player.getKiLevel()));
 				parentScreen.create();
-				
-				CameraController.changeStateTo(1, false);
-				table.clear();
-				table.add(heading).colspan(5);
-				table.row();
-				table.add(buttonGenerateShips).minWidth(w*0.2f).minHeight(w*0.1f);
-				table.add().minWidth(w*0.01f);
-				table.add(buttonStart).minWidth(w*0.2f).minHeight(w*0.1f);
-				table.add().minWidth(w*0.01f);
-				table.add(buttonSelfPlaceShips).minWidth(w*0.2f).minHeight(w*0.1f);
-				table2.clear();
 			}
 		});
 		
@@ -490,6 +498,7 @@ public class GameFieldScreen implements Screen {
 			table2.add(new Label("Du hast "+((player.getGame().hasSomebodyWon()==1)?"gewonnen!":"leider verloren."),headingStyle)).colspan(3);
 			table2.row();
 			table2.add(new Label("Drücke Neustart für ein neues Spiel.",headingStyle)).colspan(3);
+			Gdx.input.setInputProcessor(inputMultiplexer);
 			CameraController.changeStateTo(1, false);
 		}
 		

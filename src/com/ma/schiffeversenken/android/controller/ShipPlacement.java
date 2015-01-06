@@ -36,7 +36,7 @@ public class ShipPlacement {
 	 * @param field
 	 * @param ships
 	 */
-	public void placeShips(Field field, Ship[] ships, boolean test) {
+	public void placeShips(Field field, Ship[] ships) {
 		this.t = field;
 
 		createBlocks(field);
@@ -91,10 +91,10 @@ public class ShipPlacement {
 			}
 		}
 
-		if (!test) {
+		
 			// Setzen von ships
 			field.setShips(ships);
-		}
+		
 	}
 
 	/**

@@ -32,7 +32,7 @@ public class KI {
 	 * @param loadedGame Boolean ob das Spiel geladen wurde
 	 * @param difficultyLevel Schwierigkeitsstufe der KI
 	 */
-	public KI(Field myField, Field enemiesField, boolean test, boolean loadedGame, int difficultyLevel){
+	public KI(Field myField, Field enemiesField, boolean loadedGame, int difficultyLevel){
 		this.myField = myField;
 		this.enemiesField = enemiesField;
 		this.kiStrategy = new NormalStrategy(this);
@@ -51,7 +51,7 @@ public class KI {
 		}
 		
 		if(!loadedGame){//myField hat schon Schiffe
-			setShips(createShips(3, 4, 2, 1), test);
+			setShips(createShips(3, 4, 2, 1));
 		}
 			
 		initHistory();
@@ -122,9 +122,9 @@ public class KI {
 	* Schiffe auf dem Spielfeld der KI platzieren
 	* @param ships Die Schiffe, die platziert werden
 	*/
-	private void setShips(Ship[] ships, boolean test){
+	private void setShips(Ship[] ships){
 		sp = new ShipPlacement();
-		sp.placeShips(myField, ships, test);
+		sp.placeShips(myField, ships);
 	}
 	
 	/**

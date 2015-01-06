@@ -188,7 +188,7 @@ public class Field {
 		sp = new ShipPlacement();
 		sp.placeShips(this, KI.createShips(schiffsEinstellung.get(0),
 				schiffsEinstellung.get(1), schiffsEinstellung.get(2),
-				schiffsEinstellung.get(3)), false);
+				schiffsEinstellung.get(3)));
 		allShipsSetManual = false;
 
 	}

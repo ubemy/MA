@@ -1,14 +1,10 @@
 package com.ma.schiffeversenken.android.controller;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.Json.Serializable;
-import com.badlogic.gdx.utils.JsonValue;
+import com.ma.schiffeversenken.CameraController;
 import com.ma.schiffeversenken.android.model.*;
 
 /**
@@ -428,7 +424,7 @@ public class Game extends Thread {
 	 * - Gibt 2 zurueck, wenn Spieler 2 gewonnen hat
 	 * - Gibt 0 zurueck, wenn niemand gewonnen hat 
 	 */
-	private int hasSomebodyWon(){
+	public int hasSomebodyWon(){
 		int ret = 1;
 		
 		for(Ship ship : secondFieldEnemy.getShips()){
@@ -479,7 +475,6 @@ public class Game extends Thread {
 				//Auf Eingabe von Benutzer warten
 				do{
 					feWasAlreadyAttacked = false;
-					
 					while(!firstGamerAction){
 						try {
 							Thread.sleep(FIVEHUNDRED_MS);
@@ -496,6 +491,7 @@ public class Game extends Thread {
 				if(gameMode == GAME_MODE_SINGLE_PLAYER){
 					//Wenn GameMode == 0 == Einzelspieler, dann KI attackieren lassen
 					do{
+						
 						feWasAlreadyAttacked = false;
 						/*
 						 * Die Schleife wird solange durchlaufen,
@@ -513,6 +509,7 @@ public class Game extends Thread {
 				else{
 					//Auf Eingabe von Benutzer warten
 					do{
+						
 						feWasAlreadyAttacked = false;
 						/*
 						 * Die Schleife wird solange durchlaufen,
@@ -535,12 +532,15 @@ public class Game extends Thread {
 			if(primaryBTGame || secondaryBTGame){
 				if(hasEnemyWon()){
 					end = true;
+					CameraController.changeStateTo(8, false);
 				}
 			}
 			else if(hasSomebodyWon() != 0){
 				end = true;
+				CameraController.changeStateTo(8, false);
 			}
-		}while(!end);
+			
+		}while(!end);	
 	}
 
 	/**

@@ -750,6 +750,7 @@ public class Field {
 		try {
 			drawShips = new ArrayList<EntityShip>();
 			allShipsSet = false;
+			allShipsSetManual=false;
 			create();
 			createNeighbors();
 			createEdges();

@@ -40,6 +40,10 @@ public class Player implements Serializable {
 	private static Field firstField;
 	private static Field secondField;
 	TiledMap map;
+	private int gameMode;
+	private boolean primaryBTGame;
+	private boolean secondaryBTGame;
+	private int theKiLevel;
 	private static ArrayList<Integer> gameSettings;
 
 	/**
@@ -52,6 +56,8 @@ public class Player implements Serializable {
 	public Player(TiledMapTileSet tileSet, TiledMap m, boolean primaryBTGame, boolean secondaryBTGame)
 			throws ClassNotFoundException, IOException {
 		super();
+		this.primaryBTGame=primaryBTGame;
+		this.secondaryBTGame=secondaryBTGame;
 		map = m;
 		firstField = new Field(0, tileSet, (TiledMapTileLayer) map.getLayers()
 				.get("0"));
@@ -62,18 +68,18 @@ public class Player implements Serializable {
 		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
 		String kiLevel = pref.getString("ki");
 		Gdx.app.log(GameFieldScreen.LOG, "Kilevel: "+kiLevel);
-		int ki=-1;
+		theKiLevel=-1;
 		if (kiLevel.equals("Einfach")){
-			ki=1;
+			theKiLevel=1;
 		}else if (kiLevel.equals("Mittel")){
-			ki=2;
+			theKiLevel=2;
 		}else if (kiLevel.equals("Schwer")){
-			ki=3;
+			theKiLevel=3;
 		}
 
-		int gameMode = 0;
+		gameMode = 0;
 		if(primaryBTGame || secondaryBTGame) gameMode = 1;
-		this.game = new Game(gameMode, firstField, secondField, primaryBTGame, secondaryBTGame, false, ki);
+		this.game = new Game(gameMode, firstField, secondField, primaryBTGame, secondaryBTGame, false, theKiLevel);
 
 		if (Gdx.files.isLocalStorageAvailable()
 				&& Gdx.files.local("preferences.bin").exists()) {
@@ -300,5 +306,26 @@ public class Player implements Serializable {
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		// TODO Auto-generated method stub
+	}
+	
+	public int getGameMode(){
+		return gameMode;
+	}
+	
+	public int getKiLevel(){
+		return theKiLevel;
+	}
+
+	public void setNewGame(Game game2) {
+		 try
+	      {
+	       game.sleep( 500 );
+	       game.interrupt();
+	      }
+	      catch ( InterruptedException e )
+	      {
+	       System.out.println( "Unterbrechung in sleep()" );
+	      }
+		this.game=game2;
 	}
 }

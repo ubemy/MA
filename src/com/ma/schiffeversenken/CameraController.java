@@ -21,7 +21,7 @@ import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
 import com.ma.schiffeversenken.android.view.Help;
 
-class CameraController implements GestureListener {
+public class CameraController implements GestureListener {
 	float velX, velY;
 	boolean flinging = false;
 	float initialScale = 1;
@@ -33,8 +33,8 @@ class CameraController implements GestureListener {
 	private float faktorY;
 	private boolean panStart = false;
 	// 0=Intro, 1=FullView, 2=GameFieldZoom, 3=PlayerShips, 4=EnemyShips,
-	// 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid
-	ArrayList<Boolean> state;
+	// 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid, 8=NewGame
+	private static ArrayList<Boolean> state;
 	// Wenn true wird gerade ein Schiff plaziert.
 	private boolean aktivatorSchiffSetzen;
 	private TextureRegion shipBack;
@@ -320,10 +320,10 @@ class CameraController implements GestureListener {
 		} else if (state.get(0)) {
 			camera.position.x = layerX;
 			// State Wechsel
-			changeStateTo(state, 1, false);
+			changeStateTo(1, false);
 		}
 		// 1=FullView
-		if (state.get(1)) {
+		if (state.get(1)||state.get(8)) {
 			if (camera.position.x > layerX) {
 				camera.position.x -= 20f;
 				if (camera.position.x < layerX)
@@ -491,21 +491,18 @@ class CameraController implements GestureListener {
 	}
 
 	/**
-	 * Hilfsmethode, dient dem setzen eines Kamerazustandes.
+	 * Hilfsmethode, dient dem setzen eines Kamerazustandes anhand des aktuellen Zustandes der in ArrayList<Boolean> state gesetzt wurde.
 	 * 
 	 * 0=Intro, 1=FullView, 2=GameFieldZoom, 3=PlayerShips, 4=EnemyShips,
-	 * 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid
+	 * 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid, 8=NewGame
 	 * 
-	 * @param state
-	 *            ArrayList<Boolean> mit den jeweiligen Zuständen
 	 * @param toStateNumber
 	 *            Der ausgewählte Zustand
 	 * @param grid
 	 *            Boolean der im jeweiligen Zustand den Grid Zustand mit
 	 *            aktiviert.
 	 */
-	public static void changeStateTo(ArrayList<Boolean> state,
-			int toStateNumber, boolean grid) {
+	public static void changeStateTo(int toStateNumber, boolean grid) {
 		for (int i = 0; i < state.size(); i++) {
 			if (i == toStateNumber) {
 				state.set(i, true);
@@ -531,6 +528,10 @@ class CameraController implements GestureListener {
 					continue;
 				state.set(i, false);
 			}
+		}
+		
+		for (Boolean boolean1 : state) {
+			System.out.println(""+boolean1);
 		}
 
 	}

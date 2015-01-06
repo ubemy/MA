@@ -25,7 +25,7 @@ public class MyGdxGameField extends Game {
 	@Override
 	public void create() {
 		//Wenn spiel erstellt wird wollen wir den Screen setzen
-		setScreen(new GameFieldScreen(primaryBTGame, secondaryBTGame));
+		setScreen(new GameFieldScreen(this,primaryBTGame, secondaryBTGame));
 	}
 
 	@Override

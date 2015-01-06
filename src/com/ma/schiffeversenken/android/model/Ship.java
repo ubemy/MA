@@ -118,14 +118,14 @@ public class Ship{
 		return size;
 	}
 
-	/**
-	 * Gibt den Namen des Schiffs zurueck
-	 * 
-	 * @return Der Name des Schiffs
-	 */
-	public String getName() {
-		return name;
-	}
+//	/**
+//	 * Gibt den Namen des Schiffs zurueck
+//	 * 
+//	 * @return Der Name des Schiffs
+//	 */
+//	public String getName() {
+//		return name;
+//	}
 
 	/**
 	 * Setzt den Standort des Schiffs

@@ -5,10 +5,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.ma.schiffeversenken.GameFieldScreen;
+import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -24,16 +26,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.Json.Serializable;
-import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.Base64Coder;
+
 
 /**
  * Der Player hält alles zusammen OpenGl/Controller
  * 
  * @author Klaus
  */
-public class Player implements Serializable {
+public class Player implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private static Game game;
@@ -297,17 +298,45 @@ public class Player implements Serializable {
 		ObjectInputStream o = new ObjectInputStream(b);
 		return o.readObject();
 	}
-
-	@Override
-	public void write(Json json) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void read(Json json, JsonValue jsonData) {
-		// TODO Auto-generated method stub
-	}
 	
+	/**
+	 * Liest ein String Objekt ein und schreibt diesen in Base64.
+	 * @param s String dieser hält ein Objekt
+	 * @return o Objekt wird zurückgeliefert
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	   public static Object fromString( String s ) throws IOException ,
+	                                                       ClassNotFoundException {
+	        byte [] data = Base64Coder.decode( s );
+	        ObjectInputStream ois = new ObjectInputStream( 
+	                                        new ByteArrayInputStream(  data ) );
+	        Object o  = ois.readObject();
+	        ois.close();
+	        return o;
+	   }
+
+	   /**
+	    * Liest ein Base64 Objekt und schreibt dieses in einen String.
+	    * @param o Objekt welches in String geschrieben werden soll.
+	    * @return String der resultierende String
+	    * @throws IOException
+	    */
+	   public static String toString( Serializable o ) {
+		   try {
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        ObjectOutputStream oos;
+				oos = new ObjectOutputStream( baos );
+	        oos.writeObject(o);
+	        oos.close();
+	        return new String( Base64Coder.encode( baos.toByteArray() ) );
+		   } catch (IOException e) {
+			   // TODO Auto-generated catch block
+			   e.printStackTrace();
+		   }
+		   return "";
+	    }
+		
 	public int getGameMode(){
 		return gameMode;
 	}

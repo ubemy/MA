@@ -1,5 +1,6 @@
 package com.ma.schiffeversenken.android.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -69,6 +70,7 @@ public class Game extends Thread {
 	/**Wird auf True gesetzt, wenn das Spiel zuende ist*/
 	private boolean end;
 	private String returnDestroyedIDs;
+
 		
 	/**
 	 * Erstellt ein neues Game Objekt
@@ -201,12 +203,12 @@ public class Game extends Thread {
 		this.returnDestroyedIDs = returnDestroyedIDs;
 	}
 	
-	public void setEnemyField(Field field){
-		this.secondFieldEnemy = field;
+	public void setEnemyFieldUnitsBluetooth(FieldUnit[][] units){
+		this.secondFieldEnemy.setFieldUnitsBluetooth(units);
 	}
 	
-	public void setEnemyShips(Ship[] ships){
-		this.secondFieldEnemy.setShipsManual(ships);
+	public void setEnemyFieldShipsBluetooth(Ship[] ships){
+		this.secondFieldEnemy.setFieldShips(ships);
 	}
 	
 	public void destroyBluetoothShip(){
@@ -301,6 +303,7 @@ public class Game extends Thread {
 		
 		
 		if(primaryBTGame || secondaryBTGame){
+
 			
 			if(gamer == 0 && primaryBTGame){
 				fe = secondFieldEnemy.getElementByID(id);
@@ -323,6 +326,7 @@ public class Game extends Thread {
 				
 				byte[] attackString = (new String(btConnectedThread.BLUETOOTH_ATTACK + Integer.toString(id))).getBytes();
 				
+
 				if(primaryBTGame && gamer == FIRST_GAMER){
 					btConnectedThread.write(attackString);	
 				}
@@ -338,6 +342,7 @@ public class Game extends Thread {
 							e.printStackTrace();
 						}
 					}
+			
 					
 					ret = returnAttackHit;
 					destroyShip(fe);//Ob Schiff komplett zerstört
@@ -397,7 +402,6 @@ public class Game extends Thread {
 					//Wenn das Feld belegt war
 					ret = true;
 					destroyShip(fe);
-					System.out.println("NULL?"+((fe.getPlacedShip()!=null)?"No":"Yes"));
 					shipDestroyed = fe.getPlacedShip().isDestroyed();
 					attackHit = true;
 				}
@@ -487,6 +491,17 @@ public class Game extends Thread {
 	 */
 	@Override
 	public void run() {
+//		//TODO Fertigstellen von Feld Übertragen.
+//		if((primaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
+//			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+//			while(!getFirstFieldPlayer().getFeldUebertragen()&&!getSecondFieldEnemy().getFeldUebertragen()){
+//				try {
+//					Thread.sleep(FIVEHUNDRED_MS);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//				}
+//			}
+//		}
 		end = false;
 		boolean hitShip = false;
 		//gamersTurn = (new Random()).nextInt(2);

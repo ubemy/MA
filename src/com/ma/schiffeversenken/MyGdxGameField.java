@@ -8,14 +8,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.model.Player;
 
 public class MyGdxGameField extends Game {
-
+	private AndroidLauncher androidLauncher;
+	
 	private boolean primaryBTGame, secondaryBTGame;
-	public MyGdxGameField(boolean primaryBTGame, boolean secondaryBTGame){
+	public MyGdxGameField(boolean primaryBTGame, boolean secondaryBTGame,AndroidLauncher a){
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
+		this.androidLauncher=a;
 	}
 	
 	/**
@@ -54,6 +57,10 @@ public class MyGdxGameField extends Game {
 		super.resume();
 		// TODO LADEN
 
+	}
+	
+	public AndroidLauncher getAndroidLauncher(){
+		return this.androidLauncher;
 	}
 
 }

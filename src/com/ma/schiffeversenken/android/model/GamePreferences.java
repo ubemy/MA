@@ -20,6 +20,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.OpenableColumns;
 
+/**
+ * GamePreferences Objekt zur einstellung von Spieleinstellungen
+ * @author Klaus Schlender
+ */
 @Deprecated
 public class GamePreferences implements Parcelable{
 	

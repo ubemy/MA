@@ -526,11 +526,6 @@ public class CameraController implements GestureListener {
 				state.set(i, false);
 			}
 		}
-		
-		for (Boolean boolean1 : state) {
-			System.out.println(""+boolean1);
-		}
-
 	}
 
 	public void setShipPlaceHelper(ArrayList<Integer> shipPlaceHelper) {

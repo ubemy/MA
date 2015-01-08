@@ -1,12 +1,8 @@
 package com.ma.schiffeversenken;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import android.content.Context;
-import android.util.StateSet;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -41,10 +37,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.ma.schiffeversenken.android.AndroidLauncher;
+import com.ma.schiffeversenken.android.BackActivity;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
-import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
-import com.ma.schiffeversenken.android.model.Ship;
 
 public class GameFieldScreen implements Screen {
 
@@ -133,6 +129,11 @@ public class GameFieldScreen implements Screen {
 		this.parentScreen=parentScreen;
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
+		//Für Meldungen außerhalb der Anwendung innerhalb BluetoothConnectedThread
+		if(parentScreen.getAndroidLauncher()!=null){
+		BluetoothConnectedThread.getInstance().setAndroidLauncher(parentScreen.getAndroidLauncher());
+		}
+
 	}
 	
 	@Override
@@ -307,32 +308,18 @@ public class GameFieldScreen implements Screen {
 				Gdx.input.setInputProcessor(gestureDetector);
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
-						if(primaryBTGame || secondaryBTGame){
-							BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
-							
-							String fieldString = null;
-							String shipsString = null;
-							FieldUnit[][] fieldunits = player.getGame().getFirstFieldPlayer().getFieldUnits();
-							Ship[] ships = player.getGame().getFirstFieldPlayer().getShips();
-
-							try {								
-								fieldString = BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD + 
-										Player.serialize(fieldunits);
-								
-								shipsString = BluetoothConnectedThread.BLUETOOTH_ENEMY_SHIPS + 
-										Player.serialize(ships);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-							
-							btcThread.write(fieldString.getBytes());
-							btcThread.write(shipsString.getBytes());
-						}
+						
+//						player.getGame().getFirstFieldPlayer().serialisierungstestLocal();
+						
+						
 						//Setzen der Schiffe und Starten.
 						//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
 						if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
 						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						}
+						
+					
+
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
@@ -340,24 +327,26 @@ public class GameFieldScreen implements Screen {
 						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
 						
-						CameraController.changeStateTo(2, false);
 
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();
+						CameraController.changeStateTo(2, false);
 					}else{
 						//Setzen der Schiffe und Starten.
 						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
+						
+			
+						
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
-						CameraController.changeStateTo(2, false);
-	
 						
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();
+						CameraController.changeStateTo(2, false);
 					}
 				}
 
@@ -483,7 +472,7 @@ public class GameFieldScreen implements Screen {
 
 		//Wenn Spiel zu ende ist soll State 1 und Text mit Btton aktiv werden.
 		if(state.get(8)){
-			System.out.println("BLUB");
+			System.out.println("State 8");
 			table.clear();
 			table.add(heading).colspan(5);
 			table.row();
@@ -612,5 +601,9 @@ public class GameFieldScreen implements Screen {
 		skin.dispose();
 		// ship.getTexture().dispose();// Wichtig texturen dispose()
 
+	}
+	
+	public MyGdxGameField getMyGdxGameField(){
+		return this.parentScreen;
 	}
 }

@@ -9,6 +9,7 @@ import com.ma.schiffeversenken.android.model.*;
  * Steuert das automatische Platzieren der Schiffe fuer beide Spiele
  * 
  * @author Maik Steinborn
+ * @author Klaus Schlender
  */
 public class ShipPlacement {
 	/** Anzahl der Bloecke */

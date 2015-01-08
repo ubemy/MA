@@ -5,7 +5,8 @@ package com.ma.schiffeversenken.android.model;
 /**
  * Fuer alle Schiffe
  * 
- * @author Maik, Klaus
+ * @author Maik Steinborn
+ * @author Klaus Schlender
  */
 public class Ship implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;

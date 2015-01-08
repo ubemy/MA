@@ -1,5 +1,6 @@
 package com.ma.schiffeversenken.android.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
 import com.ma.schiffeversenken.EntityShip;
+import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.controller.KI;
 import com.ma.schiffeversenken.android.controller.ShipPlacement;
 
@@ -65,6 +67,7 @@ public class Field {
 	private TreeMap<String, TiledMapTile> shipTiles;
 	private int animationtimerMax = 20;
 	private boolean allShipsSetManual;
+	private boolean feldUebertragen;
 
 	/**
 	 * Erstellt ein Field Objekt.
@@ -104,6 +107,7 @@ public class Field {
 			this.size = mtl.getTileHeight();
 			this.allShipsSetManual = false;
 			this.allShipsSet = false;
+			this.feldUebertragen=false;
 			drawShips = new ArrayList<EntityShip>();
 			getShipTileSetTextures(shipTextures);
 			create();
@@ -590,6 +594,67 @@ public class Field {
 	// @Deprecated
 	public void draw(Batch batch) {
 		try{
+			//TODO DELETE AB HIER 
+			
+			// Eigenes Spielfeld
+						for (int i = 0; i < 10; i++) {
+							for (int j = 0; j < 10; j++) {
+								if (units[i][j].getAttacked()) {// Wenn Feld angegriffen wurde
+									if (!units[i][j].getOccupied()) {// Nicht belegt,
+										// Wasserplatscher
+										if (units[i][j].getAnimationtimer() < animationtimerMax) {
+											batch.draw(shipTextures.get("gunattack"),
+													units[i][j].getXpos(),
+													units[i][j].getYpos(), size, size);
+											units[i][j].setAnimationtimer(units[i][j]
+													.getAnimationtimer() + 1);
+										} else if (units[i][j].getAnimationtimer() < animationtimerMax
+												+ animationtimerMax) {// Nach animation
+																		// Wasserattacke
+																		// anzeigen
+											batch.draw(shipTextures.get("waterattack"),
+													units[i][j].getXpos(),
+													units[i][j].getYpos(), size, size);
+											units[i][j].setAnimationtimer(units[i][j]
+													.getAnimationtimer() + 1);
+										}
+									} else {
+										// Schiffsteil beschädigt, malen wenn Vorhanden.
+										if(units[i][j].getEntityShipDrawUnit()!=null)
+										units[i][j].getEntityShipDrawUnit().render(batch,
+												true,shipTextures);
+										// Bombenanimation
+										if (units[i][j].getAnimationtimer() < animationtimerMax) {
+											batch.draw(shipTextures.get("gunattack"),
+													units[i][j].getXpos(),
+													units[i][j].getYpos(), size, size);
+											units[i][j].setAnimationtimer(units[i][j]
+													.getAnimationtimer() + 1);
+										}
+									}
+								} else {// Wenn Feld nicht angegriffen
+										// Schiffsteil vorhanden auf dem Feld
+									if (units[i][j].getOccupied()) {
+										//DrawUnit is null when there is no ship placed draw when not null.
+										if(units[i][j].getEntityShipDrawUnit()!=null){
+										units[i][j].getEntityShipDrawUnit().render(batch,
+												false,shipTextures);
+										}
+									}
+								}
+
+							}
+						}
+					
+					
+			
+			//TODO DELETE BIS HIER
+			
+			
+			
+			
+			
+			
 		// Rendern vom Spielfeld
 		if (this.typ == 0) {// Eigenes Spielfeld
 			for (int i = 0; i < 10; i++) {
@@ -775,6 +840,304 @@ public class Field {
 	public void setAllShipsSetManual(boolean b) {
 		allShipsSetManual = b;
 
+	}
+
+	public void setFieldUnits(FieldUnit[][] u) {
+		this.units=u;
+	}
+	
+	public void setFieldUnitsBluetooth(FieldUnit[][] u) {
+		if(!feldUebertragen){
+			//TODO Nachricht feldübertragen
+			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
+			byte[] returnString = (new String(btcThread.BLUETOOTH_ENEMY_FIELD_RETURN)).getBytes();
+			btcThread.write(returnString);
+		}
+		this.units=u;
+	}
+	
+	public void setFieldShips(Ship[] s) {
+		this.placedShips=s;
+	}
+
+	public void sendFieldUnitsWithBluetooth() {
+		
+		
+		//Für Bluetooth eigenes Feld übertragen
+		if(!feldUebertragen){
+			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
+			byte[] fieldBytes;
+			byte[] fieldBytes2;
+			String subString;
+				
+			subString = Player.toString(getFieldUnits());
+				
+			//Deserialisierung
+			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+"Hallo").getBytes();
+			//Schreiben
+			btcThread.write(fieldBytes);
+
+//			//Deserialisierung
+//			fieldBytes2 = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+"Hallo Welt").getBytes();
+//			//Schreiben
+//			btcThread.write(fieldBytes);
+
+
+			//Warten bis Feld senden abgeschlossen
+		
+//				try {
+//					Thread.sleep(50);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+			
+				
+				
+		}else if(feldUebertragen){
+			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
+			byte[] returnString = (new String(btcThread.BLUETOOTH_ENEMY_FIELD+"HALLOENDE")).getBytes();
+			btcThread.write(returnString);
+			feldUebertragen=!feldUebertragen;
+		}
+		
+//		try {
+//			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
+//			//Serialisierung
+//			byte[] fieldBytes;
+//			String subString;
+//				subString = Player.toString(units);
+//			//Deserialisierung
+//			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+"Hallo").getBytes();
+//			//Schreiben
+//			btcThread.write(fieldBytes);
+//			//Deserialisierung
+//			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD_RETURN).getBytes();
+//			//Schreiben
+//			btcThread.write(fieldBytes);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+				
+//				//TODO DEPRECATED ab hier nur zur Information
+//				try {
+//					BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
+//					//Serialisierung
+//					byte[] fieldBytes;
+//					String subString = Player.toString(units);
+//					String subStringAll = new String(subString);
+//					String subStringPart = subStringAll.substring(0, BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
+//									
+//					fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();					
+//					
+//					//Deserialisierung
+//					int bytesToTransfer = subStringAll.length();		
+//					while (bytesToTransfer >= 0) {
+//						if(bytesToTransfer>0){
+//							//Part Bytes senden	
+//							if(subStringAll.length()>=(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length())){									
+//								subStringPart = subStringAll.substring(0, (BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length()));
+//							}else{//letzter Part
+//								subStringPart = subStringAll;
+//							}
+//						
+//						fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();
+//						//Schreiben
+//						btcThread.write(fieldBytes);
+//					
+//						if(subStringPart.equals(subStringAll)){
+//							bytesToTransfer -= subStringAll.length();
+//						}else{//Rest definieren
+//						subStringAll=subStringAll.substring(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());			    
+//					    bytesToTransfer -= BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length();
+//						}
+//						}else{
+//							//Ende senden
+//							fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD).getBytes();
+//							bytesToTransfer -= BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length();
+//							//Schreiben
+//							btcThread.write(fieldBytes);
+//						}
+//					}
+//					} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				
+				//TODO ALT ALT
+//				byte[] fieldBytes;
+//				String subStringAll = Player.toString(units);
+//				String subStringPart;
+//
+//				int bytesToTransfer = subStringAll.length();		
+//				while (bytesToTransfer >= 0) {			
+//					if(bytesToTransfer>0){
+//						//1024 Bytes senden	
+//					subStringPart = subStringAll.substring(0, BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
+//					
+//					fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();
+//					btcThread.write(fieldBytes);
+//					
+//					subStringAll=subStringAll.substring(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());			    
+//				    bytesToTransfer -= BluetoothConnectedThread.BUFFER_SIZE;
+//					}else{
+//						//Ende senden
+//						fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD).getBytes();
+//						btcThread.write(fieldBytes);
+//						bytesToTransfer -= BluetoothConnectedThread.BUFFER_SIZE;
+//					}
+//				}
+				
+//				fieldString = BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD +
+//						(Player.serialize(units));
+//				
+//				shipsString = BluetoothConnectedThread.BLUETOOTH_ENEMY_SHIPS + 
+//						Player.serialize(ships);
+//				btcThread.write(fieldBytes);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}	
+	}
+
+	public void serialisierungstestLocal() {
+		//TODO Serialisierungstest --> funktioniert local
+				try {
+					//Serialisierung
+					byte[] fieldBytes;
+					FieldUnit[][] units = getFieldUnits();
+					FieldUnit[][] units2;
+					System.out.println("FIELDID VORHER: "+units[1][1].getID());					
+					String subString = Player.toString(units);
+					String subStringAll = new String(subString);
+					String subStringPart = subStringAll.substring(0, subStringAll.length()-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
+									
+					fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();
+					
+					System.out.println("Send_Sub    "+subStringPart+"      größe:"+subStringPart.length());
+					System.out.println("Send_Full   "+fieldBytes+"      größe:"+fieldBytes.length);		
+					//Deserialisierung
+					String readMsg="";
+					String subStringIncomeing="";
+							//1024 Bytes senden	
+							System.out.println("substringSend lastindex:"+subStringAll.length());
+							System.out.println("substringSend lastindextocopy:"+(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length()));
+								subStringPart = subStringAll;
+						
+						fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();
+						//Schreiben simulieren
+						readMsg = new String(fieldBytes, 0, fieldBytes.length);
+						subStringIncomeing= subStringIncomeing+readMsg.substring(BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
+//						btcThread.write(fieldBytes);
+						
+					
+							//Ende senden
+							fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD).getBytes();
+							readMsg = new String(fieldBytes, 0, fieldBytes.length);
+						
+						
+						if(readMsg.startsWith(BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD)){
+							//Ende simulieren
+							System.out.println("Substring länge muss:"+subString.length());
+							System.out.println("Substring länge ist :"+subStringIncomeing.length());
+							units2=(FieldUnit[][])Player.fromString(subStringIncomeing);					
+							System.out.println("FIELDID NACHHER: "+units2[1][1].getID());
+							
+						}
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			
+//				//TODO Serialisierungstest --> funktioniert local
+//				try {
+//					//Serialisierung
+//					byte[] fieldBytes;
+//					FieldUnit[][] units = getFieldUnits();
+//					FieldUnit[][] units2;
+//					System.out.println("FIELDID VORHER: "+units[1][1].getID());					
+//					String subString = Player.toString(units);
+//					String subStringAll = new String(subString);
+//					String subStringPart = subStringAll.substring(0, BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
+//									
+//					fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();					
+//					
+//					System.out.println("Send_Sub    "+subStringPart+"      größe:"+subStringPart.length());
+//					System.out.println("Send_Full   "+fieldBytes+"      größe:"+fieldBytes.length);		
+//					//Deserialisierung
+//					String readMsg="";
+//					String subStringIncomeing="";
+//					int bytesToTransfer = subStringAll.length();		
+//					while (bytesToTransfer >= 0) {			
+//						System.out.println("bytesToTransfer vorher:"+bytesToTransfer);
+//						if(bytesToTransfer>0){
+//							//1024 Bytes senden	
+//							System.out.println("substringSend lastindex:"+subStringAll.length());
+//							System.out.println("substringSend lastindextocopy:"+(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length()));
+//							if(subStringAll.length()>=(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length())){									
+//								subStringPart = subStringAll.substring(0, (BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length()));
+//							}else{
+//								subStringPart = subStringAll;
+//							}
+//						
+//						fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();
+//						//Schreiben simulieren
+//						readMsg = new String(fieldBytes, 0, fieldBytes.length);
+//						subStringIncomeing= subStringIncomeing+readMsg.substring(BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
+////						btcThread.write(fieldBytes);
+//						
+//						if(subStringPart.equals(subStringAll)){
+//							bytesToTransfer -= subStringAll.length();
+//						}else{
+//						subStringAll=subStringAll.substring(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());			    
+//					    bytesToTransfer -= BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length();
+//						}
+//						System.out.println("bytesToTransfer later:"+bytesToTransfer);
+//						}else{
+//							//Ende senden
+//							fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD).getBytes();
+//							readMsg = new String(fieldBytes, 0, fieldBytes.length);
+//							
+//							bytesToTransfer -= BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length();
+//						}
+//						
+//						if(readMsg.startsWith(BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD)){
+//							//Ende simulieren
+//							System.out.println("Substring länge muss:"+subString.length());
+//							System.out.println("Substring länge ist :"+subStringIncomeing.length());
+//							units2=(FieldUnit[][])Player.fromString(subStringIncomeing);					
+//							System.out.println("FIELDID NACHHER: "+units2[1][1].getID());
+//							
+//						}
+//					}
+//					
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (ClassNotFoundException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				
+			
+	}
+	
+	/**
+	 * Variablen werden durch BluetoothConnectedtThread gesetzt, wenn diese
+	 * Variablen vom Bluetooth Gegner gesendet werden
+	 * @param returnFieldSet
+	 */
+	public void setFeldUebertragen(boolean returnFieldSet){
+		this.feldUebertragen = returnFieldSet;
+	}
+	
+	public boolean getFeldUebertragen(){
+		return this.feldUebertragen;
 	}
 
 }

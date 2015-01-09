@@ -870,13 +870,13 @@ public class Field {
 		if(!feldUebertragen){
 			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
 			byte[] fieldBytes;
-			byte[] fieldBytes2;
-			String subString;
-				
-			subString = Player.toString(getShips());
+			
+			//Speichern nach Json String
+			Json json = new Json();
+			String jsonPlacedShips =json.toJson(new ShipsDescriptor().newShipsDescriptor(placedShips));
 				
 			//Deserialisierung
-			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+"Hallo").getBytes();
+			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+jsonPlacedShips).getBytes();
 			//Schreiben
 			btcThread.write(fieldBytes);
 
@@ -1007,18 +1007,18 @@ public class Field {
 
 		//Speichern nach Json
 		Json json = new Json();
-		String jsonPlacedShips =json.toJson(new ShipsDescriptor().newShipsDescriptor(placedShips));
 		
+		String jsonPlacedShips =json.toJson(new ShipsDescriptor().newShipsDescriptor(placedShips), ShipsDescriptor.class);
+		System.out.println(json.prettyPrint(jsonPlacedShips));
 		
 		//erzeugen von Json
 		ShipsDescriptor desc = json.fromJson(ShipsDescriptor.class, jsonPlacedShips);
-		System.out.println("Ships: "+desc.numberOfShips);
-		
+		System.out.println("Ships: "+desc.shipsPlaced.size());
 		//Feld resetten und Schiffe aus Json Generieren und Platzieren.
 		desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());
 		
 
-//				//TODO Serialisierungstest --> funktioniert local
+//				//TODO Java Serialisierungstest --> funktioniert local
 //				try {
 //					//Serialisierung
 //					byte[] fieldBytes;
@@ -1111,9 +1111,7 @@ public class Field {
 	 *
 	 */
 	public static class ShipsDescriptor {
-		public int numberOfShips;
 		public ArrayList<ShipDescriptor> shipsPlaced;
-
 		
 		/**
 		 * Methode erstellt aus shipPlacement das Json kompatible Objekt
@@ -1121,7 +1119,6 @@ public class Field {
 		 */
 		public ShipsDescriptor newShipsDescriptor(Ship[] placedShips){
 			ShipsDescriptor desc = new ShipsDescriptor();
-			desc.numberOfShips=placedShips.length;
 			desc.shipsPlaced = new ArrayList<ShipDescriptor>(placedShips.length);
 			for (Ship ship : placedShips) {
 				ShipDescriptor shipDesc = new ShipDescriptor().newShipDescriptor(ship);
@@ -1136,6 +1133,7 @@ public class Field {
 		/**
 		 * Methode erstellt die Schiffe aus den
 		 * Json Daten in ShipsDescriptor.
+		 * TODO Optimieren und Schiffsteilegrafiken überprüfen
 		 * @return desc ShipsDescriptor
 		 */
 		public void replaceOldFieldPlacedShips(Field field){
@@ -1147,7 +1145,7 @@ public class Field {
 			field.resetField();
 			
 			//Neue Units erstellen und verarbeiten
-			ArrayList<FieldUnit[]> placedShipUnits = new ArrayList<FieldUnit[]>(numberOfShips);
+			ArrayList<FieldUnit[]> placedShipUnits = new ArrayList<FieldUnit[]>();
 			
 			for(int i=0 ;i<shipsPlaced.size();i++){
 			
@@ -1164,11 +1162,13 @@ public class Field {
 					FieldUnit unit = field.getElementByID(id);
 					shipLastUnit=unit;
 						//Behandeln von Schiffsanfang
-						if(j==0){
-							//Init Schiffstexturen
+						if(j<1){
+							//kleine Schiffstexturen
+							if(fieldUnitsDesc.size()==1){
 							shipBack = "dvk";
 							shipMiddle = "dvk";
 							shipFront ="dvk";
+							}
 							
 							// Hinzufügen von Schiffsteil
 							tmpShip = new EntityShip(shipBack,
@@ -1291,12 +1291,12 @@ public class Field {
 					shiftDirection = -1;
 					
 					unitLocation[0].setShipOrientation(orientation);
-					// Hinzufügen der fertigen unitLocation
-					placedShipUnits.add(unitLocation);
-					
-					Gdx.app.log(GameFieldScreen.LOG, "Anzahl Schiffe auf Feld: "
-							+ placedShipUnits.size());
 				}	
+				// Hinzufügen der fertigen unitLocation
+				placedShipUnits.add(unitLocation);
+				
+				Gdx.app.log(GameFieldScreen.LOG, "Anzahl Schiffe auf Feld: "
+						+ placedShipUnits.size());
 			}
 			
 			// Die neuen Schiffe platzieren
@@ -1339,8 +1339,6 @@ public class Field {
 	 *
 	 */
 	public static class ShipDescriptor {
-		public int size;
-		public String name;
 		public LocationDescriptor location;
 		
 		/**
@@ -1349,8 +1347,6 @@ public class Field {
 		 */
 		public ShipDescriptor newShipDescriptor(Ship ship){
 			ShipDescriptor shipDesc = new ShipDescriptor();
-			shipDesc.size = ship.size;
-			shipDesc.name = ship.name;
 			shipDesc.location = new LocationDescriptor().newLocationDescriptor(ship.location);
 			return shipDesc;
 		}
@@ -1365,7 +1361,7 @@ public class Field {
 	 */
 	public static class LocationDescriptor {
 		public ArrayList<FieldUnitDescriptor> fieldUnits;
-		
+
 		public LocationDescriptor newLocationDescriptor(FieldUnit[] loc){
 			LocationDescriptor locDesc = new LocationDescriptor();
 			locDesc.fieldUnits= new ArrayList<Field.FieldUnitDescriptor>(loc.length);

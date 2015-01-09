@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
 import com.ma.schiffeversenken.EntityShip;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.controller.KI;
@@ -39,11 +40,11 @@ public class Field {
 	 * einheiten = Das Spielfeld besteht aus 10x10 Einheiten einheiten[y-Achse
 	 * (Zeile)][x-Achse (Spalte)]
 	 */
-	FieldUnit[][] units = new FieldUnit[10][10];
+	protected FieldUnit[][] units = new FieldUnit[10][10];
 	/**
 	 * Menge von platzierten Schiffen auf diesem Spielfeld
 	 */
-	Ship[] placedShips;
+	protected Ship[] placedShips;
 	/**
 	 * typ = Gibt den Typ des Spielfelds an. Eigenes Spielfeld = 0; Gegnerisches
 	 * Spielfeld = 1;
@@ -870,7 +871,7 @@ public class Field {
 			byte[] fieldBytes2;
 			String subString;
 				
-			subString = Player.toString(getFieldUnits());
+			subString = Player.toString(getShips());
 				
 			//Deserialisierung
 			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+"Hallo").getBytes();
@@ -920,7 +921,7 @@ public class Field {
 //		}
 		
 				
-//				//TODO DEPRECATED ab hier nur zur Information
+////TODO DEPRECATED ab hier nur zur Information
 //				try {
 //					BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
 //					//Serialisierung
@@ -1001,59 +1002,12 @@ public class Field {
 	}
 
 	public void serialisierungstestLocal() {
-		//TODO Serialisierungstest --> funktioniert local
-				try {
-					//Serialisierung
-					byte[] fieldBytes;
-					FieldUnit[][] units = getFieldUnits();
-					FieldUnit[][] units2;
-					System.out.println("FIELDID VORHER: "+units[1][1].getID());					
-					String subString = Player.toString(units);
-					String subStringAll = new String(subString);
-					String subStringPart = subStringAll.substring(0, subStringAll.length()-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
-									
-					fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();
-					
-					System.out.println("Send_Sub    "+subStringPart+"      größe:"+subStringPart.length());
-					System.out.println("Send_Full   "+fieldBytes+"      größe:"+fieldBytes.length);		
-					//Deserialisierung
-					String readMsg="";
-					String subStringIncomeing="";
-							//1024 Bytes senden	
-							System.out.println("substringSend lastindex:"+subStringAll.length());
-							System.out.println("substringSend lastindextocopy:"+(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length()));
-								subStringPart = subStringAll;
-						
-						fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();
-						//Schreiben simulieren
-						readMsg = new String(fieldBytes, 0, fieldBytes.length);
-						subStringIncomeing= subStringIncomeing+readMsg.substring(BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
-//						btcThread.write(fieldBytes);
-						
-					
-							//Ende senden
-							fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD).getBytes();
-							readMsg = new String(fieldBytes, 0, fieldBytes.length);
-						
-						
-						if(readMsg.startsWith(BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD)){
-							//Ende simulieren
-							System.out.println("Substring länge muss:"+subString.length());
-							System.out.println("Substring länge ist :"+subStringIncomeing.length());
-							units2=(FieldUnit[][])Player.fromString(subStringIncomeing);					
-							System.out.println("FIELDID NACHHER: "+units2[1][1].getID());
-							
-						}
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			
+
+		//Speichern nach Json
+		Json json = new Json();
+		System.out.println(json.prettyPrint(new ShipsDescriptor().newShipsDescriptor(placedShips)));
+		
+		
 //				//TODO Serialisierungstest --> funktioniert local
 //				try {
 //					//Serialisierung
@@ -1140,4 +1094,128 @@ public class Field {
 		return this.feldUebertragen;
 	}
 
+	/**
+	 * Klasse erstellt ein Json lesefähiges Abbild von placedShips
+	 * um dieses dan für den Objektbau wiederzuverwenden.
+	 * @author Klaus Schlender
+	 *
+	 */
+	public static class ShipsDescriptor {
+		public int numberOfShips;
+		public ArrayList<ShipDescriptor> shipsPlaced;
+		
+		/**
+		 * Methode erstellt aus shipPlacement das Json kompatible Objekt
+		 * @return
+		 */
+		public ShipsDescriptor newShipsDescriptor(Ship[] placedShips){
+			ShipsDescriptor desc = new ShipsDescriptor();
+			desc.numberOfShips=placedShips.length;
+			desc.shipsPlaced = new ArrayList<ShipDescriptor>(placedShips.length);
+			for (Ship ship : placedShips) {
+				ShipDescriptor shipDesc = new ShipDescriptor().newShipDescriptor(ship);
+				desc.shipsPlaced.add(shipDesc);
+			}
+			return desc;
+		}
+		
+		
+		
+		
+		/**
+		 * Methode erstellt die Schiffe aus den
+		 * Json Daten.
+		 * @return  Ship[] Array
+		 */
+		@Deprecated//TODO erweitern oder löschen.
+		public Ship[] createNewShips(ShipDescriptor[] s){
+			//Blanke Schiffe Erstellen
+			int numberOfSubmarines=0;
+			int numberOfCruiser=0;
+			int numberOfDestroyer=0;
+			int numberOfBattleShips=0;
+			for (ShipDescriptor shipDescr : s) {
+				switch (shipDescr.size) {
+				case 1:
+					numberOfCruiser++;
+					break;
+				case 2:
+					numberOfSubmarines++;
+					break;
+				case 3:
+					numberOfDestroyer++;
+					break;
+				case 4:
+					numberOfBattleShips++;
+					break;
+				default:
+					break;
+				}
+			}
+			Ship[] createdShips = KI.createShips(numberOfCruiser, numberOfSubmarines, numberOfDestroyer, numberOfBattleShips);
+			return createdShips;
+		}
+		
+	}
+	
+	/**
+	 * Klasse erstellt ein Json lesefähiges Abbild von Ship
+	 * @author Klaus Schlender
+	 *
+	 */
+	public static class ShipDescriptor {
+		public int size;
+		public String name;
+		public LocationDescriptor location;
+		
+		/**
+		 * Methode erstellt aus shipPlacement das Json kompatible Objekt
+		 * @return
+		 */
+		public ShipDescriptor newShipDescriptor(Ship ship){
+			ShipDescriptor shipDesc = new ShipDescriptor();
+			shipDesc.size = ship.size;
+			shipDesc.name = ship.name;
+			shipDesc.location = new LocationDescriptor().newLocationDescriptor(ship.location);
+			return shipDesc;
+		}
+		
+	}
+	
+	/**
+	 * Klasse erstellt ein Json lesefähiges Abbild von FieldUnit[size]
+	 * das zu einem Schiff gehört.
+	 * @author Klaus Schlender
+	 *
+	 */
+	public static class LocationDescriptor {
+		public ArrayList<FieldUnitDescriptor> fieldUnits;
+		
+		public LocationDescriptor newLocationDescriptor(FieldUnit[] loc){
+			LocationDescriptor locDesc = new LocationDescriptor();
+			locDesc.fieldUnits= new ArrayList<Field.FieldUnitDescriptor>(loc.length);
+			for (FieldUnit fieldUnit : loc) {
+				FieldUnitDescriptor unitDesc = new FieldUnitDescriptor().newFieldUnitDescriptor(fieldUnit);
+				locDesc.fieldUnits.add(unitDesc);
+			}
+			return locDesc;
+		}
+	}
+	
+	/**
+	 * Klasse erstellt ein Json lesefähiges Abbild von FieldUnit[size]
+	 * das zu einem Schiff gehört.
+	 * @author Klaus Schlender
+	 *
+	 */
+	public static class FieldUnitDescriptor {
+		public int id;
+		
+		public FieldUnitDescriptor newFieldUnitDescriptor(FieldUnit fieldUnit){
+			FieldUnitDescriptor unitDesc = new FieldUnitDescriptor();
+			unitDesc.id = fieldUnit.id;
+			return unitDesc;
+		}
+		
+	}
 }

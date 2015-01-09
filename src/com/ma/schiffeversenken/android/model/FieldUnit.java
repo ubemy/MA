@@ -1,6 +1,7 @@
 package com.ma.schiffeversenken.android.model;
 
-import java.io.Serializable;
+
+
 
 import com.ma.schiffeversenken.EntityShip;
 
@@ -10,9 +11,8 @@ import com.ma.schiffeversenken.EntityShip;
  * @author Maik Steinborn
  * @author Klaus Schlender
  */
-public class FieldUnit implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public class FieldUnit{
+
 	/**Rechte Kante*/
 	public static final int EDGE_RIGHT = 0;
 	/**Obere Kante*/

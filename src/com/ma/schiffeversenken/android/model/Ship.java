@@ -1,15 +1,13 @@
 package com.ma.schiffeversenken.android.model;
 
 
-
 /**
  * Fuer alle Schiffe
  * 
  * @author Maik Steinborn
  * @author Klaus Schlender
  */
-public class Ship implements java.io.Serializable{
-	private static final long serialVersionUID = 1L;
+public class Ship {
 	/** Vorderes Schiff Segment */
 	public static final int SHIP_SEGMENT_FRONT = 0;
 	/** Mittleres Schiff Segment */

@@ -326,7 +326,7 @@ public class GameFieldScreen implements Screen {
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
-						
+
 
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();

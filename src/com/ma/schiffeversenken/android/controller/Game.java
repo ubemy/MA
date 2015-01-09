@@ -304,7 +304,6 @@ public class Game extends Thread {
 		
 		if(primaryBTGame || secondaryBTGame){
 
-			
 			if(gamer == 0 && primaryBTGame){
 				fe = secondFieldEnemy.getElementByID(id);
 			}
@@ -491,9 +490,10 @@ public class Game extends Thread {
 	 */
 	@Override
 	public void run() {
-//		//TODO Fertigstellen von Feld Übertragen.
-//		if((primaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
-//			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+		//TODO Fertigstellen von Feld Übertragen.
+		getFirstFieldPlayer().serialisierungstestLocal();
+		if((primaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
+			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
 //			while(!getFirstFieldPlayer().getFeldUebertragen()&&!getSecondFieldEnemy().getFeldUebertragen()){
 //				try {
 //					Thread.sleep(FIVEHUNDRED_MS);
@@ -501,7 +501,7 @@ public class Game extends Thread {
 //				e.printStackTrace();
 //				}
 //			}
-//		}
+		}
 		end = false;
 		boolean hitShip = false;
 		//gamersTurn = (new Random()).nextInt(2);

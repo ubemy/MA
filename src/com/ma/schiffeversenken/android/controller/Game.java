@@ -491,7 +491,7 @@ public class Game extends Thread {
 	@Override
 	public void run() {
 		//TODO Fertigstellen von Feld Übertragen.
-		getFirstFieldPlayer().serialisierungstestLocal();
+		getFirstFieldPlayer().serialisierungstestLocal(this);
 		if((primaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
 			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
 //			while(!getFirstFieldPlayer().getFeldUebertragen()&&!getSecondFieldEnemy().getFeldUebertragen()){

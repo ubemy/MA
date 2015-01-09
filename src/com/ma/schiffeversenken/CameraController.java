@@ -615,7 +615,6 @@ public class CameraController implements GestureListener {
 				shipFront = "uvf";
 				shipNextUnit = unit.get_uNeighbor();
 			}
-
 			if (unit.equals(shipLastUnit.get_oNeighbor())) {
 				shiftDirection = 3;
 				// Gdx.app.log("FirstShift", "downShift");
@@ -681,7 +680,7 @@ public class CameraController implements GestureListener {
 				}
 			}
 
-			// Setzen der richtigen Schiffstextur für letzen
+			// Setzen der richtigen Schiffstextur für letzen Teil
 			unitLocation[unitLocation.length - 1].getEntityShipDrawUnit()
 					.setShipTextureRegion(shipMiddle);
 
@@ -708,7 +707,7 @@ public class CameraController implements GestureListener {
 		// boolean zurücksetzen
 		aktivatorSchiffSetzen = false;
 		firstShift = true;
-		shiftDirection = -1;
+//		shiftDirection = -1;
 		shipPlaceHelper.set(unitLocation.length - 1,
 				shipPlaceHelper.get(unitLocation.length - 1) - 1);
 		game.getFirstFieldPlayer().setAllShipsSet(true);
@@ -735,6 +734,7 @@ public class CameraController implements GestureListener {
 		default:
 			break;
 		}
+		shiftDirection = -1;
 
 		unitLocation[0].setShipOrientation(orientation);
 

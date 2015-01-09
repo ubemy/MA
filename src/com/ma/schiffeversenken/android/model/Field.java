@@ -14,7 +14,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.ma.schiffeversenken.EntityShip;
+import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
+import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.controller.KI;
 import com.ma.schiffeversenken.android.controller.ShipPlacement;
 
@@ -1001,13 +1003,21 @@ public class Field {
 //		}	
 	}
 
-	public void serialisierungstestLocal() {
+	public void serialisierungstestLocal(Game game) {
 
 		//Speichern nach Json
 		Json json = new Json();
-		System.out.println(json.prettyPrint(new ShipsDescriptor().newShipsDescriptor(placedShips)));
+		String jsonPlacedShips =json.toJson(new ShipsDescriptor().newShipsDescriptor(placedShips));
 		
 		
+		//erzeugen von Json
+		ShipsDescriptor desc = json.fromJson(ShipsDescriptor.class, jsonPlacedShips);
+		System.out.println("Ships: "+desc.numberOfShips);
+		
+		//Feld resetten und Schiffe aus Json Generieren und Platzieren.
+		desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());
+		
+
 //				//TODO Serialisierungstest --> funktioniert local
 //				try {
 //					//Serialisierung
@@ -1103,6 +1113,7 @@ public class Field {
 	public static class ShipsDescriptor {
 		public int numberOfShips;
 		public ArrayList<ShipDescriptor> shipsPlaced;
+
 		
 		/**
 		 * Methode erstellt aus shipPlacement das Json kompatible Objekt
@@ -1124,36 +1135,200 @@ public class Field {
 		
 		/**
 		 * Methode erstellt die Schiffe aus den
-		 * Json Daten.
-		 * @return  Ship[] Array
+		 * Json Daten in ShipsDescriptor.
+		 * @return desc ShipsDescriptor
 		 */
-		@Deprecated//TODO erweitern oder löschen.
-		public Ship[] createNewShips(ShipDescriptor[] s){
-			//Blanke Schiffe Erstellen
-			int numberOfSubmarines=0;
-			int numberOfCruiser=0;
-			int numberOfDestroyer=0;
-			int numberOfBattleShips=0;
-			for (ShipDescriptor shipDescr : s) {
-				switch (shipDescr.size) {
-				case 1:
-					numberOfCruiser++;
-					break;
-				case 2:
-					numberOfSubmarines++;
-					break;
-				case 3:
-					numberOfDestroyer++;
-					break;
-				case 4:
-					numberOfBattleShips++;
-					break;
-				default:
-					break;
-				}
+		public void replaceOldFieldPlacedShips(Field field){
+			//Hilfsvariablen
+			String shipBack ="dvk";
+			String shipMiddle ="dvk";
+			String shipFront ="dvk";
+			//Schiffe und Feld zurücksetzen
+			field.resetField();
+			
+			//Neue Units erstellen und verarbeiten
+			ArrayList<FieldUnit[]> placedShipUnits = new ArrayList<FieldUnit[]>(numberOfShips);
+			
+			for(int i=0 ;i<shipsPlaced.size();i++){
+			
+				FieldUnit[] unitLocation = new FieldUnit[1];
+				int shiftDirection =-1;
+				FieldUnit shipLastUnit;
+				FieldUnit shipNextUnit;
+				EntityShip tmpShip;
+				
+				//Units Rekonstruieren
+				ArrayList<FieldUnitDescriptor> fieldUnitsDesc = shipsPlaced.get(i).location.fieldUnits;
+				for(int j=0;j<fieldUnitsDesc.size();j++){
+					int id = fieldUnitsDesc.get(j).id;
+					FieldUnit unit = field.getElementByID(id);
+					shipLastUnit=unit;
+						//Behandeln von Schiffsanfang
+						if(j==0){
+							//Init Schiffstexturen
+							shipBack = "dvk";
+							shipMiddle = "dvk";
+							shipFront ="dvk";
+							
+							// Hinzufügen von Schiffsteil
+							tmpShip = new EntityShip(shipBack,
+									new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
+											GameFieldScreen.size, GameFieldScreen.size));
+							unit.setEntityShipDrawUnit(tmpShip);
+							unit.setOccupied(true);
+							
+							// Schiffslänge hinzufügen
+							unitLocation = new FieldUnit[1];
+							unitLocation[0] = unit;
+							shipLastUnit = unit;
+					
+						}else if(j==1){//Behandeln von zweitem Schiffsteil
+							//Definieren der Schiffstexturen lt. Ausrichtung gemäß Vorgänger
+							if (unit.equals(unitLocation[0].get_lNeighbor())) {
+								shiftDirection = 0;
+								shipBack = "lhb";
+								shipMiddle ="lhm";
+								shipFront = "lhf";
+								shipNextUnit = unit.get_lNeighbor();
+							}
+							if (unit.equals(unitLocation[0].get_rNeighbor())) {
+								shiftDirection = 1;
+								shipBack ="rhb";
+								shipMiddle = "rhm";
+								shipFront = "rhf";
+								shipNextUnit = unit.get_rNeighbor();
+							}
+							if (unit.equals(unitLocation[0].get_uNeighbor())) {
+								shiftDirection = 2;
+								shipBack ="uvb";		
+								shipMiddle = "uvm";
+								shipFront = "uvf";
+								shipNextUnit = unit.get_uNeighbor();
+							}
+
+							if (unit.equals(shipLastUnit.get_oNeighbor())) {
+								shiftDirection = 3;
+								shipBack = ("uvf");
+								shipMiddle = ("uvm");
+								shipFront = ("uvb");
+								shipNextUnit = unit.get_oNeighbor();
+							}
+							
+							// Hinzufügen von Schiffsteil
+							tmpShip = new EntityShip(shipFront,
+									new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
+											GameFieldScreen.size, GameFieldScreen.size));
+							unit.setEntityShipDrawUnit(tmpShip);
+							unit.setOccupied(true);
+
+							// Schiffslänge hinzufügen
+							FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
+							tmpUnitLocation[0] = unitLocation[0];
+							tmpUnitLocation[1] = unit;
+							unitLocation = tmpUnitLocation;
+
+							// Setzen der richtigen Schiffstextur für Hinten
+							unitLocation[0].getEntityShipDrawUnit().setShipTextureRegion(
+									shipBack);
+							shipLastUnit = unit;
+						}else if(j<fieldUnitsDesc.size()){//Behandeln von Schiffsmitte bis Front
+							// Hinzufügen von Schiffsteil
+							tmpShip = new EntityShip(shipFront,
+									new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
+											GameFieldScreen.size, GameFieldScreen.size));
+							unit.setEntityShipDrawUnit(tmpShip);
+							unit.setOccupied(true);
+							
+							// shipNextUnit festlegen
+							switch (shiftDirection) {
+							case 0:// links
+								shipNextUnit = unit.get_lNeighbor();
+								break;
+							case 1:// rechts
+								shipNextUnit = unit.get_rNeighbor();
+								break;
+							case 2:// oben
+								shipNextUnit = unit.get_uNeighbor();
+								break;
+							case 3:// unten
+								shipNextUnit = unit.get_oNeighbor();
+								break;
+							default:
+								break;
+							}
+
+							// Setzen der richtigen Schiffstextur für letzen Teil
+							unitLocation[unitLocation.length - 1].getEntityShipDrawUnit()
+									.setShipTextureRegion(shipMiddle);
+
+							// Schiffslänge hinzufügen
+							FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
+							for (int k = 0; k < unitLocation.length; k++) {
+								tmpUnitLocation[k] = unitLocation[k];
+							}
+							tmpUnitLocation[tmpUnitLocation.length - 1] = unit;
+							unitLocation = tmpUnitLocation;
+							shipLastUnit = unit;
+						}
+					//Schiffsausrichtung
+					int orientation = 1;
+					switch (shiftDirection) {
+					case 0:// links
+						orientation = 2;
+						break;
+					case 1:// rechts
+						orientation = 0;
+						break;
+					case 2:// oben
+						orientation = 1;
+						break;
+					case 3:// unten
+						orientation = 3;
+						break;
+					default:
+						break;
+					}
+					shiftDirection = -1;
+					
+					unitLocation[0].setShipOrientation(orientation);
+					// Hinzufügen der fertigen unitLocation
+					placedShipUnits.add(unitLocation);
+					
+					Gdx.app.log(GameFieldScreen.LOG, "Anzahl Schiffe auf Feld: "
+							+ placedShipUnits.size());
+				}	
 			}
-			Ship[] createdShips = KI.createShips(numberOfCruiser, numberOfSubmarines, numberOfDestroyer, numberOfBattleShips);
-			return createdShips;
+			
+			// Die neuen Schiffe platzieren
+			field.setManualNewShipplacement(placedShipUnits);
+	
+
+//			//Blanke Schiffe Erstellen
+//			int numberOfSubmarines=0;
+//			int numberOfCruiser=0;
+//			int numberOfDestroyer=0;
+//			int numberOfBattleShips=0;
+//			for (ShipDescriptor shipDescr : this.shipsPlaced) {
+//				switch (shipDescr.size) {
+//				case 1:
+//					numberOfCruiser++;
+//					break;
+//				case 2:
+//					numberOfSubmarines++;
+//					break;
+//				case 3:
+//					numberOfDestroyer++;
+//					break;
+//				case 4:
+//					numberOfBattleShips++;
+//					break;
+//				default:
+//					break;
+//				}
+//			}
+//			Ship[] createdShips = KI.createShips(numberOfCruiser, numberOfSubmarines, numberOfDestroyer, numberOfBattleShips);
+//		
+			
 		}
 		
 	}

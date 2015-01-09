@@ -5,12 +5,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Json;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.BackActivity;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
+import com.ma.schiffeversenken.android.model.Field.ShipsDescriptor;
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 
@@ -163,63 +165,73 @@ public class BluetoothConnectedThread extends Thread {
 //	                	game.getSecondFieldEnemy().setFeldUebertragen(true);
 //	                	AndroidLauncher.notificationToUser("RETURN "+" received:"+readMsg.length(),androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,FieldMessageCounterToDoDelete+1);
 //	                }
-//	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD)){
-//        	
-////	                	Gdx.app.log("BLUETOOTH_ENEMY_FIELD", "received:"+readMsg.length());
-//	                	FieldMessageCounterToDoDelete=1234567;
-//
-//	                	AndroidLauncher.notificationToUser(readMsg.substring(BLUETOOTH_ENEMY_FIELD.length())+" received:"+readMsg.length(),androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,FieldMessageCounterToDoDelete);
-//						//Deserialisierung
-//	                	byte[] fieldBytes;
-//
-//	                	//Return Schreiben
+	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD)){
+        	
+//	                	Gdx.app.log("BLUETOOTH_ENEMY_FIELD", "received:"+readMsg.length());
+						
+	                	
+	                	String jsonPlacedShips=readMsg.substring(BLUETOOTH_ENEMY_FIELD.length());
+	                	//Deserialisierung 
+	                	Json json = new Json();
+	            		ShipsDescriptor desc = json.fromJson(ShipsDescriptor.class, jsonPlacedShips);
+	            		
+	            		//TODO Delete Erfolg posten
+	            		FieldMessageCounterToDoDelete=1234567;
+	            		AndroidLauncher.notificationToUser(BLUETOOTH_ENEMY_FIELD+" received:"+readMsg.length(),androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,FieldMessageCounterToDoDelete);
+	            		//TODO Delete bis Hier
+	            		
+	            		//Feld resetten und Schiffe aus Json Generieren und Platzieren.
+	            		desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());
+	                	
+	                	
+	                	//Return Schreiben
 //						fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD_RETURN).getBytes();
 //						write(fieldBytes);
+	                	
+//                		AndroidLauncher.notificationToUser(readMsg.substring(BLUETOOTH_ENEMY_FIELD.length())+" received:"+readMsg.length(),androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,1234568);
+                		
+//                		FieldUnit[][] tmpFieldUnits = (FieldUnit[][])Player.fromString(readMsg.substring(BLUETOOTH_ENEMY_FIELD.length()));
+//                		game.setEnemyFieldUnits(tmpFieldUnits);
+	    	          	
+	                	//TODO löschen
+//	                	byte[] readBuf = new byte[83402]; // this array will hold the bytes for the image, this value better be not hardcoded in your code
+//
+//	                	int start = 0;
+//	                	while(readMsg) {
+//	                	    readBuf.copyOfRange((byte[]) msg.obj, start, start + 1024); // copy received 1024 bytes
+//	                	    start += 1024; //increment so that we don't overwrite previous bytes
+//	                	}
+//
+//	                	/*After everything is read...*/
+//	                	Bitmap bmp=BitmapFactory.decodeByteArray(readBuf,0,readBuf.length);
+	                	//TODO löschen bis hier
+	                	
+//	                	//TODO Erste gehversuche:
+//	                	if(readMsg.equals(BLUETOOTH_ENEMY_FIELD+BLUETOOTH_ENEMY_FIELD)){
+//	                		//Ende vom Stream
+////	                		AndroidLauncher.notificationToUser("FieldUnits.",androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,1234568);
+//	                		FieldUnit[][] tmpFieldUnits = (FieldUnit[][])Player.fromString(subStringIncomeing);
+//	                		game.setEnemyFieldUnits(tmpFieldUnits);
+//	                		subStringIncomeing="";
+//	                	}else{
+//	                		//Stream zu String zusammenführen
+//	                		subStringIncomeing= subStringIncomeing+readMsg.substring(BLUETOOTH_ENEMY_FIELD.length());
+//	                	}
+	                
+//	                //TODO ALTES
+//	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_SHIPS)){
+//	                	String msgSubstring = readMsg.substring(BLUETOOTH_ENEMY_SHIPS.length());
+//	                	Ship[] ships = null;
 //	                	
-////                		AndroidLauncher.notificationToUser(readMsg.substring(BLUETOOTH_ENEMY_FIELD.length())+" received:"+readMsg.length(),androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,1234568);
-//                		
-////                		FieldUnit[][] tmpFieldUnits = (FieldUnit[][])Player.fromString(readMsg.substring(BLUETOOTH_ENEMY_FIELD.length()));
-////                		game.setEnemyFieldUnits(tmpFieldUnits);
-//	    	          	
-//	                	//TODO löschen
-////	                	byte[] readBuf = new byte[83402]; // this array will hold the bytes for the image, this value better be not hardcoded in your code
-////
-////	                	int start = 0;
-////	                	while(readMsg) {
-////	                	    readBuf.copyOfRange((byte[]) msg.obj, start, start + 1024); // copy received 1024 bytes
-////	                	    start += 1024; //increment so that we don't overwrite previous bytes
-////	                	}
-////
-////	                	/*After everything is read...*/
-////	                	Bitmap bmp=BitmapFactory.decodeByteArray(readBuf,0,readBuf.length);
-//	                	//TODO löschen bis hier
+//	                	try{
+//	                		ships = (Ship[]) Player.deserialize(msgSubstring.getBytes());
+//	                	} catch (ClassNotFoundException e) {
+//							e.printStackTrace();
+//						}
 //	                	
-////	                	//TODO Erste gehversuche:
-////	                	if(readMsg.equals(BLUETOOTH_ENEMY_FIELD+BLUETOOTH_ENEMY_FIELD)){
-////	                		//Ende vom Stream
-//////	                		AndroidLauncher.notificationToUser("FieldUnits.",androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,1234568);
-////	                		FieldUnit[][] tmpFieldUnits = (FieldUnit[][])Player.fromString(subStringIncomeing);
-////	                		game.setEnemyFieldUnits(tmpFieldUnits);
-////	                		subStringIncomeing="";
-////	                	}else{
-////	                		//Stream zu String zusammenführen
-////	                		subStringIncomeing= subStringIncomeing+readMsg.substring(BLUETOOTH_ENEMY_FIELD.length());
-////	                	}
-//	                
-////	                //TODO ALTES
-////	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_SHIPS)){
-////	                	String msgSubstring = readMsg.substring(BLUETOOTH_ENEMY_SHIPS.length());
-////	                	Ship[] ships = null;
-////	                	
-////	                	try{
-////	                		ships = (Ship[]) Player.deserialize(msgSubstring.getBytes());
-////	                	} catch (ClassNotFoundException e) {
-////							e.printStackTrace();
-////						}
-////	                	
-////	                	game.setEnemyFieldShips(ships);
-//	                
-//	                }
+//	                	game.setEnemyFieldShips(ships);
+	                
+	                }
             	}
             } catch (Exception e){
                 break;

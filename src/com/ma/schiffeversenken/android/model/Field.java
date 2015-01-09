@@ -71,6 +71,7 @@ public class Field {
 	private int animationtimerMax = 20;
 	private boolean allShipsSetManual;
 	private boolean feldUebertragen;
+	private boolean feldUebertragenAntwort=false;
 
 	/**
 	 * Erstellt ein Field Objekt.
@@ -111,6 +112,7 @@ public class Field {
 			this.allShipsSetManual = false;
 			this.allShipsSet = false;
 			this.feldUebertragen=false;
+			this.feldUebertragenAntwort=false;
 			drawShips = new ArrayList<EntityShip>();
 			getShipTileSetTextures(shipTextures);
 			create();
@@ -873,7 +875,7 @@ public class Field {
 			
 			//Speichern nach Json String
 			Json json = new Json();
-			String jsonPlacedShips =json.toJson(new ShipsDescriptor().newShipsDescriptor(placedShips));
+			String jsonPlacedShips =json.toJson(new ShipsDescriptor().newShipsDescriptor(placedShips),ShipsDescriptor.class);
 				
 			//Deserialisierung
 			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+jsonPlacedShips).getBytes();
@@ -896,12 +898,13 @@ public class Field {
 			
 				
 				
-		}else if(feldUebertragen){
-			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
-			byte[] returnString = (new String(btcThread.BLUETOOTH_ENEMY_FIELD+"HALLOENDE")).getBytes();
-			btcThread.write(returnString);
-			feldUebertragen=!feldUebertragen;
 		}
+//		else if(feldUebertragen){
+//			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
+//			byte[] returnString = (new String(btcThread.BLUETOOTH_ENEMY_FIELD+"HALLOENDE")).getBytes();
+//			btcThread.write(returnString);
+//			feldUebertragen=!feldUebertragen;
+//		}
 		
 //		try {
 //			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
@@ -1011,6 +1014,8 @@ public class Field {
 		String jsonPlacedShips =json.toJson(new ShipsDescriptor().newShipsDescriptor(placedShips), ShipsDescriptor.class);
 		System.out.println(json.prettyPrint(jsonPlacedShips));
 		
+		System.out.println("Länge von String: "+jsonPlacedShips.length());
+		
 		//erzeugen von Json
 		ShipsDescriptor desc = json.fromJson(ShipsDescriptor.class, jsonPlacedShips);
 		System.out.println("Ships: "+desc.shipsPlaced.size());
@@ -1092,7 +1097,7 @@ public class Field {
 	}
 	
 	/**
-	 * Variablen werden durch BluetoothConnectedtThread gesetzt, wenn diese
+	 * Variablen werden durch gesetzt, wenn diese
 	 * Variablen vom Bluetooth Gegner gesendet werden
 	 * @param returnFieldSet
 	 */
@@ -1100,8 +1105,29 @@ public class Field {
 		this.feldUebertragen = returnFieldSet;
 	}
 	
+	/**
+	 * Variablen werden durch gesetzt, wenn
+	 * vom Bluetooth Gegner ein Feld empfangen wurde.
+	 * @param b
+	 */
+	public void setFeldUebertragenAntwort(boolean b){
+		this.feldUebertragenAntwort = b;
+	}
+	
+	/**
+	 * True wenn vom Bluetooth Gegner ein Feld übertragen wurde.
+	 * 
+	 */
 	public boolean getFeldUebertragen(){
 		return this.feldUebertragen;
+	}
+	
+	/**
+	 * True wenn vom Bluetooth Gegner das eigene Feld empfangen wurde.
+	 * 
+	 */
+	public boolean getFeldUebertragenAntwort(){
+		return this.feldUebertragenAntwort;
 	}
 
 	/**

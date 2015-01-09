@@ -491,9 +491,14 @@ public class Game extends Thread {
 	@Override
 	public void run() {
 		//TODO Fertigstellen von Feld Übertragen.
+		//TODO feldUebertragenAntwort() bestimmen wenn feld empfangen und dem gegner senden
+		//TODO testen auf funktionalität.
 		getFirstFieldPlayer().serialisierungstestLocal(this);
+		
+		//Wenn eigenes Feld nicht versendet
 		if((primaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
 			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+			getFirstFieldPlayer().setFeldUebertragen(true);
 //			while(!getFirstFieldPlayer().getFeldUebertragen()&&!getSecondFieldEnemy().getFeldUebertragen()){
 //				try {
 //					Thread.sleep(FIVEHUNDRED_MS);
@@ -502,6 +507,14 @@ public class Game extends Thread {
 //				}
 //			}
 		}
+		//Wenn eigenes Feld nicht versendet und ein feld vom Gegner empfangen wurde.
+		if((secondaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()&&getFirstFieldPlayer().getFeldUebertragenAntwort()){
+			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+			getFirstFieldPlayer().setFeldUebertragen(true);
+		}
+		
+		
+		
 		end = false;
 		boolean hitShip = false;
 		//gamersTurn = (new Random()).nextInt(2);

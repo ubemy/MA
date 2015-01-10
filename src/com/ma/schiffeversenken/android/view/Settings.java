@@ -16,6 +16,11 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  * @author Maik Steinborn
  */
 public class Settings extends Activity {
+	public static final String SETTINGS_SOUNDOFF = "soundOff";
+	public static final String SETTINGS_VIBRATIONOFF = "vibrationOff";
+	private static final String trueString = String.valueOf(true);
+	private static final String falseString = String.valueOf(false);
+	
 	/**
 	 * Erstellt eine Einstellungen Activity
 	 */
@@ -38,43 +43,44 @@ public class Settings extends Activity {
 		
 		final CheckBox lautlosCheckBox = (CheckBox)findViewById(R.id.Lautlos_Checkbox);
 		final CheckBox vibrationausCheckBox = (CheckBox)findViewById(R.id.Vibration_aus_Checkbox);
-		
-		if(getValue("lautlos") == "true"){
+
+		if(Boolean.parseBoolean(getValue(SETTINGS_SOUNDOFF))){
 			lautlosCheckBox.setChecked(true);
 		}
 		
-		if(getValue("vibrationaus") == "true"){
+		if(Boolean.parseBoolean(getValue(SETTINGS_SOUNDOFF))){
 			vibrationausCheckBox.setChecked(true);
 		}
 		
 		lautlosCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			/*
-			 * Wenn die Lautlos Checkbox betötigt wird,
-			 * wird der entsprechende Eintrag in den Shared Preferences geändert
+			 * Wenn die Lautlos Checkbox betaetigt wird,
+			 * wird der entsprechende Eintrag in den Shared Preferences geaendert
 			 */
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				
 				if(isChecked){
-					setSharedPreferences("lautlos", "true");
+					setSharedPreferences(SETTINGS_SOUNDOFF, trueString);
 				}
 				else{
-					setSharedPreferences("lautlos", "false");
+					setSharedPreferences(SETTINGS_SOUNDOFF, falseString);
 				}
 			}
 		});
 		
 		vibrationausCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			/*
-			 * Wenn die Vibration aus Checkbox betötigt wird,
-			 * wird der entsprechende Eintrag in den Shared Preferences geändert
+			 * Wenn die Vibration aus Checkbox betaetigt wird,
+			 * wird der entsprechende Eintrag in den Shared Preferences geaendert
 			 */
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					setSharedPreferences("vibrationaus", "true");
+					setSharedPreferences(SETTINGS_VIBRATIONOFF, trueString);
 				}
 				else{
-					setSharedPreferences("vibrationaus", "false");
+					setSharedPreferences(SETTINGS_VIBRATIONOFF, falseString);
 				}
 			}
 		});
@@ -100,9 +106,11 @@ public class Settings extends Activity {
 	}
 	
 	public String getValue(String name){
-		//Gibt den Wert des entsprechendes Eintrags zurück
+		//Gibt den Wert des entsprechendes Eintrags zurueck
+		String ret = null;
 		SharedPreferences sp = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);
-		return sp.getString(name, "");
+		ret = sp.getString(name, "");
+		return ret;
 	}
 	
 	public void setSharedPreferences(String name, String value){

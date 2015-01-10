@@ -12,6 +12,7 @@ import java.util.Iterator;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.controller.Game;
+import com.ma.schiffeversenken.android.view.Settings;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Preferences;
@@ -56,6 +57,9 @@ public class Player {
 	public Player(TiledMapTileSet tileSet, TiledMap m, boolean primaryBTGame, boolean secondaryBTGame)
 			throws ClassNotFoundException, IOException {
 		super();
+		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
+		Field.soundOff = Boolean.parseBoolean(pref.getString(Settings.SETTINGS_SOUNDOFF));
+		Field.vibrationOff = Boolean.parseBoolean(pref.getString(Settings.SETTINGS_VIBRATIONOFF));
 		this.primaryBTGame=primaryBTGame;
 		this.secondaryBTGame=secondaryBTGame;
 		map = m;
@@ -65,7 +69,6 @@ public class Player {
 				.get("0"));
 		
 		//Load Preferences on Ki Difficulty
-		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
 		String kiLevel = pref.getString("ki");
 		Gdx.app.log(GameFieldScreen.TITLE, "Kilevel: "+kiLevel);
 		theKiLevel=-1;

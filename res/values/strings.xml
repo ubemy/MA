@@ -62,5 +62,7 @@
     <string name="PleaseSelectADevice">Bitte ein Gerät auswählen</string>
     <string name="title_activity_back">BackActivity</string>
     <string name="button_text_back">Zurück</string>
+    <string name="settings_soundOff">soundOff</string>
+    <string name="settings_vibrationOff">vibrationOff</string>
 
 </resources>

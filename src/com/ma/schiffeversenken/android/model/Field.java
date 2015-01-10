@@ -38,10 +38,13 @@ public class Field {
 	public static final int EDGE_BELOW = 3;
 	/** Anzahl der Feldelement */
 	public static final int FIELD_SIZE = 100;
-	public static final String SHOT_SOUND_PATH = "sounds/Shot.mp3";
-	public static final String EXPLOSION_SOUND_PATH = "sounds/Explosion.mp3";
+	private static final String SHOT_SOUND_PATH = "sounds/Shot.mp3";
+	private static final String EXPLOSION_SOUND_PATH = "sounds/Explosion.mp3";
+	private static final int VIBRATION_LENGTH = 100;
 	Sound explosionSound, shotSound;
 	Music explosionMusic, shotMusic;
+	public static boolean soundOff = false;
+	public static boolean vibrationOff = false;;
 	
 	/**
 	 * einheiten = Das Spielfeld besteht aus 10x10 Einheiten einheiten[y-Achse
@@ -643,7 +646,9 @@ public class Field {
 													.getAnimationtimer() + 1);
 											
 											if(units[i][j].getAnimationtimer() == 1){
-												shotSound.play();
+												if(!Field.soundOff){
+													shotSound.play();
+												}
 											}
 										} else if (units[i][j].getAnimationtimer() < animationtimerMax
 												+ animationtimerMax) {// Nach animation
@@ -669,7 +674,12 @@ public class Field {
 													.getAnimationtimer() + 1);
 											
 											if(units[i][j].getAnimationtimer() == 1){
-												explosionSound.play();
+												if(!Field.soundOff){
+													explosionSound.play();
+												}
+												if(!Field.vibrationOff){
+													Gdx.input.vibrate(VIBRATION_LENGTH);
+												}
 											}
 										}
 									}

@@ -36,8 +36,6 @@ public class Ship {
 	int size;
 	/** Boolean ob das Schiff zerstoert ist */
 	boolean destroyed=false;
-	/** Name des Schiffs */
-	String name;
 	/** Felder auf denen das Schiff platziert ist */
 	FieldUnit[] location;
 	/** Ausrichtung des Schiffs: 0=rechts, 1=oben, 2=links, 3=unten */
@@ -52,8 +50,7 @@ public class Ship {
 	 * @param size
 	 *            Groesse des Schiffs
 	 */
-	public Ship(String name, int size) {
-		this.name = name;
+	public Ship(int size) {
 		this.size = size;
 		this.destroyed = false;
 		this.location = new FieldUnit[size];
@@ -70,8 +67,7 @@ public class Ship {
 	 * @param location
 	 *            Gebiet der Schiffsteile
 	 */
-	public Ship(String name, int size, FieldUnit[] location) {
-		this.name = name;
+	public Ship(int size, FieldUnit[] location) {
 		this.size = size;
 		this.destroyed = false;
 		this.location = location;

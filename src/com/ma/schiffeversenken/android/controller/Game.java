@@ -344,7 +344,7 @@ public class Game extends Thread {
 					destroyShip(fe);//Ob Schiff komplett zerstört
 					shipDestroyed = returnShipDestroyed;
 					attackHit = returnAttackHit;
-					if(shipDestroyed) destroyBluetoothShip();
+					//if(shipDestroyed) destroyBluetoothShip();
 				}
 				else{
 					if(fe.getOccupied()){
@@ -392,6 +392,7 @@ public class Game extends Thread {
 		}
 		
 		if(!feWasAlreadyAttacked){
+			FieldUnit[] fieldUnits = null;
 			if(!done){
 				fe.setAttacked(true); //FeldElement als attackiert markieren
 				if(fe.getOccupied()){
@@ -399,6 +400,7 @@ public class Game extends Thread {
 					ret = true;
 					destroyShip(fe);
 					shipDestroyed = fe.getPlacedShip().isDestroyed();
+					fieldUnits = fe.getPlacedShip().getLocation();
 					attackHit = true;
 				}
 			}
@@ -408,7 +410,7 @@ public class Game extends Thread {
 				 * Wenn die KI attackiert hat werden zwei Variablen gesetzt,
 				 * damit die KI weiss ob ein Schiff getroffen und/oder zerstoert wurden
 				 */
-				ki.updateHistory(id, attackHit, shipDestroyed);
+				ki.updateHistory(id, attackHit, shipDestroyed, fieldUnits);
 			}	
 		}
 		

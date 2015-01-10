@@ -436,7 +436,7 @@ public class Field {
 		
 		//Debug
 		for (Ship ship : ships) {
-			System.out.println("FeldSchiff: "+ship.name+" Größe"+ship.size+" ");
+			System.out.println("Größe"+ship.size+" ");
 			for (FieldUnit u : ship.location) {
 //				System.out.print(" ID:"+u.getID()+" Grafik:"+u.getEntityShipDrawUnit().toString());
 				System.out.print(" ID:"+u.getID()+((u.getEntityShipDrawUnit()==null)?"null":"Notnull"));

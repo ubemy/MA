@@ -118,28 +118,28 @@ public class ShipPlacement {
 			//Initialisierung der Schiffe
 			switch (u.length - 1) {
 			case 0:
-				ships[i]= new Ship("Kreuzer", Ship.CRUISER_SIZE,u);
+				ships[i]= new Ship(Ship.CRUISER_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true); 
 					unit.placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 				}
 				break;
 			case 1:
-				ships[i] = new Ship("Uboot", Ship.SUBMARINE_SIZE,u);
+				ships[i] = new Ship(Ship.SUBMARINE_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
 					unit.placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 				}
 				break;
 			case 2:
-				ships[i] = new Ship("Zerstoerer", Ship.DESTROYER_SIZE,u);
+				ships[i] = new Ship(Ship.DESTROYER_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
 					unit.placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);
 				}
 				break;
 			case 3:
-				ships[i] = new Ship("Schlachtschiff", Ship.BATTLESHIP_SIZE,u);
+				ships[i] = new Ship(Ship.BATTLESHIP_SIZE,u);
 				for(FieldUnit unit:u){
 					unit.setOccupied(true);
 					unit.placeShip(ships[i], Ship.SHIP_SEGMENT_BACK);

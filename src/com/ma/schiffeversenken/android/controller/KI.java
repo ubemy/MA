@@ -1,5 +1,7 @@
 package com.ma.schiffeversenken.android.controller;
 import java.util.Random;
+
+import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
@@ -23,6 +25,8 @@ public class KI {
 	private boolean[] shipDestroyedHistory = new boolean[NUMBER_OF_HISTORY];
 	/**Strategie bzw. Schwierigkeitsstufe der KI*/
 	KIStrategy kiStrategy;
+	/**Wird bei einem JUnit Test auf True gesetzt*/
+	public static boolean jUnitTest = false;
 	
 	/**
 	 * Erstellt ein neues KI Objekt
@@ -59,21 +63,31 @@ public class KI {
 	
 	/**
 	* History updaten
-	* Die History speichert die letzten 4 Angriffe
+	* Die History speichert die letzten 6 Angriffe
 	* @param id Die id der letzten Angriffe
 	* @param hit True oder False ob bei den letzten Angriffen ein Schiff getroffen wurde
 	* @param shipDestroyed True oder False ob bei den letzten Angriffen ein Schiff zerstoert wurde
 	*/
-	public void updateHistory(int id, boolean hit, boolean shipDestroyed){
-		for(int i=3; i>0; i--){
+	public void updateHistory(int id, boolean hit, boolean shipDestroyed, FieldUnit[] fieldUnits){
+		for(int i=NUMBER_OF_HISTORY-1; i>0; i--){
 			idHistory[i] = idHistory[i-1];
 			hitHistory[i] = hitHistory[i-1];
 			shipDestroyedHistory[i] = shipDestroyedHistory[i-1];
+			
+			if(shipDestroyed && fieldUnits != null){
+				for(FieldUnit fu : fieldUnits){
+					if(idHistory[i] == fu.getID()){
+						shipDestroyedHistory[i] = true;
+					}
+				}
+			}
 		}
-	
+		
 		idHistory[0] = id;
 		hitHistory[0] = hit;
 		shipDestroyedHistory[0] = shipDestroyed;
+		
+		
 	}
 		
 	/**
@@ -98,19 +112,19 @@ public class KI {
 		int i,j,k,l;
 		
 		for(i=0; i<numberOfSubmarines; i++){
-			ships[i] = new Ship("Uboot", Ship.SUBMARINE_SIZE);
+			ships[i] = new Ship(Ship.SUBMARINE_SIZE);
 		}
 		
 		for(j=0; j<numberOfCruiser; j++){
-			ships[j+numberOfSubmarines] = new Ship("Kreuzer", Ship.CRUISER_SIZE);
+			ships[j+numberOfSubmarines] = new Ship(Ship.CRUISER_SIZE);
 		}
 		
 		for(k=0; k<numberOfDestroyer; k++){
-			ships[k+numberOfSubmarines+numberOfCruiser] = new Ship("Zerstoerer", Ship.DESTROYER_SIZE);
+			ships[k+numberOfSubmarines+numberOfCruiser] = new Ship(Ship.DESTROYER_SIZE);
 		}
 		
 		for(l=0; l<numberOfBattleShips; l++){
-			ships[l+numberOfSubmarines+numberOfCruiser+numberOfDestroyer] = new Ship("Schlachtschiff", Ship.BATTLESHIP_SIZE);
+			ships[l+numberOfSubmarines+numberOfCruiser+numberOfDestroyer] = new Ship(Ship.BATTLESHIP_SIZE);
 		}
 		
 		return ships;

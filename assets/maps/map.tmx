@@ -28,11 +28,11 @@
   </data>
  </layer>
  <objectgroup name="GameField">
-  <object name="arrow" x="64" y="995">
+  <object name="arrow" type="filled" x="64" y="995">
    <polygon points="0,0 640,0 320,-34.25"/>
   </object>
  </objectgroup>
- <objectgroup name="GameFieldPlayer">
+ <objectgroup name="GameFieldPlayer" visible="0">
   <object x="64" y="1152" width="640" height="64"/>
   <object x="64" y="1408" width="640" height="64"/>
   <object x="64" y="1536" width="640" height="64"/>

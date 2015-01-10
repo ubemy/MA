@@ -21,12 +21,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -485,7 +487,7 @@ public class GameFieldScreen implements Screen {
 			sr.setProjectionMatrix(camera.combined);
 			sr.setColor(Color.GRAY);
 			String objektebene = "";
-			if (state.get(5)) {
+			if (state.get(5)) {//Arrow when Player Turn
 				objektebene = "GameField";
 			}
 			if (state.get(6)) {
@@ -508,6 +510,16 @@ public class GameFieldScreen implements Screen {
 						sr.end();
 					}
 				}
+			}
+			
+			//Pfeil wenn Spieler am Zug ist.
+			if(player.getGame().getGamersTurn()==0){
+				MapObject object = map.getLayers().get("GameField").getObjects().get("arrow");
+				Polygon pfeil = ((PolygonMapObject) object).getPolygon();
+				sr.setColor(Color.MAGENTA);
+				sr.begin(ShapeType.Line);
+				sr.polygon(pfeil.getTransformedVertices());
+				sr.end();
 			}
 		}
 

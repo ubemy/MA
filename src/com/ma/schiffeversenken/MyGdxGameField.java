@@ -3,6 +3,11 @@ package com.ma.schiffeversenken;
 import com.badlogic.gdx.Game;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 
+/**
+ * Klasse Handelt die Game Screens.
+ * 
+ * @author Klaus Schlender
+ */
 public class MyGdxGameField extends Game {
 	
 	private AndroidLauncher androidLauncher;

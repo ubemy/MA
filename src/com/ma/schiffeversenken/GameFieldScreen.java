@@ -43,9 +43,14 @@ import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.BackActivity;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.controller.Game;
+import com.ma.schiffeversenken.android.model.Allgemeinesdreieck;
 import com.ma.schiffeversenken.android.model.Field;
 import com.ma.schiffeversenken.android.model.Player;
-
+/**
+ * Klasse Handelt die Game Screens.
+ * 
+ * @author Klaus Schlender
+ */
 public class GameFieldScreen implements Screen {
 
 	public static final String TITLE = "Schiffeversenken 1.0";
@@ -115,6 +120,8 @@ public class GameFieldScreen implements Screen {
 	private TextButton buttonRestart;
 	private MyGdxGameField parentScreen;
 	private boolean restartGame;
+
+	private ArrayList<float[]> pfeilPolygone;
 	
 	public GameFieldScreen(boolean restartGame, MyGdxGameField parentScreen, boolean primaryBTGame, boolean secondaryBTGame){
 		this.restartGame=restartGame;
@@ -381,6 +388,9 @@ public class GameFieldScreen implements Screen {
 		inputMultiplexer.addProcessor(gestureDetector);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		
+
+		
 	}
 
 	/**
@@ -410,7 +420,7 @@ public class GameFieldScreen implements Screen {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// TODO TEST OB LADEN
+			
 		}
 	}
 
@@ -516,9 +526,9 @@ public class GameFieldScreen implements Screen {
 			if(player.getGame().getGamersTurn()==0){
 				MapObject object = map.getLayers().get("GameField").getObjects().get("arrow");
 				Polygon pfeil = ((PolygonMapObject) object).getPolygon();
-				sr.setColor(Color.RED);
+				float[] vert = pfeil.getTransformedVertices();
 				sr.begin(ShapeType.Line);
-				sr.polygon(pfeil.getTransformedVertices());
+				sr.polygon(vert);
 				sr.end();
 			}
 		}
@@ -528,7 +538,6 @@ public class GameFieldScreen implements Screen {
 		if(state.get(1)||state.get(3)){
 			//Wenn Spiel zu ende ist soll State 1 und Text mit Btton aktiv werden.
 			if(state.get(8)){
-				System.out.println("State 8");
 				table.clear();
 				table.add(heading).colspan(5);
 				table.row();
@@ -551,7 +560,7 @@ public class GameFieldScreen implements Screen {
 		}
 
 	}
-
+	
 	@Override
 	public void resize(int width, int height) {
 		// Gdx.app.log(TITLE, "resize(...)");

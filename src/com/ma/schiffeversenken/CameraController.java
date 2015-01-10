@@ -2,25 +2,22 @@ package com.ma.schiffeversenken;
 
 import java.util.ArrayList;
 
-import android.media.CameraProfile;
-import android.provider.SyncStateContract.Helpers;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTile.BlendMode;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
-import com.ma.schiffeversenken.android.view.Help;
 
+/**
+ * Klasse Handelt Touchevents
+ * 
+ * @author Klaus Schlender
+ */
 public class CameraController implements GestureListener {
 	float velX, velY;
 	boolean flinging = false;

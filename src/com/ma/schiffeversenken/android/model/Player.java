@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.ma.schiffeversenken.GameFieldScreen;
-import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.view.Settings;
 import com.badlogic.gdx.Gdx;
@@ -31,9 +30,9 @@ import com.badlogic.gdx.utils.Base64Coder;
 
 
 /**
- * Der Player hält alles zusammen OpenGl/Controller
+ * Der Player trägt die Spielelemente und das Spielgeschehen.
  * 
- * @author Klaus
+ * @author Klaus Schlender
  */
 public class Player {
 	private static Game game;

@@ -1,6 +1,5 @@
 package com.ma.schiffeversenken.android.model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
@@ -226,12 +225,24 @@ public class Field {
 		this.placedShips = ships;
 		// Für das Zeichnen bekommt jedes Schiff sein EntityShip danach die
 		// Koordinaten.
+		handleShipEntityDrawUnits(ships,false,false);
+		allShipsSet = true;
+	}
+	
+	/**
+	 * Methode behandelt für jedes Schiff das entsprechende Feldelement und
+	 * vergibt diesem das entsprechende Draw Objekt EntityShip
+	 * @param ships Die übergebenen Schiffe
+	 * @param setTextureName true, wenn nur die Textur angepasst werden soll.
+	 * @param manualPlacement true, wenn die Plazierung manuell gemacht wurde.
+	 */
+	private void handleShipEntityDrawUnits(Ship[] ships, boolean setTextureName, boolean manualPlacement) {
 		for (Ship ship : ships) {
 			// Finden der geeigneten Textur
 			String textureName = "";
-			int index = 0;
 			if (ship.getSize() > 1) {
-				for (FieldUnit unit : ship.location) {
+				for (int s=0;s<ship.location.length;s++) {
+					FieldUnit unit = ship.location[s];
 					switch (unit.getShipSegment()) {
 					case 2:// 2=Hinterteil
 						if (unit.getPlacedShip().getOrientation() == 0
@@ -251,21 +262,17 @@ public class Field {
 							}
 						} else {// Vertikal
 							if (unit.getPlacedShip().getOrientation() == 1) {// oben
-								
 							if (!unit.getPlacedShip().isDestroyed()) {
-								// textureName = "dvb";//TODO Add upstairs
-								// texture
-								textureName = "uvf";
+								textureName = (manualPlacement)?"uvb":"dvb";
 							} else {
-								// textureName = "dvba";
-								textureName = "uvfa";
+								textureName = (manualPlacement)?"uvba":"dvba";
 							}
 							}else{//unten
 								if (!unit.getPlacedShip().isDestroyed()) {
 									// texture
-									textureName = "uvb";
+									textureName = (manualPlacement)?"dvb":"uvb";
 								} else {
-									textureName = "uvba";
+									textureName = (manualPlacement)?"dvba":"uvba";
 								}
 							}
 						}
@@ -288,17 +295,22 @@ public class Field {
 								}
 							}
 						} else {// Vertikal
+							if (unit.getPlacedShip().getOrientation() == 1) {// oben	
 							if (!unit.getPlacedShip().isDestroyed()) {
-								// textureName = "dvm";//TODO Add upstairs
-								// texture
 								textureName = "uvm";
 							} else {
-								// textureName = "dvma";
 								textureName = "uvma";
+							}
+							}else{//unten
+								if (!unit.getPlacedShip().isDestroyed()) {
+									textureName = "dvm";
+								} else {
+									textureName = "dvma";
+								}
 							}
 						}
 						break;
-					case 0:// 1=Front
+					case 0:// 0=Front
 						if (unit.getPlacedShip().getOrientation() == 0
 								|| unit.getPlacedShip().getOrientation() == 2) {// Horizontal
 							if (unit.getPlacedShip().getOrientation() == 0) {// rechts
@@ -317,26 +329,28 @@ public class Field {
 							}
 						} else {// Vertikal
 							if (unit.getPlacedShip().getOrientation() == 1) {// oben
-								
 							if (!unit.getPlacedShip().isDestroyed()) {
-								// textureName = "dvb";//TODO Add upstairs
-								// texture
-								textureName = "uvb";
+								textureName = (manualPlacement)?"uvf":"dvf";
 							} else {
-								// textureName = "dvba";
-								textureName = "uvba";
+								textureName = "uvfa";
 							}
 							}else{//unten
 								if (!unit.getPlacedShip().isDestroyed()) {
 									// texture
-									textureName = "uvf";
+									textureName = (manualPlacement)?"dvf":"uvf";
 								} else {
-									textureName = "uvfa";
+									textureName = (manualPlacement)?"dvfa":"uvfa";
 								}
 							}
 						}
 						break;
 					}
+					
+					
+					if(setTextureName&&unit.getEntityShipDrawUnit()!=null){
+					//Bearbeiten von Schiffsteil.
+						unit.getEntityShipDrawUnit().setShipTextureRegion(textureName);
+					}else{
 					// Hinzufügen von Schiffsteil
 					EntityShip tmpShip = new EntityShip(textureName, new Vector2(
 									unit.getXpos(), unit.getYpos()),
@@ -345,6 +359,9 @@ public class Field {
 
 					// TODO Deprecated
 					drawShips.add(tmpShip);
+					}
+
+					System.out.println("Unit ID:"+unit.getID()+"<==> Drawingplace ID:"+getElementByXPosYPos(unit.getXpos(),unit.getYpos()).id);
 				}
 			} else {// Kleines Schiff
 				FieldUnit unit = ship.location[0];
@@ -376,6 +393,11 @@ public class Field {
 						textureName = "dvka";
 					}
 				}
+				
+				if(setTextureName&&unit.getEntityShipDrawUnit()!=null){
+					//Bearbeiten von Schiffsteil.
+						unit.getEntityShipDrawUnit().setShipTextureRegion(textureName);
+				}else{
 				// Hinzufügen von Schiffsteil
 				EntityShip tmpShip = new EntityShip(textureName, new Vector2(
 								unit.getXpos(), unit.getYpos()), new Vector2(
@@ -384,12 +406,11 @@ public class Field {
 
 				// TODO Deprecated
 				drawShips.add(tmpShip);
+				}
 			}
 		}
-
-		allShipsSet = true;
 	}
-	
+
 	/**
 	 * Setzt die platzierten Schiffe nach manueller Erstellung.
 	 * 
@@ -398,22 +419,20 @@ public class Field {
 	 */
 	public void setShipsManual(Ship[] ships) {
 		this.placedShips = ships;
+		//Für die Korrektur der Texturen nach der Datenübertragung des Json Objektes
+		handleShipEntityDrawUnits(placedShips,true,true);
 		allShipsSet = true;
 
-		//TODO Ab hier Deprecated
-//		for (Ship ship : ships) {
-//			if (ship.getSize() > 1) {
-//				for (FieldUnit unit : ship.location) {		
-//					// TODO Deprecated
-//					// Hinzufügen von Schiffsteil
-//					drawShips.add(unit.getEntityShipDrawUnit());
-//				}
-//			} else {// Kleines Schiff
-//				// TODO Deprecated
-//				FieldUnit unit = ship.location[0];
-//				drawShips.add(unit.getEntityShipDrawUnit());
-//			}
-//		}
+		
+		//Debug
+		for (Ship ship : ships) {
+			System.out.println("FeldSchiff: "+ship.name+" Größe"+ship.size+" ");
+			for (FieldUnit u : ship.location) {
+//				System.out.print(" ID:"+u.getID()+" Grafik:"+u.getEntityShipDrawUnit().toString());
+				System.out.print(" ID:"+u.getID()+((u.getEntityShipDrawUnit()==null)?"null":"Notnull"));
+			}
+			System.out.println("");
+		}
 	}
 
 	/**
@@ -599,8 +618,7 @@ public class Field {
 	// @Deprecated
 	public void draw(Batch batch) {
 		try{
-			//TODO DELETE AB HIER 
-			
+			//TODO DELETE AB HIER
 			// Eigenes Spielfeld
 						for (int i = 0; i < 10; i++) {
 							for (int j = 0; j < 10; j++) {
@@ -640,19 +658,13 @@ public class Field {
 								} else {// Wenn Feld nicht angegriffen
 										// Schiffsteil vorhanden auf dem Feld
 									if (units[i][j].getOccupied()) {
-										//DrawUnit is null when there is no ship placed draw when not null.
-										if(units[i][j].getEntityShipDrawUnit()!=null){
 										units[i][j].getEntityShipDrawUnit().render(batch,
 												false,shipTextures);
-										}
 									}
 								}
 
 							}
 						}
-					
-					
-			
 			//TODO DELETE BIS HIER
 			
 			
@@ -684,8 +696,7 @@ public class Field {
 										.getAnimationtimer() + 1);
 							}
 						} else {
-							// Schiffsteil beschädigt, malen wenn Vorhanden.
-							if(units[i][j].getEntityShipDrawUnit()!=null)
+							// Schiffsteil beschädigt, malen 
 							units[i][j].getEntityShipDrawUnit().render(batch,
 									true,shipTextures);
 							// Bombenanimation
@@ -700,11 +711,8 @@ public class Field {
 					} else {// Wenn Feld nicht angegriffen
 							// Schiffsteil vorhanden auf dem Feld
 						if (units[i][j].getOccupied()) {
-							//DrawUnit is null when there is no ship placed draw when not null.
-							if(units[i][j].getEntityShipDrawUnit()!=null){
 							units[i][j].getEntityShipDrawUnit().render(batch,
 									false,shipTextures);
-							}
 						}
 					}
 
@@ -866,8 +874,7 @@ public class Field {
 	}
 
 	public void sendFieldUnitsWithBluetooth() {
-		
-		
+
 		//Für Bluetooth eigenes Feld übertragen
 		if(!feldUebertragen){
 			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
@@ -881,51 +888,9 @@ public class Field {
 			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+jsonPlacedShips).getBytes();
 			//Schreiben
 			btcThread.write(fieldBytes);
-
-//			//Deserialisierung
-//			fieldBytes2 = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+"Hallo Welt").getBytes();
-//			//Schreiben
-//			btcThread.write(fieldBytes);
-
-
-			//Warten bis Feld senden abgeschlossen
-		
-//				try {
-//					Thread.sleep(50);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-			
-				
-				
 		}
-//		else if(feldUebertragen){
-//			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
-//			byte[] returnString = (new String(btcThread.BLUETOOTH_ENEMY_FIELD+"HALLOENDE")).getBytes();
-//			btcThread.write(returnString);
-//			feldUebertragen=!feldUebertragen;
-//		}
-		
-//		try {
-//			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
-//			//Serialisierung
-//			byte[] fieldBytes;
-//			String subString;
-//				subString = Player.toString(units);
-//			//Deserialisierung
-//			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+"Hallo").getBytes();
-//			//Schreiben
-//			btcThread.write(fieldBytes);
-//			//Deserialisierung
-//			fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD_RETURN).getBytes();
-//			//Schreiben
-//			btcThread.write(fieldBytes);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-				
+
+
 ////TODO DEPRECATED ab hier nur zur Information
 //				try {
 //					BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
@@ -1018,7 +983,6 @@ public class Field {
 		
 		//erzeugen von Json
 		ShipsDescriptor desc = json.fromJson(ShipsDescriptor.class, jsonPlacedShips);
-		System.out.println("Ships: "+desc.shipsPlaced.size());
 		//Feld resetten und Schiffe aus Json Generieren und Platzieren.
 		desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());
 		
@@ -1180,6 +1144,7 @@ public class Field {
 				FieldUnit shipLastUnit;
 				FieldUnit shipNextUnit;
 				EntityShip tmpShip;
+				int orientation=-1;
 				
 				//Units Rekonstruieren
 				ArrayList<FieldUnitDescriptor> fieldUnitsDesc = shipsPlaced.get(i).location.fieldUnits;
@@ -1190,11 +1155,10 @@ public class Field {
 						//Behandeln von Schiffsanfang
 						if(j<1){
 							//kleine Schiffstexturen
-							if(fieldUnitsDesc.size()==1){
 							shipBack = "dvk";
 							shipMiddle = "dvk";
 							shipFront ="dvk";
-							}
+
 							
 							// Hinzufügen von Schiffsteil
 							tmpShip = new EntityShip(shipBack,
@@ -1207,11 +1171,14 @@ public class Field {
 							unitLocation = new FieldUnit[1];
 							unitLocation[0] = unit;
 							shipLastUnit = unit;
+							// unten Kreuzer
+							orientation = 3;
 					
 						}else if(j==1){//Behandeln von zweitem Schiffsteil
 							//Definieren der Schiffstexturen lt. Ausrichtung gemäß Vorgänger
 							if (unit.equals(unitLocation[0].get_lNeighbor())) {
 								shiftDirection = 0;
+								orientation = 2;//links
 								shipBack = "lhb";
 								shipMiddle ="lhm";
 								shipFront = "lhf";
@@ -1219,6 +1186,7 @@ public class Field {
 							}
 							if (unit.equals(unitLocation[0].get_rNeighbor())) {
 								shiftDirection = 1;
+								orientation = 0;//rechts
 								shipBack ="rhb";
 								shipMiddle = "rhm";
 								shipFront = "rhf";
@@ -1226,6 +1194,7 @@ public class Field {
 							}
 							if (unit.equals(unitLocation[0].get_uNeighbor())) {
 								shiftDirection = 2;
+								orientation = 1;//oben
 								shipBack ="uvb";		
 								shipMiddle = "uvm";
 								shipFront = "uvf";
@@ -1234,6 +1203,7 @@ public class Field {
 
 							if (unit.equals(shipLastUnit.get_oNeighbor())) {
 								shiftDirection = 3;
+								orientation = 3;//unten
 								shipBack = ("uvf");
 								shipMiddle = ("uvm");
 								shipFront = ("uvb");
@@ -1269,15 +1239,27 @@ public class Field {
 							switch (shiftDirection) {
 							case 0:// links
 								shipNextUnit = unit.get_lNeighbor();
+								shipBack = "lhb";
+								shipMiddle ="lhm";
+								shipFront = "lhf";
 								break;
 							case 1:// rechts
 								shipNextUnit = unit.get_rNeighbor();
+								shipBack ="rhb";
+								shipMiddle = "rhm";
+								shipFront = "rhf";
 								break;
 							case 2:// oben
 								shipNextUnit = unit.get_uNeighbor();
+								shipBack ="uvb";		
+								shipMiddle = "uvm";
+								shipFront = "uvf";
 								break;
 							case 3:// unten
 								shipNextUnit = unit.get_oNeighbor();
+								shipBack = ("uvf");
+								shipMiddle = ("uvm");
+								shipFront = ("uvb");
 								break;
 							default:
 								break;
@@ -1296,65 +1278,59 @@ public class Field {
 							unitLocation = tmpUnitLocation;
 							shipLastUnit = unit;
 						}
-					//Schiffsausrichtung
-					int orientation = 1;
-					switch (shiftDirection) {
-					case 0:// links
-						orientation = 2;
-						break;
-					case 1:// rechts
-						orientation = 0;
-						break;
-					case 2:// oben
-						orientation = 1;
-						break;
-					case 3:// unten
-						orientation = 3;
-						break;
-					default:
-						break;
-					}
-					shiftDirection = -1;
 					
 					unitLocation[0].setShipOrientation(orientation);
+					
 				}	
 				// Hinzufügen der fertigen unitLocation
 				placedShipUnits.add(unitLocation);
 				
+				
+				//Debug
+				switch (orientation) {
+				case 0:// links
+					orientation = 2;
+					System.out.print("links ID:");
+					for (FieldUnit u : unitLocation) {
+						System.out.print(" "+u.id+" Grafik:"+u.getEntityShipDrawUnit().toString());
+					}
+					System.out.println(" ");
+					break;
+				case 1:// rechts
+					orientation = 0;
+					System.out.print("rechts ID:");
+					for (FieldUnit u : unitLocation) {
+						System.out.print(" "+u.id+" Grafik:"+u.getEntityShipDrawUnit().toString());
+					}
+					System.out.println(" ");
+					break;
+				case 2:// oben
+					orientation = 1;
+					System.out.println("oben ID:");
+					for (FieldUnit u : unitLocation) {
+						System.out.println(" "+u.id+" Grafik:"+u.getEntityShipDrawUnit().toString());
+					}
+					break;
+				case 3:// unten
+					orientation = 3;
+					System.out.println("unten ID:");
+					for (FieldUnit u : unitLocation) {
+						System.out.println(" "+u.id+" Grafik:"+u.getEntityShipDrawUnit().toString());
+					}
+					break;
+				default:
+					break;
+				}
+				
+				
+								
 				Gdx.app.log(GameFieldScreen.LOG, "Anzahl Schiffe auf Feld: "
 						+ placedShipUnits.size());
 			}
 			
 			// Die neuen Schiffe platzieren
 			field.setManualNewShipplacement(placedShipUnits);
-	
 
-//			//Blanke Schiffe Erstellen
-//			int numberOfSubmarines=0;
-//			int numberOfCruiser=0;
-//			int numberOfDestroyer=0;
-//			int numberOfBattleShips=0;
-//			for (ShipDescriptor shipDescr : this.shipsPlaced) {
-//				switch (shipDescr.size) {
-//				case 1:
-//					numberOfCruiser++;
-//					break;
-//				case 2:
-//					numberOfSubmarines++;
-//					break;
-//				case 3:
-//					numberOfDestroyer++;
-//					break;
-//				case 4:
-//					numberOfBattleShips++;
-//					break;
-//				default:
-//					break;
-//				}
-//			}
-//			Ship[] createdShips = KI.createShips(numberOfCruiser, numberOfSubmarines, numberOfDestroyer, numberOfBattleShips);
-//		
-			
 		}
 		
 	}

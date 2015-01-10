@@ -45,8 +45,6 @@ public class BluetoothConnectedThread extends Thread {
     private CreateMultiplayerGame cmgClass;
     /**Bluetooth Adapter Objekt*/
     private BluetoothAdapter bluetoothAdapter;
-    /**Für FeldUnits[][]*/
-	private String subStringIncomeing="";
     /**Statische Instanz dieser Klasse*/
     private static BluetoothConnectedThread instance;
     /**String, der bei der Bluetooth Kommunikation genutzt wird.
@@ -160,52 +158,22 @@ public class BluetoothConnectedThread extends Thread {
 	                	
 	                	game.setReturnValues(returnAttackHit, returnShipDestroyed, returnShipDestroyedIDs);
 	                }
-//	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD_RETURN)){
-//	                	game.getFirstFieldPlayer().setFeldUebertragen(true);
-//	                	game.getSecondFieldEnemy().setFeldUebertragen(true);
-//	                	AndroidLauncher.notificationToUser("RETURN "+" received:"+readMsg.length(),androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,FieldMessageCounterToDoDelete+1);
-//	                }
-	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD)){
-        	
-//	                	Gdx.app.log("BLUETOOTH_ENEMY_FIELD", "received:"+readMsg.length());
-						
-	                	
+	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD_RETURN)){
+	                	game.getFirstFieldPlayer().setFeldUebertragenAntwort(true);
+	                }
+	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD)){      	
 	                	String jsonPlacedShips=readMsg.substring(BLUETOOTH_ENEMY_FIELD.length());
 	                	//Deserialisierung 
 	                	Json json = new Json();
 	            		ShipsDescriptor desc = json.fromJson(ShipsDescriptor.class, jsonPlacedShips);
 	            		
-	            		//TODO Delete Erfolg posten
-	            		FieldMessageCounterToDoDelete=1234567;
-	            		AndroidLauncher.notificationToUser(BLUETOOTH_ENEMY_FIELD+" received:"+readMsg.length(),androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,FieldMessageCounterToDoDelete);
-	            		//TODO Delete bis Hier
-	            		
 	            		//Feld resetten und Schiffe aus Json Generieren und Platzieren.
 	            		desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());
 	                	
-	                	
 	                	//Return Schreiben
-//						fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD_RETURN).getBytes();
-//						write(fieldBytes);
-	                	
-//                		AndroidLauncher.notificationToUser(readMsg.substring(BLUETOOTH_ENEMY_FIELD.length())+" received:"+readMsg.length(),androidLauncher,androidLauncher.getClass(),BackActivity.class,androidLauncher.getNotificationManager() ,1234568);
-                		
-//                		FieldUnit[][] tmpFieldUnits = (FieldUnit[][])Player.fromString(readMsg.substring(BLUETOOTH_ENEMY_FIELD.length()));
-//                		game.setEnemyFieldUnits(tmpFieldUnits);
-	    	          	
-	                	//TODO löschen
-//	                	byte[] readBuf = new byte[83402]; // this array will hold the bytes for the image, this value better be not hardcoded in your code
-//
-//	                	int start = 0;
-//	                	while(readMsg) {
-//	                	    readBuf.copyOfRange((byte[]) msg.obj, start, start + 1024); // copy received 1024 bytes
-//	                	    start += 1024; //increment so that we don't overwrite previous bytes
-//	                	}
-//
-//	                	/*After everything is read...*/
-//	                	Bitmap bmp=BitmapFactory.decodeByteArray(readBuf,0,readBuf.length);
-	                	//TODO löschen bis hier
-	                	
+						byte[] fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD_RETURN).getBytes();
+						write(fieldBytes);
+
 //	                	//TODO Erste gehversuche:
 //	                	if(readMsg.equals(BLUETOOTH_ENEMY_FIELD+BLUETOOTH_ENEMY_FIELD)){
 //	                		//Ende vom Stream
@@ -217,20 +185,6 @@ public class BluetoothConnectedThread extends Thread {
 //	                		//Stream zu String zusammenführen
 //	                		subStringIncomeing= subStringIncomeing+readMsg.substring(BLUETOOTH_ENEMY_FIELD.length());
 //	                	}
-	                
-//	                //TODO ALTES
-//	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_SHIPS)){
-//	                	String msgSubstring = readMsg.substring(BLUETOOTH_ENEMY_SHIPS.length());
-//	                	Ship[] ships = null;
-//	                	
-//	                	try{
-//	                		ships = (Ship[]) Player.deserialize(msgSubstring.getBytes());
-//	                	} catch (ClassNotFoundException e) {
-//							e.printStackTrace();
-//						}
-//	                	
-//	                	game.setEnemyFieldShips(ships);
-	                
 	                }
             	}
             } catch (Exception e){

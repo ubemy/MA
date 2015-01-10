@@ -115,6 +115,7 @@ public class ShipPlacement {
 		for (int i=0;i<placedShipUnits.size();i++) {
 			FieldUnit[] u=placedShipUnits.get(i);
 			
+			//Initialisierung der Schiffe
 			switch (u.length - 1) {
 			case 0:
 				ships[i]= new Ship("Kreuzer", Ship.CRUISER_SIZE,u);
@@ -159,13 +160,13 @@ public class ShipPlacement {
 					markElements(1, schiffSize, u[0].getID(), field, ships[i],
 							ships[i].getOrientation());
 				} else if (ships[i].getOrientation() == Ship.SHIP_ORIENTATION_ABOVE) {
-					markElements(-10, schiffSize, u[0].getID(), field, ships[i],
+					markElements(10, schiffSize, u[0].getID(), field, ships[i],
 							ships[i].getOrientation());
 				} else if (ships[i].getOrientation() == Ship.SHIP_ORIENTATION_LEFT) {
 					markElements(-1, schiffSize, u[0].getID(), field, ships[i],
 							ships[i].getOrientation());
 				} else if (ships[i].getOrientation() == Ship.SHIP_ORIENTATION_BELOW) {
-					markElements(10, schiffSize, u[0].getID(), field, ships[i],
+					markElements(-10, schiffSize, u[0].getID(), field, ships[i],
 							ships[i].getOrientation());
 				}
 			}

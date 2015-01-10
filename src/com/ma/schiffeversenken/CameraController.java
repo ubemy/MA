@@ -589,10 +589,8 @@ public class CameraController implements GestureListener {
 				&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
 			// Beim ersten shift werden Texturen festgelegt werden.
 			firstShift = false;
-			// System.out.println("Unit Gefunden firstShift");
 			if (unit.equals(unitLocation[0].get_lNeighbor())) {
 				shiftDirection = 0;
-				// Gdx.app.log("FirstShift", "leftShift");
 				// Texturen setzen
 				shipBack = "lhb";
 				shipMiddle ="lhm";
@@ -601,7 +599,6 @@ public class CameraController implements GestureListener {
 			}
 			if (unit.equals(unitLocation[0].get_rNeighbor())) {
 				shiftDirection = 1;
-				// Gdx.app.log("FirstShift", "rightShift");
 				shipBack ="rhb";
 				shipMiddle = "rhm";
 				shipFront = "rhf";
@@ -609,7 +606,6 @@ public class CameraController implements GestureListener {
 			}
 			if (unit.equals(unitLocation[0].get_uNeighbor())) {
 				shiftDirection = 2;
-				// Gdx.app.log("FirstShift", "upShift");
 				shipBack ="uvb";		
 				shipMiddle = "uvm";
 				shipFront = "uvf";
@@ -617,11 +613,9 @@ public class CameraController implements GestureListener {
 			}
 			if (unit.equals(shipLastUnit.get_oNeighbor())) {
 				shiftDirection = 3;
-				// Gdx.app.log("FirstShift", "downShift");
-				// TODO Texturen nach unten hinzufügen
-				shipBack = ("uvf");
-				shipMiddle = ("uvm");
-				shipFront = ("uvb");
+				shipBack = ("dvb");
+				shipMiddle = ("dvm");
+				shipFront = ("dvf");
 				shipNextUnit = unit.get_oNeighbor();
 			}
 

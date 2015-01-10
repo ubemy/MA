@@ -491,25 +491,28 @@ public class Game extends Thread {
 	@Override
 	public void run() {
 		//TODO Fertigstellen von Feld Übertragen.
-		//TODO feldUebertragenAntwort() bestimmen wenn feld empfangen und dem gegner senden
-		//TODO testen auf funktionalität.
-		getFirstFieldPlayer().serialisierungstestLocal(this);
-		
-		//Wenn eigenes Feld nicht versendet
+		//Warten auf Antwort ob eigenes Feld angekommen beim Gegner
 		if((primaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
-			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+//			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+			while(!getFirstFieldPlayer().getFeldUebertragenAntwort()){
+				try {
+					Thread.sleep(FIVEHUNDRED_MS);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				}
+			}
 			getFirstFieldPlayer().setFeldUebertragen(true);
-//			while(!getFirstFieldPlayer().getFeldUebertragen()&&!getSecondFieldEnemy().getFeldUebertragen()){
-//				try {
-//					Thread.sleep(FIVEHUNDRED_MS);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//				}
-//			}
 		}
-		//Wenn eigenes Feld nicht versendet und ein feld vom Gegner empfangen wurde.
-		if((secondaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()&&getFirstFieldPlayer().getFeldUebertragenAntwort()){
-			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+		//Warten auf Antwort ob eigenes Feld angekommen beim Gegner
+		if((secondaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
+//			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+			while(!getFirstFieldPlayer().getFeldUebertragenAntwort()){
+				try {
+					Thread.sleep(FIVEHUNDRED_MS);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				}
+			}
 			getFirstFieldPlayer().setFeldUebertragen(true);
 		}
 		
@@ -526,6 +529,11 @@ public class Game extends Thread {
 				do{
 					feWasAlreadyAttacked = false;
 					while(!firstGamerAction){
+						if(hasSomebodyWon() != 0){
+							end = true;
+							CameraController.changeStateTo(8, false);
+							firstGamerAction=!firstGamerAction;
+						}
 						try {
 							Thread.sleep(FIVEHUNDRED_MS);
 						} catch (InterruptedException e) {
@@ -533,6 +541,7 @@ public class Game extends Thread {
 							e.printStackTrace();
 						}
 					}
+					if(!end)
 					hitShip = gamerAction(firstGamerAttackID, gamersTurn);
 				}while(hitShip || feWasAlreadyAttacked);
 				gamersTurn++;
@@ -541,8 +550,12 @@ public class Game extends Thread {
 				if(gameMode == GAME_MODE_SINGLE_PLAYER){
 					//Wenn GameMode == 0 == Einzelspieler, dann KI attackieren lassen
 					do{
-						
 						feWasAlreadyAttacked = false;
+						if(hasSomebodyWon() != 0){
+							end = true;
+							CameraController.changeStateTo(8, false);
+							firstGamerAction=!firstGamerAction;
+						}
 						/*
 						 * Die Schleife wird solange durchlaufen,
 						 * bis der Spieler ins Leere trifft
@@ -553,19 +566,24 @@ public class Game extends Thread {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						if(!end)
 						hitShip = gamerAction(ki.attack(), gamersTurn);
 					}while(hitShip || feWasAlreadyAttacked);
 				}
 				else{
 					//Auf Eingabe von Benutzer warten
 					do{
-						
 						feWasAlreadyAttacked = false;
 						/*
 						 * Die Schleife wird solange durchlaufen,
 						 * bis der Spieler ins Leere trifft
 						 */
 						while(!secondGamerAction){
+							if(hasSomebodyWon() != 0){
+								end = true;
+								CameraController.changeStateTo(8, false);
+								secondGamerAction=!secondGamerAction;
+							}
 							try {
 								Thread.sleep(FIVEHUNDRED_MS);
 							} catch (InterruptedException e) {
@@ -573,6 +591,7 @@ public class Game extends Thread {
 								e.printStackTrace();
 							}
 						}
+						if(!end)
 						hitShip = gamerAction(secondGamerAttackID, gamersTurn);
 					}while(hitShip || feWasAlreadyAttacked);
 				}
@@ -583,13 +602,14 @@ public class Game extends Thread {
 				if(hasEnemyWon()){
 					end = true;
 					CameraController.changeStateTo(8, false);
+					
 				}
 			}
 			else if(hasSomebodyWon() != 0){
 				end = true;
 				CameraController.changeStateTo(8, false);
+				
 			}
-			
 		}while(!end);	
 	}
 

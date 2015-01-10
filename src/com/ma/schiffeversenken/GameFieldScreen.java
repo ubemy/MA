@@ -308,25 +308,23 @@ public class GameFieldScreen implements Screen {
 				Gdx.input.setInputProcessor(gestureDetector);
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
-						
-//						player.getGame().getFirstFieldPlayer().serialisierungstestLocal();
-						
-						
+
 						//Setzen der Schiffe und Starten.
 						//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
 						if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
 						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						}
 						
-					
-
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
-
+					
+						if(primaryBTGame||secondaryBTGame){
+						player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+						}
 
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();
@@ -335,14 +333,16 @@ public class GameFieldScreen implements Screen {
 						//Setzen der Schiffe und Starten.
 						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
 						
-			
-						
 						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						tmpEmptyShipList.add(0);
 						controller.setShipPlaceHelper(tmpEmptyShipList);
+						
+						if(primaryBTGame||secondaryBTGame){
+							player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+						}
 						
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();

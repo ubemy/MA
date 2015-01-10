@@ -325,11 +325,6 @@ public class GameFieldScreen implements Screen {
 						if(primaryBTGame||secondaryBTGame){
 						player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
 						}
-
-						//DEBUG
-						if(!primaryBTGame&&!secondaryBTGame){
-						player.getGame().getFirstFieldPlayer().serialisierungstestLocal(player.getGame());
-						}
 						
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();

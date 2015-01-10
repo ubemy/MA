@@ -735,7 +735,7 @@ public class CameraController implements GestureListener {
 		// Hinzufügen der fertigen unitLocation
 		placedShipUnits.add(unitLocation);
 
-		Gdx.app.log(GameFieldScreen.LOG, "Anzahl Schiffe auf Feld: "
+		Gdx.app.log(GameFieldScreen.TITLE, "Anzahl Schiffe auf Feld: "
 				+ placedShipUnits.size());
 	}
 

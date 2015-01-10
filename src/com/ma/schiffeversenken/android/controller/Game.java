@@ -70,10 +70,10 @@ public class Game extends Thread {
 	/**Wird auf True gesetzt, wenn das Spiel zuende ist*/
 	private boolean end;
 	private String returnDestroyedIDs;
-
 		
 	/**
 	 * Erstellt ein neues Game Objekt
+	 * @param state 
 	 * @param gameMode 0=Einzelspieler; 1=Mehrspieler
 	 * @param firstFieldPlayer Spielfeld des 1. Spielers
 	 * @param secondField Spieldfeld des 2. Spielers
@@ -536,14 +536,12 @@ public class Game extends Thread {
 						try {
 							Thread.sleep(FIVEHUNDRED_MS);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 					if(!end){
 					hitShip = gamerAction(firstGamerAttackID, gamersTurn);
 					}else{
-						CameraController.changeStateTo(8, false);
 						break;
 					}
 				}while(hitShip || feWasAlreadyAttacked);
@@ -565,13 +563,11 @@ public class Game extends Thread {
 						try {
 							Thread.sleep(THOUSAND_MS);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						if(!end){
 						hitShip = gamerAction(ki.attack(), gamersTurn);
 						}else{
-							CameraController.changeStateTo(8, false);
 							break;
 						}
 					}while(hitShip || feWasAlreadyAttacked);
@@ -592,14 +588,12 @@ public class Game extends Thread {
 							try {
 								Thread.sleep(FIVEHUNDRED_MS);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
 						if(!end){
 						hitShip = gamerAction(secondGamerAttackID, gamersTurn);
 						}else{
-							CameraController.changeStateTo(8, false);
 							break;
 						}
 					}while(hitShip || feWasAlreadyAttacked);
@@ -610,15 +604,18 @@ public class Game extends Thread {
 			if(primaryBTGame || secondaryBTGame){
 				if(hasEnemyWon()){
 					end = true;
-					CameraController.changeStateTo(8, false);
 				}
 			}
 			else if(hasSomebodyWon() != 0){
 				end = true;
-				CameraController.changeStateTo(8, false);
-				
 			}
-		}while(!end);	
+		}while(!end);
+		//Neustart Kameramodus, auch beim Bluetooth Gegner.
+		CameraController.changeStateTo(8, false);
+		if(primaryBTGame||secondaryBTGame){	
+		byte[] bytes = BluetoothConnectedThread.BLUETOOTH_NEWGAME.getBytes();
+		btConnectedThread.write(bytes);
+		}
 	}
 
 	/**

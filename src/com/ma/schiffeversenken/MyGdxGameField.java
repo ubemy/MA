@@ -1,20 +1,13 @@
 package com.ma.schiffeversenken;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.ma.schiffeversenken.android.AndroidLauncher;
-import com.ma.schiffeversenken.android.model.Player;
 
 public class MyGdxGameField extends Game {
-	private AndroidLauncher androidLauncher;
 	
+	private AndroidLauncher androidLauncher;
 	private boolean primaryBTGame, secondaryBTGame;
+
 	public MyGdxGameField(boolean primaryBTGame, boolean secondaryBTGame,AndroidLauncher a){
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
@@ -28,7 +21,16 @@ public class MyGdxGameField extends Game {
 	@Override
 	public void create() {
 		//Wenn spiel erstellt wird wollen wir den Screen setzen
-		setScreen(new GameFieldScreen(this,primaryBTGame, secondaryBTGame));
+		setScreen(new GameFieldScreen(false,this,primaryBTGame, secondaryBTGame));
+	}
+	
+	/**
+	 * Wird beim Neustart aufgerufen.
+	 * @param newGame true, wenn neues spiel
+	 */
+	public void create(boolean restart) {
+		//Wenn spiel erstellt wird wollen wir den Screen setzen
+		setScreen(new GameFieldScreen(restart,this,primaryBTGame, secondaryBTGame));
 	}
 
 	@Override
@@ -62,5 +64,5 @@ public class MyGdxGameField extends Game {
 	public AndroidLauncher getAndroidLauncher(){
 		return this.androidLauncher;
 	}
-
+	
 }

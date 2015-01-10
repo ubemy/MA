@@ -6,6 +6,7 @@ import java.io.OutputStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
+import com.ma.schiffeversenken.CameraController;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.BackActivity;
@@ -59,6 +60,7 @@ public class BluetoothConnectedThread extends Thread {
     public static final String BLUETOOTH_ENEMY_FIELD = "_FIELD_";
     public static final String BLUETOOTH_ENEMY_FIELD_RETURN = "_FRETURN_";
     public static final String BLUETOOTH_ENEMY_SHIPS = "_SHIPS_";
+    public static final String BLUETOOTH_NEWGAME = "_NEWGAME_";
     /** Für Notifikationen außerhalb der App*/
     AndroidLauncher androidLauncher;
 	private int FieldMessageCounterToDoDelete;
@@ -157,11 +159,13 @@ public class BluetoothConnectedThread extends Thread {
 	                	String returnShipDestroyedIDs = readMsg.substring(ind);
 	                	
 	                	game.setReturnValues(returnAttackHit, returnShipDestroyed, returnShipDestroyedIDs);
+	                }else if(readMsg.startsWith(BLUETOOTH_NEWGAME)){
+	                	CameraController.changeStateTo(8, false);
 	                }
 	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD_RETURN)){
 	                	game.getFirstFieldPlayer().setFeldUebertragenAntwort(true);
 	                }
-	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD)){      	
+	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD)){
 	                	String jsonPlacedShips=readMsg.substring(BLUETOOTH_ENEMY_FIELD.length());
 	                	//Deserialisierung 
 	                	Json json = new Json();

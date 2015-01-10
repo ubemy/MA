@@ -1324,7 +1324,7 @@ public class Field {
 				
 				
 								
-				Gdx.app.log(GameFieldScreen.LOG, "Anzahl Schiffe auf Feld: "
+				Gdx.app.log(GameFieldScreen.TITLE, "Anzahl Schiffe auf Feld: "
 						+ placedShipUnits.size());
 			}
 			

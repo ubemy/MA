@@ -44,8 +44,7 @@ import com.ma.schiffeversenken.android.model.Player;
 
 public class GameFieldScreen implements Screen {
 
-	public static final String TITLE = "Schiffeversenken";
-	public static final String LOG = "gdxlog";
+	public static final String TITLE = "Schiffeversenken 1.0";
 
 	private TiledMap map;
 	private TiledMapTileLayer mapTileLayer;
@@ -68,12 +67,6 @@ public class GameFieldScreen implements Screen {
 
 	// Spiellogic
 	private Player player;
-	private ArrayList<EntityShip> tilesPlayerShips;
-	private ArrayList<EntityShip> tilesEnemyShips;
-	private Iterator<EntityShip> tileIterator;
-
-	// TEstzwecke
-	private EntityShip ship;
 
 	// Texturen für Schrift und buttons
 	private Stage stage;
@@ -103,19 +96,12 @@ public class GameFieldScreen implements Screen {
 	// Intro Textur
 	private Texture introTexture;
 	private TextureRegion introTextureRegion;
-
 	private CameraController controller;
-
 	private GestureDetector gestureDetector;
-
 	private Texture randTexture;
-
 	private TextureRegion randTextureRegion;
-
 	private TextureRegion randTextureRegionUp;
-
 	private TextureRegion randTextureRegionUpRight;
-
 	private InputMultiplexer inputMultiplexer;
 
 	//Einstellung wie viele Schiffe zu setzensind.
@@ -124,8 +110,10 @@ public class GameFieldScreen implements Screen {
 	private boolean primaryBTGame, secondaryBTGame;
 	private TextButton buttonRestart;
 	private MyGdxGameField parentScreen;
+	private boolean restartGame;
 	
-	public GameFieldScreen(MyGdxGameField parentScreen, boolean primaryBTGame, boolean secondaryBTGame){
+	public GameFieldScreen(boolean restartGame, MyGdxGameField parentScreen, boolean primaryBTGame, boolean secondaryBTGame){
+		this.restartGame=restartGame;
 		this.parentScreen=parentScreen;
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
@@ -133,12 +121,10 @@ public class GameFieldScreen implements Screen {
 		if(parentScreen.getAndroidLauncher()!=null){
 		BluetoothConnectedThread.getInstance().setAndroidLauncher(parentScreen.getAndroidLauncher());
 		}
-
 	}
 	
 	@Override
 	public void show() {
-		Gdx.app.log(LOG, "Hello World");
 		// Tiled Maps,Layer und tileSet laden um diese zu nutzen
 		map = new TmxMapLoader().load("maps/map.tmx");
 		mapTileLayer = (TiledMapTileLayer) map.getLayers().get("0");
@@ -154,7 +140,11 @@ public class GameFieldScreen implements Screen {
 		camera.viewportHeight = h;
 		layerX = mapTileLayer.getWidth() * mapTileLayer.getTileWidth() / 2;
 		layerY = mapTileLayer.getHeight() * mapTileLayer.getTileHeight() / 2;
-		camera.position.set(-layerX, layerY, 0);
+		if(restartGame){
+			camera.position.set(layerX, layerY, 0);			
+		}else{
+			camera.position.set(-layerX, layerY, 0);			
+		}
 		// zoomarichmetik um jede Auflösung zu unterstützen
 		float zoomfaktor = ((0.95f * 1920 / h));
 		camera.zoom = zoomfaktor;
@@ -174,12 +164,12 @@ public class GameFieldScreen implements Screen {
 		// TODO LADEN ERWEITERN
 		loadPlayerData();
 		
-		//TODO CameraController übergeben wie viele Schiffe zu setzen.
+		//Standarteinstellung
 		schiffsEinstellung = new ArrayList<Integer>(4);
-		 schiffsEinstellung.add(4);//0, kreuzer
-		 schiffsEinstellung.add(3);//1,Uboot
-		 schiffsEinstellung.add(2);//2,schlachtschiff
-		 schiffsEinstellung.add(1);//3,Zerstörer
+		schiffsEinstellung.add(4);//0, kreuzer
+		schiffsEinstellung.add(3);//1,Uboot
+		schiffsEinstellung.add(2);//2,schlachtschiff
+		schiffsEinstellung.add(1);//3,Zerstörer
 		// Touch Events
 		controller = new CameraController(camera, layerX, layerY, layerZoom,
 				player,state,schiffsEinstellung);
@@ -358,7 +348,7 @@ public class GameFieldScreen implements Screen {
 		buttonRestart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				parentScreen.create();
+				parentScreen.create(true);
 			}
 		});
 		
@@ -401,7 +391,7 @@ public class GameFieldScreen implements Screen {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			// TODO TEST OB LADEN GEHT
+			// TODO Erweitern
 		} else {
 			System.out
 					.println("Player does not exist. Creating new player ...");
@@ -606,4 +596,5 @@ public class GameFieldScreen implements Screen {
 	public MyGdxGameField getMyGdxGameField(){
 		return this.parentScreen;
 	}
+
 }

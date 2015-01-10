@@ -34,9 +34,7 @@ import com.badlogic.gdx.utils.Base64Coder;
  * 
  * @author Klaus
  */
-public class Player implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+public class Player {
 	private static Game game;
 	private static Field firstField;
 	private static Field secondField;
@@ -49,6 +47,7 @@ public class Player implements Serializable{
 
 	/**
 	 * TODO Make Animation
+	 * @param state 
 	 * @param tileSet
 	 * @param m
 	 * @throws ClassNotFoundException
@@ -68,7 +67,7 @@ public class Player implements Serializable{
 		//Load Preferences on Ki Difficulty
 		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
 		String kiLevel = pref.getString("ki");
-		Gdx.app.log(GameFieldScreen.LOG, "Kilevel: "+kiLevel);
+		Gdx.app.log(GameFieldScreen.TITLE, "Kilevel: "+kiLevel);
 		theKiLevel=-1;
 		if (kiLevel.equals("Einfach")){
 			theKiLevel=1;

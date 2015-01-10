@@ -46,7 +46,7 @@ public class AndroidLauncher extends AndroidApplication {
 		boolean primaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("primaryBTGame").toString());
 		boolean secondaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("secondaryBTGame").toString());
 		
-		initialize(new MyGdxGameField(primaryBTGame, secondaryBTGame,this), cfg);
+		
 		
 		
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
@@ -70,6 +70,9 @@ public class AndroidLauncher extends AndroidApplication {
 	    };
 	    
 		this.registerReceiver(mReceiver, filter);
+		
+		
+		initialize(new MyGdxGameField(primaryBTGame, secondaryBTGame,this), cfg);
 	}
 
 	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

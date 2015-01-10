@@ -122,7 +122,7 @@ public class GameFieldScreen implements Screen {
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
 		//Für Meldungen außerhalb der Anwendung innerhalb BluetoothConnectedThread
-		if(parentScreen.getAndroidLauncher()!=null){
+		if(parentScreen.getAndroidLauncher()!=null&&primaryBTGame||secondaryBTGame){
 		BluetoothConnectedThread.getInstance().setAndroidLauncher(parentScreen.getAndroidLauncher());
 		}
 	}

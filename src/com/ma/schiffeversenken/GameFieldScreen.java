@@ -318,7 +318,9 @@ public class GameFieldScreen implements Screen {
 						}
 
 						//DEBUG
+						if(!primaryBTGame&&!secondaryBTGame){
 						player.getGame().getFirstFieldPlayer().serialisierungstestLocal(player.getGame());
+						}
 						
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();

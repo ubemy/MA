@@ -11,6 +11,9 @@ import com.ma.schiffeversenken.android.model.*;
 * @author Maik Steinborn
 */
 public class KI {
+	public static final String KI_SIMPLE = "Einfach";
+	public static final String KI_NORMAL = "Mittel";
+	public static final String KI_DIFFICULT = "Schwer";
 	/**Anzahl der Angriffe, die in der History gespeichert werden*/
 	public static final int NUMBER_OF_HISTORY = 6;
 	/**Das Spielfeld der KI*/

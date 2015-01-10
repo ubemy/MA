@@ -9,31 +9,36 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ma.schiffeversenken.android.view.StartScreen" >
 
-    <Button
-        android:id="@+id/Start_Spiel_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="78dp"
-        android:text="@string/button_text_start_game" />
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true" >
+            
+	    <Button
+	        android:id="@+id/Start_Spiel_Button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:clickable="true"
+	        android:text="@string/button_text_start_game" />
+	
+	    <Button
+	        android:id="@+id/Einstellungen_Button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/Start_Spiel_Button"
+	        android:clickable="true"
+	        android:text="@string/button_text_settings" />
+	
+	    <Button
+	        android:id="@+id/Hilfe_Button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/Einstellungen_Button"
+	        android:clickable="true"
+	        android:text="@string/button_text_help" />
 
-    <Button
-        android:id="@+id/Einstellungen_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Start_Spiel_Button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:text="@string/button_text_settings" />
-
-    <Button
-        android:id="@+id/Hilfe_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Einstellungen_Button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
-        android:text="@string/button_text_help" />
-
+    </RelativeLayout>
+    
 </RelativeLayout>

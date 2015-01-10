@@ -11,6 +11,7 @@ import java.util.Iterator;
 
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.controller.Game;
+import com.ma.schiffeversenken.android.controller.KI;
 import com.ma.schiffeversenken.android.view.Settings;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -71,11 +72,11 @@ public class Player {
 		String kiLevel = pref.getString("ki");
 		Gdx.app.log(GameFieldScreen.TITLE, "Kilevel: "+kiLevel);
 		theKiLevel=-1;
-		if (kiLevel.equals("Einfach")){
+		if (kiLevel.equals(KI.KI_SIMPLE)){
 			theKiLevel=1;
-		}else if (kiLevel.equals("Mittel")){
+		}else if (kiLevel.equals(KI.KI_NORMAL)){
 			theKiLevel=2;
-		}else if (kiLevel.equals("Schwer")){
+		}else if (kiLevel.equals(KI.KI_DIFFICULT)){
 			theKiLevel=3;
 		}
 

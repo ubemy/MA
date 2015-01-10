@@ -75,5 +75,9 @@
     <string name="button_text_start_game">Spiel starten</string>
     <string name="button_text_settings">Einstellungen</string>
     <string name="button_text_help">Hilfe</string>
+    <string name="title_activity_back">BackActivity</string>
+    <string name="button_text_back">Zurück</string>
+    <string name="settings_soundOff">soundOff</string>
+    <string name="settings_vibrationOff">vibrationOff</string>
     
 </resources>

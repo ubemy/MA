@@ -6,11 +6,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 /**
  * Android Activity zur Auswahl folgender Optionen:
@@ -23,13 +26,12 @@ public class StartScreen extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_startscreen);
 		
-		Button startSpielButton=null, einstellungenButton=null, hilfeButton=null;
 		try{
 			
-			createButtons(startSpielButton, R.id.Start_Spiel_Button, "Spiel starten", GameMode.class);
-			createButtons(einstellungenButton, R.id.Einstellungen_Button, "Einstellungen", Settings.class);
-			createButtons(hilfeButton, R.id.Hilfe_Button, "Hilfe", Help.class);
-			//testButton();
+			createButtons(R.id.Start_Spiel_Button, GameMode.class);
+			createButtons(R.id.Einstellungen_Button, Settings.class);
+			createButtons(R.id.Hilfe_Button, Help.class);
+			
 			SharedPreferences sp = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);
 			Editor editor = sp.edit();
 			editor.putString("lautlos", "false");
@@ -41,14 +43,19 @@ public class StartScreen extends Activity {
 		}
 	}
 	
-	private <E> void createButtons(Button button, int id, String text, final Class<E> c){
+	private <E> void createButtons(int id, final Class<E> c){
 		/*
 		 * Buttons erstellen
 		 */
-		Button startSpielButton = (Button) findViewById(id);
-		startSpielButton.setText(text);
-		startSpielButton.setOnClickListener(new View.OnClickListener() {
-			
+		Point p = new Point();
+		getWindowManager().getDefaultDisplay().getSize(p);
+		int buttonWidth = p.x / 2;
+		
+		Button button = (Button) findViewById(id);
+		RelativeLayout.LayoutParams lParams = (android.widget.RelativeLayout.LayoutParams) button.getLayoutParams();
+		lParams.width = buttonWidth;
+		
+		button.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
 				try{

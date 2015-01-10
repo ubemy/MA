@@ -4,16 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
+import com.ma.schiffeversenken.android.controller.KI;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 public class StartGame extends Activity {
 
@@ -21,16 +24,11 @@ public class StartGame extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start_game);
-		
-		Button einfach=null, mittel=null, schwer=null;
-		
+				
 		try{
-			
-			createButtons(einfach, R.id.button_ki_einfach, getString(R.string.ki_simple), AndroidLauncher.class);
-			createButtons(mittel, R.id.button_ki_normal, getString(R.string.ki_normal), AndroidLauncher.class);
-			createButtons(schwer, R.id.button_ki_schwer, getString(R.string.ki_difficult), AndroidLauncher.class);
-			//testButton();
-
+			createButtons(R.id.button_ki_einfach, KI.KI_SIMPLE, AndroidLauncher.class);
+			createButtons(R.id.button_ki_normal, KI.KI_NORMAL, AndroidLauncher.class);
+			createButtons(R.id.button_ki_schwer, KI.KI_DIFFICULT, AndroidLauncher.class);
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
@@ -56,20 +54,25 @@ public class StartGame extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private <E> void createButtons(Button button, int id, final String text, final Class <E> c){
+	private <E> void createButtons(int id, final String kiDifficulty, final Class <E> c){
 		/*
 		 * Buttons erstellen
 		 */
-		Button startSpielButton = (Button) findViewById(id);
-		startSpielButton.setText(text);
-		startSpielButton.setOnClickListener(new View.OnClickListener() {
-			
+		Point p = new Point();
+		getWindowManager().getDefaultDisplay().getSize(p);
+		int buttonWidth = p.x / 2;
+		
+		Button button = (Button) findViewById(id);
+		RelativeLayout.LayoutParams lParams = (android.widget.RelativeLayout.LayoutParams) button.getLayoutParams();
+		lParams.width = buttonWidth;
+		
+		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				try{
 					SharedPreferences sp = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);
 					Editor editor = sp.edit();
-					editor.putString("ki", text);
+					editor.putString("ki", kiDifficulty);
 					editor.apply();
 				
 					Intent intent = new Intent(StartGame.this, c);

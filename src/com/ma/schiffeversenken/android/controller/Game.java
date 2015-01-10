@@ -487,34 +487,6 @@ public class Game extends Thread {
 	 */
 	@Override
 	public void run() {
-		//TODO Fertigstellen von Feld Übertragen.
-		//Warten auf Antwort ob eigenes Feld angekommen beim Gegner
-		if((primaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
-//			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
-			while(!getFirstFieldPlayer().getFeldUebertragenAntwort()){
-				try {
-					Thread.sleep(FIVEHUNDRED_MS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				}
-			}
-			getFirstFieldPlayer().setFeldUebertragen(true);
-		}
-		//Warten auf Antwort ob eigenes Feld angekommen beim Gegner
-		if((secondaryBTGame)&&!getFirstFieldPlayer().getFeldUebertragen()){
-//			getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
-			while(!getFirstFieldPlayer().getFeldUebertragenAntwort()){
-				try {
-					Thread.sleep(FIVEHUNDRED_MS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				}
-			}
-			getFirstFieldPlayer().setFeldUebertragen(true);
-		}
-		
-		
-		
 		end = false;
 		boolean hitShip = false;
 		//gamersTurn = (new Random()).nextInt(2);
@@ -608,7 +580,8 @@ public class Game extends Thread {
 			}
 		}while(!end);
 		
-			//Neustart Kameramodus, auch beim Bluetooth Gegner.
+		//Neustart Kameramodus, auch beim Bluetooth Gegner.
+		//TODO Maik fragen wer den server macht und wo das Game läuft.
 		CameraController.changeStateTo(1, false, false);
 		CameraController.changeStateTo(8, false, true);
 		if(primaryBTGame||secondaryBTGame){	

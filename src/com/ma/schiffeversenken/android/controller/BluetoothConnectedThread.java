@@ -160,7 +160,8 @@ public class BluetoothConnectedThread extends Thread {
 	                	
 	                	game.setReturnValues(returnAttackHit, returnShipDestroyed, returnShipDestroyedIDs);
 	                }else if(readMsg.startsWith(BLUETOOTH_NEWGAME)){
-	                	CameraController.changeStateTo(8, false,true);
+	                	CameraController.changeStateTo(1, false, false);
+	            		CameraController.changeStateTo(8, false, true);
 	                }
 	                else if(readMsg.startsWith(BLUETOOTH_ENEMY_FIELD_RETURN)){
 	                	game.getFirstFieldPlayer().setFeldUebertragenAntwort(true);

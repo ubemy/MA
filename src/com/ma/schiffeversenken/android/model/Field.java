@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -36,6 +38,10 @@ public class Field {
 	public static final int EDGE_BELOW = 3;
 	/** Anzahl der Feldelement */
 	public static final int FIELD_SIZE = 100;
+	public static final String SHOT_SOUND_PATH = "sounds/Shot.mp3";
+	public static final String EXPLOSION_SOUND_PATH = "sounds/Explosion.mp3";
+	Sound explosionSound, shotSound;
+	Music explosionMusic, shotMusic;
 	
 	/**
 	 * einheiten = Das Spielfeld besteht aus 10x10 Einheiten einheiten[y-Achse
@@ -112,6 +118,10 @@ public class Field {
 			this.allShipsSet = false;
 			this.feldUebertragen=false;
 			this.feldUebertragenAntwort=false;
+			this.explosionSound = Gdx.audio.newSound(Gdx.files.internal(EXPLOSION_SOUND_PATH));
+			this.explosionMusic = Gdx.audio.newMusic(Gdx.files.internal(EXPLOSION_SOUND_PATH));
+			this.shotSound = Gdx.audio.newSound(Gdx.files.internal(SHOT_SOUND_PATH));
+			this.shotMusic = Gdx.audio.newMusic(Gdx.files.internal(SHOT_SOUND_PATH));
 			drawShips = new ArrayList<EntityShip>();
 			getShipTileSetTextures(shipTextures);
 			create();
@@ -631,6 +641,10 @@ public class Field {
 													units[i][j].getYpos(), size, size);
 											units[i][j].setAnimationtimer(units[i][j]
 													.getAnimationtimer() + 1);
+											
+											if(units[i][j].getAnimationtimer() == 1){
+												shotSound.play();
+											}
 										} else if (units[i][j].getAnimationtimer() < animationtimerMax
 												+ animationtimerMax) {// Nach animation
 																		// Wasserattacke
@@ -653,6 +667,10 @@ public class Field {
 													units[i][j].getYpos(), size, size);
 											units[i][j].setAnimationtimer(units[i][j]
 													.getAnimationtimer() + 1);
+											
+											if(units[i][j].getAnimationtimer() == 1){
+												explosionSound.play();
+											}
 										}
 									}
 								} else {// Wenn Feld nicht angegriffen
@@ -685,6 +703,10 @@ public class Field {
 										units[i][j].getYpos(), size, size);
 								units[i][j].setAnimationtimer(units[i][j]
 										.getAnimationtimer() + 1);
+								
+								if(units[i][j].getAnimationtimer() == 1){
+									shotSound.play();
+								}
 							} else if (units[i][j].getAnimationtimer() < animationtimerMax
 									+ animationtimerMax) {// Nach animation
 															// Wasserattacke
@@ -706,6 +728,10 @@ public class Field {
 										units[i][j].getYpos(), size, size);
 								units[i][j].setAnimationtimer(units[i][j]
 										.getAnimationtimer() + 1);
+								
+								if(units[i][j].getAnimationtimer() == 1){
+									explosionSound.play();
+								}
 							}
 						}
 					} else {// Wenn Feld nicht angegriffen

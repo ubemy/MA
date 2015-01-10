@@ -28,8 +28,6 @@ public class KI {
 	private boolean[] shipDestroyedHistory = new boolean[NUMBER_OF_HISTORY];
 	/**Strategie bzw. Schwierigkeitsstufe der KI*/
 	KIStrategy kiStrategy;
-	/**Wird bei einem JUnit Test auf True gesetzt*/
-	public static boolean jUnitTest = false;
 	
 	/**
 	 * Erstellt ein neues KI Objekt
@@ -133,13 +131,12 @@ public class KI {
 		return ships;
 	}
 	
-	public ShipPlacement sp = new ShipPlacement(); //Nur zu Testzwecken als globale Variable
-	
 	/**
 	* Schiffe auf dem Spielfeld der KI platzieren
 	* @param ships Die Schiffe, die platziert werden
 	*/
 	private void setShips(Ship[] ships){
+		ShipPlacement sp = new ShipPlacement();
 		sp = new ShipPlacement();
 		sp.placeShips(myField, ships);
 	}

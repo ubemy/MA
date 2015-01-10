@@ -14,6 +14,8 @@ import com.ma.schiffeversenken.android.model.*;
 public class ShipPlacement {
 	/** Anzahl der Bloecke */
 	public static final int NUMBER_OF_BLOCKS = 25;
+	/**Wird bei einem JUnit Test auf True gesetzt*/
+	public static boolean jUnitTest = false;
 	
 	/**
 	 * Das Spielfeld wird in 25 Bloecke aufgeteilt. Die Bloecke werden in dieser
@@ -92,10 +94,10 @@ public class ShipPlacement {
 			}
 		}
 
-		
+		if(!jUnitTest){
 			// Setzen von ships
 			field.setShips(ships);
-		
+		}
 	}
 
 	/**

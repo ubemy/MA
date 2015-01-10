@@ -516,7 +516,7 @@ public class GameFieldScreen implements Screen {
 			if(player.getGame().getGamersTurn()==0){
 				MapObject object = map.getLayers().get("GameField").getObjects().get("arrow");
 				Polygon pfeil = ((PolygonMapObject) object).getPolygon();
-				sr.setColor(Color.MAGENTA);
+				sr.setColor(Color.RED);
 				sr.begin(ShapeType.Line);
 				sr.polygon(pfeil.getTransformedVertices());
 				sr.end();

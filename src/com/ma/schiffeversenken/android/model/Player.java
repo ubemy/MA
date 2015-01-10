@@ -353,7 +353,8 @@ public class Player {
 	      catch ( InterruptedException e )
 	      {
 	       System.out.println( "Unterbrechung in sleep()" );
+	       this.game=game2;
 	      }
-		this.game=game2;
+		
 	}
 }

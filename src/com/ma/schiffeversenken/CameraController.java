@@ -317,10 +317,10 @@ public class CameraController implements GestureListener {
 		} else if (state.get(0)) {
 			camera.position.x = layerX;
 			// State Wechsel
-			changeStateTo(1, false);
+			changeStateTo(1, false,false);
 		}
 		// 1=FullView
-		if (state.get(1)||state.get(8)) {
+		if (state.get(1)) {
 			if (camera.position.x > layerX) {
 				camera.position.x -= 20f;
 				if (camera.position.x < layerX)
@@ -498,32 +498,37 @@ public class CameraController implements GestureListener {
 	 * @param grid
 	 *            Boolean der im jeweiligen Zustand den Grid Zustand mit
 	 *            aktiviert.
+	 * @param changeOneValueOf Den Zustand von einem Eintrag umkehren.
 	 */
-	public static void changeStateTo(int toStateNumber, boolean grid) {
-		for (int i = 0; i < state.size(); i++) {
-			if (i == toStateNumber) {
-				state.set(i, true);
-				if (grid) {
-					if (toStateNumber == 2) {
-						state.set(5, true);
-						state.set(6, false);
-						state.set(7, false);
+	public static void changeStateTo(int toStateNumber, boolean grid, boolean changeOneValueOf) {
+		if(changeOneValueOf){
+			state.set(toStateNumber, !state.get(toStateNumber));
+		}else{
+			for (int i = 0; i < state.size(); i++) {
+				if (i == toStateNumber) {
+					state.set(i, true);
+					if (grid) {
+						if (toStateNumber == 2) {
+							state.set(5, true);
+							state.set(6, false);
+							state.set(7, false);
+						}
+						if (toStateNumber == 3) {
+							state.set(5, false);
+							state.set(6, true);
+							state.set(7, false);
+						}
+						if (toStateNumber == 4) {
+							state.set(5, false);
+							state.set(6, false);
+							state.set(7, true);
+						}
 					}
-					if (toStateNumber == 3) {
-						state.set(5, false);
-						state.set(6, true);
-						state.set(7, false);
-					}
-					if (toStateNumber == 4) {
-						state.set(5, false);
-						state.set(6, false);
-						state.set(7, true);
-					}
+				} else {
+					if (grid && (i == 5 || i == 6 || i == 7))
+						continue;
+					state.set(i, false);
 				}
-			} else {
-				if (grid && (i == 5 || i == 6 || i == 7))
-					continue;
-				state.set(i, false);
 			}
 		}
 	}

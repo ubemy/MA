@@ -1,10 +1,8 @@
 package com.ma.schiffeversenken.android.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.ma.schiffeversenken.CameraController;
 import com.ma.schiffeversenken.android.model.*;
 
@@ -341,8 +339,7 @@ public class Game extends Thread {
 							e.printStackTrace();
 						}
 					}
-			
-					
+
 					ret = returnAttackHit;
 					destroyShip(fe);//Ob Schiff komplett zerstört
 					shipDestroyed = returnShipDestroyed;
@@ -610,11 +607,13 @@ public class Game extends Thread {
 				end = true;
 			}
 		}while(!end);
-		//Neustart Kameramodus, auch beim Bluetooth Gegner.
-		CameraController.changeStateTo(8, false);
+		
+			//Neustart Kameramodus, auch beim Bluetooth Gegner.
+		CameraController.changeStateTo(1, false, false);
+		CameraController.changeStateTo(8, false, true);
 		if(primaryBTGame||secondaryBTGame){	
-		byte[] bytes = BluetoothConnectedThread.BLUETOOTH_NEWGAME.getBytes();
-		btConnectedThread.write(bytes);
+			byte[] bytes = BluetoothConnectedThread.BLUETOOTH_NEWGAME.getBytes();
+			btConnectedThread.write(bytes);
 		}
 	}
 

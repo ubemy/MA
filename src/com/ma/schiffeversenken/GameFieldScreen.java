@@ -40,6 +40,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.BackActivity;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
+import com.ma.schiffeversenken.android.controller.Game;
+import com.ma.schiffeversenken.android.model.Field;
 import com.ma.schiffeversenken.android.model.Player;
 
 public class GameFieldScreen implements Screen {
@@ -259,7 +261,7 @@ public class GameFieldScreen implements Screen {
 					player.getGame().getFirstFieldPlayer().resetField();//Spielfeld zurücksetzen
 					controller.setShipPlaceHelper(schiffsEinstellung);
 				}
-				CameraController.changeStateTo(3, true);
+				CameraController.changeStateTo(3, true,false);
 				table.clear();
 				table.add(heading).colspan(5);
 				table.row();
@@ -298,7 +300,6 @@ public class GameFieldScreen implements Screen {
 				Gdx.input.setInputProcessor(gestureDetector);
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
-
 						//Setzen der Schiffe und Starten.
 						//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
 						if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
@@ -316,9 +317,12 @@ public class GameFieldScreen implements Screen {
 						player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
 						}
 
+						//DEBUG
+						player.getGame().getFirstFieldPlayer().serialisierungstestLocal(player.getGame());
+						
 						//TODO Optimieren für BLuetooth
 						player.getGame().start();
-						CameraController.changeStateTo(2, false);
+						CameraController.changeStateTo(2, false,false);
 					}else{
 						//Setzen der Schiffe und Starten.
 						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
@@ -334,9 +338,8 @@ public class GameFieldScreen implements Screen {
 							player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
 						}
 						
-						//TODO Optimieren für BLuetooth
 						player.getGame().start();
-						CameraController.changeStateTo(2, false);
+						CameraController.changeStateTo(2, false,false);
 					}
 				}
 
@@ -348,11 +351,10 @@ public class GameFieldScreen implements Screen {
 		buttonRestart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				loadPlayerData();				
 				parentScreen.create(true);
 			}
 		});
-		
-
 		
 		// Hinzufügen vom Elementen zur Tabelle Start
 //		table.center();
@@ -460,26 +462,7 @@ public class GameFieldScreen implements Screen {
 		batch.draw(introTextureRegion, layerX * 2 * 2, layerY * 2 * 2);
 		batch.end();
 
-		//Wenn Spiel zu ende ist soll State 1 und Text mit Btton aktiv werden.
-		if(state.get(8)){
-			System.out.println("State 8");
-			table.clear();
-			table.add(heading).colspan(5);
-			table.row();
-			table.add().minWidth(w*0.01f);
-			table.add(buttonRestart).minWidth(w*0.3f).minHeight(w*0.1f);
-			table.add().minWidth(w*0.01f);
-			
-			table2.clear();
-			table2.setBounds(0, 0, w, h*1.68f);
-			table2.add(new Label("Ende",headingStyle)).colspan(3);
-			table2.row();
-			table2.add(new Label("Du hast "+((player.getGame().hasSomebodyWon()==1)?"gewonnen!":"leider verloren."),headingStyle)).colspan(3);
-			table2.row();
-			table2.add(new Label("Drücke Neustart für ein neues Spiel.",headingStyle)).colspan(3);
-			Gdx.input.setInputProcessor(inputMultiplexer);
-			CameraController.changeStateTo(1, false);
-		}
+
 		
 		
 		// Spielfelder
@@ -526,9 +509,29 @@ public class GameFieldScreen implements Screen {
 			}
 		}
 
-		
-		//InputProzessor
-		if(state.get(1)||state.get(3)||state.get(8)){
+
+		//Menue
+		if(state.get(1)||state.get(3)){
+			//Wenn Spiel zu ende ist soll State 1 und Text mit Btton aktiv werden.
+			if(state.get(8)){
+				System.out.println("State 8");
+				table.clear();
+				table.add(heading).colspan(5);
+				table.row();
+				table.add().minWidth(w*0.01f);
+				table.add(buttonRestart).minWidth(w*0.3f).minHeight(w*0.1f);
+				table.add().minWidth(w*0.01f);
+				
+				table2.clear();
+				table2.setBounds(0, 0, w, h*1.68f);
+				table2.add(new Label("Ende",headingStyle)).colspan(3);
+				table2.row();
+				table2.add(new Label("Du hast "+((player.getGame().hasSomebodyWon()==1)?"gewonnen!":"leider verloren."),headingStyle)).colspan(3);
+				table2.row();
+				table2.add(new Label("Drücke Neustart für ein neues Spiel.",headingStyle)).colspan(3);
+				Gdx.input.setInputProcessor(inputMultiplexer);
+				CameraController.changeStateTo(8, false,true);
+			}
 			stage.act(delta);
 			stage.draw();
 		}

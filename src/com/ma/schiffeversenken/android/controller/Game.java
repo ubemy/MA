@@ -531,7 +531,6 @@ public class Game extends Thread {
 					while(!firstGamerAction){
 						if(hasSomebodyWon() != 0){
 							end = true;
-							CameraController.changeStateTo(8, false);
 							firstGamerAction=!firstGamerAction;
 						}
 						try {
@@ -541,8 +540,12 @@ public class Game extends Thread {
 							e.printStackTrace();
 						}
 					}
-					if(!end)
+					if(!end){
 					hitShip = gamerAction(firstGamerAttackID, gamersTurn);
+					}else{
+						CameraController.changeStateTo(8, false);
+						break;
+					}
 				}while(hitShip || feWasAlreadyAttacked);
 				gamersTurn++;
 			}
@@ -553,7 +556,6 @@ public class Game extends Thread {
 						feWasAlreadyAttacked = false;
 						if(hasSomebodyWon() != 0){
 							end = true;
-							CameraController.changeStateTo(8, false);
 							firstGamerAction=!firstGamerAction;
 						}
 						/*
@@ -566,8 +568,12 @@ public class Game extends Thread {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						if(!end)
+						if(!end){
 						hitShip = gamerAction(ki.attack(), gamersTurn);
+						}else{
+							CameraController.changeStateTo(8, false);
+							break;
+						}
 					}while(hitShip || feWasAlreadyAttacked);
 				}
 				else{
@@ -581,7 +587,6 @@ public class Game extends Thread {
 						while(!secondGamerAction){
 							if(hasSomebodyWon() != 0){
 								end = true;
-								CameraController.changeStateTo(8, false);
 								secondGamerAction=!secondGamerAction;
 							}
 							try {
@@ -591,8 +596,12 @@ public class Game extends Thread {
 								e.printStackTrace();
 							}
 						}
-						if(!end)
+						if(!end){
 						hitShip = gamerAction(secondGamerAttackID, gamersTurn);
+						}else{
+							CameraController.changeStateTo(8, false);
+							break;
+						}
 					}while(hitShip || feWasAlreadyAttacked);
 				}
 				gamersTurn = 0;
@@ -602,7 +611,6 @@ public class Game extends Thread {
 				if(hasEnemyWon()){
 					end = true;
 					CameraController.changeStateTo(8, false);
-					
 				}
 			}
 			else if(hasSomebodyWon() != 0){

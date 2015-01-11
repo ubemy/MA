@@ -10,29 +10,28 @@
     tools:context="com.ma.schiffeversenken.android.view.Settings" >
 
     <CheckBox
-        android:id="@+id/Lautlos_Checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="120dp"
-        android:text="@string/button_text_mute" />
-
-    <CheckBox
         android:id="@+id/Vibration_aus_Checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/Lautlos_Checkbox"
-        android:layout_below="@+id/Lautlos_Checkbox"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:text="@string/button_text_vibration_off" />
-    
+
+    <CheckBox
+        android:id="@+id/Lautlos_Checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Vibration_aus_Checkbox"
+        android:layout_alignLeft="@+id/Vibration_aus_Checkbox"
+        android:text="@string/button_text_mute" />
+
     <CheckBox
         android:id="@+id/Cheats_Enabled_Checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/Vibration_aus_Checkbox"
         android:layout_below="@+id/Vibration_aus_Checkbox"
-        android:text="@string/button_text_cheats_checkbox" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/button_text_cheats_checkbox"
+        android:visibility="invisible" />
 
 </RelativeLayout>

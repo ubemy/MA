@@ -19,7 +19,7 @@ public class Game extends Thread {
 	/**Mehrspielermodus*/
 	private final static int GAME_MODE_MULTI_PLAYER = 1;
 	/**500 millisekunden*/
-	private final static int FIVEHUNDRED_MS = 500;
+	public final static int FIVEHUNDRED_MS = 500;
 	/**1000 millisekunden*/
 	private final static int THOUSAND_MS = 1000;
 	/**50 millisekunden*/

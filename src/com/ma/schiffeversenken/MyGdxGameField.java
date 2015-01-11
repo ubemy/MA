@@ -1,7 +1,15 @@
 package com.ma.schiffeversenken;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.SharedPreferences;
+
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.ma.schiffeversenken.android.AndroidLauncher;
+import com.ma.schiffeversenken.android.model.Field;
+import com.ma.schiffeversenken.android.view.Settings;
+import com.ma.schiffeversenken.android.view.StartScreen;
 
 /**
  * Klasse Handelt die Game Screens.
@@ -11,7 +19,7 @@ import com.ma.schiffeversenken.android.AndroidLauncher;
 public class MyGdxGameField extends Game {
 	
 	private AndroidLauncher androidLauncher;
-	private boolean primaryBTGame, secondaryBTGame;
+	private boolean primaryBTGame, secondaryBTGame,wasBluetoothEnabledBevore;
 
 	public MyGdxGameField(boolean primaryBTGame, boolean secondaryBTGame,AndroidLauncher a){
 		this.primaryBTGame = primaryBTGame;
@@ -40,6 +48,15 @@ public class MyGdxGameField extends Game {
 
 	@Override
 	public void dispose() {
+		//Disable bluetooth when multiplayer
+		if(primaryBTGame||secondaryBTGame){
+			Preferences pref = Gdx.app.getPreferences("Main_Preferences");
+			boolean wasBluetoothEnabledBevore = Boolean.parseBoolean(pref.getString(StartScreen.SETTINGS_BLUETOOTHWASACTIVATEDBEVORE));
+			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();    
+			if (mBluetoothAdapter.isEnabled() && !wasBluetoothEnabledBevore) {
+			    mBluetoothAdapter.disable(); 
+			} 
+		}
 		super.dispose();
 	}
 

@@ -26,7 +26,7 @@ import com.ma.schiffeversenken.android.view.BackActivity;
  * @author Klaus Schlender
  */
 public class AndroidLauncher extends AndroidApplication {
-	public  NotificationManager nManager;
+
 	
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -40,9 +40,7 @@ public class AndroidLauncher extends AndroidApplication {
 		cfg.useImmersiveMode=false;
 		cfg.useWakelock=false;
 		
-		//Um den Spieler zum laufenden Spiel zu bringen.
-		nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationToUser("Viel Spaﬂ beim spielen, Anwendung l‰uft.",this,this.getClass(),BackActivity.class, nManager,1234567);
+
 		
 		boolean primaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("primaryBTGame").toString());
 		boolean secondaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("secondaryBTGame").toString());
@@ -134,9 +132,4 @@ public class AndroidLauncher extends AndroidApplication {
 		//zum beenden der Notification
 	//	mNotificationManager.cancel(mId);
 	}
-
-	public NotificationManager getNotificationManager() {
-		return nManager;
-	}
-
 }

@@ -1,21 +1,23 @@
 package com.ma.schiffeversenken.android.view;
 
 
+import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
@@ -26,8 +28,12 @@ import android.widget.RelativeLayout;
  * @author Klaus Schlender
  */
 public class StartScreen extends Activity {
+	
+	private static final int NONE = -1;
 	public static final String SETTINGS_BUTTONWIDTH = "buttonwidth";
 	public static final String SETTINGS_BUTTONHEIGHT = "buttonheight";
+	public static final String SETTINGS_BLUETOOTHWASACTIVATEDBEVORE = "bluetoothwasactive";
+	public  NotificationManager nManager;
 	private int buttonWidth;
 
 	@Override
@@ -36,6 +42,17 @@ public class StartScreen extends Activity {
 		setContentView(R.layout.activity_startscreen);
 		
 		try{
+			//Um den Spieler über laufendes Spiel zu berichten.
+			nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			AndroidLauncher.notificationToUser("Viel Spaß beim spielen, Anwendung läuft.",this,this.getClass(),BackActivity.class, nManager,1234567);
+			
+			//Bluetooth abfragen ob schon vorher Aktiv.
+			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();    
+			if (mBluetoothAdapter.isEnabled()){
+				setSharedPreferences(SETTINGS_BLUETOOTHWASACTIVATEDBEVORE, String.valueOf(true));
+			}else{
+				setSharedPreferences(SETTINGS_BLUETOOTHWASACTIVATEDBEVORE, String.valueOf(false));
+			}
 			//Button Breite global setzen.
 			Point p = new Point();
 			getWindowManager().getDefaultDisplay().getSize(p);
@@ -54,13 +71,9 @@ public class StartScreen extends Activity {
 			lParams.width = buttonWidth;
 			exitButton.setOnClickListener(new OnClickListener() {
 				
-		        @Override
-		        public void onClick(View v) {
-		        	//Schließen von offenen Meldungen der App und endgültiges Beenden.
-		        	NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		        	nManager.cancelAll();
-		            finish();
-		            System.exit(0);
+				@Override
+		        public void onClick(View v) {				
+					handleBeenden();
 		        }
 		    });
 			
@@ -76,6 +89,24 @@ public class StartScreen extends Activity {
 		}
 	}
 	
+	/**
+	 * Methode beendet die Applikation
+	 */
+	protected void handleBeenden() {
+    	//Schließen von offenen Meldungen der App und endgültiges Beenden.
+    	NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    	nManager.cancelAll();
+		//Disable bluetooth
+    	SharedPreferences pref = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);
+    	boolean wasBluetoothEnabledBevore = Boolean.parseBoolean(pref.getString(SETTINGS_BLUETOOTHWASACTIVATEDBEVORE, null));
+		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();    
+		if (mBluetoothAdapter.isEnabled() && !wasBluetoothEnabledBevore) {
+		    mBluetoothAdapter.disable(); 
+		} 
+        finish();
+        System.exit(0);
+	}
+
 	private <E> void createButtons(int id, final Class<E> c, int bwidth){
 		/*
 		 * Buttons erstellen
@@ -128,5 +159,15 @@ public class StartScreen extends Activity {
 		Editor editor = sp.edit();
 		editor.putString(name, value);
 		editor.apply();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	    	setResult(NONE, getIntent());
+	        handleBeenden();
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 }

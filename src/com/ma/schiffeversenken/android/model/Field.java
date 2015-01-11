@@ -1102,10 +1102,10 @@ public class Field {
 		/**
 		 * Methode erstellt die Schiffe aus den
 		 * Json Daten in ShipsDescriptor.
-		 * TODO Optimieren und Schiffsteilegrafiken überprüfen
-		 * @return desc ShipsDescriptor
+		 * 
+		 * @return boolean Gibt true zurück bei Erfolg.
 		 */
-		public void replaceOldFieldPlacedShips(Field field){
+		public boolean replaceOldFieldPlacedShips(Field field){
 			//Hilfsvariablen
 			String shipBack ="dvk";
 			String shipMiddle ="dvk";
@@ -1266,6 +1266,12 @@ public class Field {
 			}		
 			// Die neuen Schiffe platzieren
 			field.setManualNewShipplacement(placedShipUnits);
+			
+			if(field.getShips().length==shipsPlaced.size()){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package com.ma.schiffeversenken;
 
 import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -321,22 +322,15 @@ public class GameFieldScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {					
 				Gdx.input.setInputProcessor(gestureDetector);
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
-					if(player.getGame().getFirstFieldPlayer().isAllShipsSet() || primaryBTGame || secondaryBTGame){
-						//Setzen der Schiffe und Starten.
-						//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
-						if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
-							player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
-						}
-						player.getGame().start();
+					//Setzen der Schiffe und Starten.
+					//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
+					if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
+						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 					}else{
 						//Setzen der Schiffe und Starten.
-						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);			
-						player.getGame().start();
+						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
 					}
-					
-					if(primaryBTGame||secondaryBTGame){
-					player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
-					}
+
 					//Resetten vom ShipPlaceHelper im CameraController
 					ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
 					tmpEmptyShipList.add(0);
@@ -344,7 +338,22 @@ public class GameFieldScreen implements Screen {
 					tmpEmptyShipList.add(0);
 					tmpEmptyShipList.add(0);
 					controller.setShipPlaceHelper(tmpEmptyShipList);
-					CameraController.changeStateTo(2, false,false);
+					
+					if(primaryBTGame||secondaryBTGame){
+						do{
+						//Feldübertragen erneut versuchen bei Fehlschlag.
+						try {
+							player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+							Thread.sleep(Game.FIVEHUNDRED_MS);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						}while(!player.getGame().getFirstFieldPlayer().getFeldUebertragenAntwort());
+						CameraController.changeStateTo(2, false,false);
+					}else{//Singleplayer
+						CameraController.changeStateTo(2, false,false);
+					}
+					player.getGame().start();
 				}
 			}
 		});
@@ -596,7 +605,6 @@ public class GameFieldScreen implements Screen {
 		// } catch (IOException e) {
 		// e.printStackTrace();
 		// }
-
 		atlas.dispose();
 		player.dispose();// TODO Rekursiv alle texturen
 		batch.dispose();

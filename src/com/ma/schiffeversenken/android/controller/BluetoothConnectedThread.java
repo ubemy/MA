@@ -173,11 +173,13 @@ public class BluetoothConnectedThread extends Thread {
 	            		ShipsDescriptor desc = json.fromJson(ShipsDescriptor.class, jsonPlacedShips);
 	            		
 	            		//Feld resetten und Schiffe aus Json Generieren und Platzieren.
-	            		desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());
+	            		boolean erfolgreich = desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());
 	                	
 	                	//Return Schreiben
+	            		if(erfolgreich){
 						byte[] fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD_RETURN).getBytes();
 						write(fieldBytes);
+	            		}
 
 //	                	//TODO Erste gehversuche:
 //	                	if(readMsg.equals(BLUETOOTH_ENEMY_FIELD+BLUETOOTH_ENEMY_FIELD)){

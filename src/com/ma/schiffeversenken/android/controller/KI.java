@@ -50,9 +50,9 @@ public class KI {
 		}
 		else if(difficultyLevel == 3){
 			this.kiStrategy = new DifficultStrategy(this);
-		//TODO Remove -1, its only to run Test on Desktop
+		//-1, its only to run Test on Desktop
 		}else if(difficultyLevel == -1){
-			this.kiStrategy = new SimpleStrategy(this);
+			this.kiStrategy = new DifficultStrategy(this);
 		}
 		
 		if(!loadedGame){//myField hat schon Schiffe

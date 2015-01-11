@@ -13,6 +13,7 @@ import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.controller.KI;
 import com.ma.schiffeversenken.android.view.Settings;
+import com.ma.schiffeversenken.android.view.StartScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Preferences;
@@ -60,6 +61,11 @@ public class Player {
 		Preferences pref = Gdx.app.getPreferences("Main_Preferences");
 		Field.soundOff = Boolean.parseBoolean(pref.getString(Settings.SETTINGS_SOUNDOFF));
 		Field.vibrationOff = Boolean.parseBoolean(pref.getString(Settings.SETTINGS_VIBRATIONOFF));
+		Field.cheatsOn = Boolean.parseBoolean(pref.getString(Settings.SETTINGS_CHEATSOFF));
+		if(pref.contains(StartScreen.SETTINGS_BUTTONWIDTH)){
+		GameFieldScreen.buttonwidth = Integer.parseInt(pref.getString(StartScreen.SETTINGS_BUTTONWIDTH));
+		GameFieldScreen.buttonheight = Integer.parseInt(pref.getString(StartScreen.SETTINGS_BUTTONHEIGHT));
+		}
 		this.primaryBTGame=primaryBTGame;
 		this.secondaryBTGame=secondaryBTGame;
 		map = m;

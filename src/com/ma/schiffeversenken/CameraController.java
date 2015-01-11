@@ -301,10 +301,6 @@ public class CameraController implements GestureListener {
 	 * @param layerZoom
 	 */
 	private void setNewCameraStatePosition() {
-		if (!state.get(0)) {
-			// game.
-		}
-
 		// Intro
 		if (state.get(0) && (camera.position.x < layerX)) {
 			camera.position.y = layerY;

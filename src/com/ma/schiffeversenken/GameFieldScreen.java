@@ -54,6 +54,8 @@ import com.ma.schiffeversenken.android.view.BackActivity;
 public class GameFieldScreen implements Screen {
 
 	public static final String TITLE = "Schiffeversenken 1.0";
+	public static int buttonwidth;
+	public static int buttonheight;
 
 	private TiledMap map;
 	private TiledMapTileLayer mapTileLayer;
@@ -120,8 +122,6 @@ public class GameFieldScreen implements Screen {
 	private TextButton buttonRestart;
 	private MyGdxGameField parentScreen;
 	private boolean restartGame;
-
-	private ArrayList<float[]> pfeilPolygone;
 	
 	public GameFieldScreen(boolean restartGame, MyGdxGameField parentScreen, boolean primaryBTGame, boolean secondaryBTGame){
 		this.restartGame=restartGame;
@@ -144,11 +144,17 @@ public class GameFieldScreen implements Screen {
 		// graphics High and width
 		h = Gdx.graphics.getHeight();
 		w = Gdx.graphics.getWidth();
-		// Wegen resize Aufruf nach erstellen ist die übergabe von w/h unnötig
+		
+		//Buttongestaltung initialisieren.
+		buttonwidth=(int) (w*0.3);
+		buttonheight=(int) (w*0.1);
+		
+		//Kamera einstellung
+		//Wegen resize Aufruf nach erstellen ist hier die übergabe von w/h unnötig
 		camera = new OrthographicCamera();
-		// camera.zoom 1.4 camera.position.x 510.0 camera.position.y 710.0
 		camera.viewportWidth = w;
 		camera.viewportHeight = h;
+		
 		layerX = mapTileLayer.getWidth() * mapTileLayer.getTileWidth() / 2;
 		layerY = mapTileLayer.getHeight() * mapTileLayer.getTileHeight() / 2;
 		if(restartGame){
@@ -156,13 +162,11 @@ public class GameFieldScreen implements Screen {
 		}else{
 			camera.position.set(-layerX, layerY, 0);			
 		}
-		// zoomarichmetik um jede Auflösung zu unterstützen
+		//Eigene Formel für Zoom-Arichmetik um jede Auflösung zu unterstützen
 		float zoomfaktor = ((0.95f * 1920 / h));
 		camera.zoom = zoomfaktor;
 		layerZoom = camera.zoom;
 		camera.update();
-
-
 
 		// State initialisieren
 		state = new ArrayList<Boolean>();
@@ -219,9 +223,8 @@ public class GameFieldScreen implements Screen {
 
 		table = new Table(skin);
 		table2 = new Table(skin);
-		// Set table to whole Screen
-//		table.setBounds(w*0.1f, h*0.6f, w*0.9f, h*0.7f);// Container für Label und Buttons
-		table.setBounds(0, 0, w, h*1.9f);// Container für Label und Buttons
+		//Tabellenausrichtung
+		table.setBounds(0, 0, w, h*1.76f);// Container für Label und Buttons
 
 		//Fonts erstellen
 		white = new BitmapFont(Gdx.files.internal("font/Latin_white.fnt"),
@@ -242,12 +245,11 @@ public class GameFieldScreen implements Screen {
 		textButtonStyle.pressedOffsetX = 1; // 1 nach x bewegen
 		textButtonStyle.pressedOffsetY = -1;// -1 auf y achse bewegen
 		textButtonStyle.font = black;
-		
 
 		// Button erstellen mit dem Style
 		buttonGenerateShips = new TextButton("generieren",
 				textButtonStyle);
-		buttonGenerateShips.pad(w*0.02f);
+		buttonGenerateShips.pad((int)(w*0.02f));
 		buttonGenerateShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -262,37 +264,48 @@ public class GameFieldScreen implements Screen {
 		});
 		
 		buttonSelfPlaceShips = new TextButton("platzieren",textButtonStyle);
-		buttonSelfPlaceShips.pad(w*0.02f);
+		buttonSelfPlaceShips.pad((int)(w*0.02f));
 		buttonSelfPlaceShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(player.getGame().getFirstFieldPlayer().isAllShipsSet()){
-					player.getGame().getFirstFieldPlayer().resetField();//Spielfeld zurücksetzen
+					player.getGame().getFirstFieldPlayer().resetField();
 					controller.setShipPlaceHelper(schiffsEinstellung);
 				}
-				CameraController.changeStateTo(3, true,false);
 				table.clear();
-				table.add(heading).colspan(5);
+				table.add(heading).colspan(1);
 				table.row();
-				table.add(buttonGenerateShips).minWidth(w*0.2f).minHeight(w*0.1f);
-				table.add().minWidth(w*0.01f);
-				table.add(buttonStart).minWidth(w*0.2f).minHeight(w*0.1f);
-				table.add().minWidth(w*0.01f);
-				table.add(buttonClearShips).minWidth(w*0.2f).minHeight(w*0.1f);
+				table.add(buttonStart).minWidth(buttonwidth).minHeight(buttonheight);
+				table.row();
+				table.add().minHeight(buttonwidth*0.02f);
+				table.row();
+				table.add(buttonGenerateShips).minWidth(buttonwidth).minHeight(buttonheight);
+				table.row();
+				table.add().minHeight(buttonwidth*0.02f);
+				table.row();
+				table.add(buttonClearShips).minWidth(buttonwidth).minHeight(buttonheight);
 				
 				table2.clear();
-				table2.setBounds(0, 0, w, h*1.68f);
-				table2.add(new Label("Drücke auf ein Feld",headingStyle)).colspan(5);
+				table2.setBounds(0, 0, w, h*0.2f);
+				table2.add(new Label("Drücke auf ein Feld um",headingStyle)).colspan(5);
 				table2.row();
-				table2.add(new Label("um ein Schiff zu platzieren",headingStyle)).colspan(5);
+				table2.add().minHeight(buttonheight*0.1f);
 				table2.row();
-				table2.add(new Label("und ziehe es in die gewünschte Richtung",headingStyle)).colspan(5);
-				stage.addActor(table2);
+				table2.add(new Label("ein Schiff zu platzieren.",headingStyle)).colspan(5);
+				table2.row();
+				table2.add().minHeight(buttonheight*0.1f);
+				table2.row();
+				table2.add(new Label("Für große Schiffe ziehe es in",headingStyle)).colspan(5);
+				table2.row();
+				table2.add().minHeight(buttonheight*0.1f);
+				table2.row();
+				table2.add(new Label("die gewünschte Richtung",headingStyle)).colspan(5);
+				CameraController.changeStateTo(3, true,false);
 			}
 		});
 		
 		buttonClearShips = new TextButton("löschen",textButtonStyle);
-		buttonClearShips.pad(w*0.02f);
+		buttonClearShips.pad((int)(w*0.02f));
 		buttonClearShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -302,7 +315,7 @@ public class GameFieldScreen implements Screen {
 		});
 		
 		buttonStart = new TextButton("Start",textButtonStyle);
-		buttonStart.pad(w*0.02f);
+		buttonStart.pad((int)(w*0.02f));
 		buttonStart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {					
@@ -312,80 +325,61 @@ public class GameFieldScreen implements Screen {
 						//Setzen der Schiffe und Starten.
 						//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
 						if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
-						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
+							player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 						}
-						
-						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
-						tmpEmptyShipList.add(0);
-						tmpEmptyShipList.add(0);
-						tmpEmptyShipList.add(0);
-						tmpEmptyShipList.add(0);
-						controller.setShipPlaceHelper(tmpEmptyShipList);
-					
-						if(primaryBTGame||secondaryBTGame){
-						player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
-						}
-						
-						//TODO Optimieren für BLuetooth
 						player.getGame().start();
-						CameraController.changeStateTo(2, false,false);
 					}else{
 						//Setzen der Schiffe und Starten.
-						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
-						
-						ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
-						tmpEmptyShipList.add(0);
-						tmpEmptyShipList.add(0);
-						tmpEmptyShipList.add(0);
-						tmpEmptyShipList.add(0);
-						controller.setShipPlaceHelper(tmpEmptyShipList);
-						
-						if(primaryBTGame||secondaryBTGame){
-							player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
-						}
-						
+						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);			
 						player.getGame().start();
-						CameraController.changeStateTo(2, false,false);
 					}
+					
+					if(primaryBTGame||secondaryBTGame){
+					player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
+					}
+					//Resetten vom ShipPlaceHelper im CameraController
+					ArrayList<Integer> tmpEmptyShipList = new ArrayList<Integer>(4);
+					tmpEmptyShipList.add(0);
+					tmpEmptyShipList.add(0);
+					tmpEmptyShipList.add(0);
+					tmpEmptyShipList.add(0);
+					controller.setShipPlaceHelper(tmpEmptyShipList);
+					CameraController.changeStateTo(2, false,false);
 				}
-
 			}
 		});
 		
 		buttonRestart = new TextButton("Neustart",textButtonStyle);
-		buttonRestart.pad(w*0.02f);
+		buttonRestart.pad((int)(w*0.02f));
 		buttonRestart.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				loadPlayerData();				
+//				loadPlayerData();				
 				parentScreen.create(true);
 			}
 		});
 		
-		// Hinzufügen vom Elementen zur Tabelle Start
-//		table.center();
-//		table.debug();
-		table.add(heading).colspan(5);
+		// Hinzufügen vom Elementen zur Tabelle bei Start
+		table.add(heading).colspan(1);
 		table.row();
-		table.add(buttonGenerateShips).minWidth(w*0.2f).minHeight(w*0.1f);
-		table.add().minWidth(w*0.01f);
-		table.add(buttonStart).minWidth(w*0.2f).minHeight(w*0.1f);
-		table.add().minWidth(w*0.01f);
-		table.add(buttonSelfPlaceShips).minWidth(w*0.2f).minHeight(w*0.1f);
-//		table.row();
-	
+		table.add(buttonStart).minWidth(buttonwidth).minHeight(buttonheight);
+		table.row();
+		table.add().minHeight(buttonwidth*0.02f);
+		table.row();
+		table.add(buttonGenerateShips).minWidth(buttonwidth).minHeight(buttonheight);
+		table.row();
+		table.add().minHeight(buttonwidth*0.02f);
+		table.row();
+		table.add(buttonSelfPlaceShips).minWidth(buttonwidth).minHeight(buttonheight);
 
-		// table.debug();//Rote lienien zum Debuggen
 		stage.addActor(table);
+		stage.addActor(table2);
 		
 		//Setzen von mehreren InputListenern
 		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(gestureDetector);
 		inputMultiplexer.addProcessor(stage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
-
-		
 	}
 
 	/**
@@ -437,7 +431,7 @@ public class GameFieldScreen implements Screen {
 		// Animation bg
 //		renderer.render(ships);
 
-		// Draw Stuff
+		// Draw Stuff		
 		// Randgebiete
 		batch.begin();
 		batch.draw(introTextureRegion, -layerX * 2, layerY * 2);
@@ -484,7 +478,6 @@ public class GameFieldScreen implements Screen {
 
 		// TODO Animate Fireing some canons and ships getting into position.
 //		player.animatedTiles();
-
 		if (state.get(2)||state.get(5) || state.get(6) || state.get(7)) {
 			// render Objects
 			// Wie renderer.setView(camera.combined) Transformieren der Shapes
@@ -527,33 +520,34 @@ public class GameFieldScreen implements Screen {
 				sr.end();
 			}
 		}
-
-
 		//Menue
 		if(state.get(1)||state.get(3)){
 			//Wenn Spiel zu ende ist soll State 1 und Text mit Btton aktiv werden.
 			if(state.get(8)){
+				//Tabelle für Neustart vorbereiten.
 				table.clear();
-				table.add(heading).colspan(5);
+				table.add(heading).colspan(1);
 				table.row();
-				table.add().minWidth(w*0.01f);
-				table.add(buttonRestart).minWidth(w*0.3f).minHeight(w*0.1f);
-				table.add().minWidth(w*0.01f);
-				
+				table.add(buttonRestart).minWidth(buttonwidth).minHeight(buttonheight);
+				table.row();
+				table.add().minHeight(buttonwidth*0.02f);
+				table.row();
+				table.add(new Label("Ende",headingStyle)).colspan(1);
+				table.row();
+				table.add().minHeight(buttonwidth*0.02f);
+				table.row();
+				table.add(new Label("Du hast "+((player.getGame().hasPlayerWon())?"gewonnen!":"leider verloren."),headingStyle)).colspan(1);
+				table.row();
+				table.add().minHeight(buttonwidth*0.02f);
+				table.row();
+				table.add(new Label("Drücke Neustart für ein neues Spiel.",headingStyle)).colspan(1);
 				table2.clear();
-				table2.setBounds(0, 0, w, h*1.68f);
-				table2.add(new Label("Ende",headingStyle)).colspan(3);
-				table2.row();
-				table2.add(new Label("Du hast "+((player.getGame().hasSomebodyWon()==1)?"gewonnen!":"leider verloren."),headingStyle)).colspan(3);
-				table2.row();
-				table2.add(new Label("Drücke Neustart für ein neues Spiel.",headingStyle)).colspan(3);
 				Gdx.input.setInputProcessor(inputMultiplexer);
 				CameraController.changeStateTo(8, false,true);
 			}
 			stage.act(delta);
 			stage.draw();
 		}
-
 	}
 	
 	@Override

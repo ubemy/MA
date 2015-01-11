@@ -45,6 +45,7 @@ public class Field {
 	Music explosionMusic, shotMusic;
 	public static boolean soundOff = false;
 	public static boolean vibrationOff = false;;
+	public static boolean cheatsOn = false;
 	
 	/**
 	 * einheiten = Das Spielfeld besteht aus 10x10 Einheiten einheiten[y-Achse
@@ -125,7 +126,6 @@ public class Field {
 			this.explosionMusic = Gdx.audio.newMusic(Gdx.files.internal(EXPLOSION_SOUND_PATH));
 			this.shotSound = Gdx.audio.newSound(Gdx.files.internal(SHOT_SOUND_PATH));
 			this.shotMusic = Gdx.audio.newMusic(Gdx.files.internal(SHOT_SOUND_PATH));
-			drawShips = new ArrayList<EntityShip>();
 			getShipTileSetTextures(shipTextures);
 			create();
 			createNeighbors();
@@ -142,28 +142,6 @@ public class Field {
 	 *            TiledMapTileSet wo die Texturen gespeichert sind
 	 */
 	private void getShipTileSetTextures(TiledMapTileSet st) {
-
-		// DEPRECATED START
-		// int colTexture = 5;
-		// int rowTexture = 6;
-		//
-		// //Holen der einzelenn Schifftexturen aus der Gesamten Textur in ein
-		// 2D Array.
-		// Texture tmpST = st.iterator().next().getTextureRegion().getTexture();
-		// TextureRegion[][] tmp = TextureRegion.split(tmpST,
-		// tmpST.getWidth()/colTexture, tmpST.getHeight()/rowTexture);
-		//
-		// //Holen der Texturen in ein 1D Array
-		// TextureRegion[] shipFrames = new
-		// TextureRegion[colTexture*rowTexture];
-		// int index = 0;
-		// for (int i = 0; i < rowTexture; i++) {
-		// for (int j = 0; j < colTexture; j++) {
-		// shipFrames[index++] = tmp[i][j];
-		// }
-		// }
-		// DEPRECATED END
-
 		// Setzen der Einzelnen Texturen in eine TreeMap<key,value>.
 		this.shipTextures = new TreeMap<String, TextureRegion>();
 		Iterator<TiledMapTile> iter = st.iterator();
@@ -187,7 +165,26 @@ public class Field {
 						.put(tile.getProperties().get("name").toString(), tile);
 			}
 		}
-
+		// DEPRECATED
+		// int colTexture = 5;
+		// int rowTexture = 6;
+		//
+		// //Holen der einzelenn Schifftexturen aus der Gesamten Textur in ein
+		// 2D Array.
+		// Texture tmpST = st.iterator().next().getTextureRegion().getTexture();
+		// TextureRegion[][] tmp = TextureRegion.split(tmpST,
+		// tmpST.getWidth()/colTexture, tmpST.getHeight()/rowTexture);
+		//
+		// //Holen der Texturen in ein 1D Array
+		// TextureRegion[] shipFrames = new
+		// TextureRegion[colTexture*rowTexture];
+		// int index = 0;
+		// for (int i = 0; i < rowTexture; i++) {
+		// for (int j = 0; j < colTexture; j++) {
+		// shipFrames[index++] = tmp[i][j];
+		// }
+		// }
+		// DEPRECATED
 	}
 
 	/**
@@ -369,12 +366,7 @@ public class Field {
 									unit.getXpos(), unit.getYpos()),
 							new Vector2(size, size));
 					unit.setEntityShipDrawUnit(tmpShip);
-
-					// TODO Deprecated
-					drawShips.add(tmpShip);
 					}
-
-					System.out.println("Unit ID:"+unit.getID()+"<==> Drawingplace ID:"+getElementByXPosYPos(unit.getXpos(),unit.getYpos()).id);
 				}
 			} else {// Kleines Schiff
 				FieldUnit unit = ship.location[0];
@@ -416,9 +408,6 @@ public class Field {
 								unit.getXpos(), unit.getYpos()), new Vector2(
 								size, size));
 				unit.setEntityShipDrawUnit(tmpShip);
-
-				// TODO Deprecated
-				drawShips.add(tmpShip);
 				}
 			}
 		}
@@ -631,7 +620,8 @@ public class Field {
 	// @Deprecated
 	public void draw(Batch batch) {
 		try{
-			//TODO DELETE AB HIER
+			//Cheats, man sieht das gegnerische Spielfeld
+			if(Field.cheatsOn){
 			// Eigenes Spielfeld
 						for (int i = 0; i < 10; i++) {
 							for (int j = 0; j < 10; j++) {
@@ -693,14 +683,8 @@ public class Field {
 
 							}
 						}
-			//TODO DELETE BIS HIER
-			
-			
-			
-			
-			
-			
-		// Rendern vom Spielfeld
+			}
+		// Rendern vom jeweiligen Spielfeld
 		if (this.typ == 0) {// Eigenes Spielfeld
 			for (int i = 0; i < 10; i++) {
 				for (int j = 0; j < 10; j++) {
@@ -754,45 +738,43 @@ public class Field {
 
 				}
 			}
-		} else {// Gegnerisches Feld
+		} else if(!Field.cheatsOn) {// Gegnerisches Feld
 			for (int i = 0; i < 10; i++) {
 				for (int j = 0; j < 10; j++) {
 					if (units[i][j].getAttacked()) {// Wenn Feld attakiert wurde
+						//Feueranimation nach Beschuss
+						if (units[i][j].getAnimationtimer() < animationtimerMax) {
+							batch.draw(shipTextures.get("gunattack"),
+									units[i][j].getXpos(),
+									units[i][j].getYpos(), size, size);
+							units[i][j].setAnimationtimer(units[i][j]
+									.getAnimationtimer() + 1);
+							if(units[i][j].getAnimationtimer() == 1){
+								if(!Field.soundOff){
+									shotSound.play();
+								}
+							}
+						}
 						if (!units[i][j].getOccupied()) {// Nicht belegt,
-							//Feueranimation nach Beschuss
-							if (units[i][j].getAnimationtimer() < animationtimerMax) {
-								batch.draw(shipTextures.get("gunattack"),
-										units[i][j].getXpos(),
-										units[i][j].getYpos(), size, size);
-								units[i][j].setAnimationtimer(units[i][j]
-										.getAnimationtimer() + 1);
-							} else {
 								// Wasserplatscher
 								batch.draw(shipTextures.get("waterattack"),
 										units[i][j].getXpos(),
 										units[i][j].getYpos(), size, size);
-							}
 							
 						} else {
-							// Komplettes Schiff ist zerstört und wird angezeigt
 							if (units[i][j].getPlacedShip().isDestroyed()) {
+								// Komplettes Schiff ist zerstört und wird angezeigt
 								units[i][j].getEntityShipDrawUnit().render(
 										batch, true,shipTextures);
+							} else if (!units[i][j].getPlacedShip().isDestroyed()) {
 								// Schiff nicht komplett zerstört
-							} else if (!units[i][j].getPlacedShip()
-									.isDestroyed()) {
-								if (units[i][j].getAnimationtimer() < animationtimerMax) {
-									batch.draw(shipTextures.get("gunattack"),
-											units[i][j].getXpos(),
-											units[i][j].getYpos(), size, size);
-									units[i][j].setAnimationtimer(units[i][j]
-											.getAnimationtimer() + 1);
-								} else {
+
 									// Nach animation Feueratakke anzeigen wenn schiff beschädigt
 									batch.draw(shipTextures.get("gunattack"),
 											units[i][j].getXpos(),
 											units[i][j].getYpos(), size, size);
-								}
+									
+								
 							}
 						}
 					}
@@ -804,37 +786,6 @@ public class Field {
 		catch(Exception ex){
 			ex.printStackTrace();
 		}
-		// // Rendern aller Schiffe
-		// tileIterator = drawShips.iterator();
-		// EntityShip curShip;
-		// while (tileIterator.hasNext()) {
-		// curShip = tileIterator.next();
-		// curShip.render(batch);
-		//
-		// }
-
-	}
-
-	/**
-	 * Methode gibt ein Array von EntityShip zurück die gezeichnet werden
-	 * können.
-	 * 
-	 * @return out rrayList<EntityShip> fürs Zeichnen
-	 */
-	public ArrayList<EntityShip> getTiledShips() {
-		// ArrayList<EntityShip> out = new ArrayList<EntityShip>();
-		//
-		// if(placedShips==null)
-		// System.out.println("LOL!");
-		// for (Ship ship : placedShips) {
-		// for (FieldUnit unit : ship.location) {
-		// out.add(unit.getPlacedShip().getEntityShipDrawUnit());
-		// System.out.println("Schiffsteilkoord: x"
-		// + unit.getPlacedShip().getEntityShipDrawUnit().getX() + " y"
-		// + unit.getPlacedShip().getEntityShipDrawUnit().getY());
-		// }
-		// }
-		return drawShips;
 	}
 
 	/**
@@ -858,7 +809,6 @@ public class Field {
 
 	public void resetField() {
 		try {
-			drawShips = new ArrayList<EntityShip>();
 			allShipsSet = false;
 			allShipsSetManual=false;
 			create();
@@ -926,8 +876,7 @@ public class Field {
 			btcThread.write(fieldBytes);
 		}
 
-
-////TODO DEPRECATED ab hier nur zur Information
+//				//DEPRECATED ab hier, Java.io.Serialisable macht Android Probleme.
 //				try {
 //					BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
 //					//Serialisierung
@@ -1007,23 +956,24 @@ public class Field {
 //		}	
 	}
 
+	/**
+	 * Methode dient der localen Serialisierung.
+	 * @param game Das Game Objekt
+	 */
+	@Deprecated
 	public void serialisierungstestLocal(Game game) {
-
 		//Speichern nach Json
 		Json json = new Json();
-		
 		String jsonPlacedShips =json.toJson(new ShipsDescriptor().newShipsDescriptor(placedShips), ShipsDescriptor.class);
 		System.out.println(json.prettyPrint(jsonPlacedShips));
-		
-		System.out.println("Länge von String: "+jsonPlacedShips.length());
 		
 		//erzeugen von Json
 		ShipsDescriptor desc = json.fromJson(ShipsDescriptor.class, jsonPlacedShips);
 		//Feld resetten und Schiffe aus Json Generieren und Platzieren.
-		desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());
+		desc.replaceOldFieldPlacedShips(game.getSecondFieldEnemy());	
 		
-
-//				//TODO Java Serialisierungstest --> funktioniert local
+//				//Java Serialisierungstest mit Java.io.Serialisable 
+//				//--> funktioniert local, Android hat damit Probleme
 //				try {
 //					//Serialisierung
 //					byte[] fieldBytes;
@@ -1058,7 +1008,7 @@ public class Field {
 //						//Schreiben simulieren
 //						readMsg = new String(fieldBytes, 0, fieldBytes.length);
 //						subStringIncomeing= subStringIncomeing+readMsg.substring(BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
-////						btcThread.write(fieldBytes);
+//						btcThread.write(fieldBytes);
 //						
 //						if(subStringPart.equals(subStringAll)){
 //							bytesToTransfer -= subStringAll.length();
@@ -1086,14 +1036,10 @@ public class Field {
 //					}
 //					
 //				} catch (IOException e) {
-//					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				} catch (ClassNotFoundException e) {
-//					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
-				
-			
 	}
 	
 	/**
@@ -1152,10 +1098,7 @@ public class Field {
 			}
 			return desc;
 		}
-		
-		
-		
-		
+
 		/**
 		 * Methode erstellt die Schiffe aus den
 		 * Json Daten in ShipsDescriptor.
@@ -1320,55 +1263,10 @@ public class Field {
 				}	
 				// Hinzufügen der fertigen unitLocation
 				placedShipUnits.add(unitLocation);
-				
-				
-				//Debug
-				switch (orientation) {
-				case 0:// links
-					orientation = 2;
-					System.out.print("links ID:");
-					for (FieldUnit u : unitLocation) {
-						System.out.print(" "+u.id+" Grafik:"+u.getEntityShipDrawUnit().toString());
-					}
-					System.out.println(" ");
-					break;
-				case 1:// rechts
-					orientation = 0;
-					System.out.print("rechts ID:");
-					for (FieldUnit u : unitLocation) {
-						System.out.print(" "+u.id+" Grafik:"+u.getEntityShipDrawUnit().toString());
-					}
-					System.out.println(" ");
-					break;
-				case 2:// oben
-					orientation = 1;
-					System.out.println("oben ID:");
-					for (FieldUnit u : unitLocation) {
-						System.out.println(" "+u.id+" Grafik:"+u.getEntityShipDrawUnit().toString());
-					}
-					break;
-				case 3:// unten
-					orientation = 3;
-					System.out.println("unten ID:");
-					for (FieldUnit u : unitLocation) {
-						System.out.println(" "+u.id+" Grafik:"+u.getEntityShipDrawUnit().toString());
-					}
-					break;
-				default:
-					break;
-				}
-				
-				
-								
-				Gdx.app.log(GameFieldScreen.TITLE, "Anzahl Schiffe auf Feld: "
-						+ placedShipUnits.size());
-			}
-			
+			}		
 			// Die neuen Schiffe platzieren
 			field.setManualNewShipplacement(placedShipUnits);
-
 		}
-		
 	}
 	
 	/**

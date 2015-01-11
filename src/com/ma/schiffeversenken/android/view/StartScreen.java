@@ -26,6 +26,8 @@ import android.widget.RelativeLayout;
  * @author Klaus Schlender
  */
 public class StartScreen extends Activity {
+	public static final String SETTINGS_BUTTONWIDTH = "buttonwidth";
+	public static final String SETTINGS_BUTTONHEIGHT = "buttonheight";
 	private int buttonWidth;
 
 	@Override
@@ -34,13 +36,20 @@ public class StartScreen extends Activity {
 		setContentView(R.layout.activity_startscreen);
 		
 		try{
-			
-			createButtons(R.id.Start_Spiel_Button, GameMode.class);
-			createButtons(R.id.Einstellungen_Button, Settings.class);
-			createButtons(R.id.Hilfe_Button, Help.class);
+			//Button Breite global setzen.
+			Point p = new Point();
+			getWindowManager().getDefaultDisplay().getSize(p);
+			buttonWidth = p.x / 2;
+			setSharedPreferences(SETTINGS_BUTTONWIDTH, ""+buttonWidth);
+
+			//Buttons erstellen
+			createButtons(R.id.Start_Spiel_Button, GameMode.class,buttonWidth);
+			createButtons(R.id.Einstellungen_Button, Settings.class,buttonWidth);
+			createButtons(R.id.Hilfe_Button, Help.class,buttonWidth);
 			
 			//Beenden Button
 			Button exitButton = (Button) findViewById(R.id.Button_Exit);
+			setSharedPreferences(SETTINGS_BUTTONHEIGHT, ""+exitButton.getHeight());
 			RelativeLayout.LayoutParams lParams = (android.widget.RelativeLayout.LayoutParams) exitButton.getLayoutParams();
 			lParams.width = buttonWidth;
 			exitButton.setOnClickListener(new OnClickListener() {
@@ -67,17 +76,14 @@ public class StartScreen extends Activity {
 		}
 	}
 	
-	private <E> void createButtons(int id, final Class<E> c){
+	private <E> void createButtons(int id, final Class<E> c, int bwidth){
 		/*
 		 * Buttons erstellen
 		 */
-		Point p = new Point();
-		getWindowManager().getDefaultDisplay().getSize(p);
-		buttonWidth = p.x / 2;
 		
 		Button button = (Button) findViewById(id);
 		RelativeLayout.LayoutParams lParams = (android.widget.RelativeLayout.LayoutParams) button.getLayoutParams();
-		lParams.width = buttonWidth;
+		lParams.width = bwidth;
 		
 		button.setOnClickListener(new View.OnClickListener() {	
 			@Override
@@ -110,5 +116,17 @@ public class StartScreen extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	/**
+	 * Methode setzt einen Wert in die Shared Preferences von Android.
+	 * @param name Key Name
+	 * @param value Eintrag
+	 */
+	public void setSharedPreferences(String name, String value){
+		SharedPreferences sp = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);
+		Editor editor = sp.edit();
+		editor.putString(name, value);
+		editor.apply();
 	}
 }

@@ -51,6 +51,7 @@
     <string name="button_text_visit_game">An Spiel teilnehmen</string>
     <string name="button_text_mute">Lautlos</string>
     <string name="button_text_vibration_off">Vibration aus</string>
+    <string name="button_text_cheats_checkbox">Cheats an</string>
     <string name="button_text_start_game">Spiel starten</string>
     <string name="button_text_settings">Einstellungen</string>
     <string name="button_text_help">Hilfe</string>

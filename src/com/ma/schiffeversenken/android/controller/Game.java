@@ -183,7 +183,6 @@ public class Game extends Thread {
 					destroyed = false;
 				}
 			}
-			
 			fe.getPlacedShip().setDestroyed(destroyed);
 		}
 	}
@@ -442,7 +441,6 @@ public class Game extends Thread {
 	 */
 	public int hasSomebodyWon(){
 		int ret = 1;
-		
 		Ship[] firstFieldShips = firstFieldPlayer.getShips();
 		Ship[] secondFieldShips = secondFieldEnemy.getShips();
 		
@@ -482,6 +480,25 @@ public class Game extends Thread {
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * Gibt zurueck ob der Spieler gewonnen hat mit Rückgabewert true.
+	 * 
+	 * @return Boolean Gibt ture zurück wenn der Spieler Gewonnen hat.
+	 */
+	public boolean hasPlayerWon(){
+		int enemyDefekt = 0;
+		for(Ship ship : secondFieldEnemy.getShips()){
+			if(ship.isDestroyed()){
+				enemyDefekt++;
+			}
+		}
+		if(enemyDefekt==secondFieldEnemy.getShips().length){
+			return true;
+		}else{
+		return false;
+		}
 	}
 	
 	/**

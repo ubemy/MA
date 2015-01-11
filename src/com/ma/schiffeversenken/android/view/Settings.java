@@ -14,10 +14,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 /**
  * Android Activity zum Ändern der Spieleinstellungen
  * @author Maik Steinborn
+ * @author Klaus Schlender
  */
 public class Settings extends Activity {
 	public static final String SETTINGS_SOUNDOFF = "soundOff";
 	public static final String SETTINGS_VIBRATIONOFF = "vibrationOff";
+	public static final String SETTINGS_CHEATSOFF = "cheatsOff";
 	private static final String trueString = String.valueOf(true);
 	private static final String falseString = String.valueOf(false);
 	
@@ -43,6 +45,7 @@ public class Settings extends Activity {
 		
 		final CheckBox lautlosCheckBox = (CheckBox)findViewById(R.id.Lautlos_Checkbox);
 		final CheckBox vibrationausCheckBox = (CheckBox)findViewById(R.id.Vibration_aus_Checkbox);
+		final CheckBox cheatsausCheckBox = (CheckBox)findViewById(R.id.Cheats_Enabled_Checkbox);
 
 		if(Boolean.parseBoolean(getValue(SETTINGS_SOUNDOFF))){
 			lautlosCheckBox.setChecked(true);
@@ -52,10 +55,14 @@ public class Settings extends Activity {
 			vibrationausCheckBox.setChecked(true);
 		}
 		
+		if(Boolean.parseBoolean(getValue(SETTINGS_CHEATSOFF))){
+			cheatsausCheckBox.setChecked(true);
+		}
+		
 		lautlosCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			/*
 			 * Wenn die Lautlos Checkbox betaetigt wird,
-			 * wird der entsprechende Eintrag in den Shared Preferences geaendert
+			 * wird der entsprechende Eintrag in den Shared Preferences geaendert.
 			 */
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -72,7 +79,7 @@ public class Settings extends Activity {
 		vibrationausCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			/*
 			 * Wenn die Vibration aus Checkbox betaetigt wird,
-			 * wird der entsprechende Eintrag in den Shared Preferences geaendert
+			 * wird der entsprechende Eintrag in den Shared Preferences geaendert.
 			 */
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -81,6 +88,22 @@ public class Settings extends Activity {
 				}
 				else{
 					setSharedPreferences(SETTINGS_VIBRATIONOFF, falseString);
+				}
+			}
+		});
+		
+		cheatsausCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			/*
+			 * Wenn die Cheats Checkbox betaetigt wird,
+			 * wird der entsprechende Eintrag in den Shared Preferences geaendert.
+			 */
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked){
+					setSharedPreferences(SETTINGS_CHEATSOFF, trueString);
+				}
+				else{
+					setSharedPreferences(SETTINGS_CHEATSOFF, falseString);
 				}
 			}
 		});
@@ -113,6 +136,11 @@ public class Settings extends Activity {
 		return ret;
 	}
 	
+	/**
+	 * Methode setzt einen Wert in die Shared Preferences von Android.
+	 * @param name Key Name
+	 * @param value Eintrag
+	 */
 	public void setSharedPreferences(String name, String value){
 		//Setzt einen Wert in Shared Preferences
 		SharedPreferences sp = getSharedPreferences("Main_Preferences", MODE_MULTI_PROCESS);

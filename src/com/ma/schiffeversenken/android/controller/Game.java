@@ -144,9 +144,7 @@ public class Game extends Thread {
 			}
 		}
 	}
-	
-	
-	
+
 	/**
 	 * Die Methode wird von der GUI aufgerufen,
 	 * sobald Spieler 1 auf ein Feld getippt
@@ -208,82 +206,6 @@ public class Game extends Thread {
 		this.secondFieldEnemy.setFieldShips(ships);
 	}
 	
-	public void destroyBluetoothShip(){
-		
-		ArrayList<String> idList = new ArrayList<String>();
-		
-		int end = returnDestroyedIDs.indexOf("_");
-		String retID = returnDestroyedIDs.substring(0, end);
-		int i = 1;
-		idList.add(retID);
-		
-		while(end < returnDestroyedIDs.length() - 1){
-			end = returnDestroyedIDs.indexOf("_", returnDestroyedIDs.indexOf(retID) + retID.length() + 1);
-			
-			idList.add(returnDestroyedIDs.substring(returnDestroyedIDs.indexOf(retID) + retID.length() + 1, end));
-					
-			i++;
-		}
-		
-		FieldUnit[] fieldUnits = new FieldUnit[i];
-		
-		i = 0;
-		
-		for(String s : idList){
-			fieldUnits[i] = secondFieldEnemy.getElementByID(Integer.parseInt(s));
-			i++;
-		}
-		
-		String shipName = null;
-		int shipSize = 0;
-		
-		if(i == 1){
-			shipName = "Kreuzer";
-			shipSize = Ship.CRUISER_SIZE;
-		}
-		else if(i == 2){
-			shipName = "Uboot";
-			shipSize = Ship.SUBMARINE_SIZE;
-		}
-		else if(i == 3){
-			shipName = "Zerstoerer";
-			shipSize = Ship.DESTROYER_SIZE;
-		}
-		else if(i == 4){
-			shipName = "Schlachtschiff";
-			shipSize = Ship.BATTLESHIP_SIZE;
-		}
-		
-		ArrayList<FieldUnit[]> units = new ArrayList<FieldUnit[]>(1);
-		units.add(fieldUnits);
-		
-		ShipPlacement sp = new ShipPlacement();
-		sp.placeShipsManual(secondFieldEnemy, units);
-		/*
-		Ship ship = new Ship(shipName, shipSize, fieldUnits);
-		ship.setDestroyed(true);
-		ship.setOrientation(0);
-		Ship[] ships = new Ship[1];
-		ships[0] = ship;
-		
-		for(FieldUnit fu : fieldUnits){
-			fu.setPlacedShip(ship);
-			fu.setOccupied(true);
-			fu.setAttacked(true);
-		}
-		
-		secondFieldEnemy.setShips(ships);
-		
-		TextureRegion shipBack = getFirstFieldPlayer().getShipTextures().get("uvk");
-		TextureRegion shipBackA = getFirstFieldPlayer().getShipTextures()
-				.get("uvka");
-		
-		for(FieldUnit fu : fieldUnits){
-			fu.getEntityShipDrawUnit().setShipTextureRegion("back",
-					shipBack, shipBackA);
-		}*/
-	}
-	
 	/**
 	 * Behandelt die Ausführung einer Attacke
 	 * @param id ID des Feldes, das angegriffen wird
@@ -343,7 +265,6 @@ public class Game extends Thread {
 					destroyShip(fe);//Ob Schiff komplett zerstört
 					shipDestroyed = returnShipDestroyed;
 					attackHit = returnAttackHit;
-					//if(shipDestroyed) destroyBluetoothShip();
 				}
 				else{
 					if(fe.getOccupied()){

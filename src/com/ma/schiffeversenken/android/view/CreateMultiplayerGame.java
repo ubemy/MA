@@ -50,6 +50,10 @@ public class CreateMultiplayerGame extends Activity {
 		}
 	}
 
+	/**
+	 * Bluetooth Server Socket in einem Thread starten und auf Verbindung von Client warten
+	 * @param reconnect true oder false, ob dies ein erster oder erneuter Verbindungsversuch ist
+	 */
 	public void startServer(boolean reconnect){
 		progress = new ProgressDialog(this);
 		progress.setMessage(getString(R.string.WaitForTakers));
@@ -59,6 +63,10 @@ public class CreateMultiplayerGame extends Activity {
 		bt.startServer(this, reconnect);
 	}
 	
+	/**
+	 * Wird nach dem ACTION_REQUEST_DISCOVERABLE Dialog aufgerufen.
+	 * Wertet die Eingabe des Benutzers aus.
+	 */
 	public void onActivityResult(int RequestCode, int ResultCode, Intent Data) {
 		super.onActivityResult(RequestCode, ResultCode, Data); 
 		if(RequestCode == 0){
@@ -71,11 +79,15 @@ public class CreateMultiplayerGame extends Activity {
 		}
 	} 
 	
+	/**
+	 * Wird aufgerufen, wenn die Bluetooth Verbindung erfolgreich hergestellt wurde.
+	 * Startet das Spiel.
+	 */
 	public void startGame(BluetoothConnectedThread btcThread){
 			Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-			intent.putExtra("primaryBTGame", "true");
-			intent.putExtra("secondaryBTGame", "false");
+			intent.putExtra(Bluetooth.PRIMARY_BT_GAME, String.valueOf(true));
+			intent.putExtra(Bluetooth.SECONDARY_BT_GAME, String.valueOf(false));
 			startActivity(intent);
 	}
 	

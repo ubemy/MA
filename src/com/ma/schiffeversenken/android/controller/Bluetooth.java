@@ -34,6 +34,8 @@ public class Bluetooth extends Activity {
 	private List<BluetoothDevice> allDevices;
 	/**Eindeutige UUID, die auf Server- und Clientseite beim Aufbau der Bluetooth Verbindung genutzt wird*/
 	public static final String appUUID = "00001101-0000-1000-8000-00805f9b34fb";
+	public static final String PRIMARY_BT_GAME = "primaryBTGame";
+	public static final String SECONDARY_BT_GAME = "secondaryBTGame";
 	
 	
 	/**

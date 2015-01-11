@@ -42,7 +42,6 @@ public class Field {
 	private static final String EXPLOSION_SOUND_PATH = "sounds/Explosion.mp3";
 	private static final int VIBRATION_LENGTH = 100;
 	Sound explosionSound, shotSound;
-	Music explosionMusic, shotMusic;
 	public static boolean soundOff = false;
 	public static boolean vibrationOff = false;;
 	public static boolean cheatsOn = false;
@@ -123,9 +122,7 @@ public class Field {
 			this.feldUebertragen=false;
 			this.feldUebertragenAntwort=false;
 			this.explosionSound = Gdx.audio.newSound(Gdx.files.internal(EXPLOSION_SOUND_PATH));
-			this.explosionMusic = Gdx.audio.newMusic(Gdx.files.internal(EXPLOSION_SOUND_PATH));
 			this.shotSound = Gdx.audio.newSound(Gdx.files.internal(SHOT_SOUND_PATH));
-			this.shotMusic = Gdx.audio.newMusic(Gdx.files.internal(SHOT_SOUND_PATH));
 			getShipTileSetTextures(shipTextures);
 			create();
 			createNeighbors();
@@ -749,18 +746,17 @@ public class Field {
 									units[i][j].getYpos(), size, size);
 							units[i][j].setAnimationtimer(units[i][j]
 									.getAnimationtimer() + 1);
-							if(units[i][j].getAnimationtimer() == 1){
-								if(!Field.soundOff){
-									shotSound.play();
-								}
-							}
 						}
 						if (!units[i][j].getOccupied()) {// Nicht belegt,
 								// Wasserplatscher
 								batch.draw(shipTextures.get("waterattack"),
 										units[i][j].getXpos(),
 										units[i][j].getYpos(), size, size);
-							
+								if(units[i][j].getAnimationtimer() == 1){
+									if(!Field.soundOff){
+										shotSound.play();
+									}
+								}
 						} else {
 							if (units[i][j].getPlacedShip().isDestroyed()) {
 								// Komplettes Schiff ist zerstört und wird angezeigt
@@ -772,9 +768,12 @@ public class Field {
 									// Nach animation Feueratakke anzeigen wenn schiff beschädigt
 									batch.draw(shipTextures.get("gunattack"),
 											units[i][j].getXpos(),
-											units[i][j].getYpos(), size, size);
-									
-								
+											units[i][j].getYpos(), size, size);	
+							}
+							if(units[i][j].getAnimationtimer() == 1){
+								if(!Field.soundOff){
+									explosionSound.play();
+								}
 							}
 						}
 					}

@@ -16,6 +16,7 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.ma.schiffeversenken.MyGdxGameField;
+import com.ma.schiffeversenken.android.controller.Bluetooth;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.view.BackActivity;
 
@@ -42,8 +43,8 @@ public class AndroidLauncher extends AndroidApplication {
 		
 
 		
-		boolean primaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("primaryBTGame").toString());
-		boolean secondaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get("secondaryBTGame").toString());
+		boolean primaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get(Bluetooth.PRIMARY_BT_GAME).toString());
+		boolean secondaryBTGame = Boolean.parseBoolean(getIntent().getExtras().get(Bluetooth.SECONDARY_BT_GAME).toString());
 		
 		
 		
@@ -51,7 +52,7 @@ public class AndroidLauncher extends AndroidApplication {
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 		BroadcastReceiver mReceiver;
 		
-		
+		//Broadcastreceiver für einen reconnect
 		mReceiver = new BroadcastReceiver() {
 	        @Override
 	        public void onReceive(Context context, Intent intent) {

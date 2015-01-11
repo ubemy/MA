@@ -70,14 +70,22 @@ public class VisitMultiplayerGame extends Activity {
 		bt.connectToServer(serverAddress, VisitMultiplayerGame.this, reconnect);
 	}
 	
+	/**
+	 * Wird aufgerufen, wenn die Bluetooth Verbindung erfolgreich hergestellt wurde.
+	 * Startet das Spiel.
+	 */
 	public void startGame(){
 		Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.putExtra("primaryBTGame", "false");
-		intent.putExtra("secondaryBTGame", "true");
+		intent.putExtra(Bluetooth.PRIMARY_BT_GAME, String.valueOf(false));
+		intent.putExtra(Bluetooth.SECONDARY_BT_GAME, String.valueOf(true));
 		startActivity(intent);
 	}
 	
+	/**
+	 * Wird nach dem REQUEST_ENABLE_BT Dialog aufgerufen.
+	 * Wertet die Eingabe des Benutzers aus.
+	 */
 	public void onActivityResult(int RequestCode, int ResultCode, Intent Data) {
 		super.onActivityResult(RequestCode, ResultCode, Data); 
 		if(RequestCode == Bluetooth.REQUEST_ENABLE_BT){
@@ -90,6 +98,10 @@ public class VisitMultiplayerGame extends Activity {
 		}
 	} 
 	
+	/**
+	 * Baut die Activity weiter auf, wenn der Benutzer den REQUEST_ENABLE_BT
+	 * Dialog positiv bestätigt hat
+	 */
 	private void createAct(){
 		try{
 			this.mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -119,10 +131,7 @@ public class VisitMultiplayerGame extends Activity {
 						if (VisitMultiplayerGame.this.mNewDevicesArrayAdapter.getCount() == 0) {
 							VisitMultiplayerGame.this.mNewDevicesArrayAdapter.add(getString(R.string.NoDevicesFound));
 						}
-						else{
-							status.setText(getString(R.string.PleaseSelectADevice));
-						}
-						
+						status.setText(getString(R.string.PleaseSelectADevice));
 						progress.dismiss();
 					}
 			    }

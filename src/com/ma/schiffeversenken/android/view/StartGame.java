@@ -1,7 +1,5 @@
 package com.ma.schiffeversenken.android.view;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.controller.KI;
@@ -18,6 +16,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+/**
+ * Android Activity für den Einzelspielermodus
+ * @author Klaus Schlender
+ */
 public class StartGame extends Activity {
 
 	@Override

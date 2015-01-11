@@ -1,5 +1,10 @@
-package com.ma.schiffeversenken.android;
+package com.ma.schiffeversenken.android.view;
 
+
+import com.ma.schiffeversenken.android.R;
+import com.ma.schiffeversenken.android.R.id;
+import com.ma.schiffeversenken.android.R.layout;
+import com.ma.schiffeversenken.android.R.menu;
 
 import android.app.Activity;
 import android.os.Bundle;

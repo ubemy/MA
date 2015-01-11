@@ -1,12 +1,10 @@
 package com.ma.schiffeversenken.android.view;
 
-import java.io.IOException;
 
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.controller.Bluetooth;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
-import com.ma.schiffeversenken.android.controller.Game;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;

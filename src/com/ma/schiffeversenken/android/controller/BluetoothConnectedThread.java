@@ -9,11 +9,11 @@ import com.badlogic.gdx.utils.Json;
 import com.ma.schiffeversenken.CameraController;
 import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.AndroidLauncher;
-import com.ma.schiffeversenken.android.BackActivity;
 import com.ma.schiffeversenken.android.R;
 import com.ma.schiffeversenken.android.model.FieldUnit;
 import com.ma.schiffeversenken.android.model.Player;
 import com.ma.schiffeversenken.android.model.Field.ShipsDescriptor;
+import com.ma.schiffeversenken.android.view.BackActivity;
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 

@@ -95,7 +95,7 @@
             android:label="@string/title_activity_spiel_einstellungen" >
         </activity>
         <activity
-            android:name=".BackActivity"
+            android:name="com.ma.schiffeversenken.android.view.BackActivity"
             android:label="@string/title_activity_back" >
         </activity>
     </application>

@@ -64,5 +64,6 @@
     <string name="button_text_back">Zurück</string>
     <string name="settings_soundOff">soundOff</string>
     <string name="settings_vibrationOff">vibrationOff</string>
+    <string name="button_text_exit">Beenden</string>
 
 </resources>

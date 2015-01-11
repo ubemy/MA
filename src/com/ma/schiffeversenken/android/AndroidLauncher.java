@@ -17,6 +17,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.ma.schiffeversenken.MyGdxGameField;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
+import com.ma.schiffeversenken.android.view.BackActivity;
 
 /**
  * Der AndroidLauncher initialisiert den OpenGL Context in LibGdx.

@@ -40,12 +40,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.ma.schiffeversenken.android.AndroidLauncher;
-import com.ma.schiffeversenken.android.BackActivity;
 import com.ma.schiffeversenken.android.controller.BluetoothConnectedThread;
 import com.ma.schiffeversenken.android.controller.Game;
 import com.ma.schiffeversenken.android.model.Allgemeinesdreieck;
 import com.ma.schiffeversenken.android.model.Field;
 import com.ma.schiffeversenken.android.model.Player;
+import com.ma.schiffeversenken.android.view.BackActivity;
 /**
  * Klasse Handelt die Game Screens.
  * 

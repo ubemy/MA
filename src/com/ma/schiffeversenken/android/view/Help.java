@@ -9,6 +9,7 @@ import com.ma.schiffeversenken.android.R;
 /**
  * Android Activity zum Anzeigen des Hilfe Textes
  * @author Maik Steinborn
+ * @author Klaus Schlender
  */
 public class Help extends Activity {
 	/**

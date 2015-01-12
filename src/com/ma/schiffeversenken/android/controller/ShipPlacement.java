@@ -101,7 +101,7 @@ public class ShipPlacement {
 	}
 
 	/**
-	 * Platziert die Schiffe die übergeben werden auf dem Spielfeld Erst das
+	 * Platziert die Schiffe die uebergeben werden auf dem Spielfeld Erst das
 	 * Erstellen von ships, danach das Platzieren in field
 	 * 
 	 * @param field
@@ -188,7 +188,7 @@ public class ShipPlacement {
 	 *            Gibt an in welche Richtung das Schiff platziert wurde (oben,
 	 *            unten, rechts, links)
 	 * @param size
-	 *            Größe des Schiffs
+	 *            Groesse des Schiffs
 	 * @param id
 	 *            ID des Startfeldes
 	 * @param field
@@ -219,7 +219,7 @@ public class ShipPlacement {
 	}
 
 	/**
-	 * Prüft ob die benötigten Felder frei oder belegt sind
+	 * Prueft ob die benoetigten Felder frei oder belegt sind
 	 * 
 	 * @param horver
 	 *            Gibt an in welcher Richtung das Schiff platziert werden soll
@@ -259,7 +259,7 @@ public class ShipPlacement {
 	}
 
 	/**
-	 * Prüft eine Reihe von Feldern ob diese frei oder belegt sind
+	 * Prï¿½ft eine Reihe von Feldern ob diese frei oder belegt sind
 	 * 
 	 * @param counter
 	 *            Die ID wird mit dem counter multipliziert, um nach oben,

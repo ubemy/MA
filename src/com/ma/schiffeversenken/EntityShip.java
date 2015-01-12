@@ -27,8 +27,8 @@ import com.badlogic.gdx.math.Vector2;
 
 	
 	public EntityShip(String textureName,Vector2 pos, Vector2 size) {
-		// Übergabe des Sprite, wie das Schiff aussehen soll.
-		// Übergabe des ColissionLayer
+		// uebergabe des Sprite, wie das Schiff aussehen soll.
+		// uebergabe des ColissionLayer
 //		collisionLayer = c;
 		this.position = pos;
 		this.size = size;
@@ -51,11 +51,11 @@ import com.badlogic.gdx.math.Vector2;
 		// IDEA of colision detection
 		/*
 		 * alte koordinaten und neue koordinaten die neuen koordinaten werden
-		 * geprüft auf kolisition wenn die neuen koordinaten ungültig sind dann
+		 * geprueft auf kolisition wenn die neuen Koordinaten ungueltig sind dann
 		 * sollen die alten koordinaten genommen werden andernfalls werden die
-		 * neuen überprüften koordinaten übergeben als aktuelle position.
+		 * neuen ueberprueften Koordinaten uebergeben als aktuelle Position.
 		 * 
-		 * Für die performance geht man hin und betrachtet nur die Bereiche von
+		 * Fuer die performance geht man hin und betrachtet nur die Bereiche von
 		 * der Map die jeweils in der Richtung in der gegangen wird liegen.
 		 * undzwar die 3 direkt angrenzenden tiles
 		 */
@@ -68,7 +68,7 @@ import com.badlogic.gdx.math.Vector2;
 		// zu neuer Position x wandern.
 		setX(getX() + velocity.x * deltaTime);
 
-//		// prüfen ob wir nach rechts oder links gehen
+//		// pruefen ob wir nach rechts oder links gehen
 //		if (velocity.x < 0) {
 //			// richtung links
 //			// top left
@@ -114,7 +114,7 @@ import com.badlogic.gdx.math.Vector2;
 //						.getProperties().containsKey("blocked");
 //		}
 //
-//		//Reaktion auf collisionX. Übergeben wir bei Kollision die alte xpos
+//		//Reaktion auf collisionX. Uebergeben wir bei Kollision die alte xpos
 //		if(collisionX){
 //			setX(oldX);
 //			velocity.x=0;//um nicht gegen die Wand zu fahren
@@ -124,7 +124,7 @@ import com.badlogic.gdx.math.Vector2;
 		// zu neuer Position > wandern.
 		setY(getY() + velocity.y * deltaTime);
 
-//		// prüfen ob wir nach oben oder unten gehen
+//		// Pruefen ob wir nach oben oder unten gehen
 //		if (velocity.y < 0) {
 //			// richtung unten
 //			// bottom left
@@ -167,7 +167,7 @@ import com.badlogic.gdx.math.Vector2;
 //		}
 //		
 //
-//		//Reaktion auf collisionY. Übergeben wir bei Kollision die alte xpos
+//		//Reaktion auf collisionY. Uebergeben wir bei Kollision die alte xpos
 //		if(collisionY){
 //			setY(oldY);
 //			velocity.x=0;//um nicht gegen die Wand zu fahren

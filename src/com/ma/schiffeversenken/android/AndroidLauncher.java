@@ -35,7 +35,7 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
 		//setup um GL20 anstelle GL10 zu nutzen.
 		cfg.useGLSurfaceView20API18=true;
-		//Sichert eine menge Batteriekapazität, wird deaktiviert solange nicht genutzt.
+		//Sichert eine menge Batteriekapazitaet, wird deaktiviert solange nicht genutzt.
 		cfg.useAccelerometer = false;
 		cfg.useCompass=false;
 		cfg.useImmersiveMode=false;
@@ -52,7 +52,7 @@ public class AndroidLauncher extends AndroidApplication {
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 		BroadcastReceiver mReceiver;
 		
-		//Broadcastreceiver für einen reconnect
+		//Broadcastreceiver fuer einen reconnect
 		mReceiver = new BroadcastReceiver() {
 	        @Override
 	        public void onReceive(Context context, Intent intent) {
@@ -90,14 +90,14 @@ public class AndroidLauncher extends AndroidApplication {
 	
 	
 	/**
-	 * Diese Methode dient der Meldung an den Nutzer außerhalb der Anwendung.
+	 * Diese Methode dient der Meldung an den Nutzer ausserhalb der Anwendung.
 	 * 
 	 * @param note Text
 	 * @param context ist ein Context der vom Builder genutzt wird um die RemoteViews zu erstellen. 
 	 * @param sourceActivityClassParent Elternteil Activity-Klassennamen JavaClass.class.
 	 * @param sourceActivityClassResult Resultierender Activity-Klassennamen JavaClass.class.
 	 * @param mNM NotificationManager.
-	 * @param mId id  Eine id für die Meldung, welche unique in der Anwendung ist. 
+	 * @param mId id  Eine id fuer die Meldung, welche unique in der Anwendung ist.
 	 */
 	public static void notificationToUser(String note,Context context,Class<?> sourceActivityClassParent,Class<?> sourceActivityClassResult,NotificationManager mNM,int mId){
 		Notification.Builder mBuilder =

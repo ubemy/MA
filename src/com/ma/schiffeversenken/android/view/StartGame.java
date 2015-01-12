@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 /**
- * Android Activity für den Einzelspielermodus
+ * Android Activity fuer den Einzelspielermodus
  * @author Klaus Schlender
  */
 public class StartGame extends Activity {

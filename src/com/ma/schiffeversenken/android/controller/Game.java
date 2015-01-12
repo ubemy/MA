@@ -207,7 +207,7 @@ public class Game extends Thread {
 	}
 	
 	/**
-	 * Behandelt die Ausführung einer Attacke
+	 * Behandelt die Ausfuehrung einer Attacke
 	 * @param id ID des Feldes, das angegriffen wird
 	 * @param gamer 0= Erster Spieler; 1= zweiter Spieler
 	 * @return Boolean ob ein gegnerisches Schiff getroffen wurde
@@ -262,7 +262,7 @@ public class Game extends Thread {
 					}
 
 					ret = returnAttackHit;
-					destroyShip(fe);//Ob Schiff komplett zerstört
+					destroyShip(fe);//Ob Schiff komplett zerstoert
 					shipDestroyed = returnShipDestroyed;
 					attackHit = returnAttackHit;
 				}
@@ -404,9 +404,9 @@ public class Game extends Thread {
 	}
 	
 	/**
-	 * Gibt zurueck ob der Spieler gewonnen hat mit Rückgabewert true.
+	 * Gibt zurueck ob der Spieler gewonnen hat mit Rï¿½ckgabewert true.
 	 * 
-	 * @return Boolean Gibt ture zurück wenn der Spieler Gewonnen hat.
+	 * @return Boolean Gibt ture zurueck wenn der Spieler Gewonnen hat.
 	 */
 	public boolean hasPlayerWon(){
 		int enemyDefekt = 0;
@@ -521,7 +521,7 @@ public class Game extends Thread {
 		}while(!end);
 		
 		//Neustart Kameramodus, auch beim Bluetooth Gegner.
-		//TODO Maik fragen wer den server macht und wo das Game läuft.
+		//TODO Maik fragen wer den server macht und wo das Game lï¿½uft.
 		CameraController.changeStateTo(1, false, false);
 		CameraController.changeStateTo(8, false, true);
 		if(primaryBTGame||secondaryBTGame){	
@@ -531,7 +531,7 @@ public class Game extends Thread {
 	}
 
 	/**
-	 * Zeichnet die beiden Spielfelder mit den jeweiligen Zuständen
+	 * Zeichnet die beiden Spielfelder mit den jeweiligen Zustï¿½nden
 	 * @param batch SpriteBatch worauf gezeichnet wird.
 	 */
 //	@Deprecated
@@ -554,7 +554,7 @@ public class Game extends Thread {
 	}
 	
 	/**
-	 * Methode gibt zurück ob Spieler am Zug ist
+	 * Methode gibt zurueck ob Spieler am Zug ist
 	 * 
 	 * @return int 0 wenn Spieler Am Zug
 	 */

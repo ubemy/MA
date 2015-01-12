@@ -62,25 +62,25 @@ public class GameFieldScreen implements Screen {
 	private TiledMapTileLayer mapTileLayer;
 	private TiledMapTileSet tileSetShips;
 
-	// Renderer hält einen SpriteBatch fürs zeichnen bereit
+	// Renderer haelt einen SpriteBatch fuers zeichnen bereit
 	private OrthogonalTiledMapRenderer renderer;
 	private Batch batch;
 	public static OrthographicCamera camera;
 
-	// höhe und breite
+	// Hoehe und Breite
 	private int h;
 	private int w;
 
-	// Einheitsgröße der Texturen
+	// Einheitsgroesse der Texturen
 	public static final int size = 64;
 	
-	// Environment für Lichtefekkte
+	// Environment fuer Lichtefekkte
 	private Environment environment;
 
 	// Spiellogic
 	private Player player;
 
-	// Texturen für Schrift und buttons
+	// Texturen fuer Schrift und buttons
 	private Stage stage;
 	private Skin skin;
 	private Table table;
@@ -95,7 +95,7 @@ public class GameFieldScreen implements Screen {
 	private int[] background = { 0 }, water = { 1 }, ships = { 2 },
 			attack = { 3 };
 
-	// ShapeRenderer für GridObjekte
+	// ShapeRenderer fuer GridObjekte
 	private ShapeRenderer sr;
 
 	private float layerX;
@@ -129,7 +129,7 @@ public class GameFieldScreen implements Screen {
 		this.parentScreen=parentScreen;
 		this.primaryBTGame = primaryBTGame;
 		this.secondaryBTGame = secondaryBTGame;
-		//Für Meldungen außerhalb der Anwendung innerhalb BluetoothConnectedThread
+		//Fuer Meldungen ausserhalb der Anwendung innerhalb BluetoothConnectedThread
 		if(parentScreen.getAndroidLauncher()!=null&&primaryBTGame||secondaryBTGame){
 		BluetoothConnectedThread.getInstance().setAndroidLauncher(parentScreen.getAndroidLauncher());
 		}
@@ -151,7 +151,7 @@ public class GameFieldScreen implements Screen {
 		buttonheight=(int) (w*0.1);
 		
 		//Kamera einstellung
-		//Wegen resize Aufruf nach erstellen ist hier die übergabe von w/h unnötig
+		//Wegen resize Aufruf nach erstellen ist hier die Uebergabe von w/h unnoetig
 		camera = new OrthographicCamera();
 		camera.viewportWidth = w;
 		camera.viewportHeight = h;
@@ -163,7 +163,7 @@ public class GameFieldScreen implements Screen {
 		}else{
 			camera.position.set(-layerX, layerY, 0);			
 		}
-		//Eigene Formel für Zoom-Arichmetik um jede Auflösung zu unterstützen
+		//Eigene Formel fuer Zoom-Arichmetik um jede Aufloesung zu unterstuetzen
 		float zoomfaktor = ((0.95f * 1920 / h));
 		camera.zoom = zoomfaktor;
 		layerZoom = camera.zoom;
@@ -185,7 +185,7 @@ public class GameFieldScreen implements Screen {
 		schiffsEinstellung.add(4);//0, kreuzer
 		schiffsEinstellung.add(3);//1,Uboot
 		schiffsEinstellung.add(2);//2,schlachtschiff
-		schiffsEinstellung.add(1);//3,Zerstörer
+		schiffsEinstellung.add(1);//3,Zerstoerer
 		// Touch Events
 		controller = new CameraController(camera, layerX, layerY, layerZoom,
 				player,state,schiffsEinstellung);
@@ -202,7 +202,7 @@ public class GameFieldScreen implements Screen {
 		// SpriteBatch vom Renderer
 		batch = renderer.getSpriteBatch();
 
-		// Neuer ShapeRenderer um Objektlayer zu zeichnen fürs GameGrid
+		// Neuer ShapeRenderer um Objektlayer zu zeichnen fuers GameGrid
 		sr = new ShapeRenderer();
 
 		// Background Texturen laden.
@@ -225,7 +225,7 @@ public class GameFieldScreen implements Screen {
 		table = new Table(skin);
 		table2 = new Table(skin);
 		//Tabellenausrichtung
-		table.setBounds(0, 0, w, h*1.76f);// Container für Label und Buttons
+		table.setBounds(0, 0, w, h*1.76f);// Container fï¿½r Label und Buttons
 
 		//Fonts erstellen
 		white = new BitmapFont(Gdx.files.internal("font/Latin_white.fnt"),
@@ -239,7 +239,7 @@ public class GameFieldScreen implements Screen {
 		headingStyle = new LabelStyle(white,Color.WHITE);
 		heading = new Label("Schiffeversenken", headingStyle);
 
-		// Animationen für den Button
+		// Animationen fuer den Button
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = skin.getDrawable("buttonUp");
 		textButtonStyle.down = skin.getDrawable("buttonDown");
@@ -288,7 +288,7 @@ public class GameFieldScreen implements Screen {
 				
 				table2.clear();
 				table2.setBounds(0, 0, w, h*0.2f);
-				table2.add(new Label("Drücke auf ein Feld um",headingStyle)).colspan(5);
+				table2.add(new Label("DrÃ¼cke auf ein Feld um",headingStyle)).colspan(5);
 				table2.row();
 				table2.add().minHeight(buttonheight*0.1f);
 				table2.row();
@@ -296,21 +296,21 @@ public class GameFieldScreen implements Screen {
 				table2.row();
 				table2.add().minHeight(buttonheight*0.1f);
 				table2.row();
-				table2.add(new Label("Für große Schiffe ziehe es in",headingStyle)).colspan(5);
+				table2.add(new Label("FÃ¼r groÃŸe Schiffe ziehe es in",headingStyle)).colspan(5);
 				table2.row();
 				table2.add().minHeight(buttonheight*0.1f);
 				table2.row();
-				table2.add(new Label("die gewünschte Richtung",headingStyle)).colspan(5);
+				table2.add(new Label("die gewÃ¼nschte Richtung",headingStyle)).colspan(5);
 				CameraController.changeStateTo(3, true,false);
 			}
 		});
 		
-		buttonClearShips = new TextButton("löschen",textButtonStyle);
+		buttonClearShips = new TextButton("lÃ¶schen",textButtonStyle);
 		buttonClearShips.pad((int)(w*0.02f));
 		buttonClearShips.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-					player.getGame().getFirstFieldPlayer().resetField();//Spielfeld zurücksetzen
+					player.getGame().getFirstFieldPlayer().resetField();//Spielfeld zuruecksetzen
 					controller.setShipPlaceHelper(schiffsEinstellung);
 			}
 		});
@@ -324,7 +324,7 @@ public class GameFieldScreen implements Screen {
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					//Setzen der Schiffe und Starten.
 					if(player.getGame().getFirstFieldPlayer().isAllShipsSetManual()){
-						//Wenn schiffe manuell gesetzt sind müssen diese aufs Feld plaziert werden.
+						//Wenn schiffe manuell gesetzt sind muessen diese aufs Feld plaziert werden.
 						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
 					}else if(!player.getGame().getFirstFieldPlayer().isAllShipsSet()){
 						//Setzen der Schiffe wenn diese noch nicht plaziert sind.
@@ -341,7 +341,7 @@ public class GameFieldScreen implements Screen {
 					
 					if(primaryBTGame||secondaryBTGame){
 						do{
-						//Feldübertragen erneut versuchen bei Fehlschlag.
+						//Felduebertragen erneut versuchen bei Fehlschlag.
 						try {
 							player.getGame().getFirstFieldPlayer().sendFieldUnitsWithBluetooth();
 							Thread.sleep(Game.FIVEHUNDRED_MS);
@@ -368,7 +368,7 @@ public class GameFieldScreen implements Screen {
 			}
 		});
 		
-		// Hinzufügen vom Elementen zur Tabelle bei Start
+		// Hinzufuegen vom Elementen zur Tabelle bei Start
 		table.add(heading).colspan(1);
 		table.row();
 		table.add(buttonStart).minWidth(buttonwidth).minHeight(buttonheight);
@@ -392,7 +392,7 @@ public class GameFieldScreen implements Screen {
 	}
 
 	/**
-	 * Methode lädt alte Spieldaten
+	 * Methode lï¿½dt alte Spieldaten
 	 */
 	private void loadPlayerData() {
 		if (Gdx.files.local("player.bin").exists()
@@ -433,7 +433,7 @@ public class GameFieldScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
 
-		// Dem Renderer die camera übergeben.
+		// Dem Renderer die Kamera uebergeben.
 		renderer.setView(camera);
 		renderer.render();
 
@@ -451,7 +451,7 @@ public class GameFieldScreen implements Screen {
 		batch.draw(introTextureRegion, layerX * 2, -layerY * 2);
 		batch.draw(randTextureRegion, layerX * 2, 0);
 		batch.draw(introTextureRegion, -layerX * 2, 0);
-		// Weiter Außerhalb
+		// Weiter Ausserhalb
 		// links
 		batch.draw(introTextureRegion, -layerX * 2 * 2, layerY * 2);
 		batch.draw(introTextureRegion, -layerX * 2 * 2, 0);
@@ -474,9 +474,6 @@ public class GameFieldScreen implements Screen {
 		batch.draw(introTextureRegion, layerX * 2 * 2, layerY * 2 * 2);
 		batch.end();
 
-
-		
-		
 		// Spielfelder
 		batch.begin();
 		player.draw(batch);
@@ -533,7 +530,7 @@ public class GameFieldScreen implements Screen {
 		if(state.get(1)||state.get(3)){
 			//Wenn Spiel zu ende ist soll State 1 und Text mit Btton aktiv werden.
 			if(state.get(8)){
-				//Tabelle für Neustart vorbereiten.
+				//Tabelle fï¿½r Neustart vorbereiten.
 				table.clear();
 				table.add(heading).colspan(1);
 				table.row();
@@ -549,7 +546,7 @@ public class GameFieldScreen implements Screen {
 				table.row();
 				table.add().minHeight(buttonwidth*0.02f);
 				table.row();
-				table.add(new Label("Drücke Neustart für ein neues Spiel.",headingStyle)).colspan(1);
+				table.add(new Label("Druecke Neustart fuer ein neues Spiel.",headingStyle)).colspan(1);
 				table2.clear();
 				Gdx.input.setInputProcessor(inputMultiplexer);
 				CameraController.changeStateTo(8, false,true);
@@ -561,18 +558,13 @@ public class GameFieldScreen implements Screen {
 	
 	@Override
 	public void resize(int width, int height) {
-		// Gdx.app.log(TITLE, "resize(...)");
-		// TODO globale variable oder referenz auf map größe
 		camera.viewportWidth = width;
 		camera.viewportHeight = height;
-		// camera.position.set(width/2f, height/2f, 0);
-		// camera.zoom=0.5f;
 		camera.update();
 	}
 
 	@Override
 	public void hide() {
-		// Gdx.app.log(TITLE, "hide()");
 		// TODO Auto-generated method stub
 		dispose();
 
@@ -580,7 +572,6 @@ public class GameFieldScreen implements Screen {
 
 	@Override
 	public void pause() {
-		// Gdx.app.log(TITLE, "pause()");
 		// TODO Save game fields
 		// try {
 		// Player.savePlayer(player);
@@ -592,13 +583,11 @@ public class GameFieldScreen implements Screen {
 
 	@Override
 	public void resume() {
-		// Gdx.app.log(TITLE, "resume()");
-		// //TODO load game fields
+		//TODO load game fields
 	}
 
 	@Override
 	public void dispose() {
-		// Gdx.app.log(TITLE, "dispose()");
 		// TODO implement save
 		// try {
 		// Player.savePlayer(player);
@@ -612,12 +601,6 @@ public class GameFieldScreen implements Screen {
 		introTexture.dispose();
 		stage.dispose();
 		skin.dispose();
-		// ship.getTexture().dispose();// Wichtig texturen dispose()
 
 	}
-	
-	public MyGdxGameField getMyGdxGameField(){
-		return this.parentScreen;
-	}
-
 }

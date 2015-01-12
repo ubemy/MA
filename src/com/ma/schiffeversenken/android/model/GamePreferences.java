@@ -187,7 +187,7 @@ public class GamePreferences implements Parcelable{
 	 * 
 	 * @param obj
 	 *            Das zu serialisierende Object.
-	 * @return ByteArray der das serialiserte Object hält.
+	 * @return ByteArray der das serialiserte Object haelt.
 	 * @throws IOException
 	 */
 	public static byte[] serialize(Object obj) throws IOException {
@@ -202,7 +202,7 @@ public class GamePreferences implements Parcelable{
 	 * 
 	 * @param bytes
 	 *            ByteArray eines Objectes.
-	 * @return deserialisiertes Objekt wird zurückgeliefert.
+	 * @return deserialisiertes Objekt wird zurueckgeliefert.
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */

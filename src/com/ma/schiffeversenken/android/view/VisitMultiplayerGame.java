@@ -100,7 +100,7 @@ public class VisitMultiplayerGame extends Activity {
 	
 	/**
 	 * Baut die Activity weiter auf, wenn der Benutzer den REQUEST_ENABLE_BT
-	 * Dialog positiv bestätigt hat
+	 * Dialog positiv bestaetigt hat
 	 */
 	private void createAct(){
 		try{
@@ -210,7 +210,7 @@ public class VisitMultiplayerGame extends Activity {
 	}
 	
 	/**
-	 * Dieser Toast muss ueber den UI Thread ausgeführt werden, da er von außerhalb aufgerufen wird
+	 * Dieser Toast muss ueber den UI Thread ausgefuehrt werden, da er von ausserhalb aufgerufen wird
 	 * @param message Text, der als Toast angezeigt wird
 	 */
 	public void showToast(final String message){

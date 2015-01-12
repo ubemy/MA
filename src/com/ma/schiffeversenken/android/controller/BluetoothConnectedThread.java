@@ -61,7 +61,7 @@ public class BluetoothConnectedThread extends Thread {
     public static final String BLUETOOTH_ENEMY_FIELD_RETURN = "_FRETURN_";
     public static final String BLUETOOTH_ENEMY_SHIPS = "_SHIPS_";
     public static final String BLUETOOTH_NEWGAME = "_NEWGAME_";
-    /** Für Notifikationen außerhalb der App*/
+    /** Fuer Notifikationen ausserhalb der App*/
     AndroidLauncher androidLauncher;
 	private int FieldMessageCounterToDoDelete;
     
@@ -189,7 +189,7 @@ public class BluetoothConnectedThread extends Thread {
 //	                		game.setEnemyFieldUnits(tmpFieldUnits);
 //	                		subStringIncomeing="";
 //	                	}else{
-//	                		//Stream zu String zusammenführen
+//	                		//Stream zu String zusammenfuehren
 //	                		subStringIncomeing= subStringIncomeing+readMsg.substring(BLUETOOTH_ENEMY_FIELD.length());
 //	                	}
 	                }

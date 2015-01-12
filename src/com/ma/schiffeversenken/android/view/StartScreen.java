@@ -42,9 +42,9 @@ public class StartScreen extends Activity {
 		setContentView(R.layout.activity_startscreen);
 		
 		try{
-			//Um den Spieler über laufendes Spiel zu berichten.
+			//Um den Spieler ueber laufendes Spiel zu berichten.
 			nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			AndroidLauncher.notificationToUser("Viel Spaß beim spielen, Anwendung läuft.",this,this.getClass(),BackActivity.class, nManager,1234567);
+			AndroidLauncher.notificationToUser("Viel SpaÃŸ beim spielen, Anwendung lÃ¤uft.",this,this.getClass(),BackActivity.class, nManager,1234567);
 			
 			//Bluetooth abfragen ob schon vorher Aktiv.
 			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();    
@@ -93,7 +93,7 @@ public class StartScreen extends Activity {
 	 * Methode beendet die Applikation
 	 */
 	protected void handleBeenden() {
-    	//Schließen von offenen Meldungen der App und endgültiges Beenden.
+    	//Schliessen von offenen Meldungen der App und endgueltiges Beenden.
     	NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     	nManager.cancelAll();
 		//Disable bluetooth

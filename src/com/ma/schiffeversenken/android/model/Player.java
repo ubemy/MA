@@ -32,7 +32,7 @@ import com.badlogic.gdx.utils.Base64Coder;
 
 
 /**
- * Der Player trägt die Spielelemente und das Spielgeschehen.
+ * Der Player traegt die Spielelemente und das Spielgeschehen.
  * 
  * @author Klaus Schlender
  */
@@ -151,7 +151,7 @@ public class Player {
 	}
 
 	/**
-	 * Callback Methode für das Object Player
+	 * Callback Methode fuer das Object Player
 	 */
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -179,7 +179,7 @@ public class Player {
 	 * Methode zum Zeichnen der Szene
 	 * 
 	 * @param batch
-	 *            SpriteBatch wird fürs Zeichnen übergeben.
+	 *            SpriteBatch wird fuers Zeichnen uebergeben.
 	 * @param atlas
 	 */
 	// @Deprecated
@@ -189,10 +189,10 @@ public class Player {
 
 	public void animatedTiles() {
 		// Animatad Tiles
-		// FrameArray für zwei verschiedene Bilder
+		// FrameArray fuer zwei verschiedene Bilder
 		Array<StaticTiledMapTile> frameTiles = new Array<StaticTiledMapTile>(3);
 
-		// Iterieren und holen der Animierten tiles für das FrameArray
+		// Iterieren und holen der Animierten tiles fuer das FrameArray
 		Iterator<TiledMapTile> tiles = map.getTileSets().getTileSet("ships")
 				.iterator();
 		while (tiles.hasNext()) {
@@ -213,7 +213,7 @@ public class Player {
 		//
 		//
 
-		// iteration über das TileGrid
+		// iteration ueber das TileGrid
 		for (int x = 0; x < layer.getHeight(); x++) {
 			for (int y = 0; y < layer.getHeight(); y++) {
 				Cell cell = layer.getCell(x, y);
@@ -281,7 +281,7 @@ public class Player {
 	 * 
 	 * @param obj
 	 *            Das zu serialisierende Object.
-	 * @return ByteArray der das serialiserte Object hält.
+	 * @return ByteArray der das serialiserte Object haelt.
 	 * @throws IOException
 	 */
 	public static byte[] serialize(Object obj) throws IOException {
@@ -296,7 +296,7 @@ public class Player {
 	 * 
 	 * @param bytes
 	 *            ByteArray eines Objectes.
-	 * @return deserialisiertes Objekt wird zurückgeliefert.
+	 * @return deserialisiertes Objekt wird zurueckgeliefert.
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
@@ -309,8 +309,8 @@ public class Player {
 	
 	/**
 	 * Liest ein String Objekt ein und schreibt diesen in Base64.
-	 * @param s String dieser hält ein Objekt
-	 * @return o Objekt wird zurückgeliefert
+	 * @param s String dieser haelt ein Objekt
+	 * @return o Objekt wird zurueckgeliefert
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */

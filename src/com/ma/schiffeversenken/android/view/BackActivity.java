@@ -13,8 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 /**
- * Die BackActivity soll den Nutzer auf das vorhergehende Activity befördern.
- * Diese ist Hilfreich um den Spieler wieder in die OpenGL Scene zu befördern
+ * Die BackActivity soll den Nutzer auf das vorhergehende Activity befoerdern.
+ * Diese ist Hilfreich um den Spieler wieder in die OpenGL Scene zu befoerdern
  * und wird im zusammenhang mit Notifikationen verwendet.
  * 
  * @author Klaus Schlender

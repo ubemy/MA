@@ -216,7 +216,7 @@ public class KI {
 	
 	/**
 	* Wenn das gegnerische Schiff getroffen und erst einmal angegriffen wurde,
-	* wird durch Zufall bestimmt in welche Richtung der nächste Angriff geht
+	* wird durch Zufall bestimmt in welche Richtung der naechste Angriff geht
 	* @param ret Die aktuelle ID, die angegriffen wird
 	* @return Die neue ID, die angegriffen werden soll
 	*/

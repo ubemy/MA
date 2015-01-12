@@ -77,7 +77,7 @@ public class CameraController implements GestureListener {
 		// + ", count: " + count);
 
 		// Bildschirmkoordinaten transformieren zu Weldkoordinaten
-		// touch.x und touch.y mit count für anzahl der tap
+		// touch.x und touch.y mit count fuer anzahl der tap
 		Vector3 touch = new Vector3(x, y, 0);
 		camera.unproject(touch);
 
@@ -95,7 +95,7 @@ public class CameraController implements GestureListener {
 
 		// Spieler Spielfeld Schiffe platzieren
 		// if(state.get(3)){
-		// //TODO TESTZWECK entwecher erweitern oder löschen.
+		// //TODO TESTZWECK entwecher erweitern oder loeschen.
 		// FieldUnit unit =
 		// game.getFirstFieldPlayer().getElementByXPosYPos(touch.x, touch.y);
 		// if(unit!=null){
@@ -106,7 +106,7 @@ public class CameraController implements GestureListener {
 		// }
 		// }
 
-		// // Hinzufügen von Schiffsteil
+		// // Hinzufuegen von Schiffsteil
 		// EntityShip tmpShip = new EntityShip(
 		// game.getFirstFieldPlayer().getShipTextures().get("rhk"),game.getFirstFieldPlayer().getShipTextures().get("rhka"),
 		// new Vector2(
@@ -199,7 +199,7 @@ public class CameraController implements GestureListener {
 	}
 
 	/**
-	 * Methode prüft ob die aktuelle Unit im Touch nicht in einer der Ecken von
+	 * Methode prueft ob die aktuelle Unit im Touch nicht in einer der Ecken von
 	 * der letzen Unit liegt.
 	 * 
 	 * @param lastUnit
@@ -238,8 +238,8 @@ public class CameraController implements GestureListener {
 	}
 
 	/**
-	 * Methode prüft ob die aktuelle Unit im Touch ein bereits plaziertes Schiff
-	 * überdeckt.
+	 * Methode prueft ob die aktuelle Unit im Touch ein bereits plaziertes Schiff
+	 * ueberdeckt.
 	 * 
 	 * @param unit
 	 *            Das Aktuelle Unit im Touch
@@ -292,7 +292,7 @@ public class CameraController implements GestureListener {
 	}
 
 	/**
-	 * Methode setzt die Kamera auf gewünschte position je nach Status. 0=Intro,
+	 * Methode setzt die Kamera auf gewï¿½nschte position je nach Status. 0=Intro,
 	 * 1=FullView, 2=GameFieldZoom, 3=PlayerShips, 4=EnemyShips, 5=GameFieldGrid
 	 * 6=PlayerGrid, 7=EnemyGrid
 	 * 
@@ -306,7 +306,7 @@ public class CameraController implements GestureListener {
 			camera.position.y = layerY;
 			camera.zoom = layerZoom;
 			camera.position.x += 5;
-			// Gdx.app.log("Schiffeversenken 1.0: ","Intro Ausführen");
+			// Gdx.app.log("Schiffeversenken 1.0: ","Intro Ausfï¿½hren");
 		} else if (state.get(0)) {
 			camera.position.x = layerX;
 			// State Wechsel
@@ -487,7 +487,7 @@ public class CameraController implements GestureListener {
 	 * 5=GameFieldGrid 6=PlayerGrid, 7=EnemyGrid, 8=NewGame
 	 * 
 	 * @param toStateNumber
-	 *            Der ausgewählte Zustand
+	 *            Der ausgewï¿½hlte Zustand
 	 * @param grid
 	 *            Boolean der im jeweiligen Zustand den Grid Zustand mit
 	 *            aktiviert.
@@ -556,14 +556,14 @@ public class CameraController implements GestureListener {
 			shipMiddle = "uvk";
 			shipFront ="uvk";
 			
-			// Hinzufügen von Schiffsteil
+			// Hinzufï¿½gen von Schiffsteil
 			EntityShip tmpShip = new EntityShip(shipBack,
 					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 							GameFieldScreen.size, GameFieldScreen.size));
 			unit.setEntityShipDrawUnit(tmpShip);
 			unit.setOccupied(true);
 
-			// Schiffslänge hinzufügen
+			// Schiffslï¿½nge hinzufï¿½gen
 			unitLocation = new FieldUnit[1];
 			unitLocation[0] = unit;
 			shipLastUnit = unit;
@@ -617,25 +617,25 @@ public class CameraController implements GestureListener {
 				shipNextUnit = unit.get_oNeighbor();
 			}
 
-			// Hinzufügen von Schiffsteil
+			// Hinzufï¿½gen von Schiffsteil
 			EntityShip tmpShip = new EntityShip(shipFront,
 					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 							GameFieldScreen.size, GameFieldScreen.size));
 			unit.setEntityShipDrawUnit(tmpShip);
 			unit.setOccupied(true);
 
-			// Schiffslänge hinzufügen
+			// Schiffslï¿½nge hinzufï¿½gen
 			FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
 			tmpUnitLocation[0] = unitLocation[0];
 			tmpUnitLocation[1] = unit;
 			unitLocation = tmpUnitLocation;
 
-			// Setzen der richtigen Schiffstextur für Hinten
+			// Setzen der richtigen Schiffstextur fï¿½r Hinten
 			unitLocation[0].getEntityShipDrawUnit().setShipTextureRegion(
 					shipBack);
 			shipLastUnit = unit;
 
-			// Wenn keine Zerstörer und Schlachtschiffe da sind.
+			// Wenn keine Zerstï¿½rer und Schlachtschiffe da sind.
 			if (shipPlaceHelper.get(3) == 0 && shipPlaceHelper.get(2) == 0) {
 				shipNextUnit = null;
 			}
@@ -645,7 +645,7 @@ public class CameraController implements GestureListener {
 				&& unit.equals(shipNextUnit) && !overlayingOtherShips(unit)
 				&& !isNextUnitinsideCorner(shipLastUnit, unit)) {
 			// System.out.println("Unit Gefunden secondShift");
-			// Hinzufügen von Schiffsteil
+			// Hinzufï¿½gen von Schiffsteil
 			EntityShip tmpShip = new EntityShip(shipFront,
 					new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 							GameFieldScreen.size, GameFieldScreen.size));
@@ -672,11 +672,11 @@ public class CameraController implements GestureListener {
 				}
 			}
 
-			// Setzen der richtigen Schiffstextur für letzen Teil
+			// Setzen der richtigen Schiffstextur fï¿½r letzen Teil
 			unitLocation[unitLocation.length - 1].getEntityShipDrawUnit()
 					.setShipTextureRegion(shipMiddle);
 
-			// Schiffslänge hinzufügen
+			// Schiffslï¿½nge hinzufï¿½gen
 			FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
 			for (int i = 0; i < unitLocation.length; i++) {
 				tmpUnitLocation[i] = unitLocation[i];
@@ -688,15 +688,15 @@ public class CameraController implements GestureListener {
 	}
 
 	/**
-	 * Hilfsmethode handelt das Ende des Schiffsteils, fügt das Schiff der
+	 * Hilfsmethode handelt das Ende des Schiffsteils, fï¿½gt das Schiff der
 	 * globalen Schiffsliste placedShipUnits hinzu und setzt boolean Variablen
-	 * zurück.
+	 * zurï¿½ck.
 	 * 
 	 * @param touch
 	 *            Vector3 mit Weltkoordinaten
 	 */
 	private void handleShipEndConstructor(Vector3 touch) {
-		// boolean zurücksetzen
+		// boolean zurï¿½cksetzen
 		aktivatorSchiffSetzen = false;
 		firstShift = true;
 //		shiftDirection = -1;
@@ -730,7 +730,7 @@ public class CameraController implements GestureListener {
 
 		unitLocation[0].setShipOrientation(orientation);
 
-		// Hinzufügen der fertigen unitLocation
+		// Hinzufï¿½gen der fertigen unitLocation
 		placedShipUnits.add(unitLocation);
 
 		Gdx.app.log(GameFieldScreen.TITLE, "Anzahl Schiffe auf Feld: "

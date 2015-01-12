@@ -28,8 +28,8 @@ public class MyGdxGameField extends Game {
 	}
 	
 	/**
-	 * create initialisiert das Grundgerüst für das Zeichnen mit OpenGL ES 2.0
-	 * es wird nur einmal ausgeführt
+	 * create initialisiert das Grundgeruest fuer das Zeichnen mit OpenGL ES 2.0
+	 * es wird nur einmal ausgefuehrt
 	 */
 	@Override
 	public void create() {

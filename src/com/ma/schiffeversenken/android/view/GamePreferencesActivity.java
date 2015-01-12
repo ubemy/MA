@@ -243,7 +243,7 @@ public class GamePreferencesActivity extends Activity implements
 
 				} else {
 					((TextView) findViewById(R.id.grid_topic_row_title))
-							.setText("Ein Schiff ausw‰hlen");
+							.setText("Ein Schiff ausw√§hlen");
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();

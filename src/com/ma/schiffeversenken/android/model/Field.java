@@ -65,7 +65,7 @@ public class Field {
 	private boolean allShipsSet = false;
 	public ShipPlacement sp;
 
-	// Einheitsgröße der Texturen
+	// Einheitsgroesse der Texturen
 	float size;
 	// graphics High and width
 	private int h;
@@ -100,7 +100,7 @@ public class Field {
 	}
 
 	/**
-	 * Überladener Konstruktor erstellt ein Field Objekt
+	 * ï¿½berladener Konstruktor erstellt ein Field Objekt
 	 * 
 	 * @param typ
 	 *            Typ des Spielfelds (0=Eigenes Spielfeld, 1=Gegnerisches
@@ -230,16 +230,16 @@ public class Field {
 	public void setShips(Ship[] ships) {
 		// Vorher das setzen der Schiffe
 		this.placedShips = ships;
-		// Für das Zeichnen bekommt jedes Schiff sein EntityShip danach die
+		// Fuer das Zeichnen bekommt jedes Schiff sein EntityShip danach die
 		// Koordinaten.
 		handleShipEntityDrawUnits(ships,false,false);
 		allShipsSet = true;
 	}
 	
 	/**
-	 * Methode behandelt für jedes Schiff das entsprechende Feldelement und
+	 * Methode behandelt fuer jedes Schiff das entsprechende Feldelement und
 	 * vergibt diesem das entsprechende Draw Objekt EntityShip
-	 * @param ships Die übergebenen Schiffe
+	 * @param ships Die uebergebenen Schiffe
 	 * @param setTextureName true, wenn nur die Textur angepasst werden soll.
 	 * @param manualPlacement true, wenn die Plazierung manuell gemacht wurde.
 	 */
@@ -358,7 +358,7 @@ public class Field {
 					//Bearbeiten von Schiffsteil.
 						unit.getEntityShipDrawUnit().setShipTextureRegion(textureName);
 					}else{
-					// Hinzufügen von Schiffsteil
+					// Hinzufuegen von Schiffsteil
 					EntityShip tmpShip = new EntityShip(textureName, new Vector2(
 									unit.getXpos(), unit.getYpos()),
 							new Vector2(size, size));
@@ -400,7 +400,7 @@ public class Field {
 					//Bearbeiten von Schiffsteil.
 						unit.getEntityShipDrawUnit().setShipTextureRegion(textureName);
 				}else{
-				// Hinzufügen von Schiffsteil
+				// Hinzufuegen von Schiffsteil
 				EntityShip tmpShip = new EntityShip(textureName, new Vector2(
 								unit.getXpos(), unit.getYpos()), new Vector2(
 								size, size));
@@ -418,20 +418,9 @@ public class Field {
 	 */
 	public void setShipsManual(Ship[] ships) {
 		this.placedShips = ships;
-		//Für die Korrektur der Texturen nach der Datenübertragung des Json Objektes
+		//Fuer die Korrektur der Texturen nach der Datenuebertragung des Json Objektes
 		handleShipEntityDrawUnits(placedShips,true,true);
 		allShipsSet = true;
-
-		
-		//Debug
-		for (Ship ship : ships) {
-			System.out.println("Größe"+ship.size+" ");
-			for (FieldUnit u : ship.location) {
-//				System.out.print(" ID:"+u.getID()+" Grafik:"+u.getEntityShipDrawUnit().toString());
-				System.out.print(" ID:"+u.getID()+((u.getEntityShipDrawUnit()==null)?"null":"Notnull"));
-			}
-			System.out.println("");
-		}
 	}
 
 	/**
@@ -502,7 +491,7 @@ public class Field {
 
 	/**
 	 * Erstellt das Spielfeld, das aus 10x10 Feldelementen besteht Hierbei wird
-	 * auch die Position je Feld in der Scene übergeben.
+	 * auch die Position je Feld in der Scene uebergeben.
 	 */
 	private void create() {
 		int cellPosX = 1;
@@ -607,10 +596,10 @@ public class Field {
 	}
 
 	/**
-	 * Iteriert über alle Feldelemente die gezeichnet werden.
+	 * Iteriert ueber alle Feldelemente die gezeichnet werden.
 	 * 
 	 * @param batch
-	 *            SpriteBatch fürs Zeichnen
+	 *            SpriteBatch fuers Zeichnen
 	 * @param typ
 	 *            Spielfeld Typ 0=Spieler, 1=Gegner
 	 */
@@ -648,7 +637,7 @@ public class Field {
 													.getAnimationtimer() + 1);
 										}
 									} else {
-										// Schiffsteil beschädigt, malen wenn Vorhanden.
+										// Schiffsteil beschaedigt, malen wenn Vorhanden.
 										if(units[i][j].getEntityShipDrawUnit()!=null)
 										units[i][j].getEntityShipDrawUnit().render(batch,
 												true,shipTextures);
@@ -709,7 +698,7 @@ public class Field {
 										.getAnimationtimer() + 1);
 							}
 						} else {
-							// Schiffsteil beschädigt, malen 
+							// Schiffsteil beschaedigt, malen
 							units[i][j].getEntityShipDrawUnit().render(batch,
 									true,shipTextures);
 							// Bombenanimation
@@ -759,13 +748,13 @@ public class Field {
 								}
 						} else {
 							if (units[i][j].getPlacedShip().isDestroyed()) {
-								// Komplettes Schiff ist zerstört und wird angezeigt
+								// Komplettes Schiff ist zerstoert und wird angezeigt
 								units[i][j].getEntityShipDrawUnit().render(
 										batch, true,shipTextures);
 							} else if (!units[i][j].getPlacedShip().isDestroyed()) {
-								// Schiff nicht komplett zerstört
+								// Schiff nicht komplett zerstoert
 
-									// Nach animation Feueratakke anzeigen wenn schiff beschädigt
+									// Nach animation Feueratakke anzeigen wenn schiff beschaedigt
 									batch.draw(shipTextures.get("gunattack"),
 											units[i][j].getXpos(),
 											units[i][j].getYpos(), size, size);	
@@ -788,7 +777,7 @@ public class Field {
 	}
 
 	/**
-	 * Methode gibt den Status zurück ob Schiffe auf Feld Plaziert sind.
+	 * Methode gibt den Status zurueck ob Schiffe auf Feld Plaziert sind.
 	 * 
 	 * @return boolean true oder false
 	 */
@@ -846,7 +835,7 @@ public class Field {
 	
 	public void setFieldUnitsBluetooth(FieldUnit[][] u) {
 		if(!feldUebertragen){
-			//TODO Nachricht feldübertragen
+			//TODO Nachricht feldï¿½bertragen
 			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
 			byte[] returnString = (new String(btcThread.BLUETOOTH_ENEMY_FIELD_RETURN)).getBytes();
 			btcThread.write(returnString);
@@ -860,7 +849,7 @@ public class Field {
 
 	public void sendFieldUnitsWithBluetooth() {
 
-		//Für Bluetooth eigenes Feld übertragen
+		//Fuer Bluetooth eigenes Feld uebertragen
 		if(!feldUebertragen){
 			BluetoothConnectedThread btcThread = BluetoothConnectedThread.getInstance();
 			byte[] fieldBytes;
@@ -916,43 +905,8 @@ public class Field {
 //						}
 //					}
 //					} catch (IOException e) {
-//					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
-				
-				//TODO ALT ALT
-//				byte[] fieldBytes;
-//				String subStringAll = Player.toString(units);
-//				String subStringPart;
-//
-//				int bytesToTransfer = subStringAll.length();		
-//				while (bytesToTransfer >= 0) {			
-//					if(bytesToTransfer>0){
-//						//1024 Bytes senden	
-//					subStringPart = subStringAll.substring(0, BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());
-//					
-//					fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();
-//					btcThread.write(fieldBytes);
-//					
-//					subStringAll=subStringAll.substring(BluetoothConnectedThread.BUFFER_SIZE-BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD.length());			    
-//				    bytesToTransfer -= BluetoothConnectedThread.BUFFER_SIZE;
-//					}else{
-//						//Ende senden
-//						fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD).getBytes();
-//						btcThread.write(fieldBytes);
-//						bytesToTransfer -= BluetoothConnectedThread.BUFFER_SIZE;
-//					}
-//				}
-				
-//				fieldString = BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD +
-//						(Player.serialize(units));
-//				
-//				shipsString = BluetoothConnectedThread.BLUETOOTH_ENEMY_SHIPS + 
-//						Player.serialize(ships);
-//				btcThread.write(fieldBytes);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}	
 	}
 
 	/**
@@ -985,8 +939,8 @@ public class Field {
 //									
 //					fieldBytes = (BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+subStringPart).getBytes();					
 //					
-//					System.out.println("Send_Sub    "+subStringPart+"      größe:"+subStringPart.length());
-//					System.out.println("Send_Full   "+fieldBytes+"      größe:"+fieldBytes.length);		
+//					System.out.println("Send_Sub    "+subStringPart+"      grï¿½ï¿½e:"+subStringPart.length());
+//					System.out.println("Send_Full   "+fieldBytes+"      grï¿½ï¿½e:"+fieldBytes.length);		
 //					//Deserialisierung
 //					String readMsg="";
 //					String subStringIncomeing="";
@@ -1026,8 +980,8 @@ public class Field {
 //						
 //						if(readMsg.startsWith(BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD+BluetoothConnectedThread.BLUETOOTH_ENEMY_FIELD)){
 //							//Ende simulieren
-//							System.out.println("Substring länge muss:"+subString.length());
-//							System.out.println("Substring länge ist :"+subStringIncomeing.length());
+//							System.out.println("Substring lï¿½nge muss:"+subString.length());
+//							System.out.println("Substring lï¿½nge ist :"+subStringIncomeing.length());
 //							units2=(FieldUnit[][])Player.fromString(subStringIncomeing);					
 //							System.out.println("FIELDID NACHHER: "+units2[1][1].getID());
 //							
@@ -1060,7 +1014,7 @@ public class Field {
 	}
 	
 	/**
-	 * True wenn vom Bluetooth Gegner ein Feld übertragen wurde.
+	 * True wenn vom Bluetooth Gegner ein Feld uebertragen wurde.
 	 * 
 	 */
 	public boolean getFeldUebertragen(){
@@ -1076,8 +1030,8 @@ public class Field {
 	}
 
 	/**
-	 * Klasse erstellt ein Json lesefähiges Abbild von placedShips
-	 * um dieses dan für den Objektbau wiederzuverwenden.
+	 * Klasse erstellt ein Json lesefaehiges Abbild von placedShips
+	 * um dieses dan fuer den Objektbau wiederzuverwenden.
 	 * @author Klaus Schlender
 	 *
 	 */
@@ -1102,14 +1056,14 @@ public class Field {
 		 * Methode erstellt die Schiffe aus den
 		 * Json Daten in ShipsDescriptor.
 		 * 
-		 * @return boolean Gibt true zurück bei Erfolg.
+		 * @return boolean Gibt true zurueck bei Erfolg.
 		 */
 		public boolean replaceOldFieldPlacedShips(Field field){
 			//Hilfsvariablen
 			String shipBack ="dvk";
 			String shipMiddle ="dvk";
 			String shipFront ="dvk";
-			//Schiffe und Feld zurücksetzen
+			//Schiffe und Feld zuruecksetzen
 			field.resetField();
 			
 			//Neue Units erstellen und verarbeiten
@@ -1138,14 +1092,14 @@ public class Field {
 							shipFront ="dvk";
 
 							
-							// Hinzufügen von Schiffsteil
+							// Hinzufuegen von Schiffsteil
 							tmpShip = new EntityShip(shipBack,
 									new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 											GameFieldScreen.size, GameFieldScreen.size));
 							unit.setEntityShipDrawUnit(tmpShip);
 							unit.setOccupied(true);
 							
-							// Schiffslänge hinzufügen
+							// Schiffslaenge hinzufuegen
 							unitLocation = new FieldUnit[1];
 							unitLocation[0] = unit;
 							shipLastUnit = unit;
@@ -1153,7 +1107,7 @@ public class Field {
 							orientation = 3;
 					
 						}else if(j==1){//Behandeln von zweitem Schiffsteil
-							//Definieren der Schiffstexturen lt. Ausrichtung gemäß Vorgänger
+							//Definieren der Schiffstexturen lt. Ausrichtung gemï¿½ï¿½ Vorgï¿½nger
 							if (unit.equals(unitLocation[0].get_lNeighbor())) {
 								shiftDirection = 0;
 								orientation = 2;//links
@@ -1188,25 +1142,25 @@ public class Field {
 								shipNextUnit = unit.get_oNeighbor();
 							}
 							
-							// Hinzufügen von Schiffsteil
+							// Hinzufï¿½gen von Schiffsteil
 							tmpShip = new EntityShip(shipFront,
 									new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 											GameFieldScreen.size, GameFieldScreen.size));
 							unit.setEntityShipDrawUnit(tmpShip);
 							unit.setOccupied(true);
 
-							// Schiffslänge hinzufügen
+							// Schiffslaenge hinzufuegen
 							FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
 							tmpUnitLocation[0] = unitLocation[0];
 							tmpUnitLocation[1] = unit;
 							unitLocation = tmpUnitLocation;
 
-							// Setzen der richtigen Schiffstextur für Hinten
+							// Setzen der richtigen Schiffstextur fuer Hinten
 							unitLocation[0].getEntityShipDrawUnit().setShipTextureRegion(
 									shipBack);
 							shipLastUnit = unit;
 						}else if(j<fieldUnitsDesc.size()){//Behandeln von Schiffsmitte bis Front
-							// Hinzufügen von Schiffsteil
+							// Hinzufuegen von Schiffsteil
 							tmpShip = new EntityShip(shipFront,
 									new Vector2(unit.getXpos(), unit.getYpos()), new Vector2(
 											GameFieldScreen.size, GameFieldScreen.size));
@@ -1243,11 +1197,11 @@ public class Field {
 								break;
 							}
 
-							// Setzen der richtigen Schiffstextur für letzen Teil
+							// Setzen der richtigen Schiffstextur fuer letzen Teil
 							unitLocation[unitLocation.length - 1].getEntityShipDrawUnit()
 									.setShipTextureRegion(shipMiddle);
 
-							// Schiffslänge hinzufügen
+							// Schiffslï¿½nge hinzufï¿½gen
 							FieldUnit[] tmpUnitLocation = new FieldUnit[unitLocation.length + 1];
 							for (int k = 0; k < unitLocation.length; k++) {
 								tmpUnitLocation[k] = unitLocation[k];
@@ -1260,7 +1214,7 @@ public class Field {
 					unitLocation[0].setShipOrientation(orientation);
 					
 				}	
-				// Hinzufügen der fertigen unitLocation
+				// Hinzufuegen der fertigen unitLocation
 				placedShipUnits.add(unitLocation);
 			}		
 			// Die neuen Schiffe platzieren
@@ -1275,7 +1229,7 @@ public class Field {
 	}
 	
 	/**
-	 * Klasse erstellt ein Json lesefähiges Abbild von Ship
+	 * Klasse erstellt ein Json lesefaehiges Abbild von Ship
 	 * @author Klaus Schlender
 	 *
 	 */
@@ -1295,8 +1249,8 @@ public class Field {
 	}
 	
 	/**
-	 * Klasse erstellt ein Json lesefähiges Abbild von FieldUnit[size]
-	 * das zu einem Schiff gehört.
+	 * Klasse erstellt ein Json lesefaehiges Abbild von FieldUnit[size]
+	 * das zu einem Schiff gehoert.
 	 * @author Klaus Schlender
 	 *
 	 */
@@ -1315,8 +1269,8 @@ public class Field {
 	}
 	
 	/**
-	 * Klasse erstellt ein Json lesefähiges Abbild von FieldUnit[size]
-	 * das zu einem Schiff gehört.
+	 * Klasse erstellt ein Json lesefaehiges Abbild von FieldUnit[size]
+	 * das zu einem Schiff gehoert.
 	 * @author Klaus Schlender
 	 *
 	 */

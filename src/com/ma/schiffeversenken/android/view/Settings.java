@@ -12,7 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
- * Android Activity zum Ändern der Spieleinstellungen
+ * Android Activity zum aendern der Spieleinstellungen
  * @author Maik Steinborn
  * @author Klaus Schlender
  */

@@ -70,7 +70,7 @@ public class FieldUnit{
 	}
 	
 	/**
-	 * Überladener Konstruktor
+	 * Ueberladener Konstruktor
 	 * 
 	 * @param id
 	 *            Die eindeutige ID dieses Feldelements
@@ -227,7 +227,7 @@ public class FieldUnit{
 	}
 
 	/**
-	 * Für das Zeichnen in Opengl Koordinaten benötigt
+	 * Fuer das Zeichnen in Opengl Koordinaten benoetigt
 	 * 
 	 * @return position
 	 */
@@ -236,7 +236,7 @@ public class FieldUnit{
 	}
 
 	/**
-	 * Für das Zeichnen in Opengl Koordinaten benötigt
+	 * Fuer das Zeichnen in Opengl Koordinaten benoetigt
 	 * 
 	 * @return position
 	 */
@@ -245,7 +245,7 @@ public class FieldUnit{
 	}
 
 	/**
-	 * Für das Zeichnen in Opengl Koordinaten benötigt
+	 * Fuer das Zeichnen in Opengl Koordinaten benoetigt
 	 * 
 	 * @return position
 	 */
@@ -254,7 +254,7 @@ public class FieldUnit{
 	}
 
 	/**
-	 * Für das Zeichnen in Opengl Koordinaten benötigt
+	 * Fuer das Zeichnen in Opengl Koordinaten benoetigt
 	 * 
 	 * @return position
 	 */
@@ -263,10 +263,10 @@ public class FieldUnit{
 	}
 
 	/**
-	 * Das Schiff bekommt eine EntityShip Unit übergeben für das Zeichnen
+	 * Das Schiff bekommt eine EntityShip Unit uebergeben fuer das Zeichnen
 	 * 
 	 * @param e
-	 *            EntityShip für das Zeichnen des Schiffteils
+	 *            EntityShip fuer das Zeichnen des Schiffteils
 	 */
 	public void setEntityShipDrawUnit(EntityShip e) {
 		this.entityShip = e;
@@ -274,7 +274,7 @@ public class FieldUnit{
 	}
 
 	/**
-	 * Gibt das EntityShip von dem Schiff für das Zeichnen zurück
+	 * Gibt das EntityShip von dem Schiff fuer das Zeichnen zurueck
 	 */
 	public EntityShip getEntityShipDrawUnit() {
 		return entityShip;
@@ -282,8 +282,8 @@ public class FieldUnit{
 	}
 
 	/**
-	 * Animationstimer soll eine animation unterstützen
-	 * durch hochzählen der werte bis zu einem Wert.
+	 * Animationstimer soll eine animation unterstuetzen
+	 * durch hochzaehlen der werte bis zu einem Wert.
 	 * @return int Hilfsvariable Animationstimer 
 	 */
 	public int getAnimationtimer() {
@@ -291,9 +291,9 @@ public class FieldUnit{
 	}
 
 	/**
-	 * Animationstimer soll eine animation unterstützen
-	 * durch hochzählen der werte bis zu einem Wert.
-	 * @param animationtimer Wert für die Hilfsvariable
+	 * Animationstimer soll eine animation unterstuetzen
+	 * durch hochzaehlen der werte bis zu einem Wert.
+	 * @param animationtimer Wert fuer die Hilfsvariable
 	 */
 	public void setAnimationtimer(int animationtimer) {
 		this.animationtimer = animationtimer;

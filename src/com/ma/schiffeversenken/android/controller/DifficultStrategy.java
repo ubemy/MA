@@ -56,7 +56,7 @@ public class DifficultStrategy implements KIStrategy{
 	
 	/**
 	 * Fuehrt eine sichere Attacke aus,
-	 * das heiﬂt, dass auf jeden Fall ein gegnerisches Schiff getroffen wird
+	 * das heisst, dass auf jeden Fall ein gegnerisches Schiff getroffen wird
 	 * @return Die ID des Feldelements, das angegriffen wird
 	 */
 	private int getIDForSecureAttack(){

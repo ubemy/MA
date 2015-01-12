@@ -111,7 +111,7 @@ public class CreateMultiplayerGame extends Activity {
 	}
 	
 	/**
-	 * Dieser Toast muss ueber den UI Thread ausgeführt werden, da er von außerhalb aufgerufen wird
+	 * Dieser Toast muss ueber den UI Thread ausgefuehrt werden, da er von ausserhalb aufgerufen wird
 	 * @param message Text, der als Toast angezeigt wird
 	 */
 	public void showToast(final String message){

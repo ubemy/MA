@@ -21,7 +21,7 @@ public class Allgemeinesdreieck {
 	private double seitea = 0.0;
 	private double seiteb = 0.0;
 	private double seitec = 0.0;
-	private double flinhalt = 0.0; // Flächeninhalt
+	private double flinhalt = 0.0; // Flaecheninhalt
 	private ArrayList<float[]> pfeilPolygone;
 
 	// Konstruktor
@@ -35,13 +35,13 @@ public class Allgemeinesdreieck {
 	seiteb = b2;
 	seitec = c2;
 	
-	//Fläche berechnen
+	//Flï¿½che berechnen
 	flinhalt=flaecheninhalt();
 	}
 
 	/**
-	 * Methode liefert den Flächeninhalt eines Dreiecks
-	 * @return flaeche Flächeninhalt
+	 * Methode liefert den Flï¿½cheninhalt eines Dreiecks
+	 * @return flaeche Flï¿½cheninhalt
 	 */
 	public double flaecheninhalt(){
 		double s;
@@ -73,7 +73,7 @@ public class Allgemeinesdreieck {
 	}
 	
 	public void getTriangles(TiledMap map){
-		//Pfeil Generieren für das spätere Zeichnen
+		//Pfeil Generieren fuer das spaetere Zeichnen
 		pfeilPolygone = new ArrayList<float[]>();
 		MapObject object = map.getLayers().get("GameField").getObjects().get("arrow");
 		Polygon pfeil = ((PolygonMapObject) object).getPolygon();

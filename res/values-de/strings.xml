@@ -28,8 +28,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="help">Ziel des Spiels:\nDas Ziel des Spiels ist es, alle Schiffe der gegnerischen Spieler zu versenken.\nDer Spieler, der zuletzt noch nichtversenkte Schiffe hat, gewinnt.\n
 \nRegeln des Standardspiels:
-\nEs gibt zwei Spieler.\nDie Spielfläche beträgt 10x10 Felder.\nZu Beginn des Spiels platziert jeder Spieler seine Schiffe.\nJeder Spieler verfügt über insgesamt zehn Schiffe. 
-\nDie Schiffe dürfen waagerecht oder senkrecht aufgebaut werden.\nVor dem ersten Angriff wird durch ein Los entschieden, welcher Spieler den ersten Zug macht. 
+\nEs gibt zwei Spieler.\nDie Spielfläche beträgt 10x10 Felder.\nZu Beginn des Spiels platziert jeder Spieler seine Schiffe.\nJeder Spieler verfügt über maximal zehn Schiffe. 
+\nDie Schiffe dürfen waagerecht oder senkrecht aufgebaut werden.
 \nDer Angreifende gibt das Feld an, dass er angreift.\nEin Schiff gilt als versenkt, wenn alle Felder des Schiffes getroffen wurden.
 \nEin Spieler darf solange angreifen, bis er ins Wasser trifft.\nAnschließend ist der Gegenspieler am Zug.</string>
     <string name="title_activity_settings">Einstellungen</string>

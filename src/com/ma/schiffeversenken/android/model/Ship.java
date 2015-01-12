@@ -45,8 +45,6 @@ public class Ship {
 	/**
 	 * Erstellt ein Ship Objekt
 	 * 
-	 * @param name
-	 *            Name des Schiffs
 	 * @param size
 	 *            Groesse des Schiffs
 	 */
@@ -60,8 +58,6 @@ public class Ship {
 	/**
 	 * Erstellt ein Ship Objekt mit Location
 	 * 
-	 * @param name
-	 *            Name des Schiffs
 	 * @param size
 	 *            Groesse des Schiffs
 	 * @param location

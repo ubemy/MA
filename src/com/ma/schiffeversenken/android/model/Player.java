@@ -47,7 +47,6 @@ public class Player {
 
 	/**
 	 * TODO Make Animation
-	 * @param state 
 	 * @param tileSet
 	 * @param m
 	 * @throws ClassNotFoundException
@@ -176,7 +175,6 @@ public class Player {
 	 * 
 	 * @param batch
 	 *            SpriteBatch wird fuers Zeichnen uebergeben.
-	 * @param atlas
 	 */
 	// @Deprecated
 	public void draw(Batch batch) {
@@ -324,7 +322,6 @@ public class Player {
 	    * Liest ein Base64 Objekt und schreibt dieses in einen String.
 	    * @param o Objekt welches in String geschrieben werden soll.
 	    * @return String der resultierende String
-	    * @throws IOException
 	    */
 	   public static String toString( Serializable o ) {
 		   try {

@@ -81,7 +81,7 @@ public class Bluetooth extends Activity {
 	/**
 	 * Bluetooth Server Socket in einem Thread starten und auf Verbindung von Client warten
 	 * @param cmgClass Das initialisierte CreateMultiplayerGame Objekt
-	 * @param game Das initialisierte Game Objekt
+	 * @param reconnect true oder false ob dies ein erneuter Verbindungsversuch ist
 	 */
 	public void startServer(CreateMultiplayerGame cmgClass, boolean reconnect){
 		BluetoothListenThread btListenThread = new BluetoothListenThread(bluetoothAdapter, cmgClass, appUUID, reconnect);
@@ -92,7 +92,7 @@ public class Bluetooth extends Activity {
 	 * Verbindung mit Server aufbauen
 	 * @param mac Die MAC-Adresse des Servers, mit dem die Verbindung aufgebaut werden soll
 	 * @param vmgClass Das initialisierte VisitMultiplayerGame Objekt
-	 * @param game Das initialisierte Game Objekt
+	 * @param reconnect true oder false ob dies ein erneuter Verbindungsversuch ist
 	 */
 	public void connectToServer(String mac, VisitMultiplayerGame vmgClass, boolean reconnect){
 		BluetoothDevice device = null;

@@ -234,7 +234,7 @@ public class FieldUnit{
 	/**
 	 * Fuer das Zeichnen in Opengl Koordinaten benoetigt
 	 * 
-	 * @return position
+	 * @param xpos X-Koordinate
 	 */
 	public void setXpos(float xpos) {
 		this.xpos = xpos;
@@ -243,7 +243,7 @@ public class FieldUnit{
 	/**
 	 * Fuer das Zeichnen in Opengl Koordinaten benoetigt
 	 * 
-	 * @return position
+	 * @return Y-Koordinate
 	 */
 	public float getYpos() {
 		return ypos;

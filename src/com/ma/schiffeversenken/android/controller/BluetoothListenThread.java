@@ -78,7 +78,7 @@ public class BluetoothListenThread extends Thread{
 	/**
      * Erstellt ein Thread, das sich um die bestehende Verbindung verwaltet und
      * Ein- und ausgehende Streams verwaltet
-     * @param socket Aufgebaute Bluetooth Socket Verbindung zum Server
+     * @param mmSocket Aufgebaute Bluetooth Socket Verbindung zum Server
      */
 	private void manageConnectedSocket(BluetoothSocket mmSocket) {
     	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter);

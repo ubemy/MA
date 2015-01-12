@@ -104,9 +104,8 @@ public class ShipPlacement {
 	 * Platziert die Schiffe die uebergeben werden auf dem Spielfeld Erst das
 	 * Erstellen von ships, danach das Platzieren in field
 	 * 
-	 * @param field
-	 * @param ships
-	 * @param placedShipUnits
+	 * @param field Feld auf dem Platziert werden soll
+	 * @param placedShipUnits Schiffe, die platziert werden sollen
 	 */
 	public void placeShipsManual(Field field,
 			ArrayList<FieldUnit[]> placedShipUnits) {
@@ -221,14 +220,14 @@ public class ShipPlacement {
 	/**
 	 * Prueft ob die benoetigten Felder frei oder belegt sind
 	 * 
-	 * @param horver
+	 * @param orientation
 	 *            Gibt an in welcher Richtung das Schiff platziert werden soll
 	 *            (oben, unten, rechts, links)
 	 * @param ship
 	 *            Das zu platzierende Schiff
 	 * @param id
 	 *            Die ID des Startfeldes
-	 * @param feld
+	 * @param field
 	 *            Spielfeld
 	 * @return Gibt zurueck ob die Felder frei oder belegt sind
 	 */
@@ -268,7 +267,7 @@ public class ShipPlacement {
 	 *            Groesse des Schiffs
 	 * @param id
 	 *            ID des Startfeldes
-	 * @param feld
+	 * @param field
 	 *            Spielfeld
 	 * @return Gibt zurueck ob die Felder frei oder belegt sind
 	 */

@@ -191,8 +191,6 @@ public class Field {
 	 * Methode generiert Schiffe und plaziert diese auf dem SpielFeld.
 	 * 
 	 * @param schiffsEinstellung
-	 * @param ships
-	 *            Die Schiffe, die platziert werden
 	 */
 	public void generateNewShipplacement(ArrayList<Integer> schiffsEinstellung) {
 
@@ -603,8 +601,6 @@ public class Field {
 	 * 
 	 * @param batch
 	 *            SpriteBatch fuers Zeichnen
-	 * @param typ
-	 *            Spielfeld Typ 0=Spieler, 1=Gegner
 	 */
 	// @Deprecated
 	public void draw(Batch batch) {

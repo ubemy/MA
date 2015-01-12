@@ -65,7 +65,6 @@ public class Game extends Thread {
 	private boolean end;
 	/**
 	 * Erstellt ein neues Game Objekt
-	 * @param state 
 	 * @param gameMode 0=Einzelspieler; 1=Mehrspieler
 	 * @param firstFieldPlayer Spielfeld des 1. Spielers
 	 * @param secondField Spieldfeld des 2. Spielers

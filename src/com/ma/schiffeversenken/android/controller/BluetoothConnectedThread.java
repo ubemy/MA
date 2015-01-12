@@ -4,24 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.ma.schiffeversenken.CameraController;
-import com.ma.schiffeversenken.GameFieldScreen;
 import com.ma.schiffeversenken.android.AndroidLauncher;
 import com.ma.schiffeversenken.android.R;
-import com.ma.schiffeversenken.android.model.FieldUnit;
-import com.ma.schiffeversenken.android.model.Player;
 import com.ma.schiffeversenken.android.model.Field.ShipsDescriptor;
-import com.ma.schiffeversenken.android.view.BackActivity;
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 
-import android.app.Activity;
-import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 
 /**
  * Wird aufgerufen, wenn eine Verbindung hergestellt wurde.
@@ -63,16 +55,13 @@ public class BluetoothConnectedThread extends Thread {
     public static final String BLUETOOTH_NEWGAME = "_NEWGAME_";
     /** Fuer Notifikationen ausserhalb der App*/
     AndroidLauncher androidLauncher;
-	private int FieldMessageCounterToDoDelete;
-    
-    /**
-     * Erstellt ein BluetoothConnectedThread Objekt
-     * @param socket Erstellte Bluetooth Socket Verbindung
-     * @param vmgClass Initialisiertes VisitMultiplayerGame Objekt
-     * @param cmgClass Initialisiertes CreateMultiplayerGame Objekt
-     * @param bluetoothAdapter Bluetooth Adapter Objekt
-     * @param game Initialisiertes Game Objekt
-     */
+	/**
+	 * Erstellt ein BluetoothConnectedThread Objekt
+	 * @param socket Erstellte Bluetooth Socket Verbindung
+	 * @param vmgClass Initialisiertes VisitMultiplayerGame Objekt
+	 * @param cmgClass Initialisiertes CreateMultiplayerGame Objekt
+	 * @param bluetoothAdapter Bluetooth Adapter Objekt
+	 */
     public BluetoothConnectedThread(BluetoothSocket socket, VisitMultiplayerGame vmgClass, CreateMultiplayerGame cmgClass, BluetoothAdapter bluetoothAdapter) {
     	bluetoothSocket = socket;
         InputStream tmpIn = null;
@@ -237,6 +226,10 @@ public class BluetoothConnectedThread extends Thread {
         }
     }
     
+    /**
+     * AndroidLauncher Instanz setzen
+     * @param a AndroidLauncher Instanz
+     */
     public void setAndroidLauncher(AndroidLauncher a){
     	this.androidLauncher=a;
     }

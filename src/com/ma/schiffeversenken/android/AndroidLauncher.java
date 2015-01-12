@@ -75,6 +75,10 @@ public class AndroidLauncher extends AndroidApplication {
 		initialize(new MyGdxGameField(primaryBTGame, secondaryBTGame,this), cfg);
 	}
 
+	/**
+	 * Baut die Bluetooth Verbindung neu auf,
+	 * wenn der Benutzer den Dialog positiv bestätigt hat
+	 */
 	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 	    @Override
 	    public void onClick(DialogInterface dialog, int which) {

@@ -40,10 +40,6 @@ public class FieldUnit{
 	/** Segment des Schiffs: 0=Vorderteil, 1=Mittelteil, 2=Hinterteil */
 	private int shipSegment;
 
-	// OpenGL Elemente
-//	private TextureRegion drawFeld;
-//	private Sprite sprite;
-	private String textureName;
 	private float xpos;
 	private float ypos;
 	private int animationtimer=0;
@@ -299,19 +295,34 @@ public class FieldUnit{
 		this.animationtimer = animationtimer;
 	}
 
+	/**
+	 * Den direkten linken Nachbarn dieses Feldelements zurueckgeben
+	 * @return Den direkten linken Nachbarn
+	 */
 	public FieldUnit get_lNeighbor() {
 		return lNeighbor;
 	}
 
+	/**
+	 * Den direkten rechten Nachbarn dieses Feldelements zurueckgeben
+	 * @return Den direkten rechten Nachbarn
+	 */
 	public FieldUnit get_rNeighbor() {
 		return rNeighbor;
 	}
 
-
+	/**
+	 * Den direkten oberen Nachbarn dieses Feldelements zurueckgeben
+	 * @return Den direkten oberen Nachbarn
+	 */
 	public FieldUnit get_oNeighbor() {
 		return oNeighbor;
 	}
 
+	/**
+	 * Den direkten unteren Nachbarn dieses Feldelements zurueckgeben
+	 * @return Den direkten unteren Nachbarn
+	 */
 	public FieldUnit get_uNeighbor() {
 		return uNeighbor;
 	}
@@ -325,6 +336,10 @@ public class FieldUnit{
 		 this.orientation=orientation;
 	}
 	
+	/**
+	 * Die Orientierung des Schiffs zurueckgeben
+	 * @return Die Orientierung des Schiffs
+	 */
 	public int getShipOrientation(){
 		return orientation;
 	}

@@ -8,8 +8,6 @@ import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
-import android.content.res.Resources;
 
 /**
  * Verbindet sich mit einem offenem Server Port (Client)
@@ -29,6 +27,9 @@ public class BluetoothConnectThread extends Thread {
      * Erstellt ein BluetoothConnectThread Objekt
      * @param device Verbundene Geraete
      * @param bluetoothAdapter Der Bluetooth Adapter des Geraetes
+     * @param vmgClass Initialisiertes VisitMultiplayerGame Objekt
+     * @param uuid Eindeutige ID zur Identifizierung der App über Bluetooth
+     * @param reconnect true oder false ob dies ein erneuter Verbindungsversuch ist
      */
     public BluetoothConnectThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter, VisitMultiplayerGame vmgClass, String uuid, boolean reconnect) {
     	//Temporaeres Objekt benutze, da bluetoothSocket final ist

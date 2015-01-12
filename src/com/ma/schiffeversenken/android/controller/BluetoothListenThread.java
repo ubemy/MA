@@ -24,6 +24,9 @@ public class BluetoothListenThread extends Thread{
 	/**
 	 * Erstellt ein BluetoothListenThread Objekt
 	 * @param bluetoothAdapter Der Bluetooth Adapter des Gereats
+	 * @param cmgClass Initialisiertes CreateMultiplayerGame Objekt
+	 * @param uuid Eindeutige ID zur Identifizierung der App über Bluetooth
+	 * @param reconnect true oder false ob dies ein erneuter Verbindungsversuch ist
 	 */
 	public BluetoothListenThread(BluetoothAdapter bluetoothAdapter, CreateMultiplayerGame cmgClass, String uuid, boolean reconnect){
         //Temporaeres Objekt benutze, da serverSocket final ist

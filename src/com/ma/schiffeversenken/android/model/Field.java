@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -38,12 +37,19 @@ public class Field {
 	public static final int EDGE_BELOW = 3;
 	/** Anzahl der Feldelement */
 	public static final int FIELD_SIZE = 100;
+	/**Audio Datei, die fuer die Schieß Effekte dient*/
 	private static final String SHOT_SOUND_PATH = "sounds/Shot.mp3";
+	/**Audio Datei, die fuer die Explosions Effekte dient*/
 	private static final String EXPLOSION_SOUND_PATH = "sounds/Explosion.mp3";
+	/**Laenge der Vibration in ms, wenn ein Schiff getroffen wurde*/
 	private static final int VIBRATION_LENGTH = 100;
+	/**Sound Variablen fuer das Abspielen der Sound Effekte*/
 	Sound explosionSound, shotSound;
+	/**true oder false ob die Sound Effekte deaktiviert sind*/
 	public static boolean soundOff = false;
-	public static boolean vibrationOff = false;;
+	/**true oder false ob die Vibrationen deaktiviert sind*/
+	public static boolean vibrationOff = false;
+	/**true oder false ob die Cheat eingeschaltet sind*/
 	public static boolean cheatsOn = false;
 	
 	/**
@@ -71,9 +77,6 @@ public class Field {
 	private int h;
 	private int w;
 	private TiledMapTileLayer mapTileLayer;
-	// TODO EntityShip or Tile
-	private ArrayList<EntityShip> drawShips;
-	private Iterator<EntityShip> tileIterator;
 	private TreeMap<String, TextureRegion> shipTextures;
 	private TreeMap<String, TiledMapTile> shipTiles;
 	private int animationtimerMax = 20;
@@ -100,7 +103,7 @@ public class Field {
 	}
 
 	/**
-	 * ï¿½berladener Konstruktor erstellt ein Field Objekt
+	 * Ueberladener Konstruktor erstellt ein Field Objekt
 	 * 
 	 * @param typ
 	 *            Typ des Spielfelds (0=Eigenes Spielfeld, 1=Gegnerisches
@@ -685,7 +688,9 @@ public class Field {
 										.getAnimationtimer() + 1);
 								
 								if(units[i][j].getAnimationtimer() == 1){
-									shotSound.play();
+									if(!Field.soundOff){
+										shotSound.play();
+									}
 								}
 							} else if (units[i][j].getAnimationtimer() < animationtimerMax
 									+ animationtimerMax) {// Nach animation
@@ -710,7 +715,12 @@ public class Field {
 										.getAnimationtimer() + 1);
 								
 								if(units[i][j].getAnimationtimer() == 1){
-									explosionSound.play();
+									if(!Field.soundOff){
+										explosionSound.play();
+									}
+									if(!Field.vibrationOff){
+										Gdx.input.vibrate(VIBRATION_LENGTH);
+									}
 								}
 							}
 						}
@@ -795,6 +805,9 @@ public class Field {
 		allShipsSet = setTo;
 	}
 
+	/**
+	 * Feld zuruecksetzen
+	 */
 	public void resetField() {
 		try {
 			allShipsSet = false;
@@ -843,6 +856,10 @@ public class Field {
 		this.units=u;
 	}
 	
+	/**
+	 * Die platzierten Schiffe auf diesem Feld setzen
+	 * @param s Die platzierten Schiffe
+	 */
 	public void setFieldShips(Ship[] s) {
 		this.placedShips=s;
 	}
@@ -1074,7 +1091,6 @@ public class Field {
 				FieldUnit[] unitLocation = new FieldUnit[1];
 				int shiftDirection =-1;
 				FieldUnit shipLastUnit;
-				FieldUnit shipNextUnit;
 				EntityShip tmpShip;
 				int orientation=-1;
 				
@@ -1114,7 +1130,7 @@ public class Field {
 								shipBack = "lhb";
 								shipMiddle ="lhm";
 								shipFront = "lhf";
-								shipNextUnit = unit.get_lNeighbor();
+								unit.get_lNeighbor();
 							}
 							if (unit.equals(unitLocation[0].get_rNeighbor())) {
 								shiftDirection = 1;
@@ -1122,7 +1138,7 @@ public class Field {
 								shipBack ="rhb";
 								shipMiddle = "rhm";
 								shipFront = "rhf";
-								shipNextUnit = unit.get_rNeighbor();
+								unit.get_rNeighbor();
 							}
 							if (unit.equals(unitLocation[0].get_uNeighbor())) {
 								shiftDirection = 2;
@@ -1130,7 +1146,7 @@ public class Field {
 								shipBack ="uvb";		
 								shipMiddle = "uvm";
 								shipFront = "uvf";
-								shipNextUnit = unit.get_uNeighbor();
+								unit.get_uNeighbor();
 							}
 
 							if (unit.equals(shipLastUnit.get_oNeighbor())) {
@@ -1139,7 +1155,7 @@ public class Field {
 								shipBack = ("uvf");
 								shipMiddle = ("uvm");
 								shipFront = ("uvb");
-								shipNextUnit = unit.get_oNeighbor();
+								unit.get_oNeighbor();
 							}
 							
 							// Hinzufï¿½gen von Schiffsteil
@@ -1170,25 +1186,25 @@ public class Field {
 							// shipNextUnit festlegen
 							switch (shiftDirection) {
 							case 0:// links
-								shipNextUnit = unit.get_lNeighbor();
+								unit.get_lNeighbor();
 								shipBack = "lhb";
 								shipMiddle ="lhm";
 								shipFront = "lhf";
 								break;
 							case 1:// rechts
-								shipNextUnit = unit.get_rNeighbor();
+								unit.get_rNeighbor();
 								shipBack ="rhb";
 								shipMiddle = "rhm";
 								shipFront = "rhf";
 								break;
 							case 2:// oben
-								shipNextUnit = unit.get_uNeighbor();
+								unit.get_uNeighbor();
 								shipBack ="uvb";		
 								shipMiddle = "uvm";
 								shipFront = "uvf";
 								break;
 							case 3:// unten
-								shipNextUnit = unit.get_oNeighbor();
+								unit.get_oNeighbor();
 								shipBack = ("uvf");
 								shipMiddle = ("uvm");
 								shipFront = ("uvb");

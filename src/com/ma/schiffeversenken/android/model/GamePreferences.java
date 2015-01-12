@@ -3,7 +3,6 @@ package com.ma.schiffeversenken.android.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,14 +10,8 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.Json.Serializable;
-import com.badlogic.gdx.utils.JsonValue;
-
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.OpenableColumns;
 
 /**
  * GamePreferences Objekt zur einstellung von Spieleinstellungen

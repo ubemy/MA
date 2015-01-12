@@ -1,18 +1,17 @@
 package com.ma.schiffeversenken.android.controller;
 import java.util.Random;
 
-import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.Json.Serializable;
-import com.badlogic.gdx.utils.JsonValue;
 import com.ma.schiffeversenken.android.model.*;
 /**
 * Spiellogik des Computer Gegners
 * @author Maik Steinborn
 */
 public class KI {
+	/**Statischer String, der fuer die Uebergabe von Eigenschaften über SharedPrefereces dient*/
 	public static final String KI_SIMPLE = "Einfach";
+	/**Statischer String, der fuer die Uebergabe von Eigenschaften über SharedPrefereces dient*/
 	public static final String KI_NORMAL = "Mittel";
+	/**Statischer String, der fuer die Uebergabe von Eigenschaften über SharedPrefereces dient*/
 	public static final String KI_DIFFICULT = "Schwer";
 	/**Anzahl der Angriffe, die in der History gespeichert werden*/
 	public static final int NUMBER_OF_HISTORY = 6;
@@ -33,7 +32,6 @@ public class KI {
 	 * Erstellt ein neues KI Objekt
 	 * @param myField Spielfeld der KI
 	 * @param enemiesField Spielfeld des Gegners
-	 * @param test Wird bei einem JUnit Test auf True gesetzt
 	 * @param loadedGame Boolean ob das Spiel geladen wurde
 	 * @param difficultyLevel Schwierigkeitsstufe der KI
 	 */
@@ -68,6 +66,7 @@ public class KI {
 	* @param id Die id der letzten Angriffe
 	* @param hit True oder False ob bei den letzten Angriffen ein Schiff getroffen wurde
 	* @param shipDestroyed True oder False ob bei den letzten Angriffen ein Schiff zerstoert wurde
+	* @param fieldUnits Sämtliche Feldelemente, die zu dem Schiff gehoeren, das gerade getroffen wurde
 	*/
 	public void updateHistory(int id, boolean hit, boolean shipDestroyed, FieldUnit[] fieldUnits){
 		for(int i=NUMBER_OF_HISTORY-1; i>0; i--){

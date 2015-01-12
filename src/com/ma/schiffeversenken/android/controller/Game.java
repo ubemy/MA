@@ -1,7 +1,5 @@
 package com.ma.schiffeversenken.android.controller;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.ma.schiffeversenken.CameraController;
 import com.ma.schiffeversenken.android.model.*;
@@ -16,8 +14,6 @@ import com.ma.schiffeversenken.android.model.*;
 public class Game extends Thread {
 	/**Einzelspielermodus*/
 	private final static int GAME_MODE_SINGLE_PLAYER = 0;
-	/**Mehrspielermodus*/
-	private final static int GAME_MODE_MULTI_PLAYER = 1;
 	/**500 millisekunden*/
 	public final static int FIVEHUNDRED_MS = 500;
 	/**1000 millisekunden*/
@@ -67,8 +63,6 @@ public class Game extends Thread {
 	int gamersTurn;
 	/**Wird auf True gesetzt, wenn das Spiel zuende ist*/
 	private boolean end;
-	private String returnDestroyedIDs;
-		
 	/**
 	 * Erstellt ein neues Game Objekt
 	 * @param state 
@@ -195,15 +189,6 @@ public class Game extends Thread {
 		this.returnValuesAvailable = true;
 		this.returnAttackHit = returnAttackHit;
 		this.returnShipDestroyed = returnShipDestroyed;
-		this.returnDestroyedIDs = returnDestroyedIDs;
-	}
-	
-	public void setEnemyFieldUnitsBluetooth(FieldUnit[][] units){
-		this.secondFieldEnemy.setFieldUnitsBluetooth(units);
-	}
-	
-	public void setEnemyFieldShipsBluetooth(Ship[] ships){
-		this.secondFieldEnemy.setFieldShips(ships);
 	}
 	
 	/**
@@ -242,7 +227,7 @@ public class Game extends Thread {
 			else{
 				fe.setAttacked(true); //FeldElement als attackiert markieren
 				
-				byte[] attackString = (new String(btConnectedThread.BLUETOOTH_ATTACK + Integer.toString(id))).getBytes();
+				byte[] attackString = (new String(BluetoothConnectedThread.BLUETOOTH_ATTACK + Integer.toString(id))).getBytes();
 				
 
 				if(primaryBTGame && gamer == FIRST_GAMER){
@@ -291,7 +276,7 @@ public class Game extends Thread {
 				}
 				
 				if((secondaryBTGame && gamer == 0) || (primaryBTGame && gamer == 1)){
-					byte[] returnString = (new String(btConnectedThread.BLUETOOTH_RETURN + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed) + "_" + destroyedShipIDs)).getBytes();
+					byte[] returnString = (new String(BluetoothConnectedThread.BLUETOOTH_RETURN + Boolean.toString(attackHit) + "_" + Boolean.toString(shipDestroyed) + "_" + destroyedShipIDs)).getBytes();
 					btConnectedThread.write(returnString);
 				}
 				
@@ -350,7 +335,6 @@ public class Game extends Thread {
 		returnAttackHit = false;
 		returnShipDestroyed = false;
 		returnValuesAvailable = false;
-		returnDestroyedIDs = null;
 	}
 	
 	/**
@@ -382,22 +366,6 @@ public class Game extends Thread {
 		}
 		else{
 			return 0;
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Gibt zurueck ob der Bluetooth Gegner gewonnen hat
-	 * @return True, wenn Bluetooth Gegner gewonnen hat
-	 */
-	private boolean hasEnemyWon(){
-		boolean ret = true;
-		
-		for(Ship ship : firstFieldPlayer.getShips()){
-			if(!ship.isDestroyed()){
-				ret = false;
-			}
 		}
 		
 		return ret;
@@ -509,19 +477,13 @@ public class Game extends Thread {
 				}
 				gamersTurn = 0;
 			}
-			
-			if(primaryBTGame || secondaryBTGame){
-				if(hasEnemyWon()){
-					end = true;
-				}
-			}
-			else if(hasSomebodyWon() != 0){
+
+			if(hasSomebodyWon() != 0){
 				end = true;
 			}
 		}while(!end);
 		
 		//Neustart Kameramodus, auch beim Bluetooth Gegner.
-		//TODO Maik fragen wer den server macht und wo das Game l�uft.
 		CameraController.changeStateTo(1, false, false);
 		CameraController.changeStateTo(8, false, true);
 		if(primaryBTGame||secondaryBTGame){	
@@ -541,14 +503,26 @@ public class Game extends Thread {
 		secondFieldEnemy.draw(batch);
 	}
 
+	/**
+	 * Gibt das Spielfeld des ersten Spielers zurueck
+	 * @return Das Spielfeld des ersten Spielers
+	 */
 	public Field getFirstFieldPlayer() {
 		return firstFieldPlayer;
 	}
 
+	/**
+	 * Gibt das Spielfeld des zweiten Spielers zurueck
+	 * @return Das Spielfeld des zweiten Spielers
+	 */
 	public Field getSecondFieldEnemy() {
 		return secondFieldEnemy;
 	}
 	
+	/**
+	 * Gibt zurueck ob das Spiel zuende ist
+	 * @return true oder false ob das Spiel zuende ist
+	 */
 	public boolean isEnd(){
 		return end;
 	}

@@ -5,12 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import com.ma.schiffeversenken.android.view.CreateMultiplayerGame;
-import com.ma.schiffeversenken.android.view.GamePreferencesActivity;
 import com.ma.schiffeversenken.android.view.VisitMultiplayerGame;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 
 /**
  * Verwaltet die Bluetooth Verbindung
@@ -34,7 +32,9 @@ public class Bluetooth extends Activity {
 	private List<BluetoothDevice> allDevices;
 	/**Eindeutige UUID, die auf Server- und Clientseite beim Aufbau der Bluetooth Verbindung genutzt wird*/
 	public static final String appUUID = "00001101-0000-1000-8000-00805f9b34fb";
+	/**Statischer String, der fuer die Uebergabe von Eigenschaften über SharedPrefereces dient*/
 	public static final String PRIMARY_BT_GAME = "primaryBTGame";
+	/**Statischer String, der fuer die Uebergabe von Eigenschaften über SharedPrefereces dient*/
 	public static final String SECONDARY_BT_GAME = "secondaryBTGame";
 	
 	

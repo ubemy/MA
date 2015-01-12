@@ -42,8 +42,6 @@ public class Player {
 	private static Field secondField;
 	TiledMap map;
 	private int gameMode;
-	private boolean primaryBTGame;
-	private boolean secondaryBTGame;
 	private int theKiLevel;
 	private static ArrayList<Integer> gameSettings;
 
@@ -66,8 +64,6 @@ public class Player {
 		GameFieldScreen.buttonwidth = Integer.parseInt(pref.getString(StartScreen.SETTINGS_BUTTONWIDTH));
 		GameFieldScreen.buttonheight = Integer.parseInt(pref.getString(StartScreen.SETTINGS_BUTTONHEIGHT));
 		}
-		this.primaryBTGame=primaryBTGame;
-		this.secondaryBTGame=secondaryBTGame;
 		map = m;
 		firstField = new Field(0, tileSet, (TiledMapTileLayer) map.getLayers()
 				.get("0"));

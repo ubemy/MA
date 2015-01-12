@@ -830,7 +830,7 @@ public class Field {
 		return mapTileLayer;
 	}
 
-	public boolean getAllShipsSetManual() {
+	public boolean isAllShipsSetManual() {
 		return allShipsSetManual;
 
 	}

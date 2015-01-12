@@ -323,11 +323,11 @@ public class GameFieldScreen implements Screen {
 				Gdx.input.setInputProcessor(gestureDetector);
 				if(player.getGame().getSecondFieldEnemy().isAllShipsSet() || primaryBTGame || secondaryBTGame){
 					//Setzen der Schiffe und Starten.
-					//Wenn schiffe manuell gesetzt müssen diese aufs Feld, sonst sind diese schon auf dem Feld
-					if(player.getGame().getFirstFieldPlayer().getAllShipsSetManual()){
+					if(player.getGame().getFirstFieldPlayer().isAllShipsSetManual()){
+						//Wenn schiffe manuell gesetzt sind müssen diese aufs Feld plaziert werden.
 						player.getGame().getFirstFieldPlayer().setManualNewShipplacement(controller.getPlacedShipUnits());
-					}else{
-						//Setzen der Schiffe und Starten.
+					}else if(!player.getGame().getFirstFieldPlayer().isAllShipsSet()){
+						//Setzen der Schiffe wenn diese noch nicht plaziert sind.
 						player.getGame().getFirstFieldPlayer().generateNewShipplacement(schiffsEinstellung);
 					}
 

@@ -29,9 +29,10 @@
         android:id="@+id/Cheats_Enabled_Checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/Vibration_aus_Checkbox"
         android:layout_below="@+id/Vibration_aus_Checkbox"
         android:layout_centerHorizontal="true"
         android:text="@string/button_text_cheats_checkbox"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
 </RelativeLayout>

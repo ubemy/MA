@@ -104,6 +104,14 @@ public class Game extends Thread {
 	}
 	
 	/**
+	 * Setzt die Instanz des BluetoothConnectedThreads
+	 * @param btcThread BluetoothConnectedThread Instanz
+	 */
+	public void setBluetoothConnectedThread(BluetoothConnectedThread btcThread){
+		this.btConnectedThread = btcThread;
+	}
+	
+	/**
 	 * Zurueckgeben ob es sich bei diesem Geraet um den Bluetooth Client handelt
 	 * @return True, wenn dieses Geraet der Bluetooth Client ist
 	 */

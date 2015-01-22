@@ -82,7 +82,21 @@ public class BluetoothConnectThread extends Thread {
      * @param socket Aufgebaute Bluetooth Socket Verbindung zum Server
      */
     private void manageConnectedSocket(BluetoothSocket socket) {
-    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(socket, vmgClass, null, this.bluetoothAdapter);
+    	BluetoothConnectedThread btConnectedThread = null;
+    	
+    	if(reconnect){
+    		//Bei wiederholtem Verbindungsversuch
+    		btConnectedThread = BluetoothConnectedThread.getInstance();
+			Game game = btConnectedThread.getGame();
+			btConnectedThread = new BluetoothConnectedThread(socket, vmgClass, null, this.bluetoothAdapter);
+			btConnectedThread.setGame(game);
+			game.setBluetoothConnectedThread(btConnectedThread);
+    	}
+    	else{
+    		//Bei erstem Verbindungsversuch
+    		btConnectedThread = new BluetoothConnectedThread(socket, vmgClass, null, this.bluetoothAdapter);
+    	}
+    	
     	btConnectedThread.start();
 	}
 }

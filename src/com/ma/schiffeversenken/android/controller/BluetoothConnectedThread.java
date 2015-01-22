@@ -99,12 +99,20 @@ public class BluetoothConnectedThread extends Thread {
     }
     
     /**
+     * Gibt das Game Objekt zurueck
+     * @return Game Objekt
+     */
+    public Game getGame(){
+    	return this.game;
+    }
+    
+    /**
      * Thread starten
      */
     public void run() {
         byte[] buffer = new byte[BUFFER_SIZE];  // buffer store for the stream
         int bytes; // bytes returned from read()
- 
+        
         // Keep listening to the InputStream until an exception occurs
         while (true) {
             try {

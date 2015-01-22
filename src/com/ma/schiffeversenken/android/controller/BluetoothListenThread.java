@@ -81,8 +81,22 @@ public class BluetoothListenThread extends Thread{
      * @param mmSocket Aufgebaute Bluetooth Socket Verbindung zum Server
      */
 	private void manageConnectedSocket(BluetoothSocket mmSocket) {
-    	BluetoothConnectedThread btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter);
-    	if(!reconnect) cmgClass.startGame(btConnectedThread);
-    	btConnectedThread.start();
+		BluetoothConnectedThread btConnectedThread = null;
+		
+		if(reconnect){
+			//Bei wiederholtem Verbindungsversuch
+			btConnectedThread = BluetoothConnectedThread.getInstance();
+			Game game = btConnectedThread.getGame();
+			btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter);
+			btConnectedThread.setGame(game);
+			game.setBluetoothConnectedThread(btConnectedThread);
+		}
+		else{
+			//Bei erstem Verbindungsversuch
+			btConnectedThread = new BluetoothConnectedThread(mmSocket, null, cmgClass, this.bluetoothAdapter);
+			cmgClass.startGame(btConnectedThread);	
+		}
+		
+		btConnectedThread.start();
 	}
 }
